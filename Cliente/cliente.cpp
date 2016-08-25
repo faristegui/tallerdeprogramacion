@@ -4,7 +4,7 @@ using namespace std;
 
 int main() {
 
-    cout << "Hola Mundo Cliente" << endl;
+    cout << "Hola Mundo Cliente MODIFICADO!" << endl;
 	
 	system("pause");
 
