@@ -3,6 +3,8 @@
 Cliente/*.vcxproj
 Servidor/*.vcxproj
 *.vcxproj
+*.filters
+*.user
 
 
 ######## Devesa: Agrego los ignore de visual
