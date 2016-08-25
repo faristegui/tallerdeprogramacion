@@ -1,0 +1,21 @@
+﻿Compilación iniciada a las 25/08/2016 19:14:28.
+     1>Proyecto "C:\Fuentes\tallerdeprogramacion\Cliente\Cliente.vcxproj" en el nodo 3 (build destinos).
+     1>InitializeBuildStatus:
+         Se creará "Debug\Cliente.unsuccessfulbuild" porque se especificó "AlwaysCreate".
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt cliente.cpp
+         cliente.cpp
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Fuentes\tallerdeprogramacion\Debug\Cliente.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Cliente.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Fuentes\tallerdeprogramacion\Debug\Cliente.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Fuentes\tallerdeprogramacion\Debug\Cliente.lib" /MACHINE:X86 Debug\cliente.obj
+         LINK : no se encontró C:\Fuentes\tallerdeprogramacion\Debug\Cliente.exe o no lo generó el último vínculo incremental; ejecutando vínculo completo
+         Cliente.vcxproj -> C:\Fuentes\tallerdeprogramacion\Debug\Cliente.exe
+       Manifest:
+         c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Fuentes\tallerdeprogramacion\Debug\Cliente.exe;#1" /manifest Debug\Cliente.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Se eliminará el archivo "Debug\Cliente.unsuccessfulbuild".
+         Aplicando tarea Touch a "Debug\Cliente.lastbuildstate".
+     1>Compilación del proyecto terminada "C:\Fuentes\tallerdeprogramacion\Cliente\Cliente.vcxproj" (build destinos).
+
+Compilación correcta.
+
+Tiempo transcurrido 00:00:01.20
