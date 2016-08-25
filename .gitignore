@@ -1,8 +1,6 @@
 ######## Devesa: Para que cada uno pueda usar cualquier version de visual (ojo que esto es una chota)
 
-Cliente/*.vcxproj
-Servidor/*.vcxproj
-*.vcxproj
+
 
 
 ######## Devesa: Agrego los ignore de visual
