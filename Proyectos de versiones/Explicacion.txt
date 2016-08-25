@@ -1,0 +1,11 @@
+Una vez bajado el repo hay que poner los archivos de proyectos correspondientes.
+
+1) Entrar a la carpeta que corresponde a la version (Si se tiene mayor que 2010 pero menor que 2015 usar la de 2010).
+2) Copiar las carpetas "Cliente" y "Servidor" e ir a la raiz de la aplicacion y pegarlas ahi
+3) Si la version era 2010 o 2015 ya esta todo ok. Pero si se tenia otra (por ej 2013) cuando abramos el proyecto nos
+   va a pedir de migrar unos archivos. Le decimos que SI y listo!
+
+
+Cada vez que alguien cree una clase nueva, los otros vamos a tener que incluirlas en el proyecto (es una gilada, darle
+click izquierdo y poner incluir). Nos vamos a dar cuenta que nos falta una clase porque va a tirar error de que no 
+encuentra una referencia o algo asi..
