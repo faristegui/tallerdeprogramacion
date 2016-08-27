@@ -17,8 +17,9 @@
 
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "27015"
+#define DEFAULT_IP "localhost"
 
-int mainClient(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
@@ -29,12 +30,6 @@ int mainClient(int argc, char **argv)
 	char recvbuf[DEFAULT_BUFLEN];
 	int iResult;
 	int recvbuflen = DEFAULT_BUFLEN;
-
-	// Validate the parameters
-	if (argc != 2) {
-		printf("usage: %s server-name\n", argv[0]);
-		return 1;
-	}
 
 	// Initialize Winsock
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -49,7 +44,7 @@ int mainClient(int argc, char **argv)
 	hints.ai_protocol = IPPROTO_TCP;
 
 	// Resolve the server address and port
-	iResult = getaddrinfo(argv[1], DEFAULT_PORT, &hints, &result);
+	iResult = getaddrinfo(DEFAULT_IP, DEFAULT_PORT, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
 		WSACleanup();
@@ -96,6 +91,7 @@ int mainClient(int argc, char **argv)
 	}
 
 	printf("Bytes Sent: %ld\n", iResult);
+	system("pause");
 
 	// shutdown the connection since no more data will be sent
 	iResult = shutdown(ConnectSocket, SD_SEND);

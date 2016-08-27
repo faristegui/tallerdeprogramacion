@@ -16,7 +16,7 @@
 #define DEFAULT_PORT "27015"
 
 
-int mainClient()
+int main()
 {
 	WSADATA wsaData;
 	int iResult;
@@ -81,6 +81,8 @@ int mainClient()
 		return 1;
 	}
 
+	printf("Server listo escuchando en el puerto: 27015");
+
 	// Accept a client socket
 	ClientSocket = accept(ListenSocket, NULL, NULL);
 	if (ClientSocket == INVALID_SOCKET) {
@@ -92,7 +94,7 @@ int mainClient()
 
 	// No longer need server socket
 	closesocket(ListenSocket);
-
+	
 	// Receive until the peer shuts down the connection
 	do {
 
