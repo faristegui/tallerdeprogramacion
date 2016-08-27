@@ -11,6 +11,8 @@
 #include <string>
 #include "Usuarios.h"
 
+using namespace std;
+
 // Importacion dinamica de libreria Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
 
@@ -132,8 +134,8 @@ int main()
 
 			// Esto no esta ok pero funciona
 			recvbuf[iResult] = 0;
-			std::string str(recvbuf);
-			std::cout << "Mensaje del cliente: " << str << "\n";
+			string str(recvbuf);
+			cout << "Mensaje del cliente: " << str << "\n";
 
 			// Echo the buffer back to the sender
 			iSendResult = send(ClientSocket, recvbuf, iResult, 0);

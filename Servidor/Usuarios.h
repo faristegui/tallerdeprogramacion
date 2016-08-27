@@ -5,17 +5,19 @@
 #include <string>
 #include <sstream>
 
+using namespace std;
+
 struct Usuario {
-	std::string nombre;
-	std::string contrasena;
+	string nombre;
+	string contrasena;
 };
 
 class Usuarios
 {
-	std::ifstream archivoUsuarios;
+	ifstream archivoUsuarios;
 public:
 	Usuarios();
-	bool contrasenaValida(std::string usuario, std::string contrasena);
+	bool contrasenaValida(string usuario, string contrasena);
 	~Usuarios();
 private:
 	Usuario getProximoUsuario();

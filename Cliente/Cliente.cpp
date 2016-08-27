@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 
+using namespace std;
 
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
 #pragma comment (lib, "Ws2_32.lib")
@@ -23,9 +24,9 @@
 int main(int argc, char **argv)
 {
 
-	std::string IPAdress;
-	std::cout << "Ingrese la direccion del servidor (si es conexion local usar localhost):\n";
-	std::cin >> IPAdress;
+	string IPAdress;
+	cout << "Ingrese la direccion del servidor (si es conexion local usar localhost):\n";
+	cin >> IPAdress;
 
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
@@ -88,8 +89,15 @@ int main(int argc, char **argv)
 	}
 
 
-	std::cout << "Conexion realizada con exito\n";
-	std::cout << "Por favor ingrese nombre de usuario: ";
+	string user = "";
+	string pass = "";
+
+	cout << "Conexion realizada con exito\n\n";
+	cout << "Por favor ingrese nombre de usuario: ";
+	cin >> user;
+	cout << "Por favor ingrese su password: ";
+	cin >> pass;
+
 
 	// Send an initial buffer
 	iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
