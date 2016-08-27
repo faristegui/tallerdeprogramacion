@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
+#include "Usuarios.h"
 
 // Importacion dinamica de libreria Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
@@ -120,7 +121,7 @@ int main()
 
 	// No longer need server socket
 	closesocket(ListenSocket);
-	
+
 	// Receive until the peer shuts down the connection
 	do {
 
