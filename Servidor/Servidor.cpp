@@ -120,6 +120,7 @@ int main()
 	}
 
 	// No longer need server socket
+	
 	closesocket(ListenSocket);
 
 	// Receive until the peer shuts down the connection
@@ -127,7 +128,7 @@ int main()
 
 		iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
 		if (iResult > 0) {
-			printf("Bytes received: %d\n", iResult);
+			printf("Bytes recibidos: %d\n", iResult);
 
 			// Esto no esta ok pero funciona
 			recvbuf[iResult] = 0;
