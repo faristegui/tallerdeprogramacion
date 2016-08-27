@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 {
 
 	string IPAdress;
-	cout << "Ingrese la direccion del servidor (si es conexion local usar localhost):\n";
+	cout << "Ingrese la IP del Servidor (Usar localhost para local): ";
 	cin >> IPAdress;
 
 	WSADATA wsaData;
