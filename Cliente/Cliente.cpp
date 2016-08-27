@@ -21,6 +21,25 @@ using namespace std;
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "27015"
 
+int enviarInformacion(int& iResult,SOCKET ConnectSocket,char* sendbuf)
+{
+	// Send an initial buffer
+	iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
+	if (iResult == SOCKET_ERROR) {
+		printf("send failed with error: %d\n", WSAGetLastError());
+		closesocket(ConnectSocket);
+		WSACleanup();
+		return 1;
+	}
+	return 0;
+}
+
+void mostrarInformacionEnviada(int& iResult)
+{
+	printf("Bytes Sent: %ld\n", iResult);
+	system("pause");
+}
+
 int main(int argc, char **argv)
 {
 
@@ -87,29 +106,25 @@ int main(int argc, char **argv)
 		WSACleanup();
 		return 1;
 	}
+	
+	string nombreUsuario;
+	string clave;	
 
+	std::cout << "Conexion realizada con exito\n";
+	enviarInformacion(iResult,ConnectSocket,sendbuf);
+	mostrarInformacionEnviada(iResult);
+	
+	std::cout << "Por favor ingrese nombre de usuario: ";
+	std::cin >> nombreUsuario;
+	sendbuf = strdup(nombreUsuario.c_str());
+	enviarInformacion(iResult,ConnectSocket,sendbuf);
+	mostrarInformacionEnviada(iResult);
 
-	string user = "";
-	string pass = "";
-
-	cout << "Conexion realizada con exito\n\n";
-	cout << "Por favor ingrese nombre de usuario: ";
-	cin >> user;
-	cout << "Por favor ingrese su password: ";
-	cin >> pass;
-
-
-	// Send an initial buffer
-	iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
-	if (iResult == SOCKET_ERROR) {
-		printf("send failed with error: %d\n", WSAGetLastError());
-		closesocket(ConnectSocket);
-		WSACleanup();
-		return 1;
-	}
-
-	printf("Bytes Sent: %ld\n", iResult);
-	system("pause");
+	std::cout << "Por favor ingrese la clave: ";
+	std::cin >> clave;
+	sendbuf = strdup(clave.c_str());
+	enviarInformacion(iResult,ConnectSocket,sendbuf);
+	mostrarInformacionEnviada(iResult);
 
 	// shutdown the connection since no more data will be sent
 	iResult = shutdown(ConnectSocket, SD_SEND);
