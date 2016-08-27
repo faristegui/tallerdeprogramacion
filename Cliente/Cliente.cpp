@@ -8,6 +8,8 @@
 #include <ws2tcpip.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string>
+#include <iostream>
 
 
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
@@ -17,10 +19,14 @@
 
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "27015"
-#define DEFAULT_IP "localhost"
 
 int main(int argc, char **argv)
 {
+
+	std::string IPAdress;
+	std::cout << "Ingrese la direccion del servidor (si es conexion local usar localhost):\n";
+	std::cin >> IPAdress;
+
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	struct addrinfo *result = NULL,
@@ -44,7 +50,7 @@ int main(int argc, char **argv)
 	hints.ai_protocol = IPPROTO_TCP;
 
 	// Resolve the server address and port
-	iResult = getaddrinfo(DEFAULT_IP, DEFAULT_PORT, &hints, &result);
+	iResult = getaddrinfo(IPAdress.c_str(), DEFAULT_PORT, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
 		WSACleanup();
@@ -80,6 +86,10 @@ int main(int argc, char **argv)
 		WSACleanup();
 		return 1;
 	}
+
+
+	std::cout << "Conexion realizada con exito\n";
+	std::cout << "Por favor ingrese nombre de usuario: ";
 
 	// Send an initial buffer
 	iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
