@@ -110,18 +110,18 @@ int main(int argc, char **argv)
 	string nombreUsuario;
 	string clave;	
 
-	std::cout << "Conexion realizada con exito\n";
+	cout << "Conexion realizada con exito\n";
 	enviarInformacion(iResult,ConnectSocket,sendbuf);
 	mostrarInformacionEnviada(iResult);
 	
-	std::cout << "Por favor ingrese nombre de usuario: ";
-	std::cin >> nombreUsuario;
+	cout << "Por favor ingrese nombre de usuario: ";
+	cin >> nombreUsuario;
 	sendbuf = strdup(nombreUsuario.c_str());
 	enviarInformacion(iResult,ConnectSocket,sendbuf);
 	mostrarInformacionEnviada(iResult);
 
-	std::cout << "Por favor ingrese la clave: ";
-	std::cin >> clave;
+	cout << "Por favor ingrese la clave: ";
+	cin >> clave;
 	sendbuf = strdup(clave.c_str());
 	enviarInformacion(iResult,ConnectSocket,sendbuf);
 	mostrarInformacionEnviada(iResult);
