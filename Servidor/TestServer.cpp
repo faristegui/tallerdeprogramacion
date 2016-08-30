@@ -23,13 +23,9 @@ int main()
 
 	string puerto;
 	cout << "Ingrese el puerto donde escuchar conexiones el servidor: ";
-	cin >> puerto;
+	cin >> puerto;	
 
-	
-
-	Server server(AF_INET, SOCK_STREAM, IPPROTO_TCP, puerto /*"8090"*/);
-	server.binding(AF_INET);
-	server.escucharConexiones();
+	Server server(puerto /*"8090"*/);
 
 	while (server.aceptaConexion())
 	{

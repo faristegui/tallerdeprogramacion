@@ -7,10 +7,10 @@ Server::Server()
 
 
 
-Server::Server(int af, int tipo, int protocolo, std::string puerto)
+Server::Server(std::string puerto)
 {
 
-	// Inicializacion de las variables 
+	// Inicializacion de las variables
 
 	this->puerto = puerto;
 	this->result = NULL;
@@ -56,6 +56,9 @@ Server::Server(int af, int tipo, int protocolo, std::string puerto)
 		}
 
 		this->backupListenSocket = this->serverListenSocket;
+
+		binding(AF_INET);
+		escucharConexiones();
 
 }
 
