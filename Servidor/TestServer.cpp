@@ -21,61 +21,9 @@ void MostrarListaComandos() {
 void MainServerThread(void* arg) {
 
 	string puerto = *(string*)arg;
-
 	Server server(puerto);
-	MostrarListaComandos();
 
-	while (server.aceptaConexion())
-	{
-		/*aceptamos una conexiones*/
-		std::cout << "conexion aceptada" << std::endl;
-
-
-		/******leemos los datos desde el socket*/
-		char consultaCliente[100];
-		memset(consultaCliente, 0, 99);
-		int cantBitesLeidos;
-		int respuestaEnviarDatos;
-
-		do {
-			cantBitesLeidos = server.recibirDatos(consultaCliente, sizeof(consultaCliente));
-
-
-			string mensajeCliente(consultaCliente);
-			cout << "Mensaje del cliente: " << mensajeCliente << "\n";
-
-			/*preparamos respuesta al cliente*/
-
-			string auxRespuestaServidor = "hola " + mensajeCliente;
-
-			/***enviamos la respuesta****/
-			respuestaEnviarDatos = server.enviarDatos(auxRespuestaServidor.c_str(), strlen(auxRespuestaServidor.c_str()));
-			std::cout << "Se envia respuesta al cliente: " << auxRespuestaServidor << std::endl;
-
-			if (respuestaEnviarDatos == SOCKET_ERROR) {
-				std::cout << "fallo al enviar los datos: " << WSAGetLastError() << std::endl;
-				system("pause");
-				exit(0);
-			}
-
-			/*consulto si hubo algun error*/
-			if (server.isSocketInvalido())
-			{
-				std::cout << "fallo al aceptar conexiones con error: " << WSAGetLastError() << std::endl;
-				system("pause");
-			}
-
-		} while (cantBitesLeidos > 0);
-
-
-		if (cantBitesLeidos == 0)
-		{
-			std::cout << "cerrando conexion del servidor.." << std::endl;
-			exit(0);
-		}
-
-
-	} /*end while*/
+	server.abrir();
 }
 
 int main()
@@ -90,11 +38,12 @@ int main()
 	_beginthread(MainServerThread, 0, (void*)&puerto);
 
 	// Thread 0: Handler de eventos del server
-
+	Sleep(1000);  // Le doy 1seg a que arranque el server para mostrar el mensaje de los comandos en pantalla
 	string comando;
 
 	while (true)
 	{
+		MostrarListaComandos();
 		cin >> comando;
 		if (comando == "q")
 		{
@@ -102,12 +51,7 @@ int main()
 			system("pause");
 			break;
 		}
-		else {
-			MostrarListaComandos();
-		}
 	}
-
-	return 0;
 
 	return 0;
 }

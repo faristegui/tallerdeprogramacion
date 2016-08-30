@@ -19,30 +19,21 @@ class Server
 
 private:
 	WSADATA wsaData;
-	SOCKET serverListenSocket;
-	SOCKET backupListenSocket;
-	SOCKET acceptSocket;
+	SOCKET ListenSocket;
+	SOCKET ClientSocket;
 	sockaddr_in dirSocketServidor;
 	struct addrinfo *result;
 	struct addrinfo hints;
-
-
 	int iSendResult;
-
-
 	std::string puerto;
 
 	void binding(int af);
 	void escucharConexiones();
+	int recibirDatos(char* datosRecibidos, int sizeDatos);
 public:
 	Server(std::string puerto);
-
-	void aceptarConexion();
-	int enviarDatos(const char* datosEnviados, int sizeDatos);
-	int recibirDatos(char* datosRecibidos, int sizeDatos);
-	bool aceptaConexion();
-	void cerrarConexion();
-	bool isSocketInvalido();
+	void abrir();
+	int enviarDatos(const char* datosEnviados, int sizeDatos); // A que cliente le manda los datos? Creo que debiera ser private si es solo para echo
 	~Server();
 };
 
