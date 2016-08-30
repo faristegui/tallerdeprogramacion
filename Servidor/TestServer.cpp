@@ -9,37 +9,35 @@
 #include <sstream>
 #include "Server.h"
 
-
+#include <process.h>
 using namespace std;
 
-// Importacion dinamica de libreria Ws2_32.lib
 #pragma comment (lib, "Ws2_32.lib")
 
-// Tamano max del buffer. Por ej, en el recv() todos los recvbuf llegan con esta leng (aunque el mensaje sea mas corto)
+void MostrarListaComandos() {
+	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
+}
 
+void MainServerThread(void* arg) {
 
-int main()
-{
+	string puerto = *(string*)arg;
 
-	string puerto;
-	cout << "Ingrese el puerto donde escuchar conexiones el servidor: ";
-	cin >> puerto;	
-
-	Server server(puerto /*"8090"*/);
+	Server server(puerto);
+	MostrarListaComandos();
 
 	while (server.aceptaConexion())
 	{
 		/*aceptamos una conexiones*/
 		std::cout << "conexion aceptada" << std::endl;
 
-		
+
 		/******leemos los datos desde el socket*/
 		char consultaCliente[100];
 		memset(consultaCliente, 0, 99);
 		int cantBitesLeidos;
 		int respuestaEnviarDatos;
 
-		do{
+		do {
 			cantBitesLeidos = server.recibirDatos(consultaCliente, sizeof(consultaCliente));
 
 
@@ -47,7 +45,7 @@ int main()
 			cout << "Mensaje del cliente: " << mensajeCliente << "\n";
 
 			/*preparamos respuesta al cliente*/
-			
+
 			string auxRespuestaServidor = "hola " + mensajeCliente;
 
 			/***enviamos la respuesta****/
@@ -67,7 +65,7 @@ int main()
 				system("pause");
 			}
 
-		} while (cantBitesLeidos > 0); 
+		} while (cantBitesLeidos > 0);
 
 
 		if (cantBitesLeidos == 0)
@@ -76,9 +74,40 @@ int main()
 			exit(0);
 		}
 
-	
-	} /*end while*/
 
+	} /*end while*/
+}
+
+int main()
+{
+
+	string puerto;
+	cout << "Ingrese el puerto donde escuchara conexiones el servidor: ";
+	cin >> puerto;	
+
+	// Thread 1: Inicializacion del server
+
+	_beginthread(MainServerThread, 0, (void*)&puerto);
+
+	// Thread 0: Handler de eventos del server
+
+	string comando;
+
+	while (true)
+	{
+		cin >> comando;
+		if (comando == "q")
+		{
+			cout << "Servidor off\n";
+			system("pause");
+			break;
+		}
+		else {
+			MostrarListaComandos();
+		}
+	}
+
+	return 0;
 
 	return 0;
 }

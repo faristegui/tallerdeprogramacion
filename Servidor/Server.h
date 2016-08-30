@@ -35,11 +35,6 @@ private:
 	void binding(int af);
 	void escucharConexiones();
 public:
-	Server();
-
-	/*af=AF_INET  The Internet Protocol version 4 (IPv4) address family.
-	tipo=SOCK_STREAM  A socket type that provides sequenced, reliable, two-way, connection-based byte streams
-	protocolo=IPPROTO_TCP*/
 	Server(std::string puerto);
 
 	void aceptarConexion();
