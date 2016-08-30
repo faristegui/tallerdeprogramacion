@@ -17,7 +17,7 @@ using namespace std;
 #pragma comment (lib, "AdvApi32.lib")
 
 #define bufferSize 512
-
+int opcion;
 
 void solicitarDatos(string puerto, string ip,string user, string clave)
 {
@@ -30,22 +30,23 @@ void solicitarDatos(string puerto, string ip,string user, string clave)
 	cout << "ingrese clave: ";
 	cin >> clave;
 }
+/*
+Esta seria la idea del thread principal
 void ThreadPrincipal(void* pParams)
 {
-	int opcion;
 	string puerto;
 	string ip;
 	string user;
 	string clave;
 	while(true)
 	{
-		cout << "Ingrese una opción entre 1 y 6" << endl <<
+			cout << "Ingrese una opción entre 1 y 6" << endl <<
 			"1- Conectar" << endl <<
-			"2-Desconectar" << endl <<
-			"3-Salir" << endl <<
-			"4-Enviar" << endl <<
-			"5-Recibir" << endl <<
-			"6-Lore Ipsum" << endl;
+		"2-Desconectar" << endl <<
+		"3-Salir" << endl <<
+		"4-Enviar" << endl <<
+		"5-Recibir" << endl <<
+		"6-Lore Ipsum" << endl;
 		cin >> opcion;
 		switch(opcion)
 		{
@@ -73,13 +74,54 @@ void ThreadPrincipal(void* pParams)
 				//cliente.enviarCiclicamente()
 				break;
 		}
-
 	}
 }
+*/
 int main(int argc, char **argv)
 {
-	_beginthread(ThreadPrincipal,0,NULL);
-
+	string puerto;
+	string ip;
+	string user;
+	string clave;
+	while(true)
+	{
+		cout << "Ingrese una opción entre 1 y 6" << endl <<
+		"1- Conectar" << endl <<
+		"2-Desconectar" << endl <<
+		"3-Salir" << endl <<
+		"4-Enviar" << endl <<
+		"5-Recibir" << endl <<
+		"6-Lore Ipsum" << endl;
+		cin >> opcion;
+		switch(opcion)
+		{
+			case 1:
+				{
+					solicitarDatos(puerto,ip,user,clave);
+					Client cliente(AF_INET, SOCK_STREAM, IPPROTO_TCP, ip, puerto, user.c_str(), clave);
+					cliente.conectarAServidor();
+					//falta completar, seria lo de abajo que esta comentado
+				}
+				//cliente.conectar()
+				break;
+			case 2:
+				//cliente.desconectar()
+				break;
+			case 3:
+				exit(0);
+				break;
+			case 4:
+				//cliente.enviar()
+				break;
+			case 5:
+				//cliente.recibir()
+				break;
+			case 6:
+				//cliente.enviarCiclicamente()
+				break;
+		}
+	}
+	//system("pause");	
 	/*
 	int respuestaServer;
 	char bufferDeRespuestaServer[bufferSize];
@@ -114,4 +156,3 @@ int main(int argc, char **argv)
 	*/
 	return 0;
 }
-
