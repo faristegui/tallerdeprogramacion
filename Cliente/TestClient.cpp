@@ -6,6 +6,8 @@
 #include <string>
 #include <iostream>
 #include "Client.h"
+#include <process.h>
+#include <stdio.h>
 
 using namespace std;
 
@@ -17,20 +19,8 @@ using namespace std;
 #define bufferSize 512
 
 
-
-
-
-int main(int argc, char **argv)
+void solicitarDatos(string puerto, string ip,string user, string clave)
 {
-
-	string puerto;
-	string ip;
-	string user;
-	string clave;
-	int respuestaServer;
-	char bufferDeRespuestaServer[bufferSize];
-	int bufferSizeCliente = bufferSize;
-
 	cout << "Ingrese la IP del Servidor (Usar localhost para local): ";
 	cin >> ip;
 	cout << "Ingrese el puerto de conexion: ";
@@ -39,6 +29,63 @@ int main(int argc, char **argv)
 	cin >> user;
 	cout << "ingrese clave: ";
 	cin >> clave;
+}
+void ThreadPrincipal(void* pParams)
+{
+	int opcion;
+	string puerto;
+	string ip;
+	string user;
+	string clave;
+	while(true)
+	{
+		cout << "Ingrese una opción entre 1 y 6" << endl <<
+			"1- Conectar" << endl <<
+			"2-Desconectar" << endl <<
+			"3-Salir" << endl <<
+			"4-Enviar" << endl <<
+			"5-Recibir" << endl <<
+			"6-Lore Ipsum" << endl;
+		cin >> opcion;
+		switch(opcion)
+		{
+			case 1:
+				{
+					solicitarDatos(puerto,ip,user,clave);
+					Client cliente(AF_INET, SOCK_STREAM, IPPROTO_TCP, ip, puerto, user.c_str(), clave);
+					cliente.conectarAServidor();
+				}
+				//cliente.conectar()
+				break;
+			case 2:
+				//cliente.desconectar()
+				break;
+			case 3:
+				exit(0);
+				break;
+			case 4:
+				//cliente.enviar()
+				break;
+			case 5:
+				//cliente.recibir()
+				break;
+			case 6:
+				//cliente.enviarCiclicamente()
+				break;
+		}
+
+	}
+}
+int main(int argc, char **argv)
+{
+	_beginthread(ThreadPrincipal,0,NULL);
+
+	/*
+	int respuestaServer;
+	char bufferDeRespuestaServer[bufferSize];
+	int bufferSizeCliente = bufferSize;
+
+	solicitarDatos(puerto,ip,user,clave);
 
 	Client cliente(AF_INET, SOCK_STREAM, IPPROTO_TCP, ip, puerto, user.c_str(), clave);
 
@@ -64,7 +111,7 @@ int main(int argc, char **argv)
 	system("pause");
 
 	cliente.cerrarConexionConServer();
-
+	*/
 	return 0;
 }
 
