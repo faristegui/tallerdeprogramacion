@@ -7,9 +7,10 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "Server.h"
 
-#include <process.h>
+#include "Server.h"
+#include "Usuarios.h"
+
 using namespace std;
 
 #pragma comment (lib, "Ws2_32.lib")
@@ -22,16 +23,61 @@ using namespace std;
 #define pause() system("pause");
 #endif
 
+Server UnServer;
+
 void MostrarListaComandos() {
 	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
 }
 
+void Autenticar(string usuario, string password) {
+	Usuarios usuarios;
+
+	if (usuarios.contrasenaValida(usuario, password)) {
+		// TODO: Mandar msj credenciales validas
+	}
+	else {
+		// TODO: Mandar msj credenciales invalidas
+	}
+}
+
+void MainListenThread(void* arg) {
+	string mensaje = "";
+	SOCKET ClientSocket = *(SOCKET*)arg;
+
+	while (mensaje != "logoff") {
+		mensaje = UnServer.RecibirMensaje(ClientSocket);
+
+	}
+
+	closesocket(ClientSocket);
+}
+
 void MainServerThread(void* arg) {
 
-	string puerto = *(string*)arg;
-	Server server(puerto);
+	string Puerto = *(string*)arg;
+	UnServer.Abrir(Puerto);
 
-	server.abrir();
+	while (true) {
+		SOCKET ClientSocket = UnServer.RecibirNuevaConexion();
+		_beginthread(MainListenThread, 0, (void*)&ClientSocket);
+	}
+
+}
+
+void MenuPrincipal() {
+	string comando;
+
+	while (true)
+	{
+		MostrarListaComandos();
+		cin >> comando;
+		if (comando == "q")
+		{
+			cout << "Servidor off\n";
+			pause();
+			break;
+		}
+	}
 }
 
 int main()
@@ -46,20 +92,8 @@ int main()
 	_beginthread(MainServerThread, 0, (void*)&puerto);
 
 	// Thread 0: Handler de eventos del server
-	Sleep(1000);  // Le doy 1seg a que arranque el server para mostrar el mensaje de los comandos en pantalla
-	string comando;
-
-	while (true)
-	{
-		MostrarListaComandos();
-		cin >> comando;
-		if (comando == "q")
-		{
-			cout << "Servidor off\n";
-			pause();
-			break;
-		}
-	}
+	Sleep(1000);
+	MenuPrincipal();
 
 	return 0;
 }

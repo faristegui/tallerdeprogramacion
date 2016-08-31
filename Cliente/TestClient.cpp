@@ -116,12 +116,9 @@ void menuPrincipal()
 
 int main(int argc, char **argv)
 {
-	while(true)
-	{
 		_beginthread(ThreadPrincipal, 0, NULL);
 
 		menuPrincipal();
-	}
 	
 	return 0;
 }

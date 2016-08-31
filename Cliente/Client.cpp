@@ -147,5 +147,7 @@ void Client::cerrarConexionConServer()
 }
 Client::~Client()
 {
+	std::string auxMensajeEnviar = "logoff";
+	enviarDatos(auxMensajeEnviar.c_str(), strlen(auxMensajeEnviar.c_str()));
 	closesocket(this->ClientConnectionSocket);
 }
