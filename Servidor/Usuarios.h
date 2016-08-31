@@ -17,7 +17,7 @@ class Usuarios
 	ifstream archivoUsuarios;
 public:
 	Usuarios();
-	bool contrasenaValida(string usuario, string contrasena);
+	bool ContrasenaValida(string usuario, string contrasena);
 	~Usuarios();
 private:
 	Usuario getProximoUsuario();

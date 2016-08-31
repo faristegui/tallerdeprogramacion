@@ -5,7 +5,7 @@ Usuarios::Usuarios()
 	archivoUsuarios.open("Archivos\\Usuarios.csv", std::ifstream::in);
 }
 
-bool Usuarios::contrasenaValida(std::string usuario, std::string contrasena) {
+bool Usuarios::ContrasenaValida(std::string usuario, std::string contrasena) {
 	Usuario unUsuario;
 	resetearCursorArchivo();
 

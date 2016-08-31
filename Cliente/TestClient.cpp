@@ -27,15 +27,6 @@ using namespace std;
 #define bufferSize 512
 Client UnCliente;
 
-void solicitarDatos(string& user, string& clave)
-{
-
-	cout << "ingrese usuario: ";
-	cin >> user;
-	cout << "ingrese clave: ";
-	cin >> clave;
-}
-
 void ThreadPrincipal(void* pParams)
 {
 	//Thread principal para enviar y recibir mensajes
@@ -44,21 +35,27 @@ void ThreadPrincipal(void* pParams)
 
 void IniciarSesion()
 {
-				
 	string auxMensajeEnviar = "AUTH";
 	UnCliente.EnviarMensaje(auxMensajeEnviar.c_str(), strlen(auxMensajeEnviar.c_str()));
-	auxMensajeEnviar = "Leandro";
-	UnCliente.EnviarMensaje(auxMensajeEnviar.c_str(), strlen(auxMensajeEnviar.c_str()));
-	auxMensajeEnviar = "logoff";
-	UnCliente.EnviarMensaje(auxMensajeEnviar.c_str(), strlen(auxMensajeEnviar.c_str()));
-	/*			
-	respuestaServer = cliente.recibirDatos(bufferDeRespuestaServer, bufferSizeCliente);
-	string auxMensajeRespuesta(bufferDeRespuestaServer);
-	cout << "Mensaje recibido desde el servidor: " << auxMensajeRespuesta << "\n";
-				
-	system("pause");
-	cliente.cerrarConexionConServer();
-	*/
+
+	cout << "Ingrese Usuario: ";
+	cin >> auxMensajeEnviar;
+	UnCliente.EnviarMensaje(auxMensajeEnviar.c_str(), 15);
+
+	cout << "Ingrese clave: ";
+	cin >> auxMensajeEnviar;
+	UnCliente.EnviarMensaje(auxMensajeEnviar.c_str(), 15);
+
+	string respuesta = UnCliente.RecibirMensaje(3);
+
+	if (respuesta == "000") {
+		// TODO: LOGIN OK!
+	}
+	else {
+		respuesta = UnCliente.RecibirMensaje(40);
+		cout << respuesta << "\n";
+		pause();
+	}
 }
 
 void MenuPrincipal()
@@ -101,6 +98,7 @@ void MenuPrincipal()
 			//cliente.enviarCiclicamente()
 			break;
 	}
+	MenuPrincipal();
 }
 
 int main(int argc, char **argv)

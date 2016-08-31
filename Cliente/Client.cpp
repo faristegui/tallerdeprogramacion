@@ -8,6 +8,10 @@
 #define pause() system("pause");
 #endif
 
+#define DEFAULT_BUFLEN 512
+char recvbuf[DEFAULT_BUFLEN];
+int recvbuflen = DEFAULT_BUFLEN;
+
 using namespace std;
 
 Client::Client()
@@ -99,28 +103,18 @@ int Client::EnviarMensaje(const char* datosEnviados, int sizeDatos)
 		exit(0);
 	}
 
-	std::cout << "Bytes enviados al Server: " << cantidadBytesEnviados << std::endl;
 	return cantidadBytesEnviados;
 }
 
-int Client::recibirDatos(char* datosRecibidos, int sizeDatos)
+string Client::RecibirMensaje(int sizeDatos)
 {
 	int cantidadBytesRecibidos;
-
 	
-	cantidadBytesRecibidos = recv(this->ClientConnectionSocket, datosRecibidos, sizeDatos, 0);
-	if (cantidadBytesRecibidos > 0) {
-		std::cout << "Bytes recibidos: " << cantidadBytesRecibidos << std::endl;
-		datosRecibidos[cantidadBytesRecibidos] = 0;
+	cantidadBytesRecibidos = recv(this->ClientConnectionSocket, recvbuf, sizeDatos, 0);
+	recvbuf[cantidadBytesRecibidos] = 0;
+	string mensajeCliente(recvbuf);
 
-	}
-	else
-		if(cantidadBytesRecibidos == 0)
-		std::cout << "Bytes recibidos: " << cantidadBytesRecibidos << " la conexion esta cerrada" <<  std::endl;
-		else
-			std::cout << "fallo con error: " <<  WSAGetLastError();
-
-	return cantidadBytesRecibidos;
+	return mensajeCliente;
 
 }
 

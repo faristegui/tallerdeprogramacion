@@ -24,20 +24,10 @@ using namespace std;
 #endif
 
 Server UnServer;
+Usuarios ControlUsuarios;
 
 void MostrarListaComandos() {
 	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
-}
-
-void Autenticar(string usuario, string password) {
-	Usuarios usuarios;
-
-	if (usuarios.contrasenaValida(usuario, password)) {
-		// TODO: Mandar msj credenciales validas
-	}
-	else {
-		// TODO: Mandar msj credenciales invalidas
-	}
 }
 
 void MainListenThread(void* arg) {
@@ -45,9 +35,23 @@ void MainListenThread(void* arg) {
 	SOCKET ClientSocket = *(SOCKET*)arg;
 
 	while (mensaje != "logoff") {
+
 		mensaje = UnServer.RecibirMensaje(ClientSocket, 4);
-		mensaje = UnServer.RecibirMensaje(ClientSocket, 7);
-		mensaje = UnServer.RecibirMensaje(ClientSocket, 6);
+
+		if (mensaje == "AUTH") {
+
+			string usuario = UnServer.RecibirMensaje(ClientSocket, 15);
+			string password = UnServer.RecibirMensaje(ClientSocket, 15);
+			if (ControlUsuarios.ContrasenaValida(usuario, password)) {
+				UnServer.EnviarMensaje("000", 3, ClientSocket);
+			} else {
+				UnServer.EnviarMensaje("401", 3, ClientSocket);
+				UnServer.EnviarMensaje("El usuario y la contrasena no coinciden", 40, ClientSocket);
+			}
+
+		} else {
+
+		}
 	}
 
 	closesocket(ClientSocket);

@@ -17,7 +17,7 @@ public:
 	Client();
 	int EnviarMensaje(const char* datosEnviados, int sizeDatos);
 	void ConectarAServidor(std::string ip, std::string puerto);
-	int recibirDatos(char* datosRecibidos, int sizeDatos);
+	std::string RecibirMensaje(int sizeDatos);
 	void cerrarConexionConServer();
 	~Client();
 };
