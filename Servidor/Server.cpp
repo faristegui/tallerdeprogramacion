@@ -1,6 +1,12 @@
 #include "Server.h"
+#include "Usuarios.h"
 
 using namespace std;
+
+#define DEFAULT_BUFLEN 512
+char recvbuf[DEFAULT_BUFLEN];
+int recvbuflen = DEFAULT_BUFLEN;
+
 Server::Server(std::string puerto)
 {
 
@@ -58,9 +64,7 @@ void Server::abrir() {
 
 void Server::binding(int af)
 {
-	// Setup the TCP listening socket
-
-	
+	// Setup the TCP listening socket	
 	if (bind(this->ListenSocket, result->ai_addr, (int)result->ai_addrlen) == SOCKET_ERROR)
 	{
 
@@ -98,7 +102,7 @@ void Server::escucharConexiones()
 	/*aceptamos una conexiones*/
 	std::cout << "conexion entrante" << std::endl;
 
-	closesocket(this->ListenSocket); // TODO: Armar un while, sacarlo y dejar afuera del while (para aceptar multiples clientes)
+	closesocket(this->ListenSocket); // TODO: Armar un while, sacarlo y dejar afuera del while (para aceptar multiples conexiones)
 
 	/******leemos los datos desde el socket*/
 	char consultaCliente[100];
@@ -107,14 +111,13 @@ void Server::escucharConexiones()
 	int respuestaEnviarDatos;
 
 	do {
-		cantBitesLeidos = recibirDatos(consultaCliente, sizeof(consultaCliente));
+		string tipoMensaje;
 
-		string mensajeCliente(consultaCliente);
-		cout << "Mensaje del cliente: " << mensajeCliente << "\n";
-
+		cantBitesLeidos = recibirMensaje(tipoMensaje);
+		
 		/*preparamos respuesta al cliente*/
 
-		string auxRespuestaServidor = "hola " + mensajeCliente;
+		string auxRespuestaServidor = "hola ";
 
 		/***enviamos la respuesta****/
 		respuestaEnviarDatos = enviarDatos(auxRespuestaServidor.c_str(), strlen(auxRespuestaServidor.c_str()));
@@ -144,31 +147,37 @@ void Server::escucharConexiones()
 
 }
 
-int Server::recibirDatos(char* datosRecibidos, int sizeDatos)
+int Server::recibirMensaje(string& mensaje)
 {
 	int cantidadBytesRecibidos;
 
-	cantidadBytesRecibidos = recv(this->ClientSocket, datosRecibidos, sizeDatos, 0);
+	cantidadBytesRecibidos = recv(this->ClientSocket, recvbuf, DEFAULT_BUFLEN, 0);
 	if (cantidadBytesRecibidos > 0) {
-		std::cout << "Bytes recibidos: " << cantidadBytesRecibidos << std::endl;
-		datosRecibidos[cantidadBytesRecibidos] = 0;
-		
-		}
+
+		recvbuf[cantidadBytesRecibidos] = 0; // 0 = NULL terminator del string
+		string mensajeCliente(recvbuf);
+		cout << "Mensaje del cliente: " << mensajeCliente << "\n";
+	}
 
 	return cantidadBytesRecibidos;
 }
-
-
 
 int Server::enviarDatos(const char* datosEnviados, int sizeDatos)
 {
 		// Send an initial buffer
 		int respuesta = send(this->ClientSocket, datosEnviados, (int)strlen(datosEnviados), 0);
-
-
 		return respuesta;
-	
+}
 
+void Server::autenticar(string usuario, string password) {
+	Usuarios usuarios;
+	
+	if (usuarios.contrasenaValida(usuario, password)) {
+		// TODO: Mandar msj credenciales validas
+	}
+	else {
+		// TODO: Mandar msj credenciales invalidas
+	}
 }
 
 Server::~Server()

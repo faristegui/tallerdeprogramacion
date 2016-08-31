@@ -29,7 +29,8 @@ private:
 
 	void binding(int af);
 	void escucharConexiones();
-	int recibirDatos(char* datosRecibidos, int sizeDatos);
+	int recibirMensaje(std::string& mensaje);
+	void autenticar(std::string usuario, std::string password);
 public:
 	Server(std::string puerto);
 	void abrir();
