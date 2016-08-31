@@ -45,8 +45,9 @@ void MainListenThread(void* arg) {
 	SOCKET ClientSocket = *(SOCKET*)arg;
 
 	while (mensaje != "logoff") {
-		mensaje = UnServer.RecibirMensaje(ClientSocket);
-
+		mensaje = UnServer.RecibirMensaje(ClientSocket, 4);
+		mensaje = UnServer.RecibirMensaje(ClientSocket, 7);
+		mensaje = UnServer.RecibirMensaje(ClientSocket, 6);
 	}
 
 	closesocket(ClientSocket);

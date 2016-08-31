@@ -95,10 +95,10 @@ SOCKET Server::RecibirNuevaConexion() {
 	return UnSocketClient;
 }
 
-string Server::RecibirMensaje(SOCKET ClientSocket) {
+string Server::RecibirMensaje(SOCKET ClientSocket, int tam) {
 	int cantidadBytesRecibidos;
 
-	cantidadBytesRecibidos = recv(ClientSocket, recvbuf, DEFAULT_BUFLEN, 0);
+	cantidadBytesRecibidos = recv(ClientSocket, recvbuf, tam, 0);
 	recvbuf[cantidadBytesRecibidos] = 0; // 0 = NULL terminator del string
 	string mensajeCliente(recvbuf);
 	cout << "Mensaje del cliente: " << mensajeCliente << "\n";

@@ -25,14 +25,11 @@ using namespace std;
 #endif
 
 #define bufferSize 512
-int opcion;
+Client UnCliente;
 
-void solicitarDatos(string& puerto, string& ip,string& user, string& clave)
+void solicitarDatos(string& user, string& clave)
 {
-	cout << "Ingrese la IP del Servidor (Usar localhost para local): ";
-	cin >> ip;
-	cout << "Ingrese el puerto de conexion: ";
-	cin >> puerto;
+
 	cout << "ingrese usuario: ";
 	cin >> user;
 	cout << "ingrese clave: ";
@@ -45,43 +42,35 @@ void ThreadPrincipal(void* pParams)
 	cout << "Lanza el nuevo thread";
 }
 
-void establecerConexion()
+void IniciarSesion()
 {
-	string puerto;
-	string ip;
-	string user;
-	string clave;
-	int respuestaServer;
-	char bufferDeRespuestaServer[bufferSize];
-	int bufferSizeCliente = bufferSize;
-
-	solicitarDatos(puerto,ip,user,clave);
-	Client cliente(AF_INET, SOCK_STREAM, IPPROTO_TCP, ip, puerto, user.c_str(), clave);
-	cliente.conectarAServidor();
 				
-	char *mensajeAEnviar = "Hola soy el cliente " ;
-	string auxMensajeEnviar = "usuario " + user;
-	cout << "Mensaje enviado al servidor: " << auxMensajeEnviar << "\n";
-	cliente.enviarDatos(auxMensajeEnviar.c_str(), strlen(auxMensajeEnviar.c_str()));
-				
+	string auxMensajeEnviar = "AUTH";
+	UnCliente.EnviarMensaje(auxMensajeEnviar.c_str(), strlen(auxMensajeEnviar.c_str()));
+	auxMensajeEnviar = "Leandro";
+	UnCliente.EnviarMensaje(auxMensajeEnviar.c_str(), strlen(auxMensajeEnviar.c_str()));
+	auxMensajeEnviar = "logoff";
+	UnCliente.EnviarMensaje(auxMensajeEnviar.c_str(), strlen(auxMensajeEnviar.c_str()));
+	/*			
 	respuestaServer = cliente.recibirDatos(bufferDeRespuestaServer, bufferSizeCliente);
 	string auxMensajeRespuesta(bufferDeRespuestaServer);
 	cout << "Mensaje recibido desde el servidor: " << auxMensajeRespuesta << "\n";
 				
 	system("pause");
 	cliente.cerrarConexionConServer();
+	*/
 }
 
-void menuPrincipal()
+void MenuPrincipal()
 {
-	opcion = 0; //Opción por defecto
+	int opcion = 0;
 
 	while((opcion < 1) || (opcion > 6))
 	{
-		clear(); //Limpia la pantalla
+		clear();
 		cout << "MENU PRINCIPAL" << endl << endl <<
-		"1- Conectar" << endl <<
-		"2- Desconectar" << endl <<
+		"1- Iniciar Sesion" << endl <<
+		"2- Cerrar Sesion" << endl <<
 		"3- Salir" << endl <<
 		"4- Enviar" << endl <<
 		"5- Recibir" << endl <<
@@ -91,7 +80,7 @@ void menuPrincipal()
 	switch(opcion)
 	{
 		case 1:
-			establecerConexion();
+			IniciarSesion();
 			break;
 		case 2:
 			//cliente.desconectar()
@@ -116,9 +105,19 @@ void menuPrincipal()
 
 int main(int argc, char **argv)
 {
-		_beginthread(ThreadPrincipal, 0, NULL);
+	string ip;
+	string puerto;
 
-		menuPrincipal();
+	cout << "Ingrese la IP del Servidor (Usar localhost para local): ";
+	cin >> ip;
+	cout << "Ingrese el puerto de conexion: ";
+	cin >> puerto;
+
+	UnCliente.ConectarAServidor(ip, puerto);
+
+	_beginthread(ThreadPrincipal, 0, NULL);
+
+	MenuPrincipal();
 	
 	return 0;
 }

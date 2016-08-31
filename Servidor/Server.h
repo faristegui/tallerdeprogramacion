@@ -19,7 +19,7 @@ private:
 public:
 	void Abrir(std::string UnPuerto);
 	SOCKET RecibirNuevaConexion();
-	std::string RecibirMensaje(SOCKET ClientSocket);
+	std::string RecibirMensaje(SOCKET ClientSocket, int tam);
 	Server();
 	int EnviarMensaje(const char* datosEnviados, int sizeDatos, SOCKET ClientSocket);
 	~Server();
