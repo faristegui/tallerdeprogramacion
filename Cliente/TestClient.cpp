@@ -17,9 +17,11 @@ using namespace std;
 #pragma comment (lib, "AdvApi32.lib")
 
 #ifdef WIN32 
-#define clear() system("cls"); 
+#define clear() system("cls");
+#define pause() system("pause");
 #else 
-#define clear() system("clear"); 
+#define clear() system("clear");
+#define pause() system("pause");
 #endif
 
 #define bufferSize 512

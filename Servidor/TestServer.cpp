@@ -14,6 +14,14 @@ using namespace std;
 
 #pragma comment (lib, "Ws2_32.lib")
 
+#ifdef WIN32 
+#define clear() system("cls");
+#define pause() system("pause");
+#else 
+#define clear() system("clear");
+#define pause() system("pause");
+#endif
+
 void MostrarListaComandos() {
 	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
 }
@@ -48,7 +56,7 @@ int main()
 		if (comando == "q")
 		{
 			cout << "Servidor off\n";
-			system("pause");
+			pause();
 			break;
 		}
 	}

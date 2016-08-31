@@ -1,5 +1,12 @@
 #include "Client.h"
 
+#ifdef WIN32 
+#define clear() system("cls");
+#define pause() system("pause");
+#else 
+#define clear() system("clear");
+#define pause() system("pause");
+#endif
 
 Client::Client(int af, int tipo, int protocolo, std::string ip, std::string puerto,const char* usuario, std::string clave)
 {
@@ -17,7 +24,7 @@ Client::Client(int af, int tipo, int protocolo, std::string ip, std::string puer
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
 
 		std::cout << "Error al inicializar el socket del cliente: " << WSAGetLastError() << std::endl;
-		system("pause");
+		pause();
 		WSACleanup();
 		exit(0);
 	}
@@ -32,7 +39,7 @@ Client::Client(int af, int tipo, int protocolo, std::string ip, std::string puer
 	if (getaddrinfo(this->ipServer.c_str(), this->puerto.c_str(), &(this->hints), &(this->result)) != NO_ERROR) {
 		
 		std::cout << "Error al inicializar configuracion de ip y puerto" << std::endl;
-		system("pause");
+		pause();
 		WSACleanup();
 		exit(0);
 	}
@@ -44,7 +51,7 @@ Client::Client(int af, int tipo, int protocolo, std::string ip, std::string puer
 	if (this->ClientConnectionSocket == INVALID_SOCKET) 
 	{
 		std::cout << "Error al crear el socket del cliente: " << WSAGetLastError() << std::endl;
-		system("pause");
+		pause();
 		freeaddrinfo(result);
 		WSACleanup();
 		exit(0);
@@ -73,7 +80,7 @@ void Client::conectarAServidor()
 
 	if (this->ClientConnectionSocket == INVALID_SOCKET) {
 		std::cout << "fallo al intentar conectar con el servidor" << WSAGetLastError() << std::endl;
-		system("pause");
+		pause();
 		WSACleanup();
 		freeaddrinfo(this->result);
 		exit(0);
@@ -92,7 +99,7 @@ int Client::enviarDatos(const char* datosEnviados, int sizeDatos)
 	if (cantidadBytesEnviados == SOCKET_ERROR) {
 
 		std::cout << "fallo al enviar los datos: " << WSAGetLastError() << std::endl;
-		system("pause");
+		pause();
 		exit(0);
 	}
 
