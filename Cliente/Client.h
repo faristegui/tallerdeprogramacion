@@ -15,7 +15,7 @@ private:
 	SOCKET ClientConnectionSocket;
 public:
 	Client();
-	int EnviarMensaje(const char* datosEnviados, int sizeDatos);
+	int EnviarMensaje(std::string, int sizeDatos);
 	void ConectarAServidor(std::string ip, std::string puerto);
 	std::string RecibirMensaje(int sizeDatos);
 	void cerrarConexionConServer();

@@ -106,11 +106,12 @@ string Server::RecibirMensaje(SOCKET ClientSocket, int tam) {
 	return mensajeCliente;
 }
 
-int Server::EnviarMensaje(const char* datosEnviados, int sizeDatos, SOCKET ClientSocket)
+int Server::EnviarMensaje(string mensaje, int sizeDatos, SOCKET ClientSocket)
 {
-		// Send an initial buffer
-		int respuesta = send(ClientSocket, datosEnviados, (int)strlen(datosEnviados), 0);
-		return respuesta;
+	const char* datosEnviados = mensaje.c_str();
+	// Send an initial buffer
+	int respuesta = send(ClientSocket, datosEnviados, (int)strlen(datosEnviados), 0);
+	return respuesta;
 }
 
 Server::~Server()

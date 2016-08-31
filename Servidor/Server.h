@@ -21,7 +21,7 @@ public:
 	SOCKET RecibirNuevaConexion();
 	std::string RecibirMensaje(SOCKET ClientSocket, int tam);
 	Server();
-	int EnviarMensaje(const char* datosEnviados, int sizeDatos, SOCKET ClientSocket);
+	int EnviarMensaje(std::string mensaje, int sizeDatos, SOCKET ClientSocket);
 	~Server();
 };
 

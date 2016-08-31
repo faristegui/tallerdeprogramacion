@@ -24,7 +24,6 @@ using namespace std;
 #define pause() system("pause");
 #endif
 
-#define bufferSize 512
 Client UnCliente;
 
 void ThreadPrincipal(void* pParams)
@@ -35,29 +34,40 @@ void ThreadPrincipal(void* pParams)
 
 void IniciarSesion()
 {
-	string auxMensajeEnviar = "AUTH";
-	UnCliente.EnviarMensaje(auxMensajeEnviar.c_str(), strlen(auxMensajeEnviar.c_str()));
+	string mensaje = "AUTH";
+	UnCliente.EnviarMensaje(mensaje, 4);
 
 	cout << "Ingrese Usuario: ";
-	cin >> auxMensajeEnviar;
-	UnCliente.EnviarMensaje(auxMensajeEnviar.c_str(), 15);
+	cin >> mensaje;
+	UnCliente.EnviarMensaje(mensaje, 15);
 
 	cout << "Ingrese clave: ";
-	cin >> auxMensajeEnviar;
-	UnCliente.EnviarMensaje(auxMensajeEnviar.c_str(), 15);
+	cin >> mensaje;
+	UnCliente.EnviarMensaje(mensaje, 15);
 
 	string respuesta = UnCliente.RecibirMensaje(3);
 
+	/* NO HAY QUE HACER NADA DE ACUERDO A CADA CASO?
 	if (respuesta == "000") {
-		cout << "Datos correctos" << "\n";
-		pause();
-		// TODO: LOGIN OK!
+		
 	}
 	else {
-		respuesta = UnCliente.RecibirMensaje(40);
-		cout << respuesta << "\n";
-		pause();
+		
 	}
+	*/
+
+	respuesta = UnCliente.RecibirMensaje(40);
+	cout << respuesta << "\n";
+	pause();
+}
+
+void CerrarSesion() {
+	string mensaje = "OUT";
+	UnCliente.EnviarMensaje(mensaje, 4);
+
+	string respuesta = UnCliente.RecibirMensaje(40);
+	cout << respuesta << "\n";
+	pause();
 }
 
 void MenuPrincipal()
@@ -82,7 +92,7 @@ void MenuPrincipal()
 			IniciarSesion();
 			break;
 		case 2:
-			//cliente.desconectar()
+			CerrarSesion();
 			break;
 		case 3:
 			clear();

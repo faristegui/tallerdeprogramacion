@@ -92,8 +92,9 @@ void Client::ConectarAServidor(string UnaIP, string UnPuerto)
 }
 
 
-int Client::EnviarMensaje(const char* datosEnviados, int sizeDatos)
+int Client::EnviarMensaje(string mensaje, int sizeDatos)
 {
+	const char* datosEnviados = mensaje.c_str();
 	int cantidadBytesEnviados;
 	cantidadBytesEnviados = send(this->ClientConnectionSocket, datosEnviados, sizeDatos, 0);
 	if (cantidadBytesEnviados == SOCKET_ERROR) {

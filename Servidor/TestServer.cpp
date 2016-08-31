@@ -31,19 +31,23 @@ void MostrarListaComandos() {
 }
 
 void MainListenThread(void* arg) {
-	string mensaje = "";
+	string Usuario = "";
+	string Mensaje = "";
 	SOCKET ClientSocket = *(SOCKET*)arg;
 
-	while (mensaje != "logoff") {
+	while (Mensaje != "logoff") {
 
-		mensaje = UnServer.RecibirMensaje(ClientSocket, 4);
+		Mensaje = UnServer.RecibirMensaje(ClientSocket, 4);
 
-		if (mensaje == "AUTH") {
+		if (Mensaje == "AUTH") {
 
-			string usuario = UnServer.RecibirMensaje(ClientSocket, 15);
-			string password = UnServer.RecibirMensaje(ClientSocket, 15);
-			if (ControlUsuarios.ContrasenaValida(usuario, password)) {
+			string UsuarioMsj = UnServer.RecibirMensaje(ClientSocket, 15);
+			string PasswordMsj = UnServer.RecibirMensaje(ClientSocket, 15);
+
+			if (ControlUsuarios.ContrasenaValida(UsuarioMsj, PasswordMsj)) {
+				Usuario = UsuarioMsj;
 				UnServer.EnviarMensaje("000", 3, ClientSocket);
+				UnServer.EnviarMensaje("Bienvenido, " + Usuario, 40, ClientSocket);
 			} else {
 				UnServer.EnviarMensaje("401", 3, ClientSocket);
 				UnServer.EnviarMensaje("El usuario y la contrasena no coinciden", 40, ClientSocket);
@@ -51,6 +55,15 @@ void MainListenThread(void* arg) {
 
 		} else {
 
+			if (Mensaje == "OUT") {
+
+				if (Usuario != "") {
+					UnServer.EnviarMensaje("Hasta la proxima " + Usuario, 40, ClientSocket);
+					Usuario = "";
+				} else {
+					UnServer.EnviarMensaje("No tenia ninguna sesion iniciada", 40, ClientSocket);
+				}
+			}
 		}
 	}
 
