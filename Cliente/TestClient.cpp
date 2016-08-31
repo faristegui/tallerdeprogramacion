@@ -50,6 +50,7 @@ void IniciarSesion()
 
 	if (respuesta == "000") {
 		cout << "Datos correctos" << "\n";
+		pause();
 		// TODO: LOGIN OK!
 	}
 	else {
