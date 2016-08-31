@@ -49,6 +49,7 @@ void IniciarSesion()
 	string respuesta = UnCliente.RecibirMensaje(3);
 
 	if (respuesta == "000") {
+		cout << "Datos correctos" << "\n";
 		// TODO: LOGIN OK!
 	}
 	else {
