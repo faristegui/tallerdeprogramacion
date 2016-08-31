@@ -27,7 +27,7 @@ using namespace std;
 #define bufferSize 512
 int opcion;
 
-void solicitarDatos(string puerto, string ip,string user, string clave)
+void solicitarDatos(string& puerto, string& ip,string& user, string& clave)
 {
 	cout << "Ingrese la IP del Servidor (Usar localhost para local): ";
 	cin >> ip;
@@ -45,61 +45,35 @@ void ThreadPrincipal(void* pParams)
 	cout << "Lanza el nuevo thread";
 }
 
-/*
-Esta seria la idea del thread principal
-void ThreadPrincipal(void* pParams)
+void establecerConexion()
 {
 	string puerto;
 	string ip;
 	string user;
 	string clave;
-	while(true)
-	{
-			cout << "Ingrese una opción entre 1 y 6" << endl <<
-			"1- Conectar" << endl <<
-		"2-Desconectar" << endl <<
-		"3-Salir" << endl <<
-		"4-Enviar" << endl <<
-		"5-Recibir" << endl <<
-		"6-Lore Ipsum" << endl;
-		cin >> opcion;
-		switch(opcion)
-		{
-			case 1:
-				{
-					solicitarDatos(puerto,ip,user,clave);
-					Client cliente(AF_INET, SOCK_STREAM, IPPROTO_TCP, ip, puerto, user.c_str(), clave);
-					cliente.conectarAServidor();
-				}
-				//cliente.conectar()
-				break;
-			case 2:
-				//cliente.desconectar()
-				break;
-			case 3:
-				exit(0);
-				break;
-			case 4:
-				//cliente.enviar()
-				break;
-			case 5:
-				//cliente.recibir()
-				break;
-			case 6:
-				//cliente.enviarCiclicamente()
-				break;
-		}
-	}
+	int respuestaServer;
+	char bufferDeRespuestaServer[bufferSize];
+	int bufferSizeCliente = bufferSize;
+
+	solicitarDatos(puerto,ip,user,clave);
+	Client cliente(AF_INET, SOCK_STREAM, IPPROTO_TCP, ip, puerto, user.c_str(), clave);
+	cliente.conectarAServidor();
+				
+	char *mensajeAEnviar = "Hola soy el cliente " ;
+	string auxMensajeEnviar = "usuario " + user;
+	cout << "Mensaje enviado al servidor: " << auxMensajeEnviar << "\n";
+	cliente.enviarDatos(auxMensajeEnviar.c_str(), strlen(auxMensajeEnviar.c_str()));
+				
+	respuestaServer = cliente.recibirDatos(bufferDeRespuestaServer, bufferSizeCliente);
+	string auxMensajeRespuesta(bufferDeRespuestaServer);
+	cout << "Mensaje recibido desde el servidor: " << auxMensajeRespuesta << "\n";
+				
+	system("pause");
+	cliente.cerrarConexionConServer();
 }
-*/
 
 void menuPrincipal()
 {
-	string puerto;
-	string ip;
-	string user;
-	string clave;
-
 	opcion = 0; //Opción por defecto
 
 	while((opcion < 1) || (opcion > 6))
@@ -117,13 +91,7 @@ void menuPrincipal()
 	switch(opcion)
 	{
 		case 1:
-			{
-				solicitarDatos(puerto,ip,user,clave);
-				Client cliente(AF_INET, SOCK_STREAM, IPPROTO_TCP, ip, puerto, user.c_str(), clave);
-				cliente.conectarAServidor();
-				//falta completar, seria lo de abajo que esta comentado
-			}
-			//cliente.conectar()
+			establecerConexion();
 			break;
 		case 2:
 			//cliente.desconectar()
@@ -154,41 +122,6 @@ int main(int argc, char **argv)
 
 		menuPrincipal();
 	}
-
 	
 	return 0;
 }
-
-//system("pause");	
-	/*
-	int respuestaServer;
-	char bufferDeRespuestaServer[bufferSize];
-	int bufferSizeCliente = bufferSize;
-
-	solicitarDatos(puerto,ip,user,clave);
-
-	Client cliente(AF_INET, SOCK_STREAM, IPPROTO_TCP, ip, puerto, user.c_str(), clave);
-
-	cliente.conectarAServidor();
-
-	char *mensajeAEnviar = "Hola soy el cliente " ;
-	string auxMensajeEnviar = "usuario " + user;
-	
-	cout << "Mensaje enviado al servidor: " << auxMensajeEnviar << "\n";
-
-	cliente.enviarDatos(auxMensajeEnviar.c_str(), strlen(auxMensajeEnviar.c_str()));
-
-
-	respuestaServer = cliente.recibirDatos(bufferDeRespuestaServer, bufferSizeCliente);
-	
-	string auxMensajeRespuesta(bufferDeRespuestaServer);
-	cout << "Mensaje recibido desde el servidor: " << auxMensajeRespuesta << "\n";
-
-		
-
-
-
-	system("pause");
-
-	cliente.cerrarConexionConServer();
-	*/
