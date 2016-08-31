@@ -36,6 +36,13 @@ void solicitarDatos(string puerto, string ip,string user, string clave)
 	cout << "ingrese clave: ";
 	cin >> clave;
 }
+
+void ThreadPrincipal(void* pParams)
+{
+	//Thread principal para enviar y recibir mensajes
+	cout << "Lanza el nuevo thread";
+}
+
 /*
 Esta seria la idea del thread principal
 void ThreadPrincipal(void* pParams)
@@ -120,6 +127,9 @@ void menuPrincipal()
 			//cliente.desconectar()
 			break;
 		case 3:
+			clear();
+			cout << "El programa se cerrara.";
+			Sleep(3000);
 			exit(0);
 			break;
 		case 4:
@@ -138,6 +148,8 @@ int main(int argc, char **argv)
 {
 	while(true)
 	{
+		_beginthread(ThreadPrincipal, 0, NULL);
+
 		menuPrincipal();
 	}
 
