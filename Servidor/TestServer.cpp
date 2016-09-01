@@ -10,6 +10,7 @@
 
 #include "Server.h"
 #include "Usuarios.h"
+#include "Mensaje.h"
 
 using namespace std;
 
@@ -32,14 +33,14 @@ void MostrarListaComandos() {
 
 void MainListenThread(void* arg) {
 	string Usuario = "";
-	string Mensaje = "";
+	string mensaje = "";
 	SOCKET ClientSocket = *(SOCKET*)arg;
 
-	while (Mensaje != "logoff") {
+	while (mensaje != "logoff") {
 
-		Mensaje = UnServer.RecibirMensaje(ClientSocket, 4);
+		mensaje = UnServer.RecibirMensaje(ClientSocket, 4);
 
-		if (Mensaje == "AUTH") {
+		if (mensaje == "AUTH") {
 
 			string UsuarioMsj = UnServer.RecibirMensaje(ClientSocket, 15);
 			string PasswordMsj = UnServer.RecibirMensaje(ClientSocket, 15);
@@ -53,15 +54,37 @@ void MainListenThread(void* arg) {
 				UnServer.EnviarMensaje("El usuario y la contrasena no coinciden", 40, ClientSocket);
 			}
 
-		} else {
+		}
+		else 
+		{
+			if(mensaje == "ENVI")
+			{
+				string destinatario = UnServer.RecibirMensaje(ClientSocket,15);
+				string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,60);
+				if(ControlUsuarios.destinatarioValido(destinatario))
+				{
+					UnServer.EnviarMensaje("001",3,ClientSocket);
+					UnServer.EnviarMensaje("Mensaje enviado con exito", 30,ClientSocket);
+					Mensaje* unMensaje = new Mensaje(Usuario,destinatario,contenidoMensaje);
+					UnServer.agregarMensaje(unMensaje);
+					//faltaria informar en el log
+				}
+				else
+				{
+					UnServer.EnviarMensaje("402",3,ClientSocket);
+					UnServer.EnviarMensaje("El destinatario no existe",30,ClientSocket);
+				}
+			}
+			else
+			{
+				if (mensaje == "OUT") {
 
-			if (Mensaje == "OUT") {
-
-				if (Usuario != "") {
-					UnServer.EnviarMensaje("Hasta la proxima " + Usuario, 40, ClientSocket);
-					Usuario = "";
-				} else {
-					UnServer.EnviarMensaje("No tenia ninguna sesion iniciada", 40, ClientSocket);
+					if (Usuario != "") {
+						UnServer.EnviarMensaje("Hasta la proxima " + Usuario, 40, ClientSocket);
+						Usuario = "";
+					} else {
+						UnServer.EnviarMensaje("No tenia ninguna sesion iniciada", 40, ClientSocket);
+					}
 				}
 			}
 		}

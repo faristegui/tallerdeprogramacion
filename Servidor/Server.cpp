@@ -8,6 +8,12 @@ int recvbuflen = DEFAULT_BUFLEN;
 
 Server::Server()
 {
+	todosLosMensajes = new Lista<Mensaje*>;
+}
+
+void Server::agregarMensaje(Mensaje* unMensaje)
+{
+	todosLosMensajes->agregar(unMensaje);
 }
 
 void Server::Abrir(string UnPuerto) {

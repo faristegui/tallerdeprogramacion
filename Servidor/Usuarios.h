@@ -18,6 +18,7 @@ class Usuarios
 public:
 	Usuarios();
 	bool ContrasenaValida(string usuario, string contrasena);
+	bool destinatarioValido(string destinatario);
 	~Usuarios();
 private:
 	Usuario getProximoUsuario();

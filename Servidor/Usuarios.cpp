@@ -22,6 +22,21 @@ bool Usuarios::ContrasenaValida(std::string usuario, std::string contrasena) {
 	return false;
 }
 
+bool Usuarios::destinatarioValido(string destinatario)
+{
+	Usuario unUsuario;
+	resetearCursorArchivo();
+	while(hayUsuarios()) // hay un problema con esta funcion, no funciona bien cuando se terminan los usuario
+	{
+		unUsuario = getProximoUsuario();
+		if(unUsuario.nombre == destinatario)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 void Usuarios::resetearCursorArchivo() {
 	archivoUsuarios.clear();
 	archivoUsuarios.seekg(0, std::ifstream::beg);

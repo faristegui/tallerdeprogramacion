@@ -26,12 +26,6 @@ using namespace std;
 
 Client UnCliente;
 
-void ThreadPrincipal(void* pParams)
-{
-	//Thread principal para enviar y recibir mensajes
-	cout << "Lanza el nuevo thread";
-}
-
 void IniciarSesion()
 {
 	string mensaje = "AUTH";
@@ -70,6 +64,48 @@ void CerrarSesion() {
 	pause();
 }
 
+void enviarMensaje(void* pParams)
+{
+	int opcion = 0;
+	string mensaje;
+
+	while((opcion < 1) || (opcion > 2))
+	{
+		clear();
+		cout << "Seleccione destinatario" << endl
+		<< "1- destinatario unico" << endl
+		<< "2- todos los usuarios" << endl;
+		cin >> opcion;
+	}
+
+	//Avisa al servidor que va a mandar un mensaje
+	UnCliente.EnviarMensaje("ENVI",4);
+
+	cout << "Ingrese el mensaje que desea enviar" << endl;
+	cin >> mensaje;
+	if(opcion == 1)
+	{
+		string destinatario, respuestaServer;
+		cout << "Ingrese nombre de usuario del destinatario" << endl;
+		cin >> destinatario;
+
+		UnCliente.EnviarMensaje(destinatario,15);
+		UnCliente.EnviarMensaje(mensaje,60);
+
+		//Aca el servidor deberia validar al destinatario, respondiendo si es valido o no.
+		respuestaServer = UnCliente.RecibirMensaje(3);
+
+		cout << "Respuesta del servidor: " << respuestaServer << endl;
+		respuestaServer = UnCliente.RecibirMensaje(30);
+		cout <<"Respuesta del servidor: " << respuestaServer << endl;
+		system("pause");
+	}
+	if(opcion == 2)
+	{
+
+	}
+}
+
 void MenuPrincipal()
 {
 	int opcion = 0;
@@ -101,7 +137,9 @@ void MenuPrincipal()
 			exit(0);
 			break;
 		case 4:
-			//cliente.enviar()
+			enviarMensaje(NULL);
+			//faltaria lanzar el thread y 'sincronizar con el main para que no se pisen y se ejecute primero este
+			//_beginthread(enviarMensaje,0,NULL);
 			break;
 		case 5:
 			//cliente.recibir()
@@ -125,7 +163,6 @@ int main(int argc, char **argv)
 
 	UnCliente.ConectarAServidor(ip, puerto);
 
-	_beginthread(ThreadPrincipal, 0, NULL);
 
 	MenuPrincipal();
 	

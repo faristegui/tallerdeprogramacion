@@ -10,17 +10,20 @@
 #include <iostream>
 #include <string>
 #include <process.h>
-
+#include "Lista.h"
+#include "Mensaje.h"
 
 class Server
 {
 private:
 	SOCKET ListenSocket;
+	Lista<Mensaje*>* todosLosMensajes;
 public:
 	void Abrir(std::string UnPuerto);
 	SOCKET RecibirNuevaConexion();
 	std::string RecibirMensaje(SOCKET ClientSocket, int tam);
 	Server();
+	void agregarMensaje(Mensaje* unMensaje);
 	int EnviarMensaje(std::string mensaje, int sizeDatos, SOCKET ClientSocket);
 	~Server();
 };
