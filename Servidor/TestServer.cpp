@@ -86,6 +86,13 @@ void MainListenThread(void* arg) {
 						UnServer.EnviarMensaje("No tenia ninguna sesion iniciada", 40, ClientSocket);
 					}
 				}
+				else
+				{
+					if(mensaje == "PING")
+					{
+						UnServer.EnviarMensaje("OK", 2, ClientSocket);
+					}
+				}
 			}
 		}
 	}

@@ -26,6 +26,34 @@ using namespace std;
 
 Client UnCliente;
 
+bool statusServer = false;
+
+void ThreadStatus(void* pParams)
+{
+	//Envía mensajes al servidor y setea la variable serverStatus en TRUE o FALSE
+	bool status = false;
+
+	while(true)
+	{
+		UnCliente.EnviarMensaje("PING", 4);
+
+		string respuesta = UnCliente.RecibirMensaje(2);
+
+		if(respuesta == "OK")
+		{
+			status = true;
+		}
+		else
+		{
+			status = false;
+			clear();
+			cout << "Conexion con el servidor terminada. (Server Offline).";
+		}
+		serverStatus = status;
+		Sleep(30000); // 30 segundos
+	}
+}
+
 void IniciarSesion()
 {
 	string mensaje = "AUTH";
@@ -163,6 +191,7 @@ int main(int argc, char **argv)
 
 	UnCliente.ConectarAServidor(ip, puerto);
 
+	_beginthread(ThreadStatus, 0, NULL);
 
 	MenuPrincipal();
 	
