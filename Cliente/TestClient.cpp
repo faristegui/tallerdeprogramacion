@@ -26,7 +26,7 @@ using namespace std;
 
 Client UnCliente;
 
-bool statusServer = false;
+bool serverStatus = false;
 
 void ThreadStatus(void* pParams)
 {
