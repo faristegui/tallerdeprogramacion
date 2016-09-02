@@ -32,7 +32,7 @@ void Client::ConectarAServidor(string UnaIP, string UnPuerto)
 
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
 
-		std::cout << "Error al inicializar el socket del cliente: " << WSAGetLastError() << std::endl;
+		cout << "Error al inicializar el socket del cliente: " << WSAGetLastError() << endl;
 		pause();
 		WSACleanup();
 		exit(0);
@@ -47,7 +47,7 @@ void Client::ConectarAServidor(string UnaIP, string UnPuerto)
 
 	if (getaddrinfo(UnaIP.c_str(), UnPuerto.c_str(), &(hints), &(result)) != NO_ERROR) {
 
-		std::cout << "Error al inicializar configuracion de ip y puerto" << std::endl;
+		cout << "Error al inicializar configuracion de ip y puerto" << endl;
 		pause();
 		WSACleanup();
 		exit(0);
@@ -59,7 +59,7 @@ void Client::ConectarAServidor(string UnaIP, string UnPuerto)
 	this->ClientConnectionSocket = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
 	if (this->ClientConnectionSocket == INVALID_SOCKET)
 	{
-		std::cout << "Error al crear el socket del cliente: " << WSAGetLastError() << std::endl;
+		cout << "Error al crear el socket del cliente: " << WSAGetLastError() << endl;
 		pause();
 		freeaddrinfo(result);
 		WSACleanup();
@@ -83,7 +83,7 @@ void Client::ConectarAServidor(string UnaIP, string UnPuerto)
 	freeaddrinfo(result);
 
 	if (this->ClientConnectionSocket == INVALID_SOCKET) {
-		std::cout << "fallo al intentar conectar con el servidor" << WSAGetLastError() << std::endl;
+		cout << "fallo al intentar conectar con el servidor" << WSAGetLastError() << endl;
 		pause();
 		WSACleanup();
 		freeaddrinfo(result);
@@ -99,7 +99,7 @@ int Client::EnviarMensaje(string mensaje, int sizeDatos)
 	cantidadBytesEnviados = send(this->ClientConnectionSocket, datosEnviados, sizeDatos, 0);
 	if (cantidadBytesEnviados == SOCKET_ERROR) {
 
-		std::cout << "fallo al enviar los datos: " << WSAGetLastError() << std::endl;
+		cout << "fallo al enviar los datos: " << WSAGetLastError() << endl;
 		pause();
 		exit(0);
 	}
@@ -125,7 +125,7 @@ void Client::cerrarConexionConServer()
 	// shutdown the connection since no more data will be sent
 
 	if (shutdown(this->ClientConnectionSocket, SD_SEND) == SOCKET_ERROR) {
-		std::cout << "fallo al cerrar la conexion con el server: " << WSAGetLastError();
+		cout << "fallo al cerrar la conexion con el server: " << WSAGetLastError();
 		closesocket(this->ClientConnectionSocket);
 		WSACleanup();
 		exit(0);
@@ -134,7 +134,7 @@ void Client::cerrarConexionConServer()
 }
 Client::~Client()
 {
-	std::string auxMensajeEnviar = "logoff";
+	string auxMensajeEnviar = "logoff";
 	EnviarMensaje(auxMensajeEnviar.c_str(), strlen(auxMensajeEnviar.c_str()));
 	closesocket(this->ClientConnectionSocket);
 }

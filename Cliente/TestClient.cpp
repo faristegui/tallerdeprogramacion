@@ -183,7 +183,7 @@ int main(int argc, char **argv)
 {
 	string ip;
 	string puerto;
-
+		
 	cout << "Ingrese la IP del Servidor (Usar localhost para local): ";
 	cin >> ip;
 	cout << "Ingrese el puerto de conexion: ";
@@ -195,6 +195,6 @@ int main(int argc, char **argv)
 	_beginthread(ThreadStatus, 0, NULL);
 
 	MenuPrincipal();
-	
+
 	return 0;
 }
