@@ -36,8 +36,8 @@ void MainListenThread(void* arg) {
 	string mensaje = "";
 	SOCKET ClientSocket = *(SOCKET*)arg;
 
-	while (mensaje != "logoff") {
-
+	while (mensaje != "logoff") 
+	{
 		mensaje = UnServer.RecibirMensaje(ClientSocket, 4);
 
 		if (mensaje == "AUTH") {
@@ -55,45 +55,36 @@ void MainListenThread(void* arg) {
 			}
 
 		}
-		else 
+		if(mensaje == "ENVI")
 		{
-			if(mensaje == "ENVI")
+			string destinatario = UnServer.RecibirMensaje(ClientSocket,15);
+			string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,60);
+			if(ControlUsuarios.destinatarioValido(destinatario))
 			{
-				string destinatario = UnServer.RecibirMensaje(ClientSocket,15);
-				string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,60);
-				if(ControlUsuarios.destinatarioValido(destinatario))
-				{
-					UnServer.EnviarMensaje("001",3,ClientSocket);
-					UnServer.EnviarMensaje("Mensaje enviado con exito", 30,ClientSocket);
-					Mensaje* unMensaje = new Mensaje(Usuario,destinatario,contenidoMensaje);
-					UnServer.agregarMensaje(unMensaje);
-					//faltaria informar en el log
-				}
-				else
-				{
-					UnServer.EnviarMensaje("402",3,ClientSocket);
-					UnServer.EnviarMensaje("El destinatario no existe",30,ClientSocket);
-				}
+				UnServer.EnviarMensaje("001",3,ClientSocket);
+				UnServer.EnviarMensaje("Mensaje enviado con exito", 30,ClientSocket);
+				Mensaje* unMensaje = new Mensaje(Usuario,destinatario,contenidoMensaje);
+				UnServer.agregarMensaje(unMensaje);
+				//faltaria informar en el log
 			}
 			else
 			{
-				if (mensaje == "OUT") {
-
-					if (Usuario != "") {
-						UnServer.EnviarMensaje("Hasta la proxima " + Usuario, 40, ClientSocket);
-						Usuario = "";
-					} else {
-						UnServer.EnviarMensaje("No tenia ninguna sesion iniciada", 40, ClientSocket);
-					}
-				}
-				else
-				{
-					if(mensaje == "PING")
-					{
-						UnServer.EnviarMensaje("OK", 2, ClientSocket);
-					}
-				}
+				UnServer.EnviarMensaje("402",3,ClientSocket);
+				UnServer.EnviarMensaje("El destinatario no existe",30,ClientSocket);
 			}
+		}
+		if (mensaje == "OUT") {
+
+			if (Usuario != "") {
+				UnServer.EnviarMensaje("Hasta la proxima " + Usuario, 40, ClientSocket);
+				Usuario = "";
+			} else {
+				UnServer.EnviarMensaje("No tenia ninguna sesion iniciada", 40, ClientSocket);
+			}
+		}
+		if(mensaje == "PING")
+		{
+			UnServer.EnviarMensaje("OK", 2, ClientSocket);
 		}
 	}
 

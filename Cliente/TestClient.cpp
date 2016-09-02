@@ -191,6 +191,7 @@ int main(int argc, char **argv)
 
 	UnCliente.ConectarAServidor(ip, puerto);
 
+	// Thread de status del server.
 	_beginthread(ThreadStatus, 0, NULL);
 
 	MenuPrincipal();
