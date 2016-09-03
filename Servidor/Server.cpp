@@ -33,6 +33,7 @@ Lista<Mensaje*>* Server::obtenerMensajesPara(string destinatario)
 {
 	Lista<Mensaje*>* buzon = new Lista<Mensaje*>;
 	int posicion = 1;
+	int vuelta = 0;
 	Lista<int>* posicionesAEliminar = new Lista<int>();
 	todosLosMensajes->iniciarCursor();
 	
@@ -48,7 +49,8 @@ Lista<Mensaje*>* Server::obtenerMensajesPara(string destinatario)
 	posicionesAEliminar->iniciarCursor();
 	while(posicionesAEliminar->avanzarCursor())
 	{
-		todosLosMensajes->remover(posicionesAEliminar->obtenerCursor());
+		todosLosMensajes->remover(posicionesAEliminar->obtenerCursor()-vuelta);
+		vuelta++;
 	}
 	return buzon;
 }

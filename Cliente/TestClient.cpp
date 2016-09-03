@@ -28,6 +28,12 @@ Client UnCliente;
 
 bool serverStatus = false;
 
+struct EnvioThreadData
+{
+	int opcion;
+	string mensaje;
+};
+
 void ThreadStatus(void* pParams)
 {
 	//Envía mensajes al servidor y setea la variable serverStatus en TRUE o FALSE
@@ -92,11 +98,8 @@ void CerrarSesion() {
 	pause();
 }
 
-void enviarMensaje(void* pParams)
+void menuMensaje(string& mensaje, int& opcion)
 {
-	int opcion = 0;
-	string mensaje;
-
 	while((opcion < 1) || (opcion > 2))
 	{
 		clear();
@@ -109,12 +112,20 @@ void enviarMensaje(void* pParams)
 
 	cout << "Ingrese el mensaje que desea enviar" << endl;
 	cin >> mensaje;
+}
+
+void enviarMensaje(void* pParams)
+{
+	int opcion;
+	string mensaje;
+	EnvioThreadData* datos = (EnvioThreadData*) pParams;
+	opcion = datos->opcion;
+	mensaje = datos->mensaje;
 	string respuestaServer;
 	if(opcion == 1)
 	{
 		//Avisa al servidor que va a mandar un mensaje
 		UnCliente.EnviarMensaje("ENVI",4);
-
 		string destinatario;
 		cout << "Ingrese nombre de usuario del destinatario" << endl;
 		cin >> destinatario;
@@ -149,21 +160,24 @@ void recibirMensajes(void* pParams)
 
 	cout << "Usted tiene " << cantMensajes << " mensajes" << endl << endl;
 
-	//se reciben los mensajes (incluye cadena de emisor con contenido de cada uno)
-	//puse 512 porque es el maximo pero habria que encadenar varias respuestas del server
-	//en caso que exceda el maximo de 512 que definimos de tamaño de buffer
-	respuestaServer = UnCliente.RecibirMensaje(512);
-	
-	while(respuestaServer!= "")
+	if(stoi(cantMensajes) > 0)
 	{
-		emisor = respuestaServer.substr(0,respuestaServer.find(';'));
-		respuestaServer.erase(0,respuestaServer.find(';')+1);
+		//se reciben los mensajes (incluye cadena de emisor con contenido de cada uno)
+		//puse 512 porque es el maximo pero habria que encadenar varias respuestas del server
+		//en caso que exceda el maximo de 512 que definimos de tamaño de buffer
+		respuestaServer = UnCliente.RecibirMensaje(512);
+	
+		while(respuestaServer!= "")
+		{
+			emisor = respuestaServer.substr(0,respuestaServer.find(';'));
+			respuestaServer.erase(0,respuestaServer.find(';')+1);
 		
-		contenidoMensaje = respuestaServer.substr(0,respuestaServer.find(";;"));
-		respuestaServer.erase(0,respuestaServer.find(";;") +2);
+			contenidoMensaje = respuestaServer.substr(0,respuestaServer.find(";;"));
+			respuestaServer.erase(0,respuestaServer.find(";;") +2);
 
-		cout << "De: " << emisor << endl;
-		cout << "Mensaje: " << contenidoMensaje << endl << endl;
+			cout << "De: " << emisor << endl;
+			cout << "Mensaje: " << contenidoMensaje << endl << endl;
+		}
 	}
 	
 	system("pause");
@@ -173,7 +187,7 @@ void recibirMensajes(void* pParams)
 void MenuPrincipal()
 {
 	int opcion = 0;
-
+	Sleep(3000);
 	while((opcion < 1) || (opcion > 6))
 	{
 		clear();
@@ -201,10 +215,18 @@ void MenuPrincipal()
 			exit(0);
 			break;
 		case 4:
-			enviarMensaje(NULL);
-			//faltaria lanzar el thread y 'sincronizar con el main para que no se pisen y se ejecute primero este
-			//_beginthread(enviarMensaje,0,NULL);
-			break;
+			{
+				int opcionEnvio;
+				string mensaje;
+				menuMensaje(mensaje,opcionEnvio);
+				//enviarMensaje(NULL);
+				//faltaria lanzar el thread y 'sincronizar con el main para que no se pisen y se ejecute primero este
+				EnvioThreadData* datos = new EnvioThreadData;
+				datos->opcion = opcionEnvio;
+				datos->mensaje = mensaje;
+				_beginthread(enviarMensaje,0,(void*)datos);
+				break;
+			}
 		case 5:
 			recibirMensajes(NULL);
 			break;
@@ -228,6 +250,8 @@ int main(int argc, char **argv)
 	UnCliente.EscribirLog("Programa Cliente iniciado.");
 
 	//UnCliente.ConectarAServidor(ip, puerto);
+
+	UnCliente.ConectarAServidor(ip, puerto);
 
 	// Thread de status del server.
 	//_beginthread(ThreadStatus, 0, NULL);
