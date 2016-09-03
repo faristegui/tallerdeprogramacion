@@ -4,21 +4,26 @@
 #include <ws2tcpip.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <fstream>
+#include <time.h>
 #include <string>
 #include <iostream>
 
+using namespace std;
 
 class Client
 {
 
 private:
 	SOCKET ClientConnectionSocket;
+	ofstream logFile;  //Archivo para el log
 public:
 	Client();
-	int EnviarMensaje(std::string, int sizeDatos);
-	void ConectarAServidor(std::string ip, std::string puerto);
+	int EnviarMensaje(string, int sizeDatos);
+	void ConectarAServidor(string ip, string puerto);
 	std::string RecibirMensaje(int sizeDatos);
 	void cerrarConexionConServer();
+	void EscribirLog(string mensaje);
 	~Client();
 };
 

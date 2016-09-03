@@ -219,16 +219,18 @@ int main(int argc, char **argv)
 {
 	string ip;
 	string puerto;
-		
+
 	cout << "Ingrese la IP del Servidor (Usar localhost para local): ";
 	cin >> ip;
 	cout << "Ingrese el puerto de conexion: ";
 	cin >> puerto;
 
-	UnCliente.ConectarAServidor(ip, puerto);
+	UnCliente.EscribirLog("Programa Cliente iniciado.");
+
+	//UnCliente.ConectarAServidor(ip, puerto);
 
 	// Thread de status del server.
-	_beginthread(ThreadStatus, 0, NULL);
+	//_beginthread(ThreadStatus, 0, NULL);
 
 	MenuPrincipal();
 
