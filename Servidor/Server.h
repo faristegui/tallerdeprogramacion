@@ -27,6 +27,7 @@ public:
 	void agregarMensaje(Mensaje* unMensaje);
 	int EnviarMensaje(std::string mensaje, int sizeDatos, SOCKET ClientSocket);
 	void enviarATodos(std::string contenidoMensaje, std::string emisor);
+	Lista<Mensaje*>* obtenerMensajesPara(std::string destinatario);
 	~Server();
 };
 

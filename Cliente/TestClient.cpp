@@ -137,6 +137,39 @@ void enviarMensaje(void* pParams)
 	system("pause");
 }
 
+void recibirMensajes(void* pParams)
+{
+	string cantMensajes, respuestaServer,emisor,contenidoMensaje;
+	string tamanioEmisor,tamanioMensaje;
+	UnCliente.EnviarMensaje("REC",3);
+
+	//El servidor responde la cantidad de mensajes
+	respuestaServer = UnCliente.RecibirMensaje(3); 
+	cantMensajes = respuestaServer;
+
+	cout << "Usted tiene " << cantMensajes << " mensajes" << endl << endl;
+
+	//se reciben los mensajes (incluye cadena de emisor con contenido de cada uno)
+	//puse 512 porque es el maximo pero habria que encadenar varias respuestas del server
+	//en caso que exceda el maximo de 512 que definimos de tamaño de buffer
+	respuestaServer = UnCliente.RecibirMensaje(512);
+	
+	while(respuestaServer!= "")
+	{
+		emisor = respuestaServer.substr(0,respuestaServer.find(';'));
+		respuestaServer.erase(0,respuestaServer.find(';')+1);
+		
+		contenidoMensaje = respuestaServer.substr(0,respuestaServer.find(";;"));
+		respuestaServer.erase(0,respuestaServer.find(";;") +2);
+
+		cout << "De: " << emisor << endl;
+		cout << "Mensaje: " << contenidoMensaje << endl << endl;
+	}
+	
+	system("pause");
+
+}
+
 void MenuPrincipal()
 {
 	int opcion = 0;
@@ -173,7 +206,7 @@ void MenuPrincipal()
 			//_beginthread(enviarMensaje,0,NULL);
 			break;
 		case 5:
-			//cliente.recibir()
+			recibirMensajes(NULL);
 			break;
 		case 6:
 			//cliente.enviarCiclicamente()

@@ -91,8 +91,25 @@ void MainListenThread(void* arg) {
 			string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,60);
 			UnServer.enviarATodos(contenidoMensaje, Usuario);
 			UnServer.EnviarMensaje("002",3,ClientSocket);
-			//se envia cortado ete mensaje
+			//se envia cortado este mensaje
 			UnServer.EnviarMensaje("Mensaje enviado a todos los usuarios con exito",65,ClientSocket);
+		}
+		if(mensaje=="REC")
+		{
+			Lista<Mensaje*>* buzon = UnServer.obtenerMensajesPara(Usuario);
+			stringstream ss;
+			ss << buzon->getTamanio();
+			string str = ss.str();	
+			UnServer.EnviarMensaje(str,3,ClientSocket);
+			
+			buzon->iniciarCursor();
+			while(buzon->avanzarCursor())
+			{
+				UnServer.EnviarMensaje(buzon->obtenerCursor()->obtenerEmisor()+";",15,ClientSocket);
+				//uso ;; para separar el contenido del mensaje del emisor del siguiente mensaje.
+				//habria que prohibir el uso de ;; en el contenido del mensaje
+				UnServer.EnviarMensaje(buzon->obtenerCursor()->obtenerContenido()+";;",60,ClientSocket);
+			}
 		}
 	}
 

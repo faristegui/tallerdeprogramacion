@@ -29,6 +29,31 @@ void Server::enviarATodos(string contenidoMensaje, string emisor)
 	
 }
 
+Lista<Mensaje*>* Server::obtenerMensajesPara(string destinatario)
+{
+	Lista<Mensaje*>* buzon = new Lista<Mensaje*>;
+	int posicion = 1;
+	Lista<int>* posicionesAEliminar = new Lista<int>();
+	todosLosMensajes->iniciarCursor();
+	
+	while(todosLosMensajes->avanzarCursor())
+	{
+		if(todosLosMensajes->obtenerCursor()->obtenerDestinatario() == destinatario)
+		{
+			buzon->agregar(todosLosMensajes->obtenerCursor());
+			posicionesAEliminar->agregar(posicion);
+		}
+		posicion++;
+	}
+	posicionesAEliminar->iniciarCursor();
+	while(posicionesAEliminar->avanzarCursor())
+	{
+		todosLosMensajes->remover(posicionesAEliminar->obtenerCursor());
+	}
+	return buzon;
+}
+
+
 void Server::Abrir(string UnPuerto) {
 	// Inicializacion de las variables
 
