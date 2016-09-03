@@ -106,32 +106,35 @@ void enviarMensaje(void* pParams)
 		cin >> opcion;
 	}
 
-	//Avisa al servidor que va a mandar un mensaje
-	UnCliente.EnviarMensaje("ENVI",4);
 
 	cout << "Ingrese el mensaje que desea enviar" << endl;
 	cin >> mensaje;
+	string respuestaServer;
 	if(opcion == 1)
 	{
-		string destinatario, respuestaServer;
+		//Avisa al servidor que va a mandar un mensaje
+		UnCliente.EnviarMensaje("ENVI",4);
+
+		string destinatario;
 		cout << "Ingrese nombre de usuario del destinatario" << endl;
 		cin >> destinatario;
 
 		UnCliente.EnviarMensaje(destinatario,15);
 		UnCliente.EnviarMensaje(mensaje,60);
-
-		//Aca el servidor deberia validar al destinatario, respondiendo si es valido o no.
-		respuestaServer = UnCliente.RecibirMensaje(3);
-
-		cout << "Respuesta del servidor: " << respuestaServer << endl;
-		respuestaServer = UnCliente.RecibirMensaje(30);
-		cout <<"Respuesta del servidor: " << respuestaServer << endl;
-		system("pause");
 	}
 	if(opcion == 2)
 	{
+		//Avisa al servidor que el mensaje es para todos
+		UnCliente.EnviarMensaje("ENVT",4);
 
+		UnCliente.EnviarMensaje(mensaje,60);
 	}
+	
+	respuestaServer = UnCliente.RecibirMensaje(3);
+	cout << "Respuesta del servidor: " << respuestaServer << endl;
+	respuestaServer = UnCliente.RecibirMensaje(30);
+	cout <<"Respuesta del servidor: " << respuestaServer << endl;
+	system("pause");
 }
 
 void MenuPrincipal()

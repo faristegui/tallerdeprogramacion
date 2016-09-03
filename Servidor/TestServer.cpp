@@ -61,10 +61,10 @@ void MainListenThread(void* arg) {
 			string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,60);
 			if(ControlUsuarios.destinatarioValido(destinatario))
 			{
-				UnServer.EnviarMensaje("001",3,ClientSocket);
-				UnServer.EnviarMensaje("Mensaje enviado con exito", 30,ClientSocket);
 				Mensaje* unMensaje = new Mensaje(Usuario,destinatario,contenidoMensaje);
 				UnServer.agregarMensaje(unMensaje);
+				UnServer.EnviarMensaje("001",3,ClientSocket);
+				UnServer.EnviarMensaje("Mensaje enviado con exito", 30,ClientSocket);
 				//faltaria informar en el log
 			}
 			else
@@ -85,6 +85,14 @@ void MainListenThread(void* arg) {
 		if(mensaje == "PING")
 		{
 			UnServer.EnviarMensaje("OK", 2, ClientSocket);
+		}
+		if(mensaje == "ENVT")
+		{
+			string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,60);
+			UnServer.enviarATodos(contenidoMensaje, Usuario);
+			UnServer.EnviarMensaje("002",3,ClientSocket);
+			//se envia cortado ete mensaje
+			UnServer.EnviarMensaje("Mensaje enviado a todos los usuarios con exito",65,ClientSocket);
 		}
 	}
 

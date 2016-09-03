@@ -14,6 +14,11 @@ string Mensaje::obtenerContenido()
 	return contenido_;
 }
 
+string Mensaje::obtenerEmisor()
+{
+	return emisor_;
+}
+
 Mensaje::~Mensaje(void)
 {
 }

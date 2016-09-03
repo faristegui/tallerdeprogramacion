@@ -16,6 +16,19 @@ void Server::agregarMensaje(Mensaje* unMensaje)
 	todosLosMensajes->agregar(unMensaje);
 }
 
+void Server::enviarATodos(string contenidoMensaje, string emisor)
+{
+	Usuarios* instanciaUsuarios = new Usuarios();
+	Lista<string>* todosLosUsuarios = instanciaUsuarios->obtenerTodos();
+	todosLosUsuarios->iniciarCursor();
+	while(todosLosUsuarios->avanzarCursor())
+	{
+		Mensaje* unMensaje = new Mensaje(emisor,todosLosUsuarios->obtenerCursor(),contenidoMensaje);
+		todosLosMensajes->agregar(unMensaje);
+	}
+	
+}
+
 void Server::Abrir(string UnPuerto) {
 	// Inicializacion de las variables
 

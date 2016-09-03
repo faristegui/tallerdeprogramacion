@@ -6,6 +6,7 @@ class Mensaje
 public:
 	Mensaje(string emisor, string destinatario, string contenido);
 	string obtenerContenido();
+	string obtenerEmisor();
 	~Mensaje(void);
 private:
 	string emisor_;

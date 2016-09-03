@@ -12,6 +12,7 @@
 #include <process.h>
 #include "Lista.h"
 #include "Mensaje.h"
+#include "Usuarios.h"
 
 class Server
 {
@@ -25,6 +26,7 @@ public:
 	Server();
 	void agregarMensaje(Mensaje* unMensaje);
 	int EnviarMensaje(std::string mensaje, int sizeDatos, SOCKET ClientSocket);
+	void enviarATodos(std::string contenidoMensaje, std::string emisor);
 	~Server();
 };
 

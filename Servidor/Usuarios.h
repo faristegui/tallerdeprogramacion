@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
-
+#include "Lista.h"
 using namespace std;
 
 struct Usuario {
@@ -18,11 +18,13 @@ class Usuarios
 public:
 	Usuarios();
 	bool ContrasenaValida(string usuario, string contrasena);
-	bool destinatarioValido(string destinatario);
+	 Lista<string>* obtenerTodos();
+	 bool destinatarioValido(string destinatario);
 	~Usuarios();
 private:
 	Usuario getProximoUsuario();
-	bool hayUsuarios();
+	 bool hayUsuarios();
+	 bool esFinDeArchivo;
 	void resetearCursorArchivo();
 };
 
