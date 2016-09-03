@@ -149,21 +149,24 @@ void recibirMensajes(void* pParams)
 
 	cout << "Usted tiene " << cantMensajes << " mensajes" << endl << endl;
 
-	//se reciben los mensajes (incluye cadena de emisor con contenido de cada uno)
-	//puse 512 porque es el maximo pero habria que encadenar varias respuestas del server
-	//en caso que exceda el maximo de 512 que definimos de tamaño de buffer
-	respuestaServer = UnCliente.RecibirMensaje(512);
-	
-	while(respuestaServer!= "")
+	if(stoi(cantMensajes) > 0)
 	{
-		emisor = respuestaServer.substr(0,respuestaServer.find(';'));
-		respuestaServer.erase(0,respuestaServer.find(';')+1);
+		//se reciben los mensajes (incluye cadena de emisor con contenido de cada uno)
+		//puse 512 porque es el maximo pero habria que encadenar varias respuestas del server
+		//en caso que exceda el maximo de 512 que definimos de tamaño de buffer
+		respuestaServer = UnCliente.RecibirMensaje(512);
+	
+		while(respuestaServer!= "")
+		{
+			emisor = respuestaServer.substr(0,respuestaServer.find(';'));
+			respuestaServer.erase(0,respuestaServer.find(';')+1);
 		
-		contenidoMensaje = respuestaServer.substr(0,respuestaServer.find(";;"));
-		respuestaServer.erase(0,respuestaServer.find(";;") +2);
+			contenidoMensaje = respuestaServer.substr(0,respuestaServer.find(";;"));
+			respuestaServer.erase(0,respuestaServer.find(";;") +2);
 
-		cout << "De: " << emisor << endl;
-		cout << "Mensaje: " << contenidoMensaje << endl << endl;
+			cout << "De: " << emisor << endl;
+			cout << "Mensaje: " << contenidoMensaje << endl << endl;
+		}
 	}
 	
 	system("pause");

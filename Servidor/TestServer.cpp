@@ -101,14 +101,16 @@ void MainListenThread(void* arg) {
 			ss << buzon->getTamanio();
 			string str = ss.str();	
 			UnServer.EnviarMensaje(str,3,ClientSocket);
-			
-			buzon->iniciarCursor();
-			while(buzon->avanzarCursor())
+			if(buzon->getTamanio() > 0 )
 			{
-				UnServer.EnviarMensaje(buzon->obtenerCursor()->obtenerEmisor()+";",15,ClientSocket);
-				//uso ;; para separar el contenido del mensaje del emisor del siguiente mensaje.
-				//habria que prohibir el uso de ;; en el contenido del mensaje
-				UnServer.EnviarMensaje(buzon->obtenerCursor()->obtenerContenido()+";;",60,ClientSocket);
+				buzon->iniciarCursor();
+				while(buzon->avanzarCursor())
+				{
+					UnServer.EnviarMensaje(buzon->obtenerCursor()->obtenerEmisor()+";",15,ClientSocket);
+					//uso ;; para separar el contenido del mensaje del emisor del siguiente mensaje.
+					//habria que prohibir el uso de ;; en el contenido del mensaje
+					UnServer.EnviarMensaje(buzon->obtenerCursor()->obtenerContenido()+";;",60,ClientSocket);
+				}
 			}
 		}
 	}
