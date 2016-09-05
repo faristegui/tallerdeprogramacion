@@ -55,6 +55,7 @@ void ThreadStatus(void* pParams)
 			status = false;
 			clear();
 			cout << "Conexion con el servidor terminada. (Server Offline).";
+			UnCliente.EscribirLog("Conexion con el servidor terminada. (Server Offline).");
 		}
 		serverStatus = status;
 		Sleep(30000); // 30 segundos
@@ -76,6 +77,7 @@ void IniciarSesion()
 
 	string respuesta = UnCliente.RecibirMensaje(3);
 
+	UnCliente.EscribirLog("Autorizar usuario. Mensaje del servidor: " + respuesta + ".");
 	/* NO HAY QUE HACER NADA DE ACUERDO A CADA CASO?
 	if (respuesta == "000") {
 		
@@ -86,7 +88,7 @@ void IniciarSesion()
 	*/
 
 	respuesta = UnCliente.RecibirMensaje(40);
-	cout << respuesta << "\n";
+	cout << respuesta << endl;
 	pause();
 }
 
@@ -95,7 +97,8 @@ void CerrarSesion() {
 	UnCliente.EnviarMensaje(mensaje, 4);
 
 	string respuesta = UnCliente.RecibirMensaje(40);
-	cout << respuesta << "\n";
+	cout << respuesta << endl;
+	UnCliente.EscribirLog("Cerrar sesion. Mensaje del servidor: " + respuesta + ".");
 	pause();
 }
 
@@ -108,11 +111,11 @@ void menuMensaje(EnvioThreadData* datosOpcionEnvio)
 	while((opcion < 1) || (opcion > 2))
 	{
 		clear();
-		cout << "Seleccione destinatario" << endl
-		<< "1- destinatario unico" << endl
-		<< "2- todos los usuarios" << endl;
+		cout << "Seleccione destinatario" << endl << endl
+		<< "1- Destinatario unico" << endl
+		<< "2- Todos los usuarios" << endl;
 		cin >> opcion;
-		datosOpcionEnvio->opcion=opcion;
+		datosOpcionEnvio->opcion = opcion;
 	}
 
 	//agregado por sebastian
@@ -161,6 +164,7 @@ void enviarMensaje(void* pParams)
 
 
 		UnCliente.EnviarMensaje(destinatario,15);
+		UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ".");
 		UnCliente.EnviarMensaje(mensaje,60);
 	}
 	if(opcion == 2)
@@ -174,8 +178,8 @@ void enviarMensaje(void* pParams)
 	respuestaServer = UnCliente.RecibirMensaje(3);
 	cout << "Respuesta del servidor: " << respuestaServer << endl;
 	respuestaServer = UnCliente.RecibirMensaje(30);
-	cout <<"Respuesta del servidor: " << respuestaServer << endl;
-	system("pause");
+	cout << "Respuesta del servidor: " << respuestaServer << endl;
+	pause();
 }
 
 void recibirMensajes(void* pParams)
@@ -189,6 +193,7 @@ void recibirMensajes(void* pParams)
 	cantMensajes = respuestaServer;
 
 	cout << "Usted tiene " << cantMensajes << " mensajes" << endl << endl;
+	UnCliente.EscribirLog(cantMensajes + " mensajes recibidos.");
 
 	if(stoi(cantMensajes) > 0)
 	{
@@ -207,11 +212,10 @@ void recibirMensajes(void* pParams)
 
 			cout << "De: " << emisor << endl;
 			cout << "Mensaje: " << contenidoMensaje << endl << endl;
+			UnCliente.EscribirLog("Mensaje de " + emisor + " recibido.");
 		}
 	}
-	
-	system("pause");
-
+	pause();
 }
 
 void MenuPrincipal()
@@ -241,6 +245,7 @@ void MenuPrincipal()
 		case 3:
 			clear();
 			cout << "El programa se cerrara.";
+			UnCliente.EscribirLog("Programa cerrado por el usuario.");
 			Sleep(3000);
 			exit(0);
 			break;
@@ -248,12 +253,6 @@ void MenuPrincipal()
 			{
 				int opcionEnvio;
 				string mensaje;
-
-
-
-
-
-
 
 				EnvioThreadData* datosOpcionEnvio = new EnvioThreadData;
 				//sebastian: primero llamo al menuMensaje para obtener todos los datos del envio, osea si es envio a uno , a todos y cual es el mensaje a enviar.
@@ -284,13 +283,11 @@ int main(int argc, char **argv)
 	cin >> puerto;
 
 	UnCliente.EscribirLog("Programa Cliente iniciado.");
-
-	//UnCliente.ConectarAServidor(ip, puerto);
-
+	
 	UnCliente.ConectarAServidor(ip, puerto);
 
 	// Thread de status del server.
-	//_beginthread(ThreadStatus, 0, NULL);
+	_beginthread(ThreadStatus, 0, NULL);
 
 	MenuPrincipal();
 

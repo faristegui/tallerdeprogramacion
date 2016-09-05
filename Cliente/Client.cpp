@@ -32,8 +32,9 @@ void Client::ConectarAServidor(string UnaIP, string UnPuerto)
 	ptr = NULL;
 
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
-
-		cout << "Error al inicializar el socket del cliente: " << WSAGetLastError() << endl;
+		clear();
+		cout << "Ha ocurrido un error inesperado." << endl;
+		this->EscribirLog("Error al inicializar el socket del cliente.");
 		pause();
 		WSACleanup();
 		exit(0);
@@ -47,8 +48,8 @@ void Client::ConectarAServidor(string UnaIP, string UnPuerto)
 	// configuracion de ip y puerto de conexion con el server
 
 	if (getaddrinfo(UnaIP.c_str(), UnPuerto.c_str(), &(hints), &(result)) != NO_ERROR) {
-
-		cout << "Error al inicializar configuracion de ip y puerto" << endl;
+		clear();
+		cout << "Ha ocurrido un error al enviar la configuracion de conexion." << endl;
 		this->EscribirLog("Error al inicializar configuracion de ip y puerto.");
 		pause();
 		WSACleanup();
@@ -61,7 +62,9 @@ void Client::ConectarAServidor(string UnaIP, string UnPuerto)
 	this->ClientConnectionSocket = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
 	if (this->ClientConnectionSocket == INVALID_SOCKET)
 	{
-		cout << "Error al crear el socket del cliente: " << WSAGetLastError() << endl;
+		clear();
+		cout << "Ha ocurrido un error inesperado." << endl;
+		this->EscribirLog("Error al crear el socket del cliente.");
 		pause();
 		freeaddrinfo(result);
 		WSACleanup();
@@ -85,7 +88,8 @@ void Client::ConectarAServidor(string UnaIP, string UnPuerto)
 	freeaddrinfo(result);
 
 	if (this->ClientConnectionSocket == INVALID_SOCKET) {
-		cout << "Fallo al intentar conectar con el servidor" << WSAGetLastError() << endl;
+		clear();
+		cout << "Ha ocurrido un error al intentar conectar con el Servidor.." << WSAGetLastError() << endl;
 		this->EscribirLog("Fallo al intentar conectar con el servidor.");
 		pause();
 		WSACleanup();
@@ -116,9 +120,7 @@ int Client::EnviarMensaje(string mensaje, int sizeDatos)
 	int cantidadBytesEnviados;
 	cantidadBytesEnviados = send(this->ClientConnectionSocket, datosEnviados, sizeDatos, 0);
 	if (cantidadBytesEnviados == SOCKET_ERROR) {
-
-		cout << "Fallo al enviar los datos: " << WSAGetLastError() << endl;
-		this->EscribirLog("Fallo al enviar los datos.");
+		this->EscribirLog("Fallo al enviar mensajes.");
 		pause();
 		exit(0);
 	}
@@ -143,9 +145,11 @@ void Client::cerrarConexionConServer()
 
 	// shutdown the connection since no more data will be sent
 
-	if (shutdown(this->ClientConnectionSocket, SD_SEND) == SOCKET_ERROR) {
-		cout << "Fallo al cerrar la conexion con el server: " << WSAGetLastError();
-		this->EscribirLog("Fallo al cerrar la conexion con el server");
+	if (shutdown(this->ClientConnectionSocket, SD_SEND) == SOCKET_ERROR)
+	{
+		clear();
+		cout << "Ha ocurrido un error al cerrar la conexion con el Servidor.";
+		this->EscribirLog("Fallo al cerrar la conexion con el Servidor.");
 		closesocket(this->ClientConnectionSocket);
 		WSACleanup();
 		exit(0);
