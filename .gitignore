@@ -5,6 +5,8 @@ Servidor/*.vcxproj
 *.vcxproj
 *.filters
 *.user
+logCliente.txt
+logServidor.txt
 
 
 ######## Devesa: Agrego los ignore de visual
