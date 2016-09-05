@@ -111,7 +111,15 @@ const string obtenerDateTime() {
 //Log del cliente
 void Client::EscribirLog(string mens)
 {
-	logFile << obtenerDateTime() << mens << endl;
+	string logString = obtenerDateTime() + mens;
+
+	if(logString.size() > 128)
+	{
+		logString.resize (125); // Lo corto en 125 para que no exceda los 128 caracteres con los 3 puntos.
+		logString = logString + "...";
+	}
+
+	logFile << logString << endl;
 }
 
 int Client::EnviarMensaje(string mensaje, int sizeDatos)

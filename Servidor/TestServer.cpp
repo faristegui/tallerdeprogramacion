@@ -49,9 +49,12 @@ void MainListenThread(void* arg) {
 				Usuario = UsuarioMsj;
 				UnServer.EnviarMensaje("000", 3, ClientSocket);
 				UnServer.EnviarMensaje("Bienvenido, " + Usuario, 40, ClientSocket);
+				UnServer.EscribirLog("Usuario " + Usuario + " logueado correctamente.");
 			} else {
 				UnServer.EnviarMensaje("401", 3, ClientSocket);
+				clear();
 				UnServer.EnviarMensaje("El usuario y la contrasena no coinciden", 40, ClientSocket);
+				UnServer.EscribirLog("Fallo de autenticacion de usuario: " + Usuario);
 			}
 
 		}
@@ -65,21 +68,28 @@ void MainListenThread(void* arg) {
 				UnServer.agregarMensaje(unMensaje);
 				UnServer.EnviarMensaje("001",3,ClientSocket);
 				UnServer.EnviarMensaje("Mensaje enviado con exito", 30,ClientSocket);
+				UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario);
 				//faltaria informar en el log
 			}
 			else
 			{
 				UnServer.EnviarMensaje("402",3,ClientSocket);
+				clear();
 				UnServer.EnviarMensaje("El destinatario no existe",30,ClientSocket);
+				UnServer.EscribirLog("Error al enviar mensaje de " + Usuario + " a " + destinatario + "El destinatario no existe.");
 			}
 		}
 		if (mensaje == "OUT") {
 
 			if (Usuario != "") {
+				clear();
 				UnServer.EnviarMensaje("Hasta la proxima " + Usuario, 40, ClientSocket);
+				UnServer.EscribirLog(Usuario + " desconectado correctamente.");
 				Usuario = "";
 			} else {
-				UnServer.EnviarMensaje("No tenia ninguna sesion iniciada", 40, ClientSocket);
+				clear();
+				UnServer.EnviarMensaje("No existe ninguna sesion iniciada.", 40, ClientSocket);
+				UnServer.EscribirLog("Fallo intento de Logout. No existe sesion iniciada.");
 			}
 		}
 		if(mensaje == "PING")
@@ -93,6 +103,7 @@ void MainListenThread(void* arg) {
 			UnServer.EnviarMensaje("002",3,ClientSocket);
 			//se envia cortado este mensaje
 			UnServer.EnviarMensaje("Mensaje enviado a todos los usuarios con exito",65,ClientSocket);
+			UnServer.EscribirLog("Mensaje de " + Usuario + " enviado a todos los usuarios.");
 		}
 		if(mensaje=="REC")
 		{

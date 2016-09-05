@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
+#include <time.h>
 #include <string>
 #include <process.h>
 #include "Lista.h"
@@ -19,6 +21,7 @@ class Server
 private:
 	SOCKET ListenSocket;
 	Lista<Mensaje*>* todosLosMensajes;
+	ofstream logFile;  //Archivo para el log
 public:
 	void Abrir(std::string UnPuerto);
 	SOCKET RecibirNuevaConexion();
@@ -26,6 +29,7 @@ public:
 	Server();
 	void agregarMensaje(Mensaje* unMensaje);
 	int EnviarMensaje(std::string mensaje, int sizeDatos, SOCKET ClientSocket);
+	void EscribirLog(string mensaje);
 	void enviarATodos(std::string contenidoMensaje, std::string emisor);
 	Lista<Mensaje*>* obtenerMensajesPara(std::string destinatario);
 	~Server();
