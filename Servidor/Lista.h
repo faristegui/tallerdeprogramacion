@@ -1,4 +1,4 @@
-#include "NodoSimplementeEnlasado.h"
+#include "NodoSimplementeEnlazado.h"
 #include <cstddef>
 #include <iostream>
 #ifndef _LISTA_H
@@ -11,8 +11,8 @@ class Lista{
 	// Atributos
 	private:
 		unsigned int tamanio;
-		NodoSimplementeEnlasado<T>* primerElemento;
-		NodoSimplementeEnlasado<T>* cursor;
+		NodoSimplementeEnlazado<T>* primerElemento;
+		NodoSimplementeEnlazado<T>* cursor;
         void ordenar();
 	// Metodos
 	public:
@@ -34,7 +34,7 @@ class Lista{
         	T obtenerUltimo();
 
 	private:
-            NodoSimplementeEnlasado<T>* obtenerNodo(unsigned int posicion);
+            NodoSimplementeEnlazado<T>* obtenerNodo(unsigned int posicion);
 
 };
 
@@ -60,7 +60,7 @@ template <class T> bool Lista<T>::estaVacia(){
 //Agrega elemento, el contenido esta ordenado de menor a mayor.
 template <class T> void Lista<T>::agregar(T elemento){
 
-    NodoSimplementeEnlasado<T>* nuevoElemento = new NodoSimplementeEnlasado<T>(elemento);
+    NodoSimplementeEnlazado<T>* nuevoElemento = new NodoSimplementeEnlazado<T>(elemento);
    tamanio++;
     if(tamanio > 1){
 		
@@ -77,13 +77,13 @@ template <class T> void Lista<T>::agregar(T elemento){
 template <class T> void Lista<T>::ordenar()
 {
 
-    NodoSimplementeEnlasado<T> dumy_node(0);
-    NodoSimplementeEnlasado<T>* cur_node = primerElemento;
+    NodoSimplementeEnlazado<T> dumy_node(0);
+    NodoSimplementeEnlazado<T>* cur_node = primerElemento;
 
     while (cur_node)
     {
-        NodoSimplementeEnlasado<T>* insert_cur_pos =  dumy_node.getSiguiente();
-        NodoSimplementeEnlasado<T>* insert_pre_pos = NULL;
+        NodoSimplementeEnlazado<T>* insert_cur_pos =  dumy_node.getSiguiente();
+        NodoSimplementeEnlazado<T>* insert_pre_pos = NULL;
 
         while (insert_cur_pos)
         {
@@ -97,7 +97,7 @@ template <class T> void Lista<T>::ordenar()
         if (!insert_pre_pos)
             insert_pre_pos = &dumy_node;
 
-        NodoSimplementeEnlasado<T>* temp_node = cur_node->getSiguiente();
+        NodoSimplementeEnlazado<T>* temp_node = cur_node->getSiguiente();
 
         cur_node->setSiguiente(insert_pre_pos->getSiguiente());
         insert_pre_pos->setSiguiente(cur_node);
@@ -112,7 +112,7 @@ template<class T> Lista<T>::~Lista() {
 	
     while (this -> tamanio != 0) {
 		
-        NodoSimplementeEnlasado<T>* aBorrar = this -> primerElemento;
+        NodoSimplementeEnlazado<T>* aBorrar = this -> primerElemento;
         this -> primerElemento = this -> primerElemento -> getSiguiente();
 
         delete aBorrar;
@@ -125,7 +125,7 @@ template <class T> void Lista<T>::remover(unsigned int posicion){
 
       if ((posicion > 0) && (posicion <= this->tamanio)){
 
-        NodoSimplementeEnlasado<T>* removido;
+        NodoSimplementeEnlazado<T>* removido;
 
         if (posicion == 1) {
 
@@ -134,7 +134,7 @@ template <class T> void Lista<T>::remover(unsigned int posicion){
 
         } else {
 
-            NodoSimplementeEnlasado<T>* anterior = this->obtenerNodo(posicion - 1);
+            NodoSimplementeEnlazado<T>* anterior = this->obtenerNodo(posicion - 1);
             removido = anterior->getSiguiente();
             anterior->setSiguiente(removido->getSiguiente());
         }
@@ -183,9 +183,9 @@ template <class T> T Lista<T>::obtenerCursor(){
 }
 
 // 1<=posicion<=tamanio
-template <class T> NodoSimplementeEnlasado<T>* Lista<T>::obtenerNodo(unsigned int posicion){
+template <class T> NodoSimplementeEnlazado<T>* Lista<T>::obtenerNodo(unsigned int posicion){
 
-    NodoSimplementeEnlasado<T>* actual = this-> primerElemento;
+    NodoSimplementeEnlazado<T>* actual = this-> primerElemento;
     for (unsigned int i = 1; i < posicion; i++) {
 
         actual = actual->getSiguiente();
@@ -203,8 +203,8 @@ template <class T> T Lista<T>::obtenerUltimo(){
 template <class T> Lista<T>* Lista<T>::obtenerMayoresA(T dato){
 
     Lista<T>* registrosMayores = new Lista<T>;
-    NodoSimplementeEnlasado<T>* registroMedio = new NodoSimplementeEnlasado<T>(dato);
-    NodoSimplementeEnlasado<T>* actual = primerElemento;
+    NodoSimplementeEnlazado<T>* registroMedio = new NodoSimplementeEnlazado<T>(dato);
+    NodoSimplementeEnlazado<T>* actual = primerElemento;
 
     //busco el registro medio
     while(*registroMedio != *actual){
@@ -236,8 +236,8 @@ template <class T> Lista<T>* Lista<T>::obtenerMayoresA(T dato){
 template <class T> Lista<T>* Lista<T>::obtenerMenoresA(T dato){
 
 	Lista<T>* datosMenores = new Lista<T>;
-	NodoSimplementeEnlasado<T>* mayor = new NodoSimplementeEnlasado<T>(dato);
-	NodoSimplementeEnlasado<T>* actual = primerElemento;
+	NodoSimplementeEnlazado<T>* mayor = new NodoSimplementeEnlazado<T>(dato);
+	NodoSimplementeEnlazado<T>* actual = primerElemento;
 
 
 	while( (actual!= NULL) && (*actual < *mayor )){

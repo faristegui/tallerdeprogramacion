@@ -19,6 +19,7 @@ public:
 	Usuarios();
 	bool ContrasenaValida(string usuario, string contrasena);
 	 Lista<string>* obtenerTodos();
+	 string obtenerTodosEnString(string separador);
 	 bool destinatarioValido(string destinatario);
 	~Usuarios();
 private:

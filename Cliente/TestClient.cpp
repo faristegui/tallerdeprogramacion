@@ -62,6 +62,23 @@ void ThreadStatus(void* pParams)
 	}
 }
 
+// TODO: Hay que implementar un metodo que convierta de string separado por ";" a Lista<string>
+void MostrarUsuarios(string ListaUsuarios) {
+	string UnUsuario;
+	int index = ListaUsuarios.find(";");
+
+	cout << "Lista de usuarios: \n\n";
+
+	while (index > -1) {
+		UnUsuario = ListaUsuarios.substr(0, index);
+		ListaUsuarios = ListaUsuarios.substr(index + 1);
+		index = ListaUsuarios.find(";");
+		cout << UnUsuario << "\n";
+	}
+
+	cout << "\n";
+}
+
 void IniciarSesion()
 {
 	string mensaje = "AUTH";
@@ -122,16 +139,28 @@ void menuMensaje(EnvioThreadData* datosOpcionEnvio)
 	switch(opcion)
 	{
 	case 1:
-		
+	{
+		// Avisa al servidor que va a mandar un mensaje
+		UnCliente.EnviarMensaje("ENVI", 4);
+		// Recibe todos los usuarios
+		// Como la cantidad es variable. Primero recibo 
+		int stringLength = atoi(UnCliente.RecibirMensaje(4).c_str());
+		string todosLosUsuarios = UnCliente.RecibirMensaje(stringLength);
+		// Muestro lista de usuarios
+		MostrarUsuarios(todosLosUsuarios);
+		// Recibo usuario y msj al que el usuario desea enviarle el msj
 		cout << "Ingrese nombre de usuario del destinatario:" << endl;
 		cin >> destinatario;
 		datosOpcionEnvio->destinatario = destinatario;
 		cout << "Ingrese el mensaje que desea enviar:" << endl;
 		cin >> mensaje;
 		datosOpcionEnvio->mensaje = mensaje;
+	}
 		break;
 	case 2:
-		
+		// Avisa al servidor que el mensaje es para todos
+		UnCliente.EnviarMensaje("ENVT", 4);
+		// Recibo  msj al que el usuario desea enviarle el msj
 		cout << "Ingrese el mensaje que desea enviar a todos los usuarios:" << endl;
 		cin >> mensaje;
 		datosOpcionEnvio->mensaje = mensaje;
@@ -157,21 +186,12 @@ void enviarMensaje(void* pParams)
 	string respuestaServer;
 	if(opcion == 1)
 	{
-		//Avisa al servidor que va a mandar un mensaje
-		UnCliente.EnviarMensaje("ENVI",4);
-
-
-
-
 		UnCliente.EnviarMensaje(destinatario,15);
 		UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ". Mensaje: " + mensaje);
 		UnCliente.EnviarMensaje(mensaje,60);
 	}
 	if(opcion == 2)
 	{
-		//Avisa al servidor que el mensaje es para todos
-		UnCliente.EnviarMensaje("ENVT",4);
-
 		UnCliente.EnviarMensaje(mensaje,60);
 		UnCliente.EscribirLog("Mensaje enviado a todos los usuarios. Mensaje: " + mensaje);
 	}
@@ -224,7 +244,7 @@ void recibirMensajes(void* pParams)
 void MenuPrincipal()
 {
 	int opcion = 0;
-	Sleep(3000);
+	Sleep(3000); // Por que este sleep? [LD]
 	while((opcion < 1) || (opcion > 6))
 	{
 		clear();
@@ -254,12 +274,9 @@ void MenuPrincipal()
 			break;
 		case 4:
 			{
-				int opcionEnvio;
-				string mensaje;
-
 				EnvioThreadData* datosOpcionEnvio = new EnvioThreadData;
-				//sebastian: primero llamo al menuMensaje para obtener todos los datos del envio, osea si es envio a uno , a todos y cual es el mensaje a enviar.
 				menuMensaje(datosOpcionEnvio);
+				//sebastian: primero llamo al menuMensaje para obtener todos los datos del envio, osea si es envio a uno , a todos y cual es el mensaje a enviar
 
 				//sebastian: aca si lanzo el thread ya que ahora tengo todos los datos del menu de envio completos dentro de la estructura datosOpcionEnvio
 				_beginthread(enviarMensaje, 0, (void*)datosOpcionEnvio); //lanzo el hilo y asincronicamente enviara el mensaje al server, ya puedo entonces volver al menu principal del usuario.

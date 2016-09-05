@@ -39,6 +39,23 @@ Lista<string>* Usuarios::obtenerTodos()
 	return todosLosUsuarios;
 }
 
+string Usuarios::obtenerTodosEnString(string separador)
+{
+	string todosLosUsuarios = "";
+	Usuario unUsuario;
+	resetearCursorArchivo();
+	while (hayUsuarios())
+	{
+		unUsuario = getProximoUsuario();
+		todosLosUsuarios = todosLosUsuarios + unUsuario.nombre;
+		if (hayUsuarios()) {
+			todosLosUsuarios = todosLosUsuarios + separador;
+		}
+	}
+
+	return todosLosUsuarios;
+}
+
 bool Usuarios::destinatarioValido(string destinatario)
 {
 	Usuario unUsuario;
@@ -57,6 +74,7 @@ bool Usuarios::destinatarioValido(string destinatario)
 void Usuarios::resetearCursorArchivo() {
 	archivoUsuarios.clear();
 	archivoUsuarios.seekg(0, std::ifstream::beg);
+	esFinDeArchivo = false;
 }
 
 bool Usuarios::hayUsuarios() {

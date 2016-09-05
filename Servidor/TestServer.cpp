@@ -60,6 +60,30 @@ void MainListenThread(void* arg) {
 		}
 		if(mensaje == "ENVI")
 		{
+			// Tengo que enviarle al cliente toda la lista de usuarios
+			// (Por ahora solo tenemos el envio de strings, a futuro podriamos implementar el envio de estructuras de datos
+			// y asi poder mandar la lista directamente)
+
+			// Como la cantidad de usuarios es variables voy a mandar dos mensajes:
+			// 1 = Longitud del string (van a ser fijos 4 bytes, lo que permite que haya como minimo 624 [9999 / 16] usuarios creados)
+			//                         (si en el futuro implementamos el envio de estructuras de datos podriamos mandar
+			//							un int y asi en 4 bytes poder abarcar una cantidad mucho mas grande)
+			// 2 = Todos los usuarios separados por ";"
+
+			string todosLosUsuarios = ControlUsuarios.obtenerTodosEnString(";");
+			// Paso de int a str (TODO: implementar una funcion)
+			int Number = (int)todosLosUsuarios.length();
+			string stringLength;
+			stringstream convert;
+			convert << Number;
+			stringLength = convert.str();
+
+			UnServer.EnviarMensaje(stringLength, 4, ClientSocket);
+			UnServer.EnviarMensaje(todosLosUsuarios, todosLosUsuarios.length(), ClientSocket);
+
+			// Recibo el destinatario y el mensaje
+			// Valido destinatario
+
 			string destinatario = UnServer.RecibirMensaje(ClientSocket,15);
 			string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,60);
 			if(ControlUsuarios.destinatarioValido(destinatario))

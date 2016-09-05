@@ -197,7 +197,8 @@ int Server::EnviarMensaje(string mensaje, int sizeDatos, SOCKET ClientSocket)
 {
 	const char* datosEnviados = mensaje.c_str();
 	// Send an initial buffer
-	int respuesta = send(ClientSocket, datosEnviados, (int)strlen(datosEnviados), 0);
+	// int respuesta = send(ClientSocket, datosEnviados, (int)strlen(datosEnviados), 0);
+	int respuesta = send(ClientSocket, datosEnviados, sizeDatos, 0);
 	return respuesta;
 }
 
