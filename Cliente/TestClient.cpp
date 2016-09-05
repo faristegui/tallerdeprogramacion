@@ -164,7 +164,7 @@ void enviarMensaje(void* pParams)
 
 
 		UnCliente.EnviarMensaje(destinatario,15);
-		UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ".");
+		UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ". Mensaje: " + mensaje);
 		UnCliente.EnviarMensaje(mensaje,60);
 	}
 	if(opcion == 2)
@@ -173,12 +173,15 @@ void enviarMensaje(void* pParams)
 		UnCliente.EnviarMensaje("ENVT",4);
 
 		UnCliente.EnviarMensaje(mensaje,60);
+		UnCliente.EscribirLog("Mensaje enviado a todos los usuarios. Mensaje: " + mensaje);
 	}
 	
 	respuestaServer = UnCliente.RecibirMensaje(3);
 	cout << "Respuesta del servidor: " << respuestaServer << endl;
+	UnCliente.EscribirLog("-> " + respuestaServer);
 	respuestaServer = UnCliente.RecibirMensaje(30);
 	cout << "Respuesta del servidor: " << respuestaServer << endl;
+	UnCliente.EscribirLog("-> " + respuestaServer);
 	pause();
 }
 

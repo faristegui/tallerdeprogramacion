@@ -68,8 +68,7 @@ void MainListenThread(void* arg) {
 				UnServer.agregarMensaje(unMensaje);
 				UnServer.EnviarMensaje("001",3,ClientSocket);
 				UnServer.EnviarMensaje("Mensaje enviado con exito", 30,ClientSocket);
-				UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario);
-				//faltaria informar en el log
+				UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario + ". Mensaje: " + contenidoMensaje);
 			}
 			else
 			{
@@ -102,8 +101,8 @@ void MainListenThread(void* arg) {
 			UnServer.enviarATodos(contenidoMensaje, Usuario);
 			UnServer.EnviarMensaje("002",3,ClientSocket);
 			//se envia cortado este mensaje
-			UnServer.EnviarMensaje("Mensaje enviado a todos los usuarios con exito",65,ClientSocket);
-			UnServer.EscribirLog("Mensaje de " + Usuario + " enviado a todos los usuarios.");
+			UnServer.EnviarMensaje("Mensaje enviado a todos los usuarios con exito.",65,ClientSocket);
+			UnServer.EscribirLog("Mensaje de " + Usuario + " enviado a todos los usuarios. Mensaje: " + contenidoMensaje);
 		}
 		if(mensaje=="REC")
 		{

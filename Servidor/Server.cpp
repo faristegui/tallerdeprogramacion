@@ -69,10 +69,10 @@ void Server::Abrir(string UnPuerto) {
 	// Inicializacion de las variables
 
 	WSADATA wsaData;
-	sockaddr_in dirSocketServidor;
+	//sockaddr_in dirSocketServidor; La comento porque está sin referencia
 	struct addrinfo *result;
 	struct addrinfo hints;
-	int iSendResult;
+	//int iSendResult; La comento porque está sin referencia
 
 	this->ListenSocket = INVALID_SOCKET;
 

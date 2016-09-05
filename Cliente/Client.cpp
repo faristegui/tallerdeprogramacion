@@ -128,11 +128,11 @@ int Client::EnviarMensaje(string mensaje, int sizeDatos)
 	int cantidadBytesEnviados;
 	cantidadBytesEnviados = send(this->ClientConnectionSocket, datosEnviados, sizeDatos, 0);
 	if (cantidadBytesEnviados == SOCKET_ERROR) {
-		this->EscribirLog("Fallo al enviar mensajes.");
+		clear();
+		this->EscribirLog("Fallo al enviar mensaje.");
 		pause();
 		exit(0);
 	}
-
 	return cantidadBytesEnviados;
 }
 
