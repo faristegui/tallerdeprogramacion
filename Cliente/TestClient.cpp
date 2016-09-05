@@ -32,6 +32,7 @@ struct EnvioThreadData
 {
 	int opcion;
 	string mensaje;
+	string destinatario;
 };
 
 void ThreadStatus(void* pParams)
@@ -98,8 +99,12 @@ void CerrarSesion() {
 	pause();
 }
 
-void menuMensaje(string& mensaje, int& opcion)
+void menuMensaje(EnvioThreadData* datosOpcionEnvio)
 {
+	int opcion = 0;
+	string destinatario;
+	string mensaje;
+
 	while((opcion < 1) || (opcion > 2))
 	{
 		clear();
@@ -107,28 +112,53 @@ void menuMensaje(string& mensaje, int& opcion)
 		<< "1- destinatario unico" << endl
 		<< "2- todos los usuarios" << endl;
 		cin >> opcion;
+		datosOpcionEnvio->opcion=opcion;
+	}
+
+	//agregado por sebastian
+	switch(opcion)
+	{
+	case 1:
+		
+		cout << "Ingrese nombre de usuario del destinatario:" << endl;
+		cin >> destinatario;
+		datosOpcionEnvio->destinatario = destinatario;
+		cout << "Ingrese el mensaje que desea enviar:" << endl;
+		cin >> mensaje;
+		datosOpcionEnvio->mensaje = mensaje;
+		break;
+	case 2:
+		
+		cout << "Ingrese el mensaje que desea enviar a todos los usuarios:" << endl;
+		cin >> mensaje;
+		datosOpcionEnvio->mensaje = mensaje;
+
+
+
+		break;
 	}
 
 
-	cout << "Ingrese el mensaje que desea enviar" << endl;
-	cin >> mensaje;
 }
 
 void enviarMensaje(void* pParams)
 {
 	int opcion;
 	string mensaje;
+	string destinatario;
 	EnvioThreadData* datos = (EnvioThreadData*) pParams;
 	opcion = datos->opcion;
 	mensaje = datos->mensaje;
+	destinatario = datos->destinatario;
+
 	string respuestaServer;
 	if(opcion == 1)
 	{
 		//Avisa al servidor que va a mandar un mensaje
 		UnCliente.EnviarMensaje("ENVI",4);
-		string destinatario;
-		cout << "Ingrese nombre de usuario del destinatario" << endl;
-		cin >> destinatario;
+
+
+
 
 		UnCliente.EnviarMensaje(destinatario,15);
 		UnCliente.EnviarMensaje(mensaje,60);
@@ -218,13 +248,19 @@ void MenuPrincipal()
 			{
 				int opcionEnvio;
 				string mensaje;
-				menuMensaje(mensaje,opcionEnvio);
-				//enviarMensaje(NULL);
-				//faltaria lanzar el thread y 'sincronizar con el main para que no se pisen y se ejecute primero este
-				EnvioThreadData* datos = new EnvioThreadData;
-				datos->opcion = opcionEnvio;
-				datos->mensaje = mensaje;
-				_beginthread(enviarMensaje,0,(void*)datos);
+
+
+
+
+
+
+
+				EnvioThreadData* datosOpcionEnvio = new EnvioThreadData;
+				//sebastian: primero llamo al menuMensaje para obtener todos los datos del envio, osea si es envio a uno , a todos y cual es el mensaje a enviar.
+				menuMensaje(datosOpcionEnvio);
+
+				//sebastian: aca si lanzo el thread ya que ahora tengo todos los datos del menu de envio completos dentro de la estructura datosOpcionEnvio
+				_beginthread(enviarMensaje, 0, (void*)datosOpcionEnvio); //lanzo el hilo y asincronicamente enviara el mensaje al server, ya puedo entonces volver al menu principal del usuario.
 				break;
 			}
 		case 5:
