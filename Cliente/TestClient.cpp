@@ -26,6 +26,8 @@ using namespace std;
 
 Client UnCliente;
 
+Client ClientePing;
+
 bool serverStatus = false;
 
 struct EnvioThreadData
@@ -40,11 +42,15 @@ void ThreadStatus(void* pParams)
 	//Envía mensajes al servidor y setea la variable serverStatus en TRUE o FALSE
 	bool status = false;
 
+	EnvioThreadData* datos = (EnvioThreadData*) pParams;
+
+	ClientePing.ConectarAServidor(datos->destinatario,datos->mensaje); //Envío primero puerto e IP.
+
 	while(true)
 	{
-		UnCliente.EnviarMensaje("PING", 4);
+		ClientePing.EnviarMensaje("PING", 4);
 
-		string respuesta = UnCliente.RecibirMensaje(2);
+		string respuesta = ClientePing.RecibirMensaje(2);
 
 		if(respuesta == "OK")
 		{
@@ -55,7 +61,7 @@ void ThreadStatus(void* pParams)
 			status = false;
 			clear();
 			cout << "Conexion con el servidor terminada. (Server Offline).";
-			UnCliente.EscribirLog("Conexion con el servidor terminada. (Server Offline).");
+			ClientePing.EscribirLog("Conexion con el servidor terminada. (Server Offline).");
 		}
 		serverStatus = status;
 		Sleep(30000); // 30 segundos
@@ -307,7 +313,12 @@ int main(int argc, char **argv)
 	UnCliente.ConectarAServidor(ip, puerto);
 
 	// Thread de status del server.
-	_beginthread(ThreadStatus, 0, NULL);
+	EnvioThreadData* datosPing = new EnvioThreadData;
+	//Envio los datos de Puerto e IP al thread.
+	datosPing->destinatario = ip;
+	datosPing->mensaje = puerto;
+
+	_beginthread(ThreadStatus, 0, (void*)datosPing);
 
 	MenuPrincipal();
 
