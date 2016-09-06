@@ -19,15 +19,6 @@ class NodoSimplementeEnlazado{
 		void setDato( T nuevoDato);
 		NodoSimplementeEnlazado <T> * getSiguiente();
 		void setSiguiente(NodoSimplementeEnlazado <T> * nuevoSiguiente);
-		
-		bool operator==(const NodoSimplementeEnlazado<T>&);
-		bool operator!=(const NodoSimplementeEnlazado<T>&);
-		
-		bool operator<(const NodoSimplementeEnlazado<T>&);
-		bool operator>(const NodoSimplementeEnlazado<T>&);
-		
-		bool operator<=(const NodoSimplementeEnlazado<T>&);
-		bool operator>=(const NodoSimplementeEnlazado<T>&);
 
 };
 
@@ -52,44 +43,6 @@ template <class T> NodoSimplementeEnlazado <T>* NodoSimplementeEnlazado<T>::getS
 
 template <class T> void NodoSimplementeEnlazado<T>::setSiguiente(NodoSimplementeEnlazado <T>* nuevoSiguiente){
 	this-> siguiente = nuevoSiguiente;
-}
-
-// Sobrecarga de operadores --------------------------------------------
-
-template <class T> bool NodoSimplementeEnlazado<T>::operator== (const NodoSimplementeEnlazado<T>& otro){
-	
-	return (*dato == *otro.dato);
-	    
-}
-
-template <class T> bool NodoSimplementeEnlazado<T>::operator< (const NodoSimplementeEnlazado<T>& otro){
-	
-	return (*dato < *otro.dato);
-	
-}
-
-template <class T> bool NodoSimplementeEnlazado<T>::operator!= (const NodoSimplementeEnlazado<T>& otro){
-
-    return !(*this == otro);
-    
-}
-
-template <class T> bool NodoSimplementeEnlazado<T>::operator> (const NodoSimplementeEnlazado<T>& otro){
-	
-	return !(*this < otro) && (*this != otro);
-	
-}
-
-template <class T> bool NodoSimplementeEnlazado<T>::operator<= (const NodoSimplementeEnlazado<T>& otro){
-	
-	return ( *this < otro || *this == otro);
-	
-}
-
-template <class T> bool NodoSimplementeEnlazado<T>::operator>= (const NodoSimplementeEnlazado<T>& otro){
-
-	return ( *this > otro || *this == otro);
-	
 }
 
 #endif // NodoSimplementeEnlazado_H

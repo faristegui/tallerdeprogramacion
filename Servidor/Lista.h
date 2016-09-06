@@ -4,7 +4,7 @@
 #ifndef _LISTA_H
 #define _LISTA_H
 using namespace std;
-// La lista va a tener que dejar de ser generica, para que el agregar pueda ser un agregar ordenado.
+
 template <class T>
 class Lista{
 
@@ -13,7 +13,6 @@ class Lista{
 		unsigned int tamanio;
 		NodoSimplementeEnlazado<T>* primerElemento;
 		NodoSimplementeEnlazado<T>* cursor;
-        void ordenar();
 	// Metodos
 	public:
         	Lista();
@@ -26,9 +25,6 @@ class Lista{
 
         	void iniciarCursor();
         	bool avanzarCursor();
-
-        	Lista<T>* obtenerMenoresA(T dato);
-        	Lista<T>* obtenerMayoresA(T dato);
 
         	T obtenerCursor();
         	T obtenerUltimo();
@@ -71,40 +67,6 @@ template <class T> void Lista<T>::agregar(T elemento){
     }
 
 
-}
-
-
-template <class T> void Lista<T>::ordenar()
-{
-
-    NodoSimplementeEnlazado<T> dumy_node(0);
-    NodoSimplementeEnlazado<T>* cur_node = primerElemento;
-
-    while (cur_node)
-    {
-        NodoSimplementeEnlazado<T>* insert_cur_pos =  dumy_node.getSiguiente();
-        NodoSimplementeEnlazado<T>* insert_pre_pos = NULL;
-
-        while (insert_cur_pos)
-        {
-            if (*insert_cur_pos > *cur_node)
-                break;
-
-            insert_pre_pos = insert_cur_pos;
-            insert_cur_pos = insert_cur_pos->getSiguiente();
-        }
-
-        if (!insert_pre_pos)
-            insert_pre_pos = &dumy_node;
-
-        NodoSimplementeEnlazado<T>* temp_node = cur_node->getSiguiente();
-
-        cur_node->setSiguiente(insert_pre_pos->getSiguiente());
-        insert_pre_pos->setSiguiente(cur_node);
-
-        cur_node = temp_node;
-    }
-    primerElemento= dumy_node.getSiguiente();
 }
 
 
@@ -200,58 +162,5 @@ template <class T> T Lista<T>::obtenerUltimo(){
 
 }
 
-template <class T> Lista<T>* Lista<T>::obtenerMayoresA(T dato){
-
-    Lista<T>* registrosMayores = new Lista<T>;
-    NodoSimplementeEnlazado<T>* registroMedio = new NodoSimplementeEnlazado<T>(dato);
-    NodoSimplementeEnlazado<T>* actual = primerElemento;
-
-    //busco el registro medio
-    while(*registroMedio != *actual){
-
-        actual = actual ->getSiguiente();
-
-    }
-
-    //el primer while termina con actual guardando el registro buscado
-    registroMedio = actual;
-
-    //a partir de ahi ya son todos mayores
-    actual = actual -> getSiguiente();
-    while(actual != NULL){
-
-        registrosMayores->agregar( actual->getDato() );
-        tamanio--;
-        actual = actual->getSiguiente();
-
-    }
-    //Desencadeno el puntero del siguiente del ultimo registro que seria
-    //el registro del medio
-    registroMedio->setSiguiente(NULL);
-
-    return registrosMayores;
-
-}
-
-template <class T> Lista<T>* Lista<T>::obtenerMenoresA(T dato){
-
-	Lista<T>* datosMenores = new Lista<T>;
-	NodoSimplementeEnlazado<T>* mayor = new NodoSimplementeEnlazado<T>(dato);
-	NodoSimplementeEnlazado<T>* actual = primerElemento;
-
-
-	while( (actual!= NULL) && (*actual < *mayor )){
-		datosMenores -> agregar( actual -> getDato() );
-		tamanio--;
-		actual = actual -> getSiguiente();
-
-	}
-	// Desencadeno el ultimo de la lista y cambio el primerElemento.
-	primerElemento = actual;
-	datosMenores -> obtenerNodo(datosMenores->getTamanio()) -> setSiguiente(NULL);
-
-	return datosMenores;
-
-}
 #endif // LISTA_H
 
