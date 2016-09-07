@@ -85,7 +85,7 @@ void MainListenThread(void* arg) {
 			// Valido destinatario
 
 			string destinatario = UnServer.RecibirMensaje(ClientSocket,15);
-			string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,60);
+			string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,900);
 			if(ControlUsuarios.destinatarioValido(destinatario))
 			{
 				Mensaje* unMensaje = new Mensaje(Usuario,destinatario,contenidoMensaje);
@@ -121,7 +121,7 @@ void MainListenThread(void* arg) {
 		}
 		if(mensaje == "ENVT")
 		{
-			string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,60);
+			string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,900);
 			UnServer.enviarATodos(contenidoMensaje, Usuario);
 			UnServer.EnviarMensaje("002",3,ClientSocket);
 			//se envia cortado este mensaje
@@ -130,6 +130,7 @@ void MainListenThread(void* arg) {
 		}
 		if(mensaje=="REC")
 		{
+			string respuestaServer = "";
 			Lista<Mensaje*>* buzon = UnServer.obtenerMensajesPara(Usuario);
 			stringstream ss;
 			ss << buzon->getTamanio();
@@ -139,11 +140,13 @@ void MainListenThread(void* arg) {
 			buzon->iniciarCursor();
 			while(buzon->avanzarCursor())
 			{
-				UnServer.EnviarMensaje(buzon->obtenerCursor()->obtenerEmisor()+";",15,ClientSocket);
+				respuestaServer += buzon->obtenerCursor()->obtenerEmisor()+";"+buzon->obtenerCursor()->obtenerContenido()+";;";
+				//UnServer.EnviarMensaje(buzon->obtenerCursor()->obtenerEmisor()+";"+buzon->obtenerCursor()->obtenerContenido()+";;",75,ClientSocket);
 				//uso ;; para separar el contenido del mensaje del emisor del siguiente mensaje.
 				//habria que prohibir el uso de ;; en el contenido del mensaje
-				UnServer.EnviarMensaje(buzon->obtenerCursor()->obtenerContenido()+";;",60,ClientSocket);
+				//UnServer.EnviarMensaje(buzon->obtenerCursor()->obtenerContenido()+";;",60,ClientSocket);
 			}
+			UnServer.EnviarMensaje(respuestaServer,respuestaServer.length(),ClientSocket);
 		}
 	}
 

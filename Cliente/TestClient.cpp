@@ -194,11 +194,11 @@ void enviarMensaje(void* pParams)
 	{
 		UnCliente.EnviarMensaje(destinatario,15);
 		UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ". Mensaje: " + mensaje);
-		UnCliente.EnviarMensaje(mensaje,60);
+		UnCliente.EnviarMensaje(mensaje,mensaje.length());
 	}
 	if(opcion == 2)
 	{
-		UnCliente.EnviarMensaje(mensaje,60);
+		UnCliente.EnviarMensaje(mensaje,mensaje.length());
 		UnCliente.EscribirLog("Mensaje enviado a todos los usuarios. Mensaje: " + mensaje);
 	}
 	
@@ -229,7 +229,8 @@ void recibirMensajes(void* pParams)
 		//se reciben los mensajes (incluye cadena de emisor con contenido de cada uno)
 		//puse 512 porque es el maximo pero habria que encadenar varias respuestas del server
 		//en caso que exceda el maximo de 512 que definimos de tamaño de buffer
-		respuestaServer = UnCliente.RecibirMensaje(512);
+		
+		respuestaServer = UnCliente.RecibirMensaje(900);
 	
 		while(respuestaServer!= "")
 		{

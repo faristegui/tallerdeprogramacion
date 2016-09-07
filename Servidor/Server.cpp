@@ -22,6 +22,7 @@ Server::Server()
 
 void Server::agregarMensaje(Mensaje* unMensaje)
 {
+	cout << "El contenido es: " << unMensaje->obtenerContenido() << endl << endl;
 	todosLosMensajes->agregar(unMensaje);
 }
 
