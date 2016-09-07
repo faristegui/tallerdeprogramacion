@@ -251,6 +251,8 @@ void MenuPrincipal()
 {
 	int opcion = 0;
 	Sleep(3000); // Por que este sleep? [LD]
+	//es para sincronizar el thread de envio con el principal y que no se superpongan, pero
+	//creo que ya lo soluciono seba. estaria al pedo. [MZ10]
 	while((opcion < 1) || (opcion > 6))
 	{
 		clear();
