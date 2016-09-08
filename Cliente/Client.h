@@ -20,7 +20,7 @@ private:
 public:
 	Client();
 	int EnviarMensaje(string, int sizeDatos);
-	void ConectarAServidor(string ip, string puerto);
+	bool ConectarAServidor(string ip, string puerto);
 	std::string RecibirMensaje(int sizeDatos);
 	void cerrarConexionConServer();
 	void EscribirLog(string mensaje);

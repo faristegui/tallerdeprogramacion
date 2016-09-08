@@ -19,7 +19,7 @@ Client::Client()
     logFile.open("logCliente.txt");
 }
 
-void Client::ConectarAServidor(string UnaIP, string UnPuerto)
+bool Client::ConectarAServidor(string UnaIP, string UnPuerto)
 {
 	WSADATA wsaData;
 	struct addrinfo *result;
@@ -35,9 +35,8 @@ void Client::ConectarAServidor(string UnaIP, string UnPuerto)
 		clear();
 		cout << "Ha ocurrido un error inesperado." << endl;
 		this->EscribirLog("Error al inicializar el socket del cliente.");
-		pause();
 		WSACleanup();
-		exit(0);
+		return false;
 	}
 
 	ZeroMemory(&hints, sizeof(hints));
@@ -51,9 +50,8 @@ void Client::ConectarAServidor(string UnaIP, string UnPuerto)
 		clear();
 		cout << "Ha ocurrido un error al enviar la configuracion de conexion." << endl;
 		this->EscribirLog("Error al inicializar configuracion de ip y puerto.");
-		pause();
 		WSACleanup();
-		exit(0);
+		return false;
 	}
 
 	//**************************//
@@ -65,10 +63,9 @@ void Client::ConectarAServidor(string UnaIP, string UnPuerto)
 		clear();
 		cout << "Ha ocurrido un error inesperado." << endl;
 		this->EscribirLog("Error al crear el socket del cliente.");
-		pause();
 		freeaddrinfo(result);
 		WSACleanup();
-		exit(0);
+		return false;
 	}
 	// conectarse con la ip del server
 	for (ptr= result; ptr != NULL; ptr = ptr->ai_next) {
@@ -89,13 +86,14 @@ void Client::ConectarAServidor(string UnaIP, string UnPuerto)
 
 	if (this->ClientConnectionSocket == INVALID_SOCKET) {
 		clear();
-		cout << "Ha ocurrido un error al intentar conectar con el Servidor.." << WSAGetLastError() << endl;
-		this->EscribirLog("Fallo al intentar conectar con el servidor.");
-		pause();
+		cout << "Ha ocurrido un error al intentar conectar con el Servidor." << endl;
+		this->EscribirLog("Fallo al intentar conectar con el servidor. Codigo de error: " + WSAGetLastError());
 		WSACleanup();
 		freeaddrinfo(result);
-		exit(0);
+		return false;
 	}
+
+	return true;
 }
 
 const string obtenerDateTime() {
@@ -166,8 +164,8 @@ void Client::cerrarConexionConServer()
 }
 Client::~Client()
 {
-	string auxMensajeEnviar = "logoff";
-	EnviarMensaje(auxMensajeEnviar.c_str(), strlen(auxMensajeEnviar.c_str()));
+	string auxMensajeEnviar = "EXIT";
+	EnviarMensaje(auxMensajeEnviar, 4);
 	closesocket(this->ClientConnectionSocket);
 	this->EscribirLog("Conexion cerrada.");
 	logFile.close();

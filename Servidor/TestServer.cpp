@@ -36,7 +36,7 @@ void MainListenThread(void* arg) {
 	string mensaje = "";
 	SOCKET ClientSocket = *(SOCKET*)arg;
 
-	while (mensaje != "logoff") 
+	while ((mensaje != "EXIT") && (mensaje != "LOST"))
 	{
 		mensaje = UnServer.RecibirMensaje(ClientSocket, 4);
 
@@ -58,7 +58,7 @@ void MainListenThread(void* arg) {
 			}
 
 		}
-		if(mensaje == "ENVI")
+		if (mensaje == "ENVI")
 		{
 			// Tengo que enviarle al cliente toda la lista de usuarios
 			// (Por ahora solo tenemos el envio de strings, a futuro podriamos implementar el envio de estructuras de datos
@@ -115,11 +115,11 @@ void MainListenThread(void* arg) {
 				UnServer.EscribirLog("Fallo intento de Logout. No existe sesion iniciada.");
 			}
 		}
-		if(mensaje == "PING")
+		if (mensaje == "PING")
 		{
 			UnServer.EnviarMensaje("OK", 2, ClientSocket);
 		}
-		if(mensaje == "ENVT")
+		if (mensaje == "ENVT")
 		{
 			string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,900);
 			UnServer.enviarATodos(contenidoMensaje, Usuario);
@@ -128,7 +128,7 @@ void MainListenThread(void* arg) {
 			UnServer.EnviarMensaje("Mensaje enviado a todos los usuarios con exito.",65,ClientSocket);
 			UnServer.EscribirLog("Mensaje de " + Usuario + " enviado a todos los usuarios. Mensaje: " + contenidoMensaje);
 		}
-		if(mensaje=="REC")
+		if (mensaje == "REC")
 		{
 			string respuestaServer = "";
 			Lista<Mensaje*>* buzon = UnServer.obtenerMensajesPara(Usuario);
@@ -147,6 +147,9 @@ void MainListenThread(void* arg) {
 				//UnServer.EnviarMensaje(buzon->obtenerCursor()->obtenerContenido()+";;",60,ClientSocket);
 			}
 			UnServer.EnviarMensaje(respuestaServer,respuestaServer.length(),ClientSocket);
+		}
+		if (mensaje == "EXIT") {
+			UnServer.EscribirLog("Un cliente se desconecto");
 		}
 	}
 

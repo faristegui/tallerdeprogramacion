@@ -25,9 +25,7 @@ using namespace std;
 #endif
 
 Client UnCliente;
-
-Client ClientePing;
-
+bool clienteAbierto = true;
 bool serverStatus = false;
 
 struct EnvioThreadData
@@ -39,14 +37,18 @@ struct EnvioThreadData
 
 void ThreadStatus(void* pParams)
 {
+	Client ClientePing;
 	//Envía mensajes al servidor y setea la variable serverStatus en TRUE o FALSE
 	bool status = false;
 
 	EnvioThreadData* datos = (EnvioThreadData*) pParams;
 
-	ClientePing.ConectarAServidor(datos->destinatario,datos->mensaje); //Envío primero puerto e IP.
+	string ip = datos->destinatario;
+	string puerto = datos->mensaje;
 
-	while(true)
+	ClientePing.ConectarAServidor(ip, puerto); //Envío primero puerto e IP.
+
+	while (clienteAbierto)
 	{
 		ClientePing.EnviarMensaje("PING", 4);
 
@@ -66,6 +68,8 @@ void ThreadStatus(void* pParams)
 		serverStatus = status;
 		Sleep(30000); // 30 segundos
 	}
+
+	ClientePing.EnviarMensaje("EXIT", 4);
 }
 
 // TODO: Hay que implementar un metodo que convierta de string separado por ";" a Lista<string>
@@ -251,7 +255,7 @@ void recibirMensajes(void* pParams)
 void MenuPrincipal()
 {
 	int opcion = 0;
-	Sleep(3000); // Por que este sleep? [LD]
+	//Sleep(3000); // Por que este sleep? [LD]
 	//es para sincronizar el thread de envio con el principal y que no se superpongan, pero
 	//creo que ya lo soluciono seba. estaria al pedo. [MZ10]
 	while((opcion < 1) || (opcion > 6))
@@ -275,10 +279,8 @@ void MenuPrincipal()
 			CerrarSesion();
 			break;
 		case 3:
-			clear();
-			cout << "El programa se cerrara.";
+			clienteAbierto = false;
 			UnCliente.EscribirLog("Programa cerrado por el usuario.");
-			Sleep(3000);
 			exit(0);
 			break;
 		case 4:
@@ -303,17 +305,27 @@ void MenuPrincipal()
 
 int main(int argc, char **argv)
 {
+	bool conexionOk = false;
 	string ip;
 	string puerto;
 
-	cout << "Ingrese la IP del Servidor (Usar localhost para local): ";
-	cin >> ip;
-	cout << "Ingrese el puerto de conexion: ";
-	cin >> puerto;
+	while (!conexionOk) {
+		clear();
+		cout << "Ingrese la IP del Servidor (Usar localhost para local): ";
+		cin >> ip;
+		cout << "Ingrese el puerto de conexion: ";
+		cin >> puerto;
 
-	UnCliente.EscribirLog("Programa Cliente iniciado.");
+		conexionOk = UnCliente.ConectarAServidor(ip, puerto);
+
+		if (!conexionOk) {
+			cout << "Vuelva intentarlo\n";
+			pause();
+		}
+	}
+
 	
-	UnCliente.ConectarAServidor(ip, puerto);
+	UnCliente.EscribirLog("Programa Cliente iniciado.");
 
 	// Thread de status del server.
 	EnvioThreadData* datosPing = new EnvioThreadData;
@@ -322,7 +334,7 @@ int main(int argc, char **argv)
 	datosPing->mensaje = puerto;
 
 	_beginthread(ThreadStatus, 0, (void*)datosPing);
-
+	
 	MenuPrincipal();
 
 	return 0;

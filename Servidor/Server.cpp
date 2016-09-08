@@ -185,11 +185,19 @@ void Server::EscribirLog(string mens)
 
 string Server::RecibirMensaje(SOCKET ClientSocket, int tam) {
 	int cantidadBytesRecibidos;
+	string mensajeCliente;
 
 	cantidadBytesRecibidos = recv(ClientSocket, recvbuf, tam, 0);
-	recvbuf[cantidadBytesRecibidos] = 0; // 0 = NULL terminator del string
-	string mensajeCliente(recvbuf);
-	cout << "Mensaje del cliente: " << mensajeCliente << endl;
+	if (cantidadBytesRecibidos >= 0) {
+		string tmpMsj(recvbuf);
+		mensajeCliente = tmpMsj;
+		recvbuf[cantidadBytesRecibidos] = 0; // 0 = NULL terminator del string
+	}
+	else {
+		mensajeCliente = "LOST";
+	}
+
+	cout		<< "Mensaje del cliente: " << mensajeCliente << endl;
 
 	return mensajeCliente;
 }
