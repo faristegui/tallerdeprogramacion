@@ -1,7 +1,7 @@
 #include "Mensaje.h"
 
 
-Mensaje::Mensaje(string emisor, string destinatario, string contenido)
+Mensaje::Mensaje(std::string emisor, std::string destinatario, std::string contenido)
 {
 	emisor_ = emisor;
 	destinatario_ = destinatario;
@@ -9,17 +9,17 @@ Mensaje::Mensaje(string emisor, string destinatario, string contenido)
 }
 
 
-string Mensaje::obtenerContenido()
+std::string Mensaje::obtenerContenido()
 {
 	return contenido_;
 }
 
-string Mensaje::obtenerEmisor()
+std::string Mensaje::obtenerEmisor()
 {
 	return emisor_;
 }
 
-string Mensaje::obtenerDestinatario()
+std::string Mensaje::obtenerDestinatario()
 {
 	return destinatario_;
 }

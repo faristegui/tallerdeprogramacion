@@ -52,7 +52,6 @@ void MainListenThread(void* arg) {
 				UnServer.EscribirLog("Usuario " + Usuario + " logueado correctamente.");
 			} else {
 				UnServer.EnviarMensaje("401", 3, ClientSocket);
-				clear();
 				UnServer.EnviarMensaje("El usuario y la contrasena no coinciden", 40, ClientSocket);
 				UnServer.EscribirLog("Fallo de autenticacion de usuario: " + Usuario);
 			}
@@ -60,32 +59,15 @@ void MainListenThread(void* arg) {
 		}
 		if (mensaje == "ENVI")
 		{
-			// Tengo que enviarle al cliente toda la lista de usuarios
-			// (Por ahora solo tenemos el envio de strings, a futuro podriamos implementar el envio de estructuras de datos
-			// y asi poder mandar la lista directamente)
-
-			// Como la cantidad de usuarios es variables voy a mandar dos mensajes:
-			// 1 = Longitud del string (van a ser fijos 4 bytes, lo que permite que haya como minimo 624 [9999 / 16] usuarios creados)
-			//                         (si en el futuro implementamos el envio de estructuras de datos podriamos mandar
-			//							un int y asi en 4 bytes poder abarcar una cantidad mucho mas grande)
-			// 2 = Todos los usuarios separados por ";"
 
 			string todosLosUsuarios = ControlUsuarios.obtenerTodosEnString(";");
-			// Paso de int a str (TODO: implementar una funcion)
-			int Number = (int)todosLosUsuarios.length();
-			string stringLength;
-			stringstream convert;
-			convert << Number;
-			stringLength = convert.str();
-
-			UnServer.EnviarMensaje(stringLength, 4, ClientSocket);
-			UnServer.EnviarMensaje(todosLosUsuarios, todosLosUsuarios.length(), ClientSocket);
+			UnServer.EnviarMensajeTamanoVariable(todosLosUsuarios, ClientSocket);
 
 			// Recibo el destinatario y el mensaje
 			// Valido destinatario
 
 			string destinatario = UnServer.RecibirMensaje(ClientSocket,15);
-			string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,900);
+			string contenidoMensaje = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
 			if(ControlUsuarios.destinatarioValido(destinatario))
 			{
 				Mensaje* unMensaje = new Mensaje(Usuario,destinatario,contenidoMensaje);
@@ -134,19 +116,19 @@ void MainListenThread(void* arg) {
 			Lista<Mensaje*>* buzon = UnServer.obtenerMensajesPara(Usuario);
 			stringstream ss;
 			ss << buzon->getTamanio();
-			string str = ss.str();	
-			UnServer.EnviarMensaje(str,3,ClientSocket);
+			string CantidadMensajes = ss.str();	
+			UnServer.EnviarMensaje(CantidadMensajes, 3, ClientSocket);
 			
 			buzon->iniciarCursor();
+
 			while(buzon->avanzarCursor())
 			{
-				respuestaServer += buzon->obtenerCursor()->obtenerEmisor()+";"+buzon->obtenerCursor()->obtenerContenido()+";;";
-				//UnServer.EnviarMensaje(buzon->obtenerCursor()->obtenerEmisor()+";"+buzon->obtenerCursor()->obtenerContenido()+";;",75,ClientSocket);
-				//uso ;; para separar el contenido del mensaje del emisor del siguiente mensaje.
-				//habria que prohibir el uso de ;; en el contenido del mensaje
-				//UnServer.EnviarMensaje(buzon->obtenerCursor()->obtenerContenido()+";;",60,ClientSocket);
+				string UsuarioEmisor = buzon->obtenerCursor()->obtenerEmisor();
+				string ContenidoMensaje = buzon->obtenerCursor()->obtenerContenido();
+
+				UnServer.EnviarMensaje(UsuarioEmisor, 15, ClientSocket);
+				UnServer.EnviarMensajeTamanoVariable(ContenidoMensaje, ClientSocket);
 			}
-			UnServer.EnviarMensaje(respuestaServer,respuestaServer.length(),ClientSocket);
 		}
 		if (mensaje == "EXIT") {
 			UnServer.EscribirLog("Un cliente se desconecto");

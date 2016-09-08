@@ -21,15 +21,17 @@ class Server
 private:
 	SOCKET ListenSocket;
 	Lista<Mensaje*>* todosLosMensajes;
-	ofstream logFile;  //Archivo para el log
+	std::ofstream logFile;  //Archivo para el log
 public:
 	void Abrir(std::string UnPuerto);
 	SOCKET RecibirNuevaConexion();
 	std::string RecibirMensaje(SOCKET ClientSocket, int tam);
+	std::string RecibirMensajeTamanoVariable(SOCKET ClientSocket);
 	Server();
 	void agregarMensaje(Mensaje* unMensaje);
 	int EnviarMensaje(std::string mensaje, int sizeDatos, SOCKET ClientSocket);
-	void EscribirLog(string mensaje);
+	int EnviarMensajeTamanoVariable(std::string mensaje, SOCKET ClientSocket);
+	void EscribirLog(std::string mensaje);
 	void enviarATodos(std::string contenidoMensaje, std::string emisor);
 	Lista<Mensaje*>* obtenerMensajesPara(std::string destinatario);
 	~Server();

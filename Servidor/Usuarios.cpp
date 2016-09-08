@@ -23,9 +23,9 @@ bool Usuarios::ContrasenaValida(std::string usuario, std::string contrasena) {
 	return false;
 }
 
-Lista<string>* Usuarios::obtenerTodos()
+Lista<std::string>* Usuarios::obtenerTodos()
 {
-	Lista<string>* todosLosUsuarios = new Lista<string>;
+	Lista<std::string>* todosLosUsuarios = new Lista<std::string>;
 	Usuario unUsuario;
 	resetearCursorArchivo();
 	while(hayUsuarios())
@@ -39,9 +39,9 @@ Lista<string>* Usuarios::obtenerTodos()
 	return todosLosUsuarios;
 }
 
-string Usuarios::obtenerTodosEnString(string separador)
+std::string Usuarios::obtenerTodosEnString(std::string separador)
 {
-	string todosLosUsuarios = "";
+	std::string todosLosUsuarios = "";
 	Usuario unUsuario;
 	resetearCursorArchivo();
 	while (hayUsuarios())
@@ -56,7 +56,7 @@ string Usuarios::obtenerTodosEnString(string separador)
 	return todosLosUsuarios;
 }
 
-bool Usuarios::destinatarioValido(string destinatario)
+bool Usuarios::destinatarioValido(std::string destinatario)
 {
 	Usuario unUsuario;
 	resetearCursorArchivo();

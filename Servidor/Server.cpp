@@ -8,11 +8,13 @@
 #define pause() system("pause");
 #endif
 
-using namespace std;
+#include <mutex>
+//using namespace std;
 
 #define DEFAULT_BUFLEN 512
 char recvbuf[DEFAULT_BUFLEN];
 int recvbuflen = DEFAULT_BUFLEN;
+std::mutex UnMutex;
 
 Server::Server()
 {
@@ -22,14 +24,16 @@ Server::Server()
 
 void Server::agregarMensaje(Mensaje* unMensaje)
 {
-	cout << "El contenido es: " << unMensaje->obtenerContenido() << endl << endl;
+	UnMutex.lock();
+	std::cout << "El contenido es: " << unMensaje->obtenerContenido() << std::endl << std::endl;
 	todosLosMensajes->agregar(unMensaje);
+	UnMutex.unlock();
 }
 
-void Server::enviarATodos(string contenidoMensaje, string emisor)
+void Server::enviarATodos(std::string contenidoMensaje, std::string emisor)
 {
 	Usuarios* instanciaUsuarios = new Usuarios();
-	Lista<string>* todosLosUsuarios = instanciaUsuarios->obtenerTodos();
+	Lista<std::string>* todosLosUsuarios = instanciaUsuarios->obtenerTodos();
 	todosLosUsuarios->iniciarCursor();
 	while(todosLosUsuarios->avanzarCursor())
 	{
@@ -39,7 +43,7 @@ void Server::enviarATodos(string contenidoMensaje, string emisor)
 	
 }
 
-Lista<Mensaje*>* Server::obtenerMensajesPara(string destinatario)
+Lista<Mensaje*>* Server::obtenerMensajesPara(std::string destinatario)
 {
 	Lista<Mensaje*>* buzon = new Lista<Mensaje*>;
 	int posicion = 1;
@@ -66,7 +70,7 @@ Lista<Mensaje*>* Server::obtenerMensajesPara(string destinatario)
 }
 
 
-void Server::Abrir(string UnPuerto) {
+void Server::Abrir(std::string UnPuerto) {
 	// Inicializacion de las variables
 
 	WSADATA wsaData;
@@ -80,7 +84,7 @@ void Server::Abrir(string UnPuerto) {
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
 	{
 		clear();
-		cout << "Ha ocurrido  un error inesperado." << endl;
+		std::cout << "Ha ocurrido  un error inesperado." << std::endl;
 		this->EscribirLog("Error al inicializar el socket del Server. " + WSAGetLastError());
 		pause();
 		WSACleanup();
@@ -100,7 +104,7 @@ void Server::Abrir(string UnPuerto) {
 	if (getaddrinfo(NULL, UnPuerto.c_str(), &(hints), &(result)) != NO_ERROR)
 	{
 		clear();
-		cout << "Ha ocurrido un error con la inicializacion de la IP y el Puerto de conexion." << endl;
+		std::cout << "Ha ocurrido un error con la inicializacion de la IP y el Puerto de conexion." << std::endl;
 		this->EscribirLog("Error al inicializar configuracion de ip y puerto.");
 		pause();
 		WSACleanup();
@@ -112,7 +116,7 @@ void Server::Abrir(string UnPuerto) {
 	if (this->ListenSocket == INVALID_SOCKET)
 	{
 		clear();
-		cout << "Ha ocurrido un error inesperado." << endl;
+		std::cout << "Ha ocurrido un error inesperado." << std::endl;
 		this->EscribirLog("Error al crear el socket del servidor: " + WSAGetLastError());
 		pause();
 		freeaddrinfo(result);
@@ -124,7 +128,7 @@ void Server::Abrir(string UnPuerto) {
 	if (bind(this->ListenSocket, result->ai_addr, (int)result->ai_addrlen) == SOCKET_ERROR)
 	{
 		clear();
-		cout << "Ha ocurrido un error inesperado." << endl;
+		std::cout << "Ha ocurrido un error inesperado." << std::endl;
 		this->EscribirLog("Error al asociar el Socket a la IP y Puerto seleccionado" + WSAGetLastError());
 		pause();
 		WSACleanup();
@@ -141,7 +145,7 @@ void Server::Abrir(string UnPuerto) {
 	if (listen(ListenSocket, SOMAXCONN) == SOCKET_ERROR)
 	{
 		clear();
-		cout << "Ha ocurrido un error inesperado." << endl;
+		std::cout << "Ha ocurrido un error inesperado." << std::endl;
 		this->EscribirLog("Error al escuchar conexiones en socketServer: " + WSAGetLastError());
 		closesocket(ListenSocket);
 		pause();
@@ -149,17 +153,17 @@ void Server::Abrir(string UnPuerto) {
 		exit(0);
 	}
 
-	cout << "Server activado escuchando en el puerto: " << UnPuerto << endl;
+	std::cout << "Server activado escuchando en el puerto: " << UnPuerto << std::endl;
 	this->EscribirLog("Servidor activado. Puerto: " + UnPuerto);
 }
 
 SOCKET Server::RecibirNuevaConexion() {
 	SOCKET UnSocketClient = accept(this->ListenSocket, NULL, NULL);
-	cout << "Conexion entrante" << endl;
+	std::cout << "Conexion entrante" << std::endl;
 	return UnSocketClient;
 }
 
-const string obtenerDateTime() {
+const std::string obtenerDateTime() {
     time_t     now = time(0);
     struct tm  tstruct;
     char       buf[80];
@@ -170,9 +174,9 @@ const string obtenerDateTime() {
 }
 
 //Log del cliente
-void Server::EscribirLog(string mens)
+void Server::EscribirLog(std::string mens)
 {
-	string logString = obtenerDateTime() + mens;
+	std::string logString = obtenerDateTime() + mens;
 
 	if(logString.size() > 128)
 	{
@@ -180,29 +184,56 @@ void Server::EscribirLog(string mens)
 		logString = logString + "...";
 	}
 
-	logFile << logString << endl;
+	logFile << logString << std::endl;
 }
 
-string Server::RecibirMensaje(SOCKET ClientSocket, int tam) {
+std::string Server::RecibirMensaje(SOCKET ClientSocket, int tam) {
 	int cantidadBytesRecibidos;
-	string mensajeCliente;
+	std::string mensajeCliente;
 
 	cantidadBytesRecibidos = recv(ClientSocket, recvbuf, tam, 0);
 	if (cantidadBytesRecibidos >= 0) {
-		string tmpMsj(recvbuf);
+		std::string tmpMsj(recvbuf);
 		mensajeCliente = tmpMsj;
-		recvbuf[cantidadBytesRecibidos] = 0; // 0 = NULL terminator del string
+		recvbuf[cantidadBytesRecibidos] = 0; // 0 = NULL terminator del std::string TODO: Creo que debiera usarse el tam
 	}
 	else {
 		mensajeCliente = "LOST";
-	}
+	}
 
-	cout		<< "Mensaje del cliente: " << mensajeCliente << endl;
+	memset(recvbuf, 0, sizeof(recvbuf)); // Reseteo el array a 0 para no arrastrar basura
+
+	std::cout		<< "Mensaje del cliente: " << mensajeCliente << std::endl;
 
 	return mensajeCliente;
 }
 
-int Server::EnviarMensaje(string mensaje, int sizeDatos, SOCKET ClientSocket)
+std::string Server::RecibirMensajeTamanoVariable(SOCKET ClientSocket) {
+
+	int stringLength = atoi(RecibirMensaje(ClientSocket, 8).c_str());
+	std::string mensaje = RecibirMensaje(ClientSocket, stringLength);
+
+	return mensaje;
+}
+
+int Server::EnviarMensajeTamanoVariable(std::string mensaje, SOCKET ClientSocket)
+{
+	// Como long de msj es variable envio:
+	// 1: Tamano de string (fijo de 8)
+	// 2: Msj (variable)
+
+	// Paso de int a str (TODO: implementar una funcion)
+	int Number = (int)mensaje.length();
+	std::string stringLength;
+	std::stringstream convert;
+	convert << Number;
+	stringLength = convert.str();
+
+	EnviarMensaje(stringLength, 8, ClientSocket);
+	return EnviarMensaje(mensaje, mensaje.length(), ClientSocket);
+}
+
+int Server::EnviarMensaje(std::string mensaje, int sizeDatos, SOCKET ClientSocket)
 {
 	const char* datosEnviados = mensaje.c_str();
 	// Send an initial buffer
@@ -214,7 +245,7 @@ int Server::EnviarMensaje(string mensaje, int sizeDatos, SOCKET ClientSocket)
 Server::~Server()
 {
 	closesocket(this->ListenSocket);
-	cout << "Cerrando server: .." << WSAGetLastError() << endl;
+	std::cout << "Cerrando server: .." << WSAGetLastError() << std::endl;
 	this->EscribirLog("Servidor cerrado.");
 	WSACleanup();
 	logFile.close();

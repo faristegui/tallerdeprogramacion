@@ -3,7 +3,7 @@
 #include <iostream>
 #ifndef _LISTA_H
 #define _LISTA_H
-using namespace std;
+//using namespace std;
 
 template <class T>
 class Lista{

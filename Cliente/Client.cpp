@@ -1,4 +1,5 @@
 #include "Client.h"
+#include <sstream>
 
 #ifdef WIN32 
 #define clear() system("cls");
@@ -134,6 +135,24 @@ int Client::EnviarMensaje(string mensaje, int sizeDatos)
 	return cantidadBytesEnviados;
 }
 
+
+int Client::EnviarMensajeTamanoVariable(string mensaje)
+{		
+	// Como long de msj es variable envio:
+	// 1: Tamano de string (fijo de 8)
+	// 2: Msj (variable)
+
+	// Paso de int a str (TODO: implementar una funcion)
+	int Number = (int)mensaje.length();
+	string stringLength;
+	std::stringstream convert;
+	convert << Number;
+	stringLength = convert.str();
+
+	EnviarMensaje(stringLength, 8);
+	return EnviarMensaje(mensaje, mensaje.length());
+}
+
 string Client::RecibirMensaje(int sizeDatos)
 {
 	int cantidadBytesRecibidos;
@@ -142,8 +161,18 @@ string Client::RecibirMensaje(int sizeDatos)
 	recvbuf[cantidadBytesRecibidos] = 0;
 	string mensajeCliente(recvbuf);
 
+	memset(recvbuf, 0, sizeof(recvbuf)); // Reseteo el array a 0 para no arrastrar basura
+
 	return mensajeCliente;
 
+}
+
+std::string Client::RecibirMensajeTamanoVariable() {
+
+	int stringLength = atoi(RecibirMensaje(8).c_str());
+	std::string mensaje = RecibirMensaje(stringLength);
+
+	return mensaje;
 }
 
 void Client::cerrarConexionConServer()

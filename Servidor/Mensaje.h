@@ -1,17 +1,17 @@
 #include <string>
 #pragma once
-using namespace std;
+//using namespace std;
 class Mensaje
 {
 public:
-	Mensaje(string emisor, string destinatario, string contenido);
-	string obtenerContenido();
-	string obtenerEmisor();
-	string obtenerDestinatario();
+	Mensaje(std::string emisor, std::string destinatario, std::string contenido);
+	std::string obtenerContenido();
+	std::string obtenerEmisor();
+	std::string obtenerDestinatario();
 	~Mensaje(void);
 private:
-	string emisor_;
-	string destinatario_;
-	string contenido_;
+	std::string emisor_;
+	std::string destinatario_;
+	std::string contenido_;
 };
 

@@ -5,22 +5,21 @@
 #include <string>
 #include <sstream>
 #include "Lista.h"
-using namespace std;
 
 struct Usuario {
-	string nombre;
-	string contrasena;
+	std::string nombre;
+	std::string contrasena;
 };
 
 class Usuarios
 {
-	ifstream archivoUsuarios;
+	std::ifstream archivoUsuarios;
 public:
 	Usuarios();
-	bool ContrasenaValida(string usuario, string contrasena);
-	 Lista<string>* obtenerTodos();
-	 string obtenerTodosEnString(string separador);
-	 bool destinatarioValido(string destinatario);
+	bool ContrasenaValida(std::string usuario, std::string contrasena);
+	 Lista<std::string>* obtenerTodos();
+	 std::string obtenerTodosEnString(std::string separador);
+	 bool destinatarioValido(std::string destinatario);
 	~Usuarios();
 private:
 	Usuario getProximoUsuario();

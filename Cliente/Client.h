@@ -20,8 +20,10 @@ private:
 public:
 	Client();
 	int EnviarMensaje(string, int sizeDatos);
+	int EnviarMensajeTamanoVariable(string);
 	bool ConectarAServidor(string ip, string puerto);
 	std::string RecibirMensaje(int sizeDatos);
+	std::string RecibirMensajeTamanoVariable();
 	void cerrarConexionConServer();
 	void EscribirLog(string mensaje);
 	~Client();

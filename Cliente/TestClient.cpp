@@ -150,12 +150,8 @@ void menuMensaje(EnvioThreadData* datosOpcionEnvio)
 	{
 	case 1:
 	{
-		// Avisa al servidor que va a mandar un mensaje
 		UnCliente.EnviarMensaje("ENVI", 4);
-		// Recibe todos los usuarios
-		// Como la cantidad es variable. Primero recibo 
-		int stringLength = atoi(UnCliente.RecibirMensaje(4).c_str());
-		string todosLosUsuarios = UnCliente.RecibirMensaje(stringLength);
+		string todosLosUsuarios = UnCliente.RecibirMensajeTamanoVariable();
 		// Muestro lista de usuarios
 		MostrarUsuarios(todosLosUsuarios);
 		// Recibo usuario y msj al que el usuario desea enviarle el msj
@@ -196,9 +192,11 @@ void enviarMensaje(void* pParams)
 	string respuestaServer;
 	if(opcion == 1)
 	{
-		UnCliente.EnviarMensaje(destinatario,15);
+
+
+		UnCliente.EnviarMensaje(destinatario, 15);
+		UnCliente.EnviarMensajeTamanoVariable(mensaje);
 		UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ". Mensaje: " + mensaje);
-		UnCliente.EnviarMensaje(mensaje,mensaje.length());
 	}
 	if(opcion == 2)
 	{
@@ -207,47 +205,38 @@ void enviarMensaje(void* pParams)
 	}
 	
 	respuestaServer = UnCliente.RecibirMensaje(3);
-	cout << "Respuesta del servidor: " << respuestaServer << endl;
+	//cout << "Respuesta del servidor: " << respuestaServer << endl;
 	UnCliente.EscribirLog("-> " + respuestaServer);
 	respuestaServer = UnCliente.RecibirMensaje(30);
-	cout << "Respuesta del servidor: " << respuestaServer << endl;
+	//cout << "Respuesta del servidor: " << respuestaServer << endl;
 	UnCliente.EscribirLog("-> " + respuestaServer);
-	pause();
+	//pause();
 }
 
 void recibirMensajes(void* pParams)
 {
-	string cantMensajes, respuestaServer,emisor,contenidoMensaje;
+	int CantMensajes;
+	string respuestaServer;
 	string tamanioEmisor,tamanioMensaje;
 	UnCliente.EnviarMensaje("REC",3);
 
 	//El servidor responde la cantidad de mensajes
 	respuestaServer = UnCliente.RecibirMensaje(3); 
-	cantMensajes = respuestaServer;
+	CantMensajes = stoi(respuestaServer);
 
-	cout << "Usted tiene " << cantMensajes << " mensajes" << endl << endl;
-	UnCliente.EscribirLog(cantMensajes + " mensajes recibidos.");
+	cout << "Usted tiene " << CantMensajes << " mensajes" << endl << endl;
+	UnCliente.EscribirLog(CantMensajes + " mensajes recibidos.");
 
-	if(stoi(cantMensajes) > 0)
+	while(CantMensajes > 0)
 	{
-		//se reciben los mensajes (incluye cadena de emisor con contenido de cada uno)
-		//puse 512 porque es el maximo pero habria que encadenar varias respuestas del server
-		//en caso que exceda el maximo de 512 que definimos de tamaño de buffer
-		
-		respuestaServer = UnCliente.RecibirMensaje(900);
+		string UsuarioEmisor = UnCliente.RecibirMensaje(15);
+		string ContenidoMensaje = UnCliente.RecibirMensajeTamanoVariable();
 	
-		while(respuestaServer!= "")
-		{
-			emisor = respuestaServer.substr(0,respuestaServer.find(';'));
-			respuestaServer.erase(0,respuestaServer.find(';')+1);
-		
-			contenidoMensaje = respuestaServer.substr(0,respuestaServer.find(";;"));
-			respuestaServer.erase(0,respuestaServer.find(";;") +2);
+		cout << "De: " << UsuarioEmisor << endl;
+		cout << "Mensaje: " << ContenidoMensaje << endl << endl;
+		UnCliente.EscribirLog("Mensaje de " + UsuarioEmisor + " recibido.");
 
-			cout << "De: " << emisor << endl;
-			cout << "Mensaje: " << contenidoMensaje << endl << endl;
-			UnCliente.EscribirLog("Mensaje de " + emisor + " recibido.");
-		}
+		CantMensajes--;
 	}
 	pause();
 }
@@ -255,9 +244,7 @@ void recibirMensajes(void* pParams)
 void MenuPrincipal()
 {
 	int opcion = 0;
-	//Sleep(3000); // Por que este sleep? [LD]
-	//es para sincronizar el thread de envio con el principal y que no se superpongan, pero
-	//creo que ya lo soluciono seba. estaria al pedo. [MZ10]
+
 	while((opcion < 1) || (opcion > 6))
 	{
 		clear();
@@ -287,10 +274,9 @@ void MenuPrincipal()
 			{
 				EnvioThreadData* datosOpcionEnvio = new EnvioThreadData;
 				menuMensaje(datosOpcionEnvio);
-				//sebastian: primero llamo al menuMensaje para obtener todos los datos del envio, osea si es envio a uno , a todos y cual es el mensaje a enviar
-
-				//sebastian: aca si lanzo el thread ya que ahora tengo todos los datos del menu de envio completos dentro de la estructura datosOpcionEnvio
-				_beginthread(enviarMensaje, 0, (void*)datosOpcionEnvio); //lanzo el hilo y asincronicamente enviara el mensaje al server, ya puedo entonces volver al menu principal del usuario.
+				_beginthread(enviarMensaje, 0, (void*)datosOpcionEnvio);
+				cout << "Mensaje enviado" << endl;
+				pause();
 				break;
 			}
 		case 5:
