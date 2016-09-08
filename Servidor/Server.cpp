@@ -25,10 +25,10 @@ Server::Server()
 
 void Server::agregarMensaje(Mensaje* unMensaje)
 {
-	UnMutex.lock();
+	//UnMutex.lock();
 	std::cout << "El contenido es: " << unMensaje->obtenerContenido() << std::endl << std::endl;
 	todosLosMensajes->agregar(unMensaje);
-	UnMutex.unlock();
+	//UnMutex.unlock();
 }
 
 void Server::enviarATodos(std::string contenidoMensaje, std::string emisor)
@@ -46,7 +46,7 @@ void Server::enviarATodos(std::string contenidoMensaje, std::string emisor)
 
 Lista<Mensaje*>* Server::obtenerMensajesPara(std::string destinatario)
 {
-	UnMutex.lock();
+	//UnMutex.lock();
 
 	Lista<Mensaje*>* buzon = new Lista<Mensaje*>;
 	int posicion = 1;
@@ -71,7 +71,7 @@ Lista<Mensaje*>* Server::obtenerMensajesPara(std::string destinatario)
 	}
 
 
-	UnMutex.unlock();
+	//UnMutex.unlock();
 	return buzon;
 }
 
