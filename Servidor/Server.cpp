@@ -1,19 +1,20 @@
 #include "Server.h"
 
 #ifdef WIN32 
-#define clear() system("cls");
+#define ClearScreen() system("cls");
 #define pause() system("pause");
 #else 
-#define clear() system("clear");
+#define ClearScreen() system("clear");
 #define pause() system("pause");
 #endif
 
 #include <mutex>
 //using namespace std;
 
-#define DEFAULT_BUFLEN 512
-char recvbuf[DEFAULT_BUFLEN];
-int recvbuflen = DEFAULT_BUFLEN;
+#define MAX_BUFFER_LENGTH 512
+// TODO: El siguiente array creo q hay q crearlo y matarlo dentro
+//		 RecibirMensaje().. Como lo mato??
+char recvbuf[MAX_BUFFER_LENGTH];
 std::mutex UnMutex;
 
 Server::Server()
@@ -45,6 +46,8 @@ void Server::enviarATodos(std::string contenidoMensaje, std::string emisor)
 
 Lista<Mensaje*>* Server::obtenerMensajesPara(std::string destinatario)
 {
+	UnMutex.lock();
+
 	Lista<Mensaje*>* buzon = new Lista<Mensaje*>;
 	int posicion = 1;
 	int vuelta = 0;
@@ -66,6 +69,9 @@ Lista<Mensaje*>* Server::obtenerMensajesPara(std::string destinatario)
 		todosLosMensajes->remover(posicionesAEliminar->obtenerCursor()-vuelta);
 		vuelta++;
 	}
+
+
+	UnMutex.unlock();
 	return buzon;
 }
 
@@ -83,7 +89,7 @@ void Server::Abrir(std::string UnPuerto) {
 
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
 	{
-		clear();
+		ClearScreen();
 		std::cout << "Ha ocurrido  un error inesperado." << std::endl;
 		this->EscribirLog("Error al inicializar el socket del Server. " + WSAGetLastError());
 		pause();
@@ -103,7 +109,7 @@ void Server::Abrir(std::string UnPuerto) {
 	// (Devuelve por referencia la variable "result")
 	if (getaddrinfo(NULL, UnPuerto.c_str(), &(hints), &(result)) != NO_ERROR)
 	{
-		clear();
+		ClearScreen();
 		std::cout << "Ha ocurrido un error con la inicializacion de la IP y el Puerto de conexion." << std::endl;
 		this->EscribirLog("Error al inicializar configuracion de ip y puerto.");
 		pause();
@@ -115,7 +121,7 @@ void Server::Abrir(std::string UnPuerto) {
 	this->ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
 	if (this->ListenSocket == INVALID_SOCKET)
 	{
-		clear();
+		ClearScreen();
 		std::cout << "Ha ocurrido un error inesperado." << std::endl;
 		this->EscribirLog("Error al crear el socket del servidor: " + WSAGetLastError());
 		pause();
@@ -127,7 +133,7 @@ void Server::Abrir(std::string UnPuerto) {
 	// Setup the TCP listening socket	
 	if (bind(this->ListenSocket, result->ai_addr, (int)result->ai_addrlen) == SOCKET_ERROR)
 	{
-		clear();
+		ClearScreen();
 		std::cout << "Ha ocurrido un error inesperado." << std::endl;
 		this->EscribirLog("Error al asociar el Socket a la IP y Puerto seleccionado" + WSAGetLastError());
 		pause();
@@ -144,7 +150,7 @@ void Server::Abrir(std::string UnPuerto) {
 
 	if (listen(ListenSocket, SOMAXCONN) == SOCKET_ERROR)
 	{
-		clear();
+		ClearScreen();
 		std::cout << "Ha ocurrido un error inesperado." << std::endl;
 		this->EscribirLog("Error al escuchar conexiones en socketServer: " + WSAGetLastError());
 		closesocket(ListenSocket);
@@ -211,6 +217,12 @@ std::string Server::RecibirMensaje(SOCKET ClientSocket, int tam) {
 std::string Server::RecibirMensajeTamanoVariable(SOCKET ClientSocket) {
 
 	int stringLength = atoi(RecibirMensaje(ClientSocket, 8).c_str());
+
+	if (stringLength > MAX_BUFFER_LENGTH) {
+
+		// TODO: Traer de a pedazos
+	}
+
 	std::string mensaje = RecibirMensaje(ClientSocket, stringLength);
 
 	return mensaje;

@@ -17,10 +17,10 @@ using namespace std;
 #pragma comment (lib, "Ws2_32.lib")
 
 #ifdef WIN32 
-#define clear() system("cls");
+#define ClearScreen() system("cls");
 #define pause() system("pause");
 #else 
-#define clear() system("clear");
+#define ClearScreen() system("clear");
 #define pause() system("pause");
 #endif
 
@@ -79,7 +79,7 @@ void MainListenThread(void* arg) {
 			else
 			{
 				UnServer.EnviarMensaje("402",3,ClientSocket);
-				clear();
+				ClearScreen();
 				UnServer.EnviarMensaje("El destinatario no existe",30,ClientSocket);
 				UnServer.EscribirLog("Error al enviar mensaje de " + Usuario + " a " + destinatario + "El destinatario no existe.");
 			}
@@ -87,12 +87,12 @@ void MainListenThread(void* arg) {
 		if (mensaje == "OUT") {
 
 			if (Usuario != "") {
-				clear();
+				ClearScreen();
 				UnServer.EnviarMensaje("Hasta la proxima " + Usuario, 40, ClientSocket);
 				UnServer.EscribirLog(Usuario + " desconectado correctamente.");
 				Usuario = "";
 			} else {
-				clear();
+				ClearScreen();
 				UnServer.EnviarMensaje("No existe ninguna sesion iniciada.", 40, ClientSocket);
 				UnServer.EscribirLog("Fallo intento de Logout. No existe sesion iniciada.");
 			}

@@ -17,10 +17,10 @@ using namespace std;
 #pragma comment (lib, "AdvApi32.lib")
 
 #ifdef WIN32 
-#define clear() system("cls");
+#define ClearScreen() system("cls");
 #define pause() system("pause");
 #else 
-#define clear() system("clear");
+#define ClearScreen() system("clear");
 #define pause() system("pause");
 #endif
 
@@ -34,6 +34,40 @@ struct EnvioThreadData
 	string mensaje;
 	string destinatario;
 };
+
+
+void ThreadEnviaMensaje(void* pParams)
+{
+	int opcion;
+	string mensaje;
+	string destinatario;
+	EnvioThreadData* datos = (EnvioThreadData*)pParams;
+	opcion = datos->opcion;
+	mensaje = datos->mensaje;
+	destinatario = datos->destinatario;
+
+	string respuestaServer;
+	if (opcion == 1)
+	{
+		UnCliente.EnviarMensaje(destinatario, 15);
+		UnCliente.EnviarMensajeTamanoVariable(mensaje);
+		UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ". Mensaje: " + mensaje);
+	}
+	if (opcion == 2)
+	{
+		UnCliente.EnviarMensaje(mensaje, mensaje.length());
+		UnCliente.EscribirLog("Mensaje enviado a todos los usuarios. Mensaje: " + mensaje);
+	}
+
+	respuestaServer = UnCliente.RecibirMensaje(3);
+	//cout << "Respuesta del servidor: " << respuestaServer << endl;
+	UnCliente.EscribirLog("-> " + respuestaServer);
+	respuestaServer = UnCliente.RecibirMensaje(30);
+	//cout << "Respuesta del servidor: " << respuestaServer << endl;
+	UnCliente.EscribirLog("-> " + respuestaServer);
+	//pause();
+}
+
 
 void ThreadStatus(void* pParams)
 {
@@ -61,7 +95,7 @@ void ThreadStatus(void* pParams)
 		else
 		{
 			status = false;
-			clear();
+			ClearScreen();
 			cout << "Conexion con el servidor terminada. (Server Offline).";
 			ClientePing.EscribirLog("Conexion con el servidor terminada. (Server Offline).");
 		}
@@ -137,7 +171,7 @@ void menuMensaje(EnvioThreadData* datosOpcionEnvio)
 
 	while((opcion < 1) || (opcion > 2))
 	{
-		clear();
+		ClearScreen();
 		cout << "Seleccione destinatario" << endl << endl
 		<< "1- Destinatario unico" << endl
 		<< "2- Todos los usuarios" << endl;
@@ -179,41 +213,15 @@ void menuMensaje(EnvioThreadData* datosOpcionEnvio)
 
 }
 
-void enviarMensaje(void* pParams)
-{
-	int opcion;
-	string mensaje;
-	string destinatario;
-	EnvioThreadData* datos = (EnvioThreadData*) pParams;
-	opcion = datos->opcion;
-	mensaje = datos->mensaje;
-	destinatario = datos->destinatario;
-
-	string respuestaServer;
-	if(opcion == 1)
-	{
-
-
-		UnCliente.EnviarMensaje(destinatario, 15);
-		UnCliente.EnviarMensajeTamanoVariable(mensaje);
-		UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ". Mensaje: " + mensaje);
-	}
-	if(opcion == 2)
-	{
-		UnCliente.EnviarMensaje(mensaje,mensaje.length());
-		UnCliente.EscribirLog("Mensaje enviado a todos los usuarios. Mensaje: " + mensaje);
-	}
-	
-	respuestaServer = UnCliente.RecibirMensaje(3);
-	//cout << "Respuesta del servidor: " << respuestaServer << endl;
-	UnCliente.EscribirLog("-> " + respuestaServer);
-	respuestaServer = UnCliente.RecibirMensaje(30);
-	//cout << "Respuesta del servidor: " << respuestaServer << endl;
-	UnCliente.EscribirLog("-> " + respuestaServer);
-	//pause();
+void EnviarMensaje() {
+	EnvioThreadData* datosOpcionEnvio = new EnvioThreadData;
+	menuMensaje(datosOpcionEnvio);
+	_beginthread(ThreadEnviaMensaje, 0, (void*)datosOpcionEnvio);
+	cout << "Mensaje enviado" << endl;
+	pause();
 }
 
-void recibirMensajes(void* pParams)
+void RecibirMensajes()
 {
 	int CantMensajes;
 	string respuestaServer;
@@ -241,51 +249,56 @@ void recibirMensajes(void* pParams)
 	pause();
 }
 
+void CerrarPrograma() {
+	clienteAbierto = false;
+	UnCliente.EscribirLog("Programa cerrado por el usuario.");
+	exit(0);
+}
+
 void MenuPrincipal()
 {
 	int opcion = 0;
 
-	while((opcion < 1) || (opcion > 6))
+	while (((opcion < 1) || (opcion > 6)) || cin.fail())
 	{
-		clear();
+		if (std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(256, '\n');
+		}
+
+		ClearScreen();
 		cout << "MENU PRINCIPAL" << endl << endl <<
-		"1- Iniciar Sesion" << endl <<
-		"2- Cerrar Sesion" << endl <<
-		"3- Salir" << endl <<
-		"4- Enviar" << endl <<
-		"5- Recibir" << endl <<
-		"6- Lore Ipsum" << endl << endl << "Ingrese una opcion: ";
+			"1- Iniciar Sesion" << endl <<
+			"2- Cerrar Sesion" << endl <<
+			"3- Salir" << endl <<
+			"4- Enviar" << endl <<
+			"5- Recibir" << endl <<
+			"6- Lore Ipsum" << endl << endl << "Ingrese una opcion: ";
 		cin >> opcion;
 	}
-	switch(opcion)
+
+	switch (opcion)
 	{
-		case 1:
-			IniciarSesion();
-			break;
-		case 2:
-			CerrarSesion();
-			break;
-		case 3:
-			clienteAbierto = false;
-			UnCliente.EscribirLog("Programa cerrado por el usuario.");
-			exit(0);
-			break;
-		case 4:
-			{
-				EnvioThreadData* datosOpcionEnvio = new EnvioThreadData;
-				menuMensaje(datosOpcionEnvio);
-				_beginthread(enviarMensaje, 0, (void*)datosOpcionEnvio);
-				cout << "Mensaje enviado" << endl;
-				pause();
-				break;
-			}
-		case 5:
-			recibirMensajes(NULL);
-			break;
-		case 6:
-			//cliente.enviarCiclicamente()
-			break;
+	case 1:
+		IniciarSesion();
+		break;
+	case 2:
+		CerrarSesion();
+		break;
+	case 3:
+		CerrarPrograma();
+		break;
+	case 4:
+		EnviarMensaje();
+		break;
+	case 5:
+		RecibirMensajes();
+		break;
+	case 6:
+		//cliente.enviarCiclicamente()
+		break;
 	}
+
 	MenuPrincipal();
 }
 
@@ -296,7 +309,7 @@ int main(int argc, char **argv)
 	string puerto;
 
 	while (!conexionOk) {
-		clear();
+		ClearScreen();
 		cout << "Ingrese la IP del Servidor (Usar localhost para local): ";
 		cin >> ip;
 		cout << "Ingrese el puerto de conexion: ";

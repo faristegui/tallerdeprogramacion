@@ -2,16 +2,17 @@
 #include <sstream>
 
 #ifdef WIN32 
-#define clear() system("cls");
+#define ClearScreen() system("cls");
 #define pause() system("pause");
 #else 
-#define clear() system("clear");
+#define ClearScreen() system("clear");
 #define pause() system("pause");
 #endif
 
-#define DEFAULT_BUFLEN 512
-char recvbuf[DEFAULT_BUFLEN];
-int recvbuflen = DEFAULT_BUFLEN;
+#define MAX_BUFFER_LENGTH 512
+// TODO: El siguiente array creo q hay q crearlo y matarlo dentro
+//		 RecibirMensaje().. Como lo mato??
+char recvbuf[MAX_BUFFER_LENGTH];
 
 using namespace std;
 
@@ -33,7 +34,7 @@ bool Client::ConectarAServidor(string UnaIP, string UnPuerto)
 	ptr = NULL;
 
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
-		clear();
+		ClearScreen();
 		cout << "Ha ocurrido un error inesperado." << endl;
 		this->EscribirLog("Error al inicializar el socket del cliente.");
 		WSACleanup();
@@ -48,7 +49,7 @@ bool Client::ConectarAServidor(string UnaIP, string UnPuerto)
 	// configuracion de ip y puerto de conexion con el server
 
 	if (getaddrinfo(UnaIP.c_str(), UnPuerto.c_str(), &(hints), &(result)) != NO_ERROR) {
-		clear();
+		ClearScreen();
 		cout << "Ha ocurrido un error al enviar la configuracion de conexion." << endl;
 		this->EscribirLog("Error al inicializar configuracion de ip y puerto.");
 		WSACleanup();
@@ -61,7 +62,7 @@ bool Client::ConectarAServidor(string UnaIP, string UnPuerto)
 	this->ClientConnectionSocket = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
 	if (this->ClientConnectionSocket == INVALID_SOCKET)
 	{
-		clear();
+		ClearScreen();
 		cout << "Ha ocurrido un error inesperado." << endl;
 		this->EscribirLog("Error al crear el socket del cliente.");
 		freeaddrinfo(result);
@@ -86,7 +87,7 @@ bool Client::ConectarAServidor(string UnaIP, string UnPuerto)
 	freeaddrinfo(result);
 
 	if (this->ClientConnectionSocket == INVALID_SOCKET) {
-		clear();
+		ClearScreen();
 		cout << "Ha ocurrido un error al intentar conectar con el Servidor." << endl;
 		this->EscribirLog("Fallo al intentar conectar con el servidor. Codigo de error: " + WSAGetLastError());
 		WSACleanup();
@@ -127,7 +128,7 @@ int Client::EnviarMensaje(string mensaje, int sizeDatos)
 	int cantidadBytesEnviados;
 	cantidadBytesEnviados = send(this->ClientConnectionSocket, datosEnviados, sizeDatos, 0);
 	if (cantidadBytesEnviados == SOCKET_ERROR) {
-		clear();
+		ClearScreen();
 		this->EscribirLog("Fallo al enviar mensaje.");
 		pause();
 		exit(0);
@@ -170,6 +171,12 @@ string Client::RecibirMensaje(int sizeDatos)
 std::string Client::RecibirMensajeTamanoVariable() {
 
 	int stringLength = atoi(RecibirMensaje(8).c_str());
+
+	if (stringLength > MAX_BUFFER_LENGTH) {
+
+		// TODO: Traer de a pedazos
+	}
+
 	std::string mensaje = RecibirMensaje(stringLength);
 
 	return mensaje;
@@ -182,7 +189,7 @@ void Client::cerrarConexionConServer()
 
 	if (shutdown(this->ClientConnectionSocket, SD_SEND) == SOCKET_ERROR)
 	{
-		clear();
+		ClearScreen();
 		cout << "Ha ocurrido un error al cerrar la conexion con el Servidor.";
 		this->EscribirLog("Fallo al cerrar la conexion con el Servidor.");
 		closesocket(this->ClientConnectionSocket);
