@@ -6,6 +6,10 @@
 #include <sstream>
 #include "Lista.h"
 
+// Para ToLower
+#include <algorithm>
+#include <iostream>
+
 struct Usuario {
 	std::string nombre;
 	std::string contrasena;

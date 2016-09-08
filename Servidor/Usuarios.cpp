@@ -6,17 +6,24 @@ Usuarios::Usuarios()
 	esFinDeArchivo = false;
 }
 
-bool Usuarios::ContrasenaValida(std::string usuario, std::string contrasena) {
-	Usuario unUsuario;
+bool Usuarios::ContrasenaValida(std::string NombreUsuario, std::string Contrasena) {
+	
+	Usuario UnUsuario;
+	std::string TmpNombreUsuario;
 	resetearCursorArchivo();
 
-	//TODO: usuario = tolower(usuario);
+	// Convierte nombre de usuario a LowerCase
+	transform(NombreUsuario.begin(), NombreUsuario.end(), NombreUsuario.begin(), (int(*)(int))tolower);
 
 	while (hayUsuarios()) {
-		unUsuario = getProximoUsuario();
+		UnUsuario = getProximoUsuario();
 
-		if (unUsuario.nombre == usuario) {
-			return (unUsuario.contrasena == contrasena);
+		// Convierte nombre de usuario a LowerCase
+		TmpNombreUsuario = UnUsuario.nombre;
+		transform(TmpNombreUsuario.begin(), TmpNombreUsuario.end(), TmpNombreUsuario.begin(), (int(*)(int))tolower);
+
+		if (TmpNombreUsuario == NombreUsuario) {
+			return (UnUsuario.contrasena == Contrasena);
 		}
 	}
 
