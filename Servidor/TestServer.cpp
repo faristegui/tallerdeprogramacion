@@ -115,7 +115,7 @@ void MainListenThread(void* arg) {
 
 			UnServer.EnviarMensaje("002",3,ClientSocket);
 			//se envia cortado este mensaje
-			UnServer.EnviarMensaje("Mensaje enviado a todos los usuarios con exito.",65,ClientSocket);
+			UnServer.EnviarMensaje("Mensaje enviado a todos los usuarios con exito.", 65, ClientSocket);
 			UnServer.EscribirLog("Mensaje de " + Usuario + " enviado a todos los usuarios. Mensaje: " + contenidoMensaje);
 		}
 		if (mensaje == "REC")

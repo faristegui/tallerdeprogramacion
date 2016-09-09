@@ -62,7 +62,7 @@ void ThreadEnviaMensaje(void* pParams)
 	respuestaServer = UnCliente.RecibirMensaje(3);
 	//cout << "Respuesta del servidor: " << respuestaServer << endl;
 	UnCliente.EscribirLog("-> " + respuestaServer);
-	respuestaServer = UnCliente.RecibirMensaje(30);
+	respuestaServer = UnCliente.RecibirMensaje(65);
 	//cout << "Respuesta del servidor: " << respuestaServer << endl;
 	UnCliente.EscribirLog("-> " + respuestaServer);
 	//pause();
