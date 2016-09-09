@@ -8,14 +8,14 @@
 #define pause() system("pause");
 #endif
 
-#include <mutex>
+//#include <mutex>
 //using namespace std;
 
 #define MAX_BUFFER_LENGTH 512
 // TODO: El siguiente array creo q hay q crearlo y matarlo dentro
 //		 RecibirMensaje().. Como lo mato??
 char recvbuf[MAX_BUFFER_LENGTH];
-std::mutex UnMutex;
+//std::mutex UnMutex;
 
 Server::Server()
 {

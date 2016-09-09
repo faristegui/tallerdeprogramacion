@@ -180,6 +180,7 @@ void menuMensaje(EnvioThreadData* datosOpcionEnvio)
 	}
 
 	//agregado por sebastian
+	
 	switch(opcion)
 	{
 	case 1:
@@ -192,8 +193,9 @@ void menuMensaje(EnvioThreadData* datosOpcionEnvio)
 		cout << "Ingrese nombre de usuario del destinatario:" << endl;
 		cin >> destinatario;
 		datosOpcionEnvio->destinatario = destinatario;
+		cin.ignore();
 		cout << "Ingrese el mensaje que desea enviar:" << endl;
-		cin >> mensaje;
+		getline(cin,mensaje);
 		datosOpcionEnvio->mensaje = mensaje;
 	}
 		break;
@@ -201,15 +203,13 @@ void menuMensaje(EnvioThreadData* datosOpcionEnvio)
 		// Avisa al servidor que el mensaje es para todos
 		UnCliente.EnviarMensaje("ENVT", 4);
 		// Recibo  msj al que el usuario desea enviarle el msj
+		cin.ignore();
 		cout << "Ingrese el mensaje que desea enviar a todos los usuarios:" << endl;
-		cin >> mensaje;
+		getline(cin,mensaje);
 		datosOpcionEnvio->mensaje = mensaje;
-
-
-
 		break;
 	}
-
+	
 
 }
 
@@ -304,6 +304,7 @@ void MenuPrincipal()
 
 int main(int argc, char **argv)
 {
+	
 	bool conexionOk = false;
 	string ip;
 	string puerto;
@@ -335,6 +336,6 @@ int main(int argc, char **argv)
 	_beginthread(ThreadStatus, 0, (void*)datosPing);
 	
 	MenuPrincipal();
-
+	
 	return 0;
 }
