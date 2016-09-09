@@ -39,7 +39,9 @@ void Server::enviarATodos(std::string contenidoMensaje, std::string emisor)
 	while(todosLosUsuarios->avanzarCursor())
 	{
 		Mensaje* unMensaje = new Mensaje(emisor,todosLosUsuarios->obtenerCursor(),contenidoMensaje);
+		//UnMutex.lock();
 		todosLosMensajes->agregar(unMensaje);
+		//UnMutex.unlock();
 	}
 	
 }
