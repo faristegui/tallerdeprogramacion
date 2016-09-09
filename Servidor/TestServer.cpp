@@ -165,7 +165,7 @@ void MainServerThread(void* arg) {
 		manejador[contador] = (HANDLE) _beginthread(MainListenThread, 0, (void*)&ClientSocket);
 		contador++;
 		//cout << contador << endl;
-		WaitForMultipleObjects(contador, manejador, TRUE, INFINITE);
+		//WaitForMultipleObjects(contador, manejador, TRUE, INFINITE);
 	}
 
 }
