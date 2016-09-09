@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <process.h>
 
 #include "Server.h"
 #include "Usuarios.h"
@@ -27,6 +28,8 @@ using namespace std;
 Server UnServer;
 Usuarios ControlUsuarios;
 
+HANDLE ghMutex;
+
 void MostrarListaComandos() {
 	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
 }
@@ -35,7 +38,6 @@ void MainListenThread(void* arg) {
 	string Usuario = "";
 	string mensaje = "";
 	SOCKET ClientSocket = *(SOCKET*)arg;
-
 	while ((mensaje != "EXIT") && (mensaje != "LOST"))
 	{
 		mensaje = UnServer.RecibirMensaje(ClientSocket, 4);
@@ -71,7 +73,11 @@ void MainListenThread(void* arg) {
 			if(ControlUsuarios.destinatarioValido(destinatario))
 			{
 				Mensaje* unMensaje = new Mensaje(Usuario,destinatario,contenidoMensaje);
+				//En teoria espera que termine de ejecutar o como maximo los 5 segundos y libera el recurso [MZ]
+				WaitForSingleObject(ghMutex,5000);//se apodera del recurso, puse 5 segundos por poner algo.
 				UnServer.agregarMensaje(unMensaje);
+				ReleaseMutex(ghMutex);
+
 				UnServer.EnviarMensaje("001",3,ClientSocket);
 				UnServer.EnviarMensaje("Mensaje enviado con exito", 30,ClientSocket);
 				UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario + ". Mensaje: " + contenidoMensaje);
@@ -104,7 +110,12 @@ void MainListenThread(void* arg) {
 		if (mensaje == "ENVT")
 		{
 			string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,900);
+			
+			//En teoria espera que termine de ejecutar o como maximo los 5 segundos y libera el recurso [MZ]
+			WaitForSingleObject(ghMutex,5000);//se apodera del recurso, puse 5 segundos por poner algo.
 			UnServer.enviarATodos(contenidoMensaje, Usuario);
+			ReleaseMutex(ghMutex);
+
 			UnServer.EnviarMensaje("002",3,ClientSocket);
 			//se envia cortado este mensaje
 			UnServer.EnviarMensaje("Mensaje enviado a todos los usuarios con exito.",65,ClientSocket);
@@ -113,6 +124,9 @@ void MainListenThread(void* arg) {
 		if (mensaje == "REC")
 		{
 			string respuestaServer = "";
+			//En teoria espera que termine de ejecutar o como maximo los 5 segundos y libera el recurso [MZ]
+			WaitForSingleObject(ghMutex,5000); //se apodera del recurso, puse 5 segundos por poner algo.
+
 			Lista<Mensaje*>* buzon = UnServer.obtenerMensajesPara(Usuario);
 			stringstream ss;
 			ss << buzon->getTamanio();
@@ -129,6 +143,7 @@ void MainListenThread(void* arg) {
 				UnServer.EnviarMensaje(UsuarioEmisor, 15, ClientSocket);
 				UnServer.EnviarMensajeTamanoVariable(ContenidoMensaje, ClientSocket);
 			}
+			ReleaseMutex(ghMutex);
 		}
 		if (mensaje == "EXIT") {
 			UnServer.EscribirLog("Un cliente se desconecto");
@@ -139,13 +154,21 @@ void MainListenThread(void* arg) {
 }
 
 void MainServerThread(void* arg) {
-
+	int contador =0;
+	HANDLE manejador[6];//habian dicho maximo 6 clientes en simultaneo
+	ghMutex = CreateMutex(NULL,FALSE,NULL);
 	string Puerto = *(string*)arg;
 	UnServer.Abrir(Puerto);
 
 	while (true) {
 		SOCKET ClientSocket = UnServer.RecibirNuevaConexion();
-		_beginthread(MainListenThread, 0, (void*)&ClientSocket);
+		//En teoria cada vez que se conecta un nuevo cliente pasa por aca? No parece pasar eso.
+		//El codigo siguiente esta aplicado con esa logica
+		//La idea es ir acumulando los threads(clientes) y tener una lista para manejarlos con el mutex
+		manejador[contador] = (HANDLE) _beginthread(MainListenThread, 0, (void*)&ClientSocket);
+		contador++;
+		//cout << contador << endl;
+		WaitForMultipleObjects(contador, manejador, TRUE, INFINITE);
 	}
 
 }

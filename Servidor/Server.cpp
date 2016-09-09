@@ -1,4 +1,6 @@
 #include "Server.h"
+#include <WinBase.h>
+#include <Windows.h>
 
 #ifdef WIN32 
 #define ClearScreen() system("cls");
@@ -10,13 +12,12 @@
 
 //#include <mutex>
 //using namespace std;
-
 #define MAX_BUFFER_LENGTH 512
 // TODO: El siguiente array creo q hay q crearlo y matarlo dentro
 //		 RecibirMensaje().. Como lo mato??
 char recvbuf[MAX_BUFFER_LENGTH];
 //std::mutex UnMutex;
-
+//using namespace System::Threading;
 Server::Server()
 {
 	todosLosMensajes = new Lista<Mensaje*>;
@@ -25,6 +26,7 @@ Server::Server()
 
 void Server::agregarMensaje(Mensaje* unMensaje)
 {
+	
 	//UnMutex.lock();
 	std::cout << "El contenido es: " << unMensaje->obtenerContenido() << std::endl << std::endl;
 	todosLosMensajes->agregar(unMensaje);
