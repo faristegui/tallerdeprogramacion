@@ -55,7 +55,7 @@ void ThreadEnviaMensaje(void* pParams)
 	}
 	if (opcion == 2)
 	{
-		UnCliente.EnviarMensaje(mensaje, mensaje.length());
+		UnCliente.EnviarMensajeTamanoVariable(mensaje);
 		UnCliente.EscribirLog("Mensaje enviado a todos los usuarios. Mensaje: " + mensaje);
 	}
 
@@ -226,7 +226,7 @@ void RecibirMensajes()
 	int CantMensajes;
 	string respuestaServer;
 	string tamanioEmisor,tamanioMensaje;
-	UnCliente.EnviarMensaje("REC",3);
+	UnCliente.EnviarMensaje("REC", 3);
 
 	//El servidor responde la cantidad de mensajes
 	respuestaServer = UnCliente.RecibirMensaje(3); 

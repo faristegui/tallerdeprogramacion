@@ -57,10 +57,18 @@ Lista<Mensaje*>* Server::obtenerMensajesPara(std::string destinatario)
 	int vuelta = 0;
 	Lista<int>* posicionesAEliminar = new Lista<int>();
 	todosLosMensajes->iniciarCursor();
+	std::string TmpNombreUsuario;
+
+	// Convierte nombre de usuario a LowerCase
+	transform(destinatario.begin(), destinatario.end(), destinatario.begin(), (int(*)(int))tolower);
 	
 	while(todosLosMensajes->avanzarCursor())
 	{
-		if(todosLosMensajes->obtenerCursor()->obtenerDestinatario() == destinatario)
+		TmpNombreUsuario = todosLosMensajes->obtenerCursor()->obtenerDestinatario();
+		// Convierte nombre de usuario a LowerCase
+		transform(TmpNombreUsuario.begin(), TmpNombreUsuario.end(), TmpNombreUsuario.begin(), (int(*)(int))tolower);
+
+		if(TmpNombreUsuario == destinatario)
 		{
 			buzon->agregar(todosLosMensajes->obtenerCursor());
 			posicionesAEliminar->agregar(posicion);

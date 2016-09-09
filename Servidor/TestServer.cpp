@@ -74,7 +74,7 @@ void MainListenThread(void* arg) {
 			{
 				Mensaje* unMensaje = new Mensaje(Usuario,destinatario,contenidoMensaje);
 				//En teoria espera que termine de ejecutar o como maximo los 5 segundos y libera el recurso [MZ]
-				WaitForSingleObject(ghMutex,5000);//se apodera del recurso, puse 5 segundos por poner algo.
+				WaitForSingleObject(ghMutex, 5000);//se apodera del recurso, puse 5 segundos por poner algo.
 				UnServer.agregarMensaje(unMensaje);
 				ReleaseMutex(ghMutex);
 
@@ -85,7 +85,6 @@ void MainListenThread(void* arg) {
 			else
 			{
 				UnServer.EnviarMensaje("402",3,ClientSocket);
-				ClearScreen();
 				UnServer.EnviarMensaje("El destinatario no existe",30,ClientSocket);
 				UnServer.EscribirLog("Error al enviar mensaje de " + Usuario + " a " + destinatario + "El destinatario no existe.");
 			}
@@ -93,12 +92,10 @@ void MainListenThread(void* arg) {
 		if (mensaje == "OUT") {
 
 			if (Usuario != "") {
-				ClearScreen();
 				UnServer.EnviarMensaje("Hasta la proxima " + Usuario, 40, ClientSocket);
 				UnServer.EscribirLog(Usuario + " desconectado correctamente.");
 				Usuario = "";
 			} else {
-				ClearScreen();
 				UnServer.EnviarMensaje("No existe ninguna sesion iniciada.", 40, ClientSocket);
 				UnServer.EscribirLog("Fallo intento de Logout. No existe sesion iniciada.");
 			}
@@ -109,7 +106,7 @@ void MainListenThread(void* arg) {
 		}
 		if (mensaje == "ENVT")
 		{
-			string contenidoMensaje = UnServer.RecibirMensaje(ClientSocket,900);
+			string contenidoMensaje = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
 			
 			//En teoria espera que termine de ejecutar o como maximo los 5 segundos y libera el recurso [MZ]
 			WaitForSingleObject(ghMutex,5000);//se apodera del recurso, puse 5 segundos por poner algo.
