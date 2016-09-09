@@ -229,23 +229,29 @@ void RecibirMensajes()
 	UnCliente.EnviarMensaje("REC", 3);
 
 	//El servidor responde la cantidad de mensajes
-	respuestaServer = UnCliente.RecibirMensaje(3); 
-	CantMensajes = stoi(respuestaServer);
+	respuestaServer = UnCliente.RecibirMensaje(8);
 
-	cout << "Usted tiene " << CantMensajes << " mensajes" << endl << endl;
-	UnCliente.EscribirLog(CantMensajes + " mensajes recibidos.");
+	if (respuestaServer != "NOLOGIN") {
+		CantMensajes = stoi(respuestaServer);
 
-	while(CantMensajes > 0)
-	{
-		string UsuarioEmisor = UnCliente.RecibirMensaje(15);
-		string ContenidoMensaje = UnCliente.RecibirMensajeTamanoVariable();
-	
-		cout << "De: " << UsuarioEmisor << endl;
-		cout << "Mensaje: " << ContenidoMensaje << endl << endl;
-		UnCliente.EscribirLog("Mensaje de " + UsuarioEmisor + " recibido.");
+		cout << "Usted tiene " << CantMensajes << " mensajes" << endl << endl;
+		UnCliente.EscribirLog(CantMensajes + " mensajes recibidos.");
 
-		CantMensajes--;
+		while (CantMensajes > 0)
+		{
+			string UsuarioEmisor = UnCliente.RecibirMensaje(15);
+			string ContenidoMensaje = UnCliente.RecibirMensajeTamanoVariable();
+
+			cout << "De: " << UsuarioEmisor << endl;
+			cout << "Mensaje: " << ContenidoMensaje << endl << endl;
+			UnCliente.EscribirLog("Mensaje de " + UsuarioEmisor + " recibido.");
+
+			CantMensajes--;
+		}
+	} else {
+		cout << "Tiene que iniciar sesion para poder recibir mensajes" << endl;
 	}
+
 	pause();
 }
 
@@ -273,7 +279,7 @@ void MenuPrincipal()
 			"3- Salir" << endl <<
 			"4- Enviar" << endl <<
 			"5- Recibir" << endl <<
-			"6- Lore Ipsum" << endl << endl << "Ingrese una opcion: ";
+			"6- Lorem Ipsum" << endl << endl << "Ingrese una opcion: ";
 		cin >> opcion;
 	}
 
@@ -295,7 +301,20 @@ void MenuPrincipal()
 		RecibirMensajes();
 		break;
 	case 6:
-		//cliente.enviarCiclicamente()
+		/*
+		string letra;
+		cin >> letra;
+		for (int i = 0; i < 400; i++) {
+			UnCliente.EnviarMensaje("ENVI", 4);
+			UnCliente.RecibirMensajeTamanoVariable();
+			UnCliente.EnviarMensaje("Leandro", 15);
+			UnCliente.EnviarMensajeTamanoVariable(letra + std::to_string(i));
+			UnCliente.RecibirMensaje(3);
+			UnCliente.RecibirMensaje(30);
+		}
+		cout << "LISTO!";
+		pause();
+		*/
 		break;
 	}
 

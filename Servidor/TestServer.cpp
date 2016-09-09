@@ -62,6 +62,10 @@ void MainListenThread(void* arg) {
 		if (mensaje == "ENVI")
 		{
 
+			// El mutex aca parece que va OK, si no se quiere poner aca entonces hay que ver de
+			// Sacar el control de usuarios de esta parte (ya que el archivo csv es un recurso compartido tambien)
+			WaitForSingleObject(ghMutex, INFINITE);
+
 			string todosLosUsuarios = ControlUsuarios.obtenerTodosEnString(";");
 			UnServer.EnviarMensajeTamanoVariable(todosLosUsuarios, ClientSocket);
 
@@ -70,13 +74,13 @@ void MainListenThread(void* arg) {
 
 			string destinatario = UnServer.RecibirMensaje(ClientSocket,15);
 			string contenidoMensaje = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
+
+
 			if(ControlUsuarios.destinatarioValido(destinatario))
 			{
-				Mensaje* unMensaje = new Mensaje(Usuario,destinatario,contenidoMensaje);
-				//En teoria espera que termine de ejecutar o como maximo los 5 segundos y libera el recurso [MZ]
-				WaitForSingleObject(ghMutex, 5000);//se apodera del recurso, puse 5 segundos por poner algo.
+				Mensaje* unMensaje = new Mensaje(Usuario, destinatario, contenidoMensaje);
+
 				UnServer.agregarMensaje(unMensaje);
-				ReleaseMutex(ghMutex);
 
 				UnServer.EnviarMensaje("001",3,ClientSocket);
 				UnServer.EnviarMensaje("Mensaje enviado con exito", 30,ClientSocket);
@@ -88,6 +92,8 @@ void MainListenThread(void* arg) {
 				UnServer.EnviarMensaje("El destinatario no existe",30,ClientSocket);
 				UnServer.EscribirLog("Error al enviar mensaje de " + Usuario + " a " + destinatario + "El destinatario no existe.");
 			}
+
+			ReleaseMutex(ghMutex);
 		}
 		if (mensaje == "OUT") {
 
@@ -120,27 +126,32 @@ void MainListenThread(void* arg) {
 		}
 		if (mensaje == "REC")
 		{
-			string respuestaServer = "";
-			//En teoria espera que termine de ejecutar o como maximo los 5 segundos y libera el recurso [MZ]
-			WaitForSingleObject(ghMutex,5000); //se apodera del recurso, puse 5 segundos por poner algo.
+			if (Usuario != "") {
+				string respuestaServer = "";
+				//En teoria espera que termine de ejecutar o como maximo los 5 segundos y libera el recurso [MZ]
+				WaitForSingleObject(ghMutex, 5000); //se apodera del recurso, puse 5 segundos por poner algo.
 
-			Lista<Mensaje*>* buzon = UnServer.obtenerMensajesPara(Usuario);
-			stringstream ss;
-			ss << buzon->getTamanio();
-			string CantidadMensajes = ss.str();	
-			UnServer.EnviarMensaje(CantidadMensajes, 3, ClientSocket);
-			
-			buzon->iniciarCursor();
+				Lista<Mensaje*>* buzon = UnServer.obtenerMensajesPara(Usuario);
+				stringstream ss;
+				ss << buzon->getTamanio();
+				string CantidadMensajes = ss.str();
+				UnServer.EnviarMensaje(CantidadMensajes, 8, ClientSocket);
 
-			while(buzon->avanzarCursor())
-			{
-				string UsuarioEmisor = buzon->obtenerCursor()->obtenerEmisor();
-				string ContenidoMensaje = buzon->obtenerCursor()->obtenerContenido();
+				buzon->iniciarCursor();
 
-				UnServer.EnviarMensaje(UsuarioEmisor, 15, ClientSocket);
-				UnServer.EnviarMensajeTamanoVariable(ContenidoMensaje, ClientSocket);
+				while (buzon->avanzarCursor())
+				{
+					string UsuarioEmisor = buzon->obtenerCursor()->obtenerEmisor();
+					string ContenidoMensaje = buzon->obtenerCursor()->obtenerContenido();
+
+					UnServer.EnviarMensaje(UsuarioEmisor, 15, ClientSocket);
+					UnServer.EnviarMensajeTamanoVariable(ContenidoMensaje, ClientSocket);
+				}
+				ReleaseMutex(ghMutex);
+			} else {
+
+				UnServer.EnviarMensaje("NOLOGIN", 8, ClientSocket);
 			}
-			ReleaseMutex(ghMutex);
 		}
 		if (mensaje == "EXIT") {
 			UnServer.EscribirLog("Un cliente se desconecto");
@@ -164,8 +175,6 @@ void MainServerThread(void* arg) {
 		//La idea es ir acumulando los threads(clientes) y tener una lista para manejarlos con el mutex
 		manejador[contador] = (HANDLE) _beginthread(MainListenThread, 0, (void*)&ClientSocket);
 		contador++;
-		//cout << contador << endl;
-		//WaitForMultipleObjects(contador, manejador, TRUE, INFINITE);
 	}
 
 }
