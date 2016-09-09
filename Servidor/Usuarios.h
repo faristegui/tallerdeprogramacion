@@ -19,16 +19,15 @@ class Usuarios
 {
 	std::ifstream archivoUsuarios;
 public:
-	Usuarios();
 	bool ContrasenaValida(std::string usuario, std::string contrasena);
-	 Lista<std::string>* obtenerTodos();
-	 std::string obtenerTodosEnString(std::string separador);
-	 bool destinatarioValido(std::string destinatario);
-	~Usuarios();
+	Lista<std::string>* obtenerTodos();
+	std::string obtenerTodosEnString(std::string separador);
+	bool destinatarioValido(std::string destinatario);
 private:
 	Usuario getProximoUsuario();
-	 bool hayUsuarios();
-	 bool esFinDeArchivo;
-	void resetearCursorArchivo();
+	bool hayUsuarios();
+	bool esFinDeArchivo;
+	void AbrirArchivo();
+	void CerrarArchivo();
 };
 

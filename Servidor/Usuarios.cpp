@@ -1,16 +1,12 @@
 #include "Usuarios.h"
 
-Usuarios::Usuarios()
-{
-	archivoUsuarios.open("Archivos\\Usuarios.csv", std::ifstream::in);
-	esFinDeArchivo = false;
-}
-
 bool Usuarios::ContrasenaValida(std::string NombreUsuario, std::string Contrasena) {
 	
+	bool EsValida = false;
 	Usuario UnUsuario;
 	std::string TmpNombreUsuario;
-	resetearCursorArchivo();
+
+	AbrirArchivo();
 
 	// Convierte nombre de usuario a LowerCase
 	transform(NombreUsuario.begin(), NombreUsuario.end(), NombreUsuario.begin(), (int(*)(int))tolower);
@@ -23,26 +19,33 @@ bool Usuarios::ContrasenaValida(std::string NombreUsuario, std::string Contrasen
 		transform(TmpNombreUsuario.begin(), TmpNombreUsuario.end(), TmpNombreUsuario.begin(), (int(*)(int))tolower);
 
 		if (TmpNombreUsuario == NombreUsuario) {
-			return (UnUsuario.contrasena == Contrasena);
+			EsValida = (UnUsuario.contrasena == Contrasena);
+			break;
 		}
 	}
 
-	return false;
+	CerrarArchivo();
+	return EsValida;
 }
 
 Lista<std::string>* Usuarios::obtenerTodos()
 {
 	Lista<std::string>* todosLosUsuarios = new Lista<std::string>;
 	Usuario unUsuario;
-	resetearCursorArchivo();
+
+	AbrirArchivo();
+
 	while(hayUsuarios())
 	{
 		unUsuario = getProximoUsuario();
 		todosLosUsuarios->agregar(unUsuario.nombre);
 	}
+
 	todosLosUsuarios->remover(todosLosUsuarios->getTamanio());
 	todosLosUsuarios->iniciarCursor();
 	todosLosUsuarios->avanzarCursor();
+
+	CerrarArchivo();
 	return todosLosUsuarios;
 }
 
@@ -50,7 +53,9 @@ std::string Usuarios::obtenerTodosEnString(std::string separador)
 {
 	std::string todosLosUsuarios = "";
 	Usuario unUsuario;
-	resetearCursorArchivo();
+
+	AbrirArchivo();
+
 	while (hayUsuarios())
 	{
 		unUsuario = getProximoUsuario();
@@ -60,28 +65,37 @@ std::string Usuarios::obtenerTodosEnString(std::string separador)
 		}
 	}
 
+	CerrarArchivo();
 	return todosLosUsuarios;
 }
 
 bool Usuarios::destinatarioValido(std::string destinatario)
 {
 	Usuario unUsuario;
-	resetearCursorArchivo();
-	while(hayUsuarios()) // hay un problema con esta funcion, no funciona bien cuando se terminan los usuario
+	bool ExisteUsuario = false;
+	std::string TmpNombreUsuario;
+
+	// Convierte nombre de usuario a LowerCase
+	transform(destinatario.begin(), destinatario.end(), destinatario.begin(), (int(*)(int))tolower);
+
+	AbrirArchivo();
+
+	while(hayUsuarios())
 	{
 		unUsuario = getProximoUsuario();
-		if(unUsuario.nombre == destinatario)
+
+		TmpNombreUsuario = unUsuario.nombre;
+		// Convierte nombre de usuario a LowerCase
+		transform(TmpNombreUsuario.begin(), TmpNombreUsuario.end(), TmpNombreUsuario.begin(), (int(*)(int))tolower);
+
+		if(TmpNombreUsuario == destinatario)
 		{
-			return true;
+			ExisteUsuario = true;
 		}
 	}
-	return false;
-}
 
-void Usuarios::resetearCursorArchivo() {
-	archivoUsuarios.clear();
-	archivoUsuarios.seekg(0, std::ifstream::beg);
-	esFinDeArchivo = false;
+	CerrarArchivo();
+	return ExisteUsuario;
 }
 
 bool Usuarios::hayUsuarios() {
@@ -117,7 +131,14 @@ Usuario Usuarios::getProximoUsuario()
 	return unUsuario;
 }
 
-Usuarios::~Usuarios()
+
+void Usuarios::AbrirArchivo()
+{
+	archivoUsuarios.open("Archivos\\Usuarios.csv", std::ifstream::in);
+	esFinDeArchivo = false;
+}
+
+void Usuarios::CerrarArchivo()
 {
 	archivoUsuarios.close();
 }
