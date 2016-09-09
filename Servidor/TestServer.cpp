@@ -115,7 +115,7 @@ void MainListenThread(void* arg) {
 			string contenidoMensaje = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
 			
 			//En teoria espera que termine de ejecutar o como maximo los 5 segundos y libera el recurso [MZ]
-			WaitForSingleObject(ghMutex,5000);//se apodera del recurso, puse 5 segundos por poner algo.
+			WaitForSingleObject(ghMutex, INFINITE);//se apodera del recurso, puse 5 segundos por poner algo.
 			UnServer.enviarATodos(contenidoMensaje, Usuario);
 			ReleaseMutex(ghMutex);
 
@@ -129,7 +129,7 @@ void MainListenThread(void* arg) {
 			if (Usuario != "") {
 				string respuestaServer = "";
 				//En teoria espera que termine de ejecutar o como maximo los 5 segundos y libera el recurso [MZ]
-				WaitForSingleObject(ghMutex, 5000); //se apodera del recurso, puse 5 segundos por poner algo.
+				WaitForSingleObject(ghMutex, INFINITE); //se apodera del recurso, puse 5 segundos por poner algo.
 
 				Lista<Mensaje*>* buzon = UnServer.obtenerMensajesPara(Usuario);
 				stringstream ss;
