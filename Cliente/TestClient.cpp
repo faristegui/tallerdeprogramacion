@@ -418,8 +418,7 @@ void MenuPrincipal()
 		
 		MostrarListaUsuarios();
 		
-		cout << "Ingrese una opcion: " << endl;
-
+		cout << "Ingrese una opcion: ";
 		cin >> opcion;
 	}
 
