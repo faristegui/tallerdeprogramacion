@@ -48,31 +48,31 @@ void MainListenThread(void* arg) {
 
 		if (mensaje == "AUTH") {
 
-			if (Usuario == "") {
+			string UsuarioMsj = UnServer.RecibirMensaje(ClientSocket, 15);
+			string PasswordMsj = UnServer.RecibirMensaje(ClientSocket, 15);
 
-				UnServer.EnviarMensaje("000", 3, ClientSocket);
+			string CodigoRespuesta;
+			string MensajeRespuesta;
 
-				string UsuarioMsj = UnServer.RecibirMensaje(ClientSocket, 15);
-				string PasswordMsj = UnServer.RecibirMensaje(ClientSocket, 15);
+			if (ControlUsuarios.ContrasenaValida(UsuarioMsj, PasswordMsj)) {
 
-				if (ControlUsuarios.ContrasenaValida(UsuarioMsj, PasswordMsj)) {
-					Usuario = UsuarioMsj;
-					UnServer.EnviarMensaje("000", 3, ClientSocket);
-					UnServer.EnviarMensaje("Bienvenido, " + Usuario, 40, ClientSocket);
-					UnServer.EscribirLog("Usuario " + Usuario + " logueado correctamente.", true);
-				}
-				else {
-					UnServer.EnviarMensaje("401", 3, ClientSocket);
-					UnServer.EnviarMensaje("El usuario y la contrasena no coinciden", 40, ClientSocket);
-					UnServer.EscribirLog("Fallo de autenticacion de usuario: " + Usuario, true);
-				}
+				Usuario = UsuarioMsj;
+
+				CodigoRespuesta = "000";
+				MensajeRespuesta = "Bienvenido, " + Usuario;
+
+				UnServer.EscribirLog("Usuario " + Usuario + " logueado correctamente.", true);
 			}
 			else {
-				UnServer.EnviarMensaje("001", 3, ClientSocket);
-				UnServer.EnviarMensaje("Ya se encuentra loggeado en el servidor", 40, ClientSocket);
+
+				CodigoRespuesta = "401";
+				MensajeRespuesta = "El usuario y la contrasena no coinciden";
+
+				UnServer.EscribirLog("Fallo de autenticacion de usuario: " + Usuario, true);
 			}
 
-
+			UnServer.EnviarMensaje(CodigoRespuesta, 3, ClientSocket);
+			UnServer.EnviarMensaje(MensajeRespuesta, 40, ClientSocket);
 		}
 		if (mensaje == "USER")
 		{
@@ -81,28 +81,19 @@ void MainListenThread(void* arg) {
 		}
 		if (mensaje == "ENVI")
 		{
+			// El mutex aca parece que va OK
+			WaitForSingleObject(ghMutex, INFINITE);
 
-			if (Usuario != "") {
-				UnServer.EnviarMensaje("000", 3, ClientSocket);
+			string destinatario = UnServer.RecibirMensaje(ClientSocket, 15);
+			string contenidoMensaje = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
 
-				// El mutex aca parece que va OK
-				WaitForSingleObject(ghMutex, INFINITE);
+			Mensaje* unMensaje = new Mensaje(Usuario, destinatario, contenidoMensaje);
 
-				string destinatario = UnServer.RecibirMensaje(ClientSocket, 15);
-				string contenidoMensaje = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
+			UnServer.agregarMensaje(unMensaje);
 
-				Mensaje* unMensaje = new Mensaje(Usuario, destinatario, contenidoMensaje);
+			UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario + ". Mensaje: " + contenidoMensaje, true);
 
-				UnServer.agregarMensaje(unMensaje);
-
-				UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario + ". Mensaje: " + contenidoMensaje, true);
-
-				ReleaseMutex(ghMutex);
-			}
-			else {
-				UnServer.EnviarMensaje("001", 3, ClientSocket);
-				UnServer.EnviarMensaje("No existe ninguna sesion iniciada.", 40, ClientSocket);
-			}
+			ReleaseMutex(ghMutex);
 		}
 		if (mensaje == "OUT") {
 
@@ -122,24 +113,16 @@ void MainListenThread(void* arg) {
 		}
 		if (mensaje == "ENVT")
 		{
-			if (Usuario != "") {
-				UnServer.EnviarMensaje("000", 3, ClientSocket);
+			string contenidoMensaje = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
 
-				string contenidoMensaje = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
+			// Eespera que termine de ejecutar
+			WaitForSingleObject(ghMutex, INFINITE);
 
-				// Eespera que termine de ejecutar
-				WaitForSingleObject(ghMutex, INFINITE);
+			UnServer.enviarATodos(contenidoMensaje, Usuario);
 
-				UnServer.enviarATodos(contenidoMensaje, Usuario);
+			ReleaseMutex(ghMutex);
 
-				ReleaseMutex(ghMutex);
-
-				UnServer.EscribirLog("Mensaje de " + Usuario + " enviado a todos los usuarios. Mensaje: " + contenidoMensaje, true);
-			} else {
-
-				UnServer.EnviarMensaje("001", 3, ClientSocket);
-				UnServer.EnviarMensaje("No existe ninguna sesion iniciada.", 40, ClientSocket);
-			}
+			UnServer.EscribirLog("Mensaje de " + Usuario + " enviado a todos los usuarios. Mensaje: " + contenidoMensaje, true);
 		}
 		if (mensaje == "REC")
 		{
@@ -168,6 +151,14 @@ void MainListenThread(void* arg) {
 			} else {
 
 				UnServer.EnviarMensaje("NOLOGIN", 8, ClientSocket);
+			}
+		}
+		if (mensaje == "CHKU") {
+
+			if (Usuario == "") {
+				UnServer.EnviarMensaje("NO", 2, ClientSocket);
+			} else {
+				UnServer.EnviarMensaje("SI", 2, ClientSocket);
 			}
 		}
 		if (mensaje == "NEWC") {

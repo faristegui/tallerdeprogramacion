@@ -154,12 +154,17 @@ void ArmarListaUsuarios(string TodosLosUsuariosEnString) {
 
 void IniciarSesion()
 {
-	string Mensaje = "AUTH";
+	string Mensaje;
+	string Respuesta;
+
+	Mensaje = "CHKU";
 	UnCliente.EnviarMensaje(Mensaje, 4);
+	Respuesta = UnCliente.RecibirMensaje(2);
 
-	string Respuesta = UnCliente.RecibirMensaje(3);
+	if (Respuesta == "NO") {
 
-	if (Respuesta == "000") {
+		Mensaje = "AUTH";
+		UnCliente.EnviarMensaje(Mensaje, 4);
 
 		cout << "Ingrese Usuario: ";
 		cin >> Mensaje;
@@ -169,7 +174,7 @@ void IniciarSesion()
 		cin >> Mensaje;
 		UnCliente.EnviarMensaje(Mensaje, 15);
 
-		Respuesta = UnCliente.RecibirMensaje(3);
+		Respuesta = UnCliente.RecibirMensaje(3); // Codigo de respuesta de la autenticacion
 
 		UnCliente.EscribirLog("Autorizar usuario. Mensaje del servidor: " + Respuesta + ".");
 		Respuesta = UnCliente.RecibirMensaje(40);
@@ -178,8 +183,7 @@ void IniciarSesion()
 	}
 	else {
 
-		Respuesta = UnCliente.RecibirMensaje(40);
-		cout << Respuesta << endl;
+		cout << "Ya se encuentra loggeado al servidor" << endl;
 		pause();
 	}
 
@@ -195,9 +199,8 @@ void CerrarSesion() {
 	pause();
 }
 
-bool MenuDestinatarioMensaje(EnvioThreadData* datosOpcionEnvio)
+void MenuDestinatarioMensaje(EnvioThreadData* datosOpcionEnvio)
 {
-	bool EnviaOk = false;
 	int opcion = 0;
 	string destinatario;
 	string mensaje;
@@ -218,76 +221,58 @@ bool MenuDestinatarioMensaje(EnvioThreadData* datosOpcionEnvio)
 	{
 		bool UsuarioValido = false;
 		UnCliente.EnviarMensaje("ENVI", 4);
+		
+		MostrarListaUsuarios();
 
-		string Respuesta = UnCliente.RecibirMensaje(3);
-
-		if (Respuesta == "000") {
-
-			MostrarListaUsuarios();
-
-			while (!UsuarioValido) {
-				cout << "Ingrese nombre de usuario del destinatario:" << endl;
-				cin >> destinatario;
-				UsuarioValido = ValidarUsuario(destinatario);
-			}
-
-			datosOpcionEnvio->destinatario = destinatario;
-			cin.ignore();
-			cout << "Ingrese el mensaje que desea enviar:" << endl;
-			getline(cin, mensaje);
-			datosOpcionEnvio->mensaje = mensaje;
-
-			EnviaOk = true;
+		while (!UsuarioValido) {
+			cout << "Ingrese nombre de usuario del destinatario:" << endl;
+			cin >> destinatario;
+			UsuarioValido = ValidarUsuario(destinatario);
 		}
-		else {
-			Respuesta = UnCliente.RecibirMensaje(40);
-			cout << Respuesta << endl;
-			pause();
 
-			EnviaOk = false;
-		}
+		datosOpcionEnvio->destinatario = destinatario;
+		cin.ignore();
+		cout << "Ingrese el mensaje que desea enviar:" << endl;
+		getline(cin, mensaje);
+		datosOpcionEnvio->mensaje = mensaje;
+
+		break;
 
 	}
-		break;
 	case 2:
 
 		UnCliente.EnviarMensaje("ENVT", 4);
-
-		string Respuesta = UnCliente.RecibirMensaje(3);
-
-		if (Respuesta == "000") {
-
-			cin.ignore();
-			cout << "Ingrese el mensaje que desea enviar a todos los usuarios:" << endl;
-			getline(cin, mensaje);
-			datosOpcionEnvio->mensaje = mensaje;
-
-			EnviaOk = true;
-		}
-		else {
-
-			Respuesta = UnCliente.RecibirMensaje(40);
-			cout << Respuesta << endl;
-			pause();
-
-			EnviaOk = false;
-		}
+		
+		cin.ignore();
+		cout << "Ingrese el mensaje que desea enviar a todos los usuarios:" << endl;
+		getline(cin, mensaje);
+		datosOpcionEnvio->mensaje = mensaje;
 
 		break;
 	}
-	
-	return EnviaOk;
 }
 
 void EnviarMensaje() {
-	EnvioThreadData* datosOpcionEnvio = new EnvioThreadData;
-	bool EnviaOk = MenuDestinatarioMensaje(datosOpcionEnvio);
 
-	if (EnviaOk) {
+	string Mensaje = "CHKU";
+	UnCliente.EnviarMensaje(Mensaje, 4);
+	string Respuesta = UnCliente.RecibirMensaje(2);
+
+	if (Respuesta == "SI") {
+
+		EnvioThreadData* datosOpcionEnvio = new EnvioThreadData;
+		MenuDestinatarioMensaje(datosOpcionEnvio);
+
 		_beginthread(ThreadEnviaMensaje, 0, (void*)datosOpcionEnvio);
 		cout << "Mensaje enviado" << endl;
 		pause();
 	}
+	else {
+		cout << "Debe iniciar sesion para poder enviar mensajes" << endl;
+		pause();
+	}
+
+
 }
 
 void RecibirMensajes()
@@ -353,51 +338,67 @@ void LoremIpsum()
 	char* lectura;
 	int tamanio = 0;
 
-	srand(time(NULL)); 
-	tamanio = rand()%201; //Random entre 1 y 200, tamaño máximo del mensaje a enviar.
+	string Mensaje;
+	string Respuesta;
 
-    lectura = new char[tamanio];
+	Mensaje = "CHKU";
+	UnCliente.EnviarMensaje(Mensaje, 4);
+	Respuesta = UnCliente.RecibirMensaje(2);
 
-	string destinatario = obtenerDestinatario();
+	if (Respuesta == "SI") {
 
-	UnCliente.EscribirLog("Secuencia de envio automatico iniciada.");
+		srand(time(NULL));
+		tamanio = rand() % 201; //Random entre 1 y 200, tamaño máximo del mensaje a enviar.
 
-	FILE *archivoLoremIpsum;
-	archivoLoremIpsum = fopen("loremIpsum.txt", "rt");
+		lectura = new char[tamanio];
 
-	ClearScreen();
-	
-	cout << "Se enviaran los mensajes al usuario " << destinatario << endl; 
+		string destinatario = obtenerDestinatario();
 
-	cout << "Ingrese la frecuencia de envio de mensajes: ";
-	cin >> frecuencia;
-	cout << "Ingrese la cantidad de mensajes a enviar: ";
-	cin >> cantidad;
+		UnCliente.EscribirLog("Secuencia de envio automatico iniciada.");
 
-	milisegundos = (1000/frecuencia);
+		FILE *archivoLoremIpsum;
+		archivoLoremIpsum = fopen("loremIpsum.txt", "rt");
 
-	cout << "Se enviara un mensaje cada " << milisegundos << " milisegundos." << endl;
+		ClearScreen();
 
-	for(int i = 0; i < cantidad; i = i + 1)
-	{
-		if(!feof(archivoLoremIpsum))
+		cout << "Se enviaran los mensajes al usuario " << destinatario << endl;
+
+		cout << "Ingrese la frecuencia de envio de mensajes: ";
+		cin >> frecuencia;
+		cout << "Ingrese la cantidad de mensajes a enviar: ";
+		cin >> cantidad;
+
+		milisegundos = (1000 / frecuencia);
+
+		cout << "Se enviara un mensaje cada " << milisegundos << " milisegundos." << endl;
+
+		for (int i = 0; i < cantidad; i = i + 1)
 		{
-			fgets(lectura,tamanio + 1,archivoLoremIpsum);
-			Sleep(milisegundos);
-			UnCliente.EnviarMensaje("ENVI", 4);
-			UnCliente.EnviarMensaje(destinatario, 15);
-			UnCliente.EnviarMensajeTamanoVariable(lectura);
-			UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ". Mensaje: " + lectura);
+			if (!feof(archivoLoremIpsum))
+			{
+				fgets(lectura, tamanio + 1, archivoLoremIpsum);
+				Sleep(milisegundos);
+				UnCliente.EnviarMensaje("ENVI", 4);
+				UnCliente.EnviarMensaje(destinatario, 15);
+				UnCliente.EnviarMensajeTamanoVariable(lectura);
+				UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ". Mensaje: " + lectura);
+			}
+			else
+			{
+				rewind(archivoLoremIpsum);
+			}
 		}
-		else
-		{
-			rewind(archivoLoremIpsum);
-		}
+
+		fclose(archivoLoremIpsum);
+
+		pause();
+	}
+	else {
+
+		cout << "Debe iniciar sesion para poder enviar mensajes" << endl;
+		pause();
 	}
 
-	fclose(archivoLoremIpsum);
-
-	pause();
 }
 
 void CerrarPrograma() {
