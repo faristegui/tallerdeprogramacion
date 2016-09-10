@@ -59,12 +59,12 @@ void MainListenThread(void* arg) {
 					Usuario = UsuarioMsj;
 					UnServer.EnviarMensaje("000", 3, ClientSocket);
 					UnServer.EnviarMensaje("Bienvenido, " + Usuario, 40, ClientSocket);
-					UnServer.EscribirLog("Usuario " + Usuario + " logueado correctamente.");
+					UnServer.EscribirLog("Usuario " + Usuario + " logueado correctamente.", true);
 				}
 				else {
 					UnServer.EnviarMensaje("401", 3, ClientSocket);
 					UnServer.EnviarMensaje("El usuario y la contrasena no coinciden", 40, ClientSocket);
-					UnServer.EscribirLog("Fallo de autenticacion de usuario: " + Usuario);
+					UnServer.EscribirLog("Fallo de autenticacion de usuario: " + Usuario, true);
 				}
 			}
 			else {
@@ -95,7 +95,7 @@ void MainListenThread(void* arg) {
 
 				UnServer.agregarMensaje(unMensaje);
 
-				UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario + ". Mensaje: " + contenidoMensaje);
+				UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario + ". Mensaje: " + contenidoMensaje, true);
 
 				ReleaseMutex(ghMutex);
 			}
@@ -134,7 +134,7 @@ void MainListenThread(void* arg) {
 
 				ReleaseMutex(ghMutex);
 
-				UnServer.EscribirLog("Mensaje de " + Usuario + " enviado a todos los usuarios. Mensaje: " + contenidoMensaje);
+				UnServer.EscribirLog("Mensaje de " + Usuario + " enviado a todos los usuarios. Mensaje: " + contenidoMensaje, true);
 			} else {
 
 				UnServer.EnviarMensaje("001", 3, ClientSocket);
@@ -194,7 +194,7 @@ void MainListenThread(void* arg) {
 			UnServer.EscribirLog("Un cliente se desconecto", true);
 		}
 		else {
-			UnServer.EscribirLog("Un cliente perdio la conexion");
+			UnServer.EscribirLog("Un cliente perdio la conexion", true);
 		}
 	}
 
