@@ -36,6 +36,32 @@ void MostrarListaComandos() {
 	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
 }
 
+string obtenerUsuarioRandom()
+{
+	string destinatario = "";
+	int posUser = 0;
+	Lista<std::string>* usuarios = ControlUsuarios.obtenerTodos();
+
+	int tamanio = usuarios->getTamanio();
+
+	srand(time(NULL));
+	posUser = rand() % (tamanio + 1);
+
+	for (int i = 0; i < tamanio; i = i + 1)
+	{
+		if(i != posUser)
+		{
+			usuarios->avanzarCursor();
+		}
+		else
+		{
+			destinatario = usuarios->obtenerCursor();
+		}
+	}
+
+	return destinatario;
+}
+
 void MainListenThread(void* arg) {
 	string Usuario = "";
 	string mensaje = "";
@@ -76,8 +102,8 @@ void MainListenThread(void* arg) {
 		}
 		if (mensaje == "USER")
 		{
-			string todosLosUsuarios = ControlUsuarios.obtenerTodosEnString(";");
-			UnServer.EnviarMensajeTamanoVariable(todosLosUsuarios, ClientSocket);
+			string usuario = obtenerUsuarioRandom();
+			UnServer.EnviarMensaje(usuario, 15, ClientSocket);
 		}
 		if (mensaje == "ENVI")
 		{
@@ -91,7 +117,7 @@ void MainListenThread(void* arg) {
 
 			UnServer.agregarMensaje(unMensaje);
 
-			UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario + ". Mensaje: " + contenidoMensaje, true);
+			UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario + ". Mensaje: " + contenidoMensaje, false);
 
 			ReleaseMutex(ghMutex);
 		}

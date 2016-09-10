@@ -264,7 +264,7 @@ void EnviarMensaje() {
 		MenuDestinatarioMensaje(datosOpcionEnvio);
 
 		_beginthread(ThreadEnviaMensaje, 0, (void*)datosOpcionEnvio);
-		cout << "Mensaje enviado" << endl;
+		cout << "Mensaje enviado." << endl;
 		pause();
 	}
 	else {
@@ -314,18 +314,7 @@ string obtenerDestinatario()
 	string destinatario;
 	
 	UnCliente.EnviarMensaje("USER", 4);
-	string todosLosUsuarios = UnCliente.RecibirMensajeTamanoVariable();
-	// Recibo lista de usuarios
-	string UnUsuario;
-	int index = todosLosUsuarios.find(";");
-
-	while (index > -1) {
-		UnUsuario = todosLosUsuarios.substr(0, index);
-		todosLosUsuarios = todosLosUsuarios.substr(index + 1);
-		index = todosLosUsuarios.find(";");
-	}
-	pause();
-	destinatario = UnUsuario; //Estoy devolviendo siempre el primero. Después reviso como hacer para enviar a otros.
+	destinatario = UnCliente.RecibirMensaje(15);
 
 	return destinatario;
 }
@@ -452,20 +441,6 @@ void MenuPrincipal()
 		RecibirMensajes();
 		break;
 	case 6:
-		/*
-		string letra;
-		cin >> letra;
-		for (int i = 0; i < 400; i++) {
-			UnCliente.EnviarMensaje("ENVI", 4);
-			UnCliente.RecibirMensajeTamanoVariable();
-			UnCliente.EnviarMensaje("Leandro", 15);
-			UnCliente.EnviarMensajeTamanoVariable(letra + std::to_string(i));
-			UnCliente.RecibirMensaje(3);
-			UnCliente.RecibirMensaje(30);
-		}
-		cout << "LISTO!";
-		pause();
-		*/
 		LoremIpsum();
 		break;
 	}
