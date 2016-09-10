@@ -8,6 +8,9 @@
 #include "Client.h"
 #include <process.h>
 #include <stdio.h>
+#include "Lista.h"
+// Para ToLower
+#include <algorithm>
 
 using namespace std;
 
@@ -28,13 +31,14 @@ Client UnCliente;
 bool clienteAbierto = true;
 bool serverStatus = false;
 
+Lista<std::string>* TodosLosUsuarios = new Lista<std::string>();
+
 struct EnvioThreadData
 {
 	int opcion;
 	string mensaje;
 	string destinatario;
 };
-
 
 void ThreadEnviaMensaje(void* pParams)
 {
@@ -58,14 +62,6 @@ void ThreadEnviaMensaje(void* pParams)
 		UnCliente.EnviarMensajeTamanoVariable(mensaje);
 		UnCliente.EscribirLog("Mensaje enviado a todos los usuarios. Mensaje: " + mensaje);
 	}
-
-	respuestaServer = UnCliente.RecibirMensaje(3);
-	//cout << "Respuesta del servidor: " << respuestaServer << endl;
-	UnCliente.EscribirLog("-> " + respuestaServer);
-	respuestaServer = UnCliente.RecibirMensaje(65);
-	//cout << "Respuesta del servidor: " << respuestaServer << endl;
-	UnCliente.EscribirLog("-> " + respuestaServer);
-	//pause();
 }
 
 
@@ -106,51 +102,87 @@ void ThreadStatus(void* pParams)
 	ClientePing.EnviarMensaje("EXIT", 4);
 }
 
-// TODO: Hay que implementar un metodo que convierta de string separado por ";" a Lista<string>
-void MostrarUsuarios(string ListaUsuarios) {
-	string UnUsuario;
-	int index = ListaUsuarios.find(";");
 
-	cout << "Lista de usuarios: \n\n";
+void MostrarListaUsuarios() {
 
-	while (index > -1) {
-		UnUsuario = ListaUsuarios.substr(0, index);
-		ListaUsuarios = ListaUsuarios.substr(index + 1);
-		index = ListaUsuarios.find(";");
-		cout << UnUsuario << "\n";
+	cout << "Lista de usuarios:" << endl << endl;
+
+	TodosLosUsuarios->iniciarCursor();
+
+	while (TodosLosUsuarios->avanzarCursor())
+	{
+		cout << TodosLosUsuarios->obtenerCursor() << endl;;
 	}
 
-	cout << "\n";
+	cout << endl;
+}
+
+bool ValidarUsuario(string UnUsuario) {
+
+	// Convierte nombre de usuario a LowerCase
+	transform(UnUsuario.begin(), UnUsuario.end(), UnUsuario.begin(), (int(*)(int))tolower);
+
+	TodosLosUsuarios->iniciarCursor();
+	while (TodosLosUsuarios->avanzarCursor())
+	{
+		string OtroUsuario = TodosLosUsuarios->obtenerCursor();
+		// Convierte nombre de usuario a LowerCase
+		transform(OtroUsuario.begin(), OtroUsuario.end(), OtroUsuario.begin(), (int(*)(int))tolower);
+
+		if (UnUsuario == OtroUsuario) {
+
+			return true;
+		}
+	}
+
+	cout << "Usuario inexistente, por favor vuelva a intentar" << endl;
+
+	return false;
+}
+
+void ArmarListaUsuarios(string TodosLosUsuariosEnString) {
+	string UnUsuario;
+	int index = TodosLosUsuariosEnString.find(";");
+
+	while (index > -1) {
+		UnUsuario = TodosLosUsuariosEnString.substr(0, index);
+		TodosLosUsuariosEnString = TodosLosUsuariosEnString.substr(index + 1);
+		index = TodosLosUsuariosEnString.find(";");
+		TodosLosUsuarios->agregar(UnUsuario);
+	}
 }
 
 void IniciarSesion()
 {
-	string mensaje = "AUTH";
-	UnCliente.EnviarMensaje(mensaje, 4);
+	string Mensaje = "AUTH";
+	UnCliente.EnviarMensaje(Mensaje, 4);
 
-	cout << "Ingrese Usuario: ";
-	cin >> mensaje;
-	UnCliente.EnviarMensaje(mensaje, 15);
+	string Respuesta = UnCliente.RecibirMensaje(3);
 
-	cout << "Ingrese clave: ";
-	cin >> mensaje;
-	UnCliente.EnviarMensaje(mensaje, 15);
+	if (Respuesta == "000") {
 
-	string respuesta = UnCliente.RecibirMensaje(3);
+		cout << "Ingrese Usuario: ";
+		cin >> Mensaje;
+		UnCliente.EnviarMensaje(Mensaje, 15);
 
-	UnCliente.EscribirLog("Autorizar usuario. Mensaje del servidor: " + respuesta + ".");
-	/* NO HAY QUE HACER NADA DE ACUERDO A CADA CASO?
-	if (respuesta == "000") {
-		
+		cout << "Ingrese clave: ";
+		cin >> Mensaje;
+		UnCliente.EnviarMensaje(Mensaje, 15);
+
+		Respuesta = UnCliente.RecibirMensaje(3);
+
+		UnCliente.EscribirLog("Autorizar usuario. Mensaje del servidor: " + Respuesta + ".");
+		Respuesta = UnCliente.RecibirMensaje(40);
+		cout << Respuesta << endl;
+		pause();
 	}
 	else {
-		
-	}
-	*/
 
-	respuesta = UnCliente.RecibirMensaje(40);
-	cout << respuesta << endl;
-	pause();
+		Respuesta = UnCliente.RecibirMensaje(40);
+		cout << Respuesta << endl;
+		pause();
+	}
+
 }
 
 void CerrarSesion() {
@@ -163,8 +195,9 @@ void CerrarSesion() {
 	pause();
 }
 
-void menuMensaje(EnvioThreadData* datosOpcionEnvio)
+bool MenuDestinatarioMensaje(EnvioThreadData* datosOpcionEnvio)
 {
+	bool EnviaOk = false;
 	int opcion = 0;
 	string destinatario;
 	string mensaje;
@@ -178,47 +211,83 @@ void menuMensaje(EnvioThreadData* datosOpcionEnvio)
 		cin >> opcion;
 		datosOpcionEnvio->opcion = opcion;
 	}
-
-	//agregado por sebastian
 	
 	switch(opcion)
 	{
 	case 1:
 	{
+		bool UsuarioValido = false;
 		UnCliente.EnviarMensaje("ENVI", 4);
-		string todosLosUsuarios = UnCliente.RecibirMensajeTamanoVariable();
-		// Muestro lista de usuarios
-		MostrarUsuarios(todosLosUsuarios);
-		// Recibo usuario y msj al que el usuario desea enviarle el msj
-		cout << "Ingrese nombre de usuario del destinatario:" << endl;
-		cin >> destinatario;
-		datosOpcionEnvio->destinatario = destinatario;
-		cin.ignore();
-		cout << "Ingrese el mensaje que desea enviar:" << endl;
-		getline(cin,mensaje);
-		datosOpcionEnvio->mensaje = mensaje;
+
+		string Respuesta = UnCliente.RecibirMensaje(3);
+
+		if (Respuesta == "000") {
+
+			MostrarListaUsuarios();
+
+			while (!UsuarioValido) {
+				cout << "Ingrese nombre de usuario del destinatario:" << endl;
+				cin >> destinatario;
+				UsuarioValido = ValidarUsuario(destinatario);
+			}
+
+			datosOpcionEnvio->destinatario = destinatario;
+			cin.ignore();
+			cout << "Ingrese el mensaje que desea enviar:" << endl;
+			getline(cin, mensaje);
+			datosOpcionEnvio->mensaje = mensaje;
+
+			EnviaOk = true;
+		}
+		else {
+			Respuesta = UnCliente.RecibirMensaje(40);
+			cout << Respuesta << endl;
+			pause();
+
+			EnviaOk = false;
+		}
+
 	}
 		break;
 	case 2:
-		// Avisa al servidor que el mensaje es para todos
+
 		UnCliente.EnviarMensaje("ENVT", 4);
-		// Recibo  msj al que el usuario desea enviarle el msj
-		cin.ignore();
-		cout << "Ingrese el mensaje que desea enviar a todos los usuarios:" << endl;
-		getline(cin,mensaje);
-		datosOpcionEnvio->mensaje = mensaje;
+
+		string Respuesta = UnCliente.RecibirMensaje(3);
+
+		if (Respuesta == "000") {
+
+			cin.ignore();
+			cout << "Ingrese el mensaje que desea enviar a todos los usuarios:" << endl;
+			getline(cin, mensaje);
+			datosOpcionEnvio->mensaje = mensaje;
+
+			EnviaOk = true;
+		}
+		else {
+
+			Respuesta = UnCliente.RecibirMensaje(40);
+			cout << Respuesta << endl;
+			pause();
+
+			EnviaOk = false;
+		}
+
 		break;
 	}
 	
-
+	return EnviaOk;
 }
 
 void EnviarMensaje() {
 	EnvioThreadData* datosOpcionEnvio = new EnvioThreadData;
-	menuMensaje(datosOpcionEnvio);
-	_beginthread(ThreadEnviaMensaje, 0, (void*)datosOpcionEnvio);
-	cout << "Mensaje enviado" << endl;
-	pause();
+	bool EnviaOk = MenuDestinatarioMensaje(datosOpcionEnvio);
+
+	if (EnviaOk) {
+		_beginthread(ThreadEnviaMensaje, 0, (void*)datosOpcionEnvio);
+		cout << "Mensaje enviado" << endl;
+		pause();
+	}
 }
 
 void RecibirMensajes()
@@ -279,7 +348,12 @@ void MenuPrincipal()
 			"3- Salir" << endl <<
 			"4- Enviar" << endl <<
 			"5- Recibir" << endl <<
-			"6- Lorem Ipsum" << endl << endl << "Ingrese una opcion: ";
+			"6- Lorem Ipsum" << endl << endl;
+		
+		MostrarListaUsuarios();
+		
+		cout << "Ingrese una opcion: " << endl;
+
 		cin >> opcion;
 	}
 
@@ -343,18 +417,32 @@ int main(int argc, char **argv)
 		}
 	}
 
-	
-	UnCliente.EscribirLog("Programa Cliente iniciado.");
+	UnCliente.EnviarMensaje("NEWC", 4);
 
-	// Thread de status del server.
-	EnvioThreadData* datosPing = new EnvioThreadData;
-	//Envio los datos de Puerto e IP al thread.
-	datosPing->destinatario = ip;
-	datosPing->mensaje = puerto;
+	string Respuesta = UnCliente.RecibirMensaje(3);
 
-	_beginthread(ThreadStatus, 0, (void*)datosPing);
-	
-	MenuPrincipal();
+	if (Respuesta == "000") {
+
+		string UsuariosEnString = UnCliente.RecibirMensajeTamanoVariable();
+		ArmarListaUsuarios(UsuariosEnString);
+
+		UnCliente.EscribirLog("Programa Cliente iniciado.");
+
+		// Thread de status del server.
+		EnvioThreadData* datosPing = new EnvioThreadData;
+		//Envio los datos de Puerto e IP al thread.
+		datosPing->destinatario = ip;
+		datosPing->mensaje = puerto;
+
+		_beginthread(ThreadStatus, 0, (void*)datosPing);
+
+		MenuPrincipal();
+	} else {
+
+		string MensajeError = UnCliente.RecibirMensaje(65);		
+		cout << MensajeError << endl;
+		pause();
+	}
 	
 	return 0;
 }
