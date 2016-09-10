@@ -51,13 +51,18 @@ void MainListenThread(void* arg) {
 				Usuario = UsuarioMsj;
 				UnServer.EnviarMensaje("000", 3, ClientSocket);
 				UnServer.EnviarMensaje("Bienvenido, " + Usuario, 40, ClientSocket);
-				UnServer.EscribirLog("Usuario " + Usuario + " logueado correctamente.");
+				UnServer.EscribirLog("Usuario " + Usuario + " logueado correctamente.", true);
 			} else {
 				UnServer.EnviarMensaje("401", 3, ClientSocket);
 				UnServer.EnviarMensaje("El usuario y la contrasena no coinciden", 40, ClientSocket);
-				UnServer.EscribirLog("Fallo de autenticacion de usuario: " + Usuario);
+				UnServer.EscribirLog("Fallo de autenticacion de usuario: " + Usuario, true);
 			}
 
+		}
+		if (mensaje == "USER")
+		{
+			string todosLosUsuarios = ControlUsuarios.obtenerTodosEnString(";");
+			UnServer.EnviarMensajeTamanoVariable(todosLosUsuarios, ClientSocket);
 		}
 		if (mensaje == "ENVI")
 		{
@@ -84,13 +89,13 @@ void MainListenThread(void* arg) {
 
 				UnServer.EnviarMensaje("001",3,ClientSocket);
 				UnServer.EnviarMensaje("Mensaje enviado con exito", 30,ClientSocket);
-				UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario + ". Mensaje: " + contenidoMensaje);
+				UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario + ". Mensaje: " + contenidoMensaje, false);
 			}
 			else
 			{
 				UnServer.EnviarMensaje("402",3,ClientSocket);
 				UnServer.EnviarMensaje("El destinatario no existe",30,ClientSocket);
-				UnServer.EscribirLog("Error al enviar mensaje de " + Usuario + " a " + destinatario + "El destinatario no existe.");
+				UnServer.EscribirLog("Error al enviar mensaje de " + Usuario + " a " + destinatario + "El destinatario no existe.", true);
 			}
 
 			ReleaseMutex(ghMutex);
@@ -99,11 +104,11 @@ void MainListenThread(void* arg) {
 
 			if (Usuario != "") {
 				UnServer.EnviarMensaje("Hasta la proxima " + Usuario, 40, ClientSocket);
-				UnServer.EscribirLog(Usuario + " desconectado correctamente.");
+				UnServer.EscribirLog(Usuario + " desconectado correctamente.", true);
 				Usuario = "";
 			} else {
 				UnServer.EnviarMensaje("No existe ninguna sesion iniciada.", 40, ClientSocket);
-				UnServer.EscribirLog("Fallo intento de Logout. No existe sesion iniciada.");
+				UnServer.EscribirLog("Fallo intento de Logout. No existe sesion iniciada.", true);
 			}
 		}
 		if (mensaje == "PING")
@@ -122,7 +127,7 @@ void MainListenThread(void* arg) {
 			UnServer.EnviarMensaje("002",3,ClientSocket);
 			//se envia cortado este mensaje
 			UnServer.EnviarMensaje("Mensaje enviado a todos los usuarios con exito.", 65, ClientSocket);
-			UnServer.EscribirLog("Mensaje de " + Usuario + " enviado a todos los usuarios. Mensaje: " + contenidoMensaje);
+			UnServer.EscribirLog("Mensaje de " + Usuario + " enviado a todos los usuarios. Mensaje: " + contenidoMensaje, true);
 		}
 		if (mensaje == "REC")
 		{
@@ -154,7 +159,7 @@ void MainListenThread(void* arg) {
 			}
 		}
 		if (mensaje == "EXIT") {
-			UnServer.EscribirLog("Un cliente se desconecto");
+			UnServer.EscribirLog("Un cliente se desconecto", true);
 		}
 	}
 

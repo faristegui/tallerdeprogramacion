@@ -259,7 +259,7 @@ string obtenerDestinatario()
 {
 	string destinatario;
 	
-	UnCliente.EnviarMensaje("ENVI", 4);
+	UnCliente.EnviarMensaje("USER", 4);
 	string todosLosUsuarios = UnCliente.RecibirMensajeTamanoVariable();
 	// Recibo lista de usuarios
 	string UnUsuario;
@@ -289,7 +289,7 @@ void LoremIpsum()
 
     lectura = new char[tamanio];
 
-	string destinatario = "fulano" ;//obtenerDestinatario();
+	string destinatario = obtenerDestinatario();
 
 	UnCliente.EscribirLog("Secuencia de envio automatico iniciada.");
 
@@ -298,6 +298,8 @@ void LoremIpsum()
 
 	ClearScreen();
 	
+	cout << "Se enviaran los mensajes al usuario " << destinatario << endl; 
+
 	cout << "Ingrese la frecuencia de envio de mensajes: ";
 	cin >> frecuencia;
 	cout << "Ingrese la cantidad de mensajes a enviar: ";
