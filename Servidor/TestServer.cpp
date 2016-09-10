@@ -74,6 +74,11 @@ void MainListenThread(void* arg) {
 
 
 		}
+		if (mensaje == "USER")
+		{
+			string todosLosUsuarios = ControlUsuarios.obtenerTodosEnString(";");
+			UnServer.EnviarMensajeTamanoVariable(todosLosUsuarios, ClientSocket);
+		}
 		if (mensaje == "ENVI")
 		{
 
@@ -89,6 +94,7 @@ void MainListenThread(void* arg) {
 				Mensaje* unMensaje = new Mensaje(Usuario, destinatario, contenidoMensaje);
 
 				UnServer.agregarMensaje(unMensaje);
+
 				UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario + ". Mensaje: " + contenidoMensaje);
 
 				ReleaseMutex(ghMutex);
@@ -102,11 +108,11 @@ void MainListenThread(void* arg) {
 
 			if (Usuario != "") {
 				UnServer.EnviarMensaje("Hasta la proxima " + Usuario, 40, ClientSocket);
-				UnServer.EscribirLog(Usuario + " desconectado correctamente.");
+				UnServer.EscribirLog(Usuario + " desconectado correctamente.", true);
 				Usuario = "";
 			} else {
 				UnServer.EnviarMensaje("No existe ninguna sesion iniciada.", 40, ClientSocket);
-				UnServer.EscribirLog("Fallo intento de Logout. No existe sesion iniciada.");
+				UnServer.EscribirLog("Fallo intento de Logout. No existe sesion iniciada.", true);
 			}
 		}
 		if (mensaje == "PING")
@@ -116,7 +122,6 @@ void MainListenThread(void* arg) {
 		}
 		if (mensaje == "ENVT")
 		{
-
 			if (Usuario != "") {
 				UnServer.EnviarMensaje("000", 3, ClientSocket);
 
@@ -186,7 +191,7 @@ void MainListenThread(void* arg) {
 		CantidadClientes--;
 
 		if (mensaje == "EXIT") {
-			UnServer.EscribirLog("Un cliente se desconecto");
+			UnServer.EscribirLog("Un cliente se desconecto", true);
 		}
 		else {
 			UnServer.EscribirLog("Un cliente perdio la conexion");

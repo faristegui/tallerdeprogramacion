@@ -103,7 +103,7 @@ void Server::Abrir(std::string UnPuerto) {
 	{
 		ClearScreen();
 		std::cout << "Ha ocurrido  un error inesperado." << std::endl;
-		this->EscribirLog("Error al inicializar el socket del Server. " + WSAGetLastError());
+		this->EscribirLog("Error al inicializar el socket del Server. " + WSAGetLastError(), true);
 		pause();
 		WSACleanup();
 		exit(0);
@@ -123,7 +123,7 @@ void Server::Abrir(std::string UnPuerto) {
 	{
 		ClearScreen();
 		std::cout << "Ha ocurrido un error con la inicializacion de la IP y el Puerto de conexion." << std::endl;
-		this->EscribirLog("Error al inicializar configuracion de ip y puerto.");
+		this->EscribirLog("Error al inicializar configuracion de ip y puerto.", true);
 		pause();
 		WSACleanup();
 		exit(0);
@@ -135,7 +135,7 @@ void Server::Abrir(std::string UnPuerto) {
 	{
 		ClearScreen();
 		std::cout << "Ha ocurrido un error inesperado." << std::endl;
-		this->EscribirLog("Error al crear el socket del servidor: " + WSAGetLastError());
+		this->EscribirLog("Error al crear el socket del servidor: " + WSAGetLastError(), true);
 		pause();
 		freeaddrinfo(result);
 		WSACleanup();
@@ -147,7 +147,7 @@ void Server::Abrir(std::string UnPuerto) {
 	{
 		ClearScreen();
 		std::cout << "Ha ocurrido un error inesperado." << std::endl;
-		this->EscribirLog("Error al asociar el Socket a la IP y Puerto seleccionado" + WSAGetLastError());
+		this->EscribirLog("Error al asociar el Socket a la IP y Puerto seleccionado" + WSAGetLastError(), true);
 		pause();
 		WSACleanup();
 		freeaddrinfo(result);
@@ -164,7 +164,7 @@ void Server::Abrir(std::string UnPuerto) {
 	{
 		ClearScreen();
 		std::cout << "Ha ocurrido un error inesperado." << std::endl;
-		this->EscribirLog("Error al escuchar conexiones en socketServer: " + WSAGetLastError());
+		this->EscribirLog("Error al escuchar conexiones en socketServer: " + WSAGetLastError(), true);
 		closesocket(ListenSocket);
 		pause();
 		WSACleanup();
@@ -172,7 +172,7 @@ void Server::Abrir(std::string UnPuerto) {
 	}
 
 	std::cout << "Server activado escuchando en el puerto: " << UnPuerto << std::endl;
-	this->EscribirLog("Servidor activado. Puerto: " + UnPuerto);
+	this->EscribirLog("Servidor activado. Puerto: " + UnPuerto, true);
 }
 
 SOCKET Server::RecibirNuevaConexion() {
@@ -192,16 +192,15 @@ const std::string obtenerDateTime() {
 }
 
 //Log del cliente
-void Server::EscribirLog(std::string mens)
+void Server::EscribirLog(std::string mens, bool cortar)
 {
 	std::string logString = obtenerDateTime() + mens;
 
-	if(logString.size() > 128)
+	if(logString.size() > 128 && cortar)
 	{
 		logString.resize (125); // Lo corto en 125 para que no exceda los 128 caracteres con los 3 puntos.
 		logString = logString + "...";
 	}
-
 	logFile << logString << std::endl;
 }
 
@@ -270,7 +269,7 @@ Server::~Server()
 {
 	closesocket(this->ListenSocket);
 	std::cout << "Cerrando server: .." << WSAGetLastError() << std::endl;
-	this->EscribirLog("Servidor cerrado.");
+	this->EscribirLog("Servidor cerrado.", true);
 	WSACleanup();
 	logFile.close();
 }

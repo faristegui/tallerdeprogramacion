@@ -324,6 +324,82 @@ void RecibirMensajes()
 	pause();
 }
 
+string obtenerDestinatario()
+{
+	string destinatario;
+	
+	UnCliente.EnviarMensaje("USER", 4);
+	string todosLosUsuarios = UnCliente.RecibirMensajeTamanoVariable();
+	// Recibo lista de usuarios
+	string UnUsuario;
+	int index = todosLosUsuarios.find(";");
+
+	while (index > -1) {
+		UnUsuario = todosLosUsuarios.substr(0, index);
+		todosLosUsuarios = todosLosUsuarios.substr(index + 1);
+		index = todosLosUsuarios.find(";");
+	}
+	pause();
+	destinatario = UnUsuario; //Estoy devolviendo siempre el primero. Después reviso como hacer para enviar a otros.
+
+	return destinatario;
+}
+
+void LoremIpsum()
+{
+	int frecuencia;
+	int cantidad;
+	int milisegundos;
+	char* lectura;
+	int tamanio = 0;
+
+	srand(time(NULL)); 
+	tamanio = rand()%201; //Random entre 1 y 200, tamaño máximo del mensaje a enviar.
+
+    lectura = new char[tamanio];
+
+	string destinatario = obtenerDestinatario();
+
+	UnCliente.EscribirLog("Secuencia de envio automatico iniciada.");
+
+	FILE *archivoLoremIpsum;
+	archivoLoremIpsum = fopen("loremIpsum.txt", "rt");
+
+	ClearScreen();
+	
+	cout << "Se enviaran los mensajes al usuario " << destinatario << endl; 
+
+	cout << "Ingrese la frecuencia de envio de mensajes: ";
+	cin >> frecuencia;
+	cout << "Ingrese la cantidad de mensajes a enviar: ";
+	cin >> cantidad;
+
+	milisegundos = (1000/frecuencia);
+
+	cout << "Se enviara un mensaje cada " << milisegundos << " milisegundos." << endl;
+
+	for(int i = 0; i < cantidad; i = i + 1)
+	{
+		if(!feof(archivoLoremIpsum))
+		{
+			fgets(lectura,tamanio + 1,archivoLoremIpsum);
+			Sleep(milisegundos);
+			UnCliente.EnviarMensaje("ENVI", 4);
+			UnCliente.EnviarMensaje(destinatario, 15);
+			UnCliente.EnviarMensajeTamanoVariable(lectura);
+			UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ". Mensaje: " + lectura);
+		}
+		else
+		{
+			rewind(archivoLoremIpsum);
+		}
+	}
+
+	fclose(archivoLoremIpsum);
+
+	pause();
+}
+
 void CerrarPrograma() {
 	clienteAbierto = false;
 	UnCliente.EscribirLog("Programa cerrado por el usuario.");
@@ -389,6 +465,7 @@ void MenuPrincipal()
 		cout << "LISTO!";
 		pause();
 		*/
+		LoremIpsum();
 		break;
 	}
 
