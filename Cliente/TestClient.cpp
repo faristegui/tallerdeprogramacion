@@ -360,46 +360,55 @@ void LoremIpsum()
 
 		lectura = new char[tamanio];
 
-		string destinatario = obtenerDestinatario();
+		string destinatario = "jorgito";//obtenerDestinatario();
 
 		UnCliente.EscribirLog("Secuencia de envio automatico iniciada.");
 
 		FILE *archivoLoremIpsum;
-		archivoLoremIpsum = fopen("loremIpsum.txt", "rt");
+		archivoLoremIpsum = fopen("D:\\Projects\\GitHub\\tallerdeprogramacion\\loremIpsum.txt", "r"); // TODO: Arreglar path absoluto
 
-		ClearScreen();
+		if (archivoLoremIpsum) {
 
-		cout << "Se enviaran los mensajes al usuario " << destinatario << endl;
+			ClearScreen();
 
-		cout << "Ingrese la frecuencia de envio de mensajes: ";
-		cin >> frecuencia;
-		cout << "Ingrese la cantidad de mensajes a enviar: ";
-		cin >> cantidad;
+			cout << "Se enviaran los mensajes al usuario " << destinatario << endl;
 
-		milisegundos = (1000 / frecuencia);
+			cout << "Ingrese la frecuencia de envio de mensajes: ";
+			cin >> frecuencia;
+			cout << "Ingrese la cantidad de mensajes a enviar: ";
+			cin >> cantidad;
 
-		cout << "Se enviara un mensaje cada " << milisegundos << " milisegundos." << endl;
+			milisegundos = (1000 / frecuencia);
 
-		for (int i = 0; i < cantidad; i = i + 1)
-		{
-			if (!feof(archivoLoremIpsum))
+			cout << "Se enviara un mensaje cada " << milisegundos << " milisegundos." << endl;
+
+			for (int i = 0; i < cantidad; i = i + 1)
 			{
-				fgets(lectura, tamanio + 1, archivoLoremIpsum);
-				Sleep(milisegundos);
-				UnCliente.EnviarMensaje("ENVI", 4);
-				UnCliente.EnviarMensaje(destinatario, 15);
-				UnCliente.EnviarMensajeTamanoVariable(lectura);
-				UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ". Mensaje: " + lectura);
+				if (!feof(archivoLoremIpsum))
+				{
+					fgets(lectura, tamanio + 1, archivoLoremIpsum);
+					Sleep(milisegundos);
+					UnCliente.EnviarMensaje("ENVI", 4);
+					UnCliente.EnviarMensaje(destinatario, 15);
+					UnCliente.EnviarMensajeTamanoVariable(lectura);
+					UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ". Mensaje: " + lectura);
+				}
+				else
+				{
+					rewind(archivoLoremIpsum);
+				}
 			}
-			else
-			{
-				rewind(archivoLoremIpsum);
-			}
+
+			fclose(archivoLoremIpsum);
+
+			pause();
+		}
+		else {
+
+			cout << "Archivo loremIpsum.txt no encontrado" << endl;
+			pause();
 		}
 
-		fclose(archivoLoremIpsum);
-
-		pause();
 	}
 	else {
 
