@@ -30,6 +30,8 @@ using namespace std;
 Client UnCliente;
 bool clienteAbierto = true;
 bool serverStatus = false;
+bool IsUsuarioLogueado = false;
+string usuarioLogueado;
 
 Lista<std::string>* TodosLosUsuarios = new Lista<std::string>();
 
@@ -70,6 +72,8 @@ void ThreadStatus(void* pParams)
 	Client ClientePing;
 	//Envía mensajes al servidor y setea la variable serverStatus en TRUE o FALSE
 	bool status = false;
+	bool errorYaLogueado = false;
+	bool serverCaido = false;
 
 	EnvioThreadData* datos = (EnvioThreadData*) pParams;
 
@@ -78,28 +82,38 @@ void ThreadStatus(void* pParams)
 
 	ClientePing.ConectarAServidor(ip, puerto); //Envío primero puerto e IP.
 
-	while (clienteAbierto)
+	while (clienteAbierto && !serverCaido)
 	{
-		ClientePing.EnviarMensaje("PING", 4);
+		
 
-		string respuesta = ClientePing.RecibirMensaje(2);
-
-		if(respuesta == "OK")
-		{
-			status = true;
-		}
-		else
+		if (ClientePing.EnviarMensaje("PING", 4) == -1)//si el servidor no nos responde (enviarMensaje retorna -1)
 		{
 			status = false;
-			ClearScreen();
-			cout << "Conexion con el servidor terminada. (Server Offline).";
+			serverCaido = true;
+		}
+
+
+		else
+		{
+			string respuesta = ClientePing.RecibirMensaje(2);
+			if (respuesta == "OK")
+			{
+				status = true;
+				
+			}
+			else status = false;
+		}
+				
+		if (!status && !errorYaLogueado)// si el server se cayo lo logueo una sola vez
+		{
 			ClientePing.EscribirLog("Conexion con el servidor terminada. (Server Offline).");
+			errorYaLogueado = true;
 		}
 		serverStatus = status;
-		Sleep(30000); // 30 segundos
+		Sleep(30000); // pingueo cada medio segundo para ver si el server esta caido o no
 	}
 
-	ClientePing.EnviarMensaje("EXIT", 4);
+	if(serverStatus) ClientePing.EnviarMensaje("EXIT", 4); //solo tiene sentido enviar un mensaje de exit del cliente si el server no esta caido!!
 }
 
 
@@ -168,6 +182,7 @@ void IniciarSesion()
 
 		cout << "Ingrese Usuario: ";
 		cin >> Mensaje;
+		usuarioLogueado = Mensaje;
 		UnCliente.EnviarMensaje(Mensaje, 15);
 
 		cout << "Ingrese clave: ";
@@ -175,11 +190,14 @@ void IniciarSesion()
 		UnCliente.EnviarMensaje(Mensaje, 15);
 
 		Respuesta = UnCliente.RecibirMensaje(3); // Codigo de respuesta de la autenticacion
+		if (Respuesta == "000")
+			IsUsuarioLogueado = true;
 
 		UnCliente.EscribirLog("Autorizar usuario. Mensaje del servidor: " + Respuesta + ".");
 		Respuesta = UnCliente.RecibirMensaje(40);
 		cout << Respuesta << endl;
 		pause();
+
 	}
 	else {
 
@@ -196,6 +214,7 @@ void CerrarSesion() {
 	string respuesta = UnCliente.RecibirMensaje(40);
 	cout << respuesta << endl;
 	UnCliente.EscribirLog("Cerrar sesion. Mensaje del servidor: " + respuesta + ".");
+	IsUsuarioLogueado = false;
 	pause();
 }
 
@@ -396,6 +415,17 @@ void CerrarPrograma() {
 	exit(0);
 }
 
+void mostrarMensajeServerNoDisponible(string operacion)
+{
+	ClearScreen();
+	cout << "El server se encuentra inaccesible por el momento"  << endl;
+	cout << "No se puede ejecutar la operacion de " << operacion << endl;
+	cout << endl;
+	cout << "Cierre el cliente e intente conectarse nuevamente con el server"  << endl;
+	system("pause");
+	UnCliente.EscribirLog("Server inaccesible: No se puede ejecutar la operacion de " + operacion);
+}
+
 void MenuPrincipal()
 {
 	int opcion = 0;
@@ -408,39 +438,68 @@ void MenuPrincipal()
 		}
 
 		ClearScreen();
-		cout << "MENU PRINCIPAL" << endl << endl <<
-			"1- Iniciar Sesion" << endl <<
-			"2- Cerrar Sesion" << endl <<
-			"3- Salir" << endl <<
-			"4- Enviar" << endl <<
-			"5- Recibir" << endl <<
-			"6- Lorem Ipsum" << endl << endl;
-		
-		MostrarListaUsuarios();
-		
-		cout << "Ingrese una opcion: ";
+		if (IsUsuarioLogueado)
+		{
+				cout << "Usuario Logueado: " << usuarioLogueado << endl << endl <<
+				"2- Cerrar Sesion" << endl <<
+				"3- Salir" << endl <<
+				"4- Enviar" << endl <<
+				"5- Recibir" << endl <<
+				"6- Lorem Ipsum" << endl << endl;
+				MostrarListaUsuarios();
+				cout << "Ingrese una opcion: " << endl;
+		}
+		else
+		{
+			cout << "MENU PRINCIPAL" << endl << endl <<
+				"1- Iniciar Sesion" << endl <<
+				"2- Cerrar Sesion" << endl <<
+				"3- Salir" << endl <<
+				"4- Enviar" << endl <<
+				"5- Recibir" << endl <<
+				"6- Lorem Ipsum" << endl << endl;
+				MostrarListaUsuarios();
+				cout << "Ingrese una opcion: " << endl;
+
+		}
+
 		cin >> opcion;
 	}
 
 	switch (opcion)
 	{
 	case 1:
-		IniciarSesion();
+		if (serverStatus)//si el server no esta caido puedo ejecutar la operacion de inciarSesion
+			IniciarSesion();
+		else
+			mostrarMensajeServerNoDisponible("Iniciar Sesion");
 		break;
 	case 2:
-		CerrarSesion();
+		if (serverStatus)//si el server no esta caido puedo ejecutar la operacion de cerrarSesion
+			CerrarSesion();
+		else
+			mostrarMensajeServerNoDisponible("Cerrar Sesion");
 		break;
 	case 3:
 		CerrarPrograma();
 		break;
 	case 4:
-		EnviarMensaje();
+		if (serverStatus)//si el server no esta caido puedo ejecutar la operacion de enviarMensaje
+			EnviarMensaje();
+		else
+			mostrarMensajeServerNoDisponible("Enviar");
 		break;
 	case 5:
-		RecibirMensajes();
+		if (serverStatus)//si el server no esta caido puedo ejecutar la operacion de recibierMensaje
+			RecibirMensajes();
+		else
+			mostrarMensajeServerNoDisponible("Recibir");
 		break;
 	case 6:
-		LoremIpsum();
+		if (serverStatus)//si el server no esta caido puedo ejecutar la operacion de LoremIpsum
+			LoremIpsum();
+		else
+			mostrarMensajeServerNoDisponible("Lorem Ipsum");
 		break;
 	}
 
