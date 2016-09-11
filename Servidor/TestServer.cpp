@@ -219,23 +219,13 @@ void MainListenThread(void* arg) {
 }
 
 void MainServerThread(void* arg) {
-	//int contador =0;
-	//HANDLE manejador[14]; 
-	//LD: Puse 12 (2 por cada cliente por el ping) y le agregue uno mas por si entra un 7mo cliente para que no pinche.
-	//    No pasa nada porque mas adelante le dice que no se puede conectar!
-
 	ghMutex = CreateMutex(NULL,FALSE,NULL);
 	string Puerto = *(string*)arg;
 	UnServer.Abrir(Puerto);
 
 	while (true) {
 		SOCKET ClientSocket = UnServer.RecibirNuevaConexion();
-		//En teoria cada vez que se conecta un nuevo cliente pasa por aca? No parece pasar eso.
-		//El codigo siguiente esta aplicado con esa logica
-		//La idea es ir acumulando los threads(clientes) y tener una lista para manejarlos con el mutex
-		//manejador[contador] = (HANDLE) _beginthread(MainListenThread, 0, (void*)&ClientSocket);
-		//contador++;
-		(HANDLE)_beginthread(MainListenThread, 0, (void*)&ClientSocket);
+		_beginthread(MainListenThread, 0, (void*)&ClientSocket);
 	}
 
 }
