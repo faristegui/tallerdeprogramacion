@@ -235,6 +235,7 @@ void MainServerThread(void* arg) {
 		//La idea es ir acumulando los threads(clientes) y tener una lista para manejarlos con el mutex
 		//manejador[contador] = (HANDLE) _beginthread(MainListenThread, 0, (void*)&ClientSocket);
 		//contador++;
+		(HANDLE)_beginthread(MainListenThread, 0, (void*)&ClientSocket);
 	}
 
 }
