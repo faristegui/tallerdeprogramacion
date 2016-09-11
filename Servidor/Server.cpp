@@ -212,7 +212,7 @@ std::string Server::RecibirMensaje(SOCKET ClientSocket, int tam) {
 	if (cantidadBytesRecibidos >= 0) {
 		std::string tmpMsj(recvbuf);
 		mensajeCliente = tmpMsj;
-		recvbuf[cantidadBytesRecibidos] = 0; // 0 = NULL terminator del std::string TODO: Creo que debiera usarse el tam
+		recvbuf[cantidadBytesRecibidos] = 0; // 0 = NULL terminator del std::string
 	}
 	else {
 		mensajeCliente = "LOST";
