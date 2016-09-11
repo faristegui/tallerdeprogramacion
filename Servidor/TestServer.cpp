@@ -107,19 +107,18 @@ void MainListenThread(void* arg) {
 		}
 		if (mensaje == "ENVI")
 		{
-			// El mutex aca parece que va OK
-			WaitForSingleObject(ghMutex, INFINITE);
-
 			string destinatario = UnServer.RecibirMensaje(ClientSocket, 15);
 			string contenidoMensaje = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
 
 			Mensaje* unMensaje = new Mensaje(Usuario, destinatario, contenidoMensaje);
 
+			WaitForSingleObject(ghMutex, INFINITE);
+
 			UnServer.agregarMensaje(unMensaje);
+			
+			ReleaseMutex(ghMutex);
 
 			UnServer.EscribirLog("Mensaje enviado con exito, de: " + Usuario + " a " + destinatario + ". Mensaje: " + contenidoMensaje, false);
-
-			ReleaseMutex(ghMutex);
 		}
 		if (mensaje == "OUT") {
 

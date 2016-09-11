@@ -13,9 +13,6 @@
 //#include <mutex>
 //using namespace std;
 #define MAX_BUFFER_LENGTH 512
-// TODO: El siguiente array creo q hay q crearlo y matarlo dentro
-//		 RecibirMensaje().. Como lo mato??
-char recvbuf[MAX_BUFFER_LENGTH];
 //std::mutex UnMutex;
 //using namespace System::Threading;
 Server::Server()
@@ -205,14 +202,15 @@ void Server::EscribirLog(std::string mens, bool cortar)
 }
 
 std::string Server::RecibirMensaje(SOCKET ClientSocket, int tam) {
+	char recvbuf[MAX_BUFFER_LENGTH];
 	int cantidadBytesRecibidos;
 	std::string mensajeCliente;
 
 	cantidadBytesRecibidos = recv(ClientSocket, recvbuf, tam, 0);
 	if (cantidadBytesRecibidos >= 0) {
+		recvbuf[cantidadBytesRecibidos] = 0; // 0 = NULL terminator del std::string
 		std::string tmpMsj(recvbuf);
 		mensajeCliente = tmpMsj;
-		recvbuf[cantidadBytesRecibidos] = 0; // 0 = NULL terminator del std::string
 	}
 	else {
 		mensajeCliente = "LOST";
