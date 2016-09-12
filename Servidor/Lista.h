@@ -27,7 +27,6 @@ class Lista{
         	bool avanzarCursor();
 
         	T obtenerCursor();
-        	T obtenerUltimo();
 
 	private:
             NodoSimplementeEnlazado<T>* obtenerNodo(unsigned int posicion);
@@ -53,7 +52,7 @@ template <class T> bool Lista<T>::estaVacia(){
 	return ( this-> tamanio == 0 );
 
 }
-//Agrega elemento, el contenido esta ordenado de menor a mayor.
+//Agrega elemento, siempre al final.
 template <class T> void Lista<T>::agregar(T elemento){
 
     NodoSimplementeEnlazado<T>* nuevoElemento = new NodoSimplementeEnlazado<T>(elemento);
@@ -155,12 +154,5 @@ template <class T> NodoSimplementeEnlazado<T>* Lista<T>::obtenerNodo(unsigned in
 
     return actual;
 }
-
-template <class T> T Lista<T>::obtenerUltimo(){
-
-    return obtenerNodo(tamanio)->getDato();
-
-}
-
 #endif // LISTA_H
 

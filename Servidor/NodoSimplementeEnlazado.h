@@ -3,8 +3,6 @@
 #include <cstddef>
 template <class T>
 
-// Falta hacer el override del operador de igualdad y desigualdad.
-
 class NodoSimplementeEnlazado{
 
 	// Atributos
