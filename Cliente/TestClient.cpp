@@ -369,12 +369,12 @@ void LoremIpsum()
 
 		lectura = new char[tamanio];
 
-		string destinatario = "jorgito";//obtenerDestinatario();
+		string destinatario = obtenerDestinatario();
 
 		UnCliente.EscribirLog("Secuencia de envio automatico iniciada.");
 
 		FILE *archivoLoremIpsum;
-		archivoLoremIpsum = fopen("D:\\Projects\\GitHub\\tallerdeprogramacion\\loremIpsum.txt", "r"); // TODO: Arreglar path absoluto
+		archivoLoremIpsum = fopen("loremIpsum.txt","rb"); // TODO: Arreglar path absoluto
 
 		if (archivoLoremIpsum) {
 
@@ -414,12 +414,12 @@ void LoremIpsum()
 
 			pause();
 		}
+		
 		else {
 
 			cout << "Archivo loremIpsum.txt no encontrado" << endl;
 			pause();
 		}
-
 	}
 	else {
 
