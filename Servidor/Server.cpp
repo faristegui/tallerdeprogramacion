@@ -25,7 +25,7 @@ void Server::agregarMensaje(Mensaje* unMensaje)
 {
 	
 	//UnMutex.lock();
-	//std::cout << "El contenido es: " << unMensaje->obtenerContenido() << std::endl << std::endl;
+	std::cout << "El contenido es: " << unMensaje->obtenerContenido() << std::endl << std::endl;
 	todosLosMensajes->agregar(unMensaje);
 	//UnMutex.unlock();
 }

@@ -108,10 +108,9 @@ void ThreadStatus(void* pParams)
 			errorYaLogueado = true;
 		}
 		serverStatus = status;
-		Sleep(30000);
+		Sleep(30000); // pingueo cada medio segundo para ver si el server esta caido o no
 	}
 	if(serverStatus) ClientePing.EnviarMensaje("EXIT", 4); //solo tiene sentido enviar un mensaje de exit del cliente si el server no esta caido!!
-	
 }
 
 
@@ -189,11 +188,9 @@ void IniciarSesion()
 
 		Respuesta = UnCliente.RecibirMensaje(3); // Codigo de respuesta de la autenticacion
 		if (Respuesta == "000")
-		{
 			IsUsuarioLogueado = true;
-			UnCliente.EscribirLog("Usuario autorizado por el servidor.");
-		}
 
+		UnCliente.EscribirLog("Autorizar usuario. Mensaje del servidor: " + Respuesta + ".");
 		Respuesta = UnCliente.RecibirMensaje(40);
 		cout << Respuesta << endl;
 		pause();
@@ -544,7 +541,6 @@ int main(int argc, char **argv)
 
 		if (!conexionOk) {
 			cout << "Vuelva intentarlo\n";
-			UnCliente.EscribirLog("Fallo el intento de conexion con servidor.");
 			pause();
 		}
 	}
