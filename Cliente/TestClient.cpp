@@ -74,7 +74,7 @@ void ThreadStatus(void* pParams)
 	bool status = false;
 	bool errorYaLogueado = false;
 	bool serverCaido = false;
-
+	int resultado = 0;
 	EnvioThreadData* datos = (EnvioThreadData*) pParams;
 
 	string ip = datos->destinatario;
@@ -84,14 +84,12 @@ void ThreadStatus(void* pParams)
 
 	while (clienteAbierto && !serverCaido)
 	{
-		
 
-		if (ClientePing.EnviarMensaje("PING", 4) == -1)//si el servidor no nos responde (enviarMensaje retorna -1)
+		if (ClientePing.EnviarMensaje("PING",4) == -1)//si el servidor no nos responde (enviarMensaje retorna -1)
 		{
 			status = false;
 			serverCaido = true;
 		}
-
 
 		else
 		{
@@ -112,7 +110,6 @@ void ThreadStatus(void* pParams)
 		serverStatus = status;
 		Sleep(30000); // pingueo cada medio segundo para ver si el server esta caido o no
 	}
-
 	if(serverStatus) ClientePing.EnviarMensaje("EXIT", 4); //solo tiene sentido enviar un mensaje de exit del cliente si el server no esta caido!!
 }
 
@@ -374,7 +371,7 @@ void LoremIpsum()
 		UnCliente.EscribirLog("Secuencia de envio automatico iniciada.");
 
 		FILE *archivoLoremIpsum;
-		archivoLoremIpsum = fopen("loremIpsum.txt","rb"); // TODO: Arreglar path absoluto
+		archivoLoremIpsum = fopen("loremIpsum.txt","rb"); //el directorio actual era tallerdeprogramacion/Cliente. Ahi hay que tirar el archivo
 
 		if (archivoLoremIpsum) {
 
