@@ -69,7 +69,7 @@ void ThreadEnviaMensaje(void* pParams)
 
 void ThreadStatus(void* pParams)
 {
-	Client ClientePing;
+	Client ClientePing(0);
 	//Envía mensajes al servidor y setea la variable serverStatus en TRUE o FALSE
 	bool status = false;
 	bool errorYaLogueado = false;
@@ -104,7 +104,7 @@ void ThreadStatus(void* pParams)
 				
 		if (!status && !errorYaLogueado)// si el server se cayo lo logueo una sola vez
 		{
-			ClientePing.EscribirLog("Conexion con el servidor terminada. (Server Offline).");
+			UnCliente.EscribirLog("Conexion con el servidor terminada. (Server Offline)."); //Uso la instancia del otro cliente para no pisar el Log
 			errorYaLogueado = true;
 		}
 		serverStatus = status;

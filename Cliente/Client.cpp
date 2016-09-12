@@ -21,6 +21,11 @@ Client::Client()
     logFile.open("logCliente.txt");
 }
 
+Client::Client(int log)
+{
+	//Crea el cliente sin la definición del archivo
+}
+
 bool Client::ConectarAServidor(string UnaIP, string UnPuerto)
 {
 	WSADATA wsaData;
