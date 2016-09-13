@@ -50,9 +50,7 @@ bool Client::ConectarAServidor(string UnaIP, string UnPuerto)
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
-
 	// configuracion de ip y puerto de conexion con el server
-
 	if (getaddrinfo(UnaIP.c_str(), UnPuerto.c_str(), &(hints), &(result)) != NO_ERROR) {
 		ClearScreen();
 		cout << "Ha ocurrido un error al enviar la configuracion de conexion." << endl;
@@ -89,7 +87,7 @@ bool Client::ConectarAServidor(string UnaIP, string UnPuerto)
 		break;
 	}
 
-	freeaddrinfo(result);
+	//freeaddrinfo(result);
 
 	if (this->ClientConnectionSocket == INVALID_SOCKET) {
 		ClearScreen();
