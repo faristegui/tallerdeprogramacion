@@ -209,7 +209,6 @@ void MenuPrincipal() {
 		if (comando == "q")
 		{
 			cout << "Servidor off\n";
-			pause();
 			break;
 		}
 	}

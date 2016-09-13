@@ -206,7 +206,7 @@ std::string Server::RecibirMensaje(SOCKET ClientSocket, int tam) {
 	std::string mensajeCliente;
 
 	cantidadBytesRecibidos = recv(ClientSocket, recvbuf, tam, 0);
-	if (cantidadBytesRecibidos >= 0) {
+	if (cantidadBytesRecibidos > 0) {
 		recvbuf[cantidadBytesRecibidos] = 0; // 0 = NULL terminator del std::string
 		std::string tmpMsj(recvbuf);
 		mensajeCliente = tmpMsj;
