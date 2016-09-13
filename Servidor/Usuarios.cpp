@@ -134,7 +134,7 @@ Usuario Usuarios::getProximoUsuario()
 
 void Usuarios::AbrirArchivo()
 {
-	archivoUsuarios.open("Archivos\\Usuarios.csv", std::ifstream::in);
+	archivoUsuarios.open("Archivos\\" + NombreArchivo, std::ifstream::in);
 	esFinDeArchivo = false;
 }
 
@@ -144,9 +144,13 @@ void Usuarios::CerrarArchivo()
 }
 
 bool Usuarios::SetNombreArchivo(std::string UnNombreArchivo) {
+	bool estaOk = false;
+	
 	NombreArchivo = UnNombreArchivo;
 
 	archivoUsuarios.open("Archivos\\" + NombreArchivo);
+	estaOk = archivoUsuarios.good();
+	archivoUsuarios.close();
 
-	return archivoUsuarios.good();
+	return estaOk;
 }
