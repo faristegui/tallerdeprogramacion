@@ -5,6 +5,7 @@ Servidor/*.vcxproj
 *.vcxproj
 *.filters
 *.user
+*.sln
 logCliente.txt
 logServidor.txt
 
