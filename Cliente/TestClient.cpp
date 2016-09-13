@@ -341,7 +341,7 @@ void RecibirMensajes()
 
 			cout << "De: " << UsuarioEmisor << endl;
 			cout << "Mensaje: " << ContenidoMensaje << endl << endl;
-			UnCliente.EscribirLog("Mensaje de " + UsuarioEmisor + " recibido.");
+			UnCliente.EscribirLog("Mensaje de " + UsuarioEmisor + " recibido. Mensaje: " + ContenidoMensaje);
 
 			CantMensajes--;
 		}
