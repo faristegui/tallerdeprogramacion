@@ -36,32 +36,6 @@ void MostrarListaComandos() {
 	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
 }
 
-string obtenerUsuarioRandom()
-{
-	string destinatario = "";
-	int posUser = 0;
-	Lista<std::string>* usuarios = ControlUsuarios.obtenerTodos();
-
-	int tamanio = usuarios->getTamanio();
-
-	srand(time(NULL));
-	posUser = rand() % (tamanio + 1);
-
-	for (int i = 0; i < tamanio; i = i + 1)
-	{
-		if(i != posUser)
-		{
-			usuarios->avanzarCursor();
-		}
-		else
-		{
-			destinatario = usuarios->obtenerCursor();
-		}
-	}
-
-	return destinatario;
-}
-
 void MainListenThread(void* arg) {
 	string Usuario = "";
 	string mensaje = "";
@@ -99,11 +73,6 @@ void MainListenThread(void* arg) {
 
 			UnServer.EnviarMensaje(CodigoRespuesta, 3, ClientSocket);
 			UnServer.EnviarMensaje(MensajeRespuesta, 40, ClientSocket);
-		}
-		if (mensaje == "USER")
-		{
-			string usuario = obtenerUsuarioRandom();
-			UnServer.EnviarMensaje(usuario, 15, ClientSocket);
 		}
 		if (mensaje == "ENVI")
 		{
@@ -257,6 +226,7 @@ int main()
 	if (Puerto.empty())
 	{
 		Puerto = "1000";
+		cout << "Se usara el puerto por default: 1000" << endl;
 	}
 
 	string NombreArchivoUsuarios = "";
@@ -269,6 +239,7 @@ int main()
 		if (NombreArchivoUsuarios.empty())
 		{
 			NombreArchivoUsuarios = "Usuarios.csv";
+			cout << "Se usara el archivo por default: Usuarios.csv" << endl;
 		}
 	}
 

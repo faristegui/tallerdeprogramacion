@@ -291,6 +291,33 @@ void EnviarMensaje() {
 
 }
 
+std::string ObtenerDestinatarioRandom() {
+	string destinatario = "";
+	int posUser = 0;
+
+	TodosLosUsuarios->iniciarCursor();
+	TodosLosUsuarios->avanzarCursor();
+	int tamanio = TodosLosUsuarios->getTamanio();
+
+	srand(time(NULL));
+	posUser = rand() % (tamanio);
+
+	for (int i = 0; i < tamanio; i = i + 1)
+	{
+		if (i != posUser)
+		{
+			TodosLosUsuarios->avanzarCursor();
+		}
+		else
+		{
+			destinatario = TodosLosUsuarios->obtenerCursor();
+			break;
+		}
+	}
+
+	return destinatario;
+}
+
 void RecibirMensajes()
 {
 	int CantMensajes;
@@ -326,16 +353,6 @@ void RecibirMensajes()
 	pause();
 }
 
-string obtenerDestinatario()
-{
-	string destinatario;
-
-	UnCliente.EnviarMensaje("USER", 4);
-	destinatario = UnCliente.RecibirMensaje(15);
-
-	return destinatario;
-}
-
 string replace(char* lectura, const std::string& from, const std::string& to) {
 	string str(lectura);
 	size_t start_pos = str.find(from);
@@ -367,7 +384,7 @@ void LoremIpsum()
 
 		lectura = new char[tamanio];
 
-		string destinatario = obtenerDestinatario();
+		string destinatario = ObtenerDestinatarioRandom();
 
 		UnCliente.EscribirLog("Secuencia de envio automatico iniciada.");
 
