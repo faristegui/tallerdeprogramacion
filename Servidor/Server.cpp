@@ -266,7 +266,7 @@ int Server::EnviarMensaje(std::string mensaje, int sizeDatos, SOCKET ClientSocke
 Server::~Server()
 {
 	closesocket(this->ListenSocket);
-	std::cout << "Cerrando server: .." << WSAGetLastError() << std::endl;
+	//std::cout << "Cerrando server: .." << WSAGetLastError() << std::endl;
 	this->EscribirLog("Servidor cerrado.", true);
 	WSACleanup();
 	logFile.close();
