@@ -29,7 +29,7 @@ using namespace std;
 
 Client UnCliente;
 bool clienteAbierto = true;
-bool serverStatus = true;
+bool serverStatus = false;
 bool IsUsuarioLogueado = false;
 string usuarioLogueado;
 
@@ -335,15 +335,6 @@ string obtenerDestinatario()
 	return destinatario;
 }
 
-string replace(char* lectura, const std::string& from, const std::string& to) {
-	string str(lectura);
-	size_t start_pos = str.find(from);
-	if (start_pos == std::string::npos)
-		return str;
-	str.replace(start_pos, from.length(), to);
-	return str;
-}
-
 void LoremIpsum()
 {
 	int frecuencia;
@@ -388,18 +379,16 @@ void LoremIpsum()
 
 			cout << "Se enviara un mensaje cada " << milisegundos << " milisegundos." << endl;
 
-			int i = 0;
-			while (i < cantidad) {
+			for (int i = 0; i < cantidad; i = i + 1)
+			{
 				if (!feof(archivoLoremIpsum))
 				{
 					fgets(lectura, tamanio + 1, archivoLoremIpsum);
-					string linea = replace(lectura, "\n", "");
 					Sleep(milisegundos);
 					UnCliente.EnviarMensaje("ENVI", 4);
 					UnCliente.EnviarMensaje(destinatario, 15);
-					UnCliente.EnviarMensajeTamanoVariable(linea);
-					UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ". Mensaje: " + linea);
-					i++;
+					UnCliente.EnviarMensajeTamanoVariable(lectura);
+					UnCliente.EscribirLog("Mensaje enviado a " + destinatario + ". Mensaje: " + lectura);
 				}
 				else
 				{
