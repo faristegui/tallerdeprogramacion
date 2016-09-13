@@ -534,9 +534,24 @@ int main(int argc, char **argv)
 	while (!conexionOk) {
 		ClearScreen();
 		cout << "Ingrese la IP del Servidor (Usar localhost para local): ";
-		cin >> ip;
+
+		std::getline(std::cin, ip);
+
+		if (ip.empty())
+		{
+			ip = "localhost";
+			cout << "Se usara la ip por default: localhost" << endl;
+		}
+
 		cout << "Ingrese el puerto de conexion: ";
-		cin >> puerto;
+
+		std::getline(std::cin, puerto);
+
+		if (puerto.empty())
+		{
+			puerto = "1000";
+			cout << "Se usara el puerto por default: 1000" << endl;
+		}
 
 		conexionOk = UnCliente.ConectarAServidor(ip, puerto);
 

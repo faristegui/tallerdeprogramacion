@@ -23,11 +23,13 @@ public:
 	Lista<std::string>* obtenerTodos();
 	std::string obtenerTodosEnString(std::string separador);
 	bool destinatarioValido(std::string destinatario);
+	bool SetNombreArchivo(std::string UnNombreArchivo);
 private:
 	Usuario getProximoUsuario();
 	bool hayUsuarios();
 	bool esFinDeArchivo;
 	void AbrirArchivo();
 	void CerrarArchivo();
+	std::string NombreArchivo;
 };
 

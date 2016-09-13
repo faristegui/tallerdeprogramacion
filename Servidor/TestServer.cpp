@@ -248,13 +248,32 @@ void MenuPrincipal() {
 int main()
 {
 
-	string puerto;
 	cout << "Ingrese el puerto donde escuchara conexiones el servidor: ";
-	cin >> puerto;	
+	string Puerto;
+
+	std::getline(std::cin, Puerto);
+
+	if (Puerto.empty())
+	{
+		Puerto = "1000";
+	}
+
+	string NombreArchivoUsuarios = "";
+
+	while (!ControlUsuarios.SetNombreArchivo(NombreArchivoUsuarios)) {
+
+		cout << "Ingrese el nombre del archivo de usuarios: ";
+		std::getline(std::cin, NombreArchivoUsuarios);
+
+		if (NombreArchivoUsuarios.empty())
+		{
+			NombreArchivoUsuarios = "Usuarios.csv";
+		}
+	}
 
 	// Thread 1: Inicializacion del server
 
-	_beginthread(MainServerThread, 0, (void*)&puerto);
+	_beginthread(MainServerThread, 0, (void*)&Puerto);
 
 	// Thread 0: Handler de eventos del server
 	Sleep(1000);

@@ -2,7 +2,6 @@
 
 Cliente/*.vcxproj
 Servidor/*.vcxproj
-*.vcxproj
 *.filters
 *.user
 logCliente.txt
