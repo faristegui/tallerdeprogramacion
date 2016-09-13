@@ -224,14 +224,31 @@ std::string Server::RecibirMensaje(SOCKET ClientSocket, int tam) {
 
 std::string Server::RecibirMensajeTamanoVariable(SOCKET ClientSocket) {
 
+	std::string mensaje = "";
+
 	int stringLength = atoi(RecibirMensaje(ClientSocket, 8).c_str());
 
 	if (stringLength > MAX_BUFFER_LENGTH) {
 
-		// TODO: Traer de a pedazos
+		int BytesALeer = MAX_BUFFER_LENGTH - 1;
+
+		while (stringLength > 0) {
+
+			mensaje = mensaje + RecibirMensaje(ClientSocket, BytesALeer);
+
+			stringLength -= BytesALeer;
+
+			if (stringLength > MAX_BUFFER_LENGTH) {
+				BytesALeer = MAX_BUFFER_LENGTH - 1;
+			} else {
+				BytesALeer = stringLength;
+			}
+		}
+	}
+	else {
+		mensaje = RecibirMensaje(ClientSocket, stringLength);
 	}
 
-	std::string mensaje = RecibirMensaje(ClientSocket, stringLength);
 
 	return mensaje;
 }

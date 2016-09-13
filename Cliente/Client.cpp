@@ -177,14 +177,31 @@ string Client::RecibirMensaje(int sizeDatos)
 
 std::string Client::RecibirMensajeTamanoVariable() {
 
+	std::string mensaje = "";
+
 	int stringLength = atoi(RecibirMensaje(8).c_str());
 
 	if (stringLength > MAX_BUFFER_LENGTH) {
 
-		// TODO: Traer de a pedazos
-	}
+		int BytesALeer = MAX_BUFFER_LENGTH - 1;
 
-	std::string mensaje = RecibirMensaje(stringLength);
+		while (stringLength > 0) {
+
+			mensaje = mensaje + RecibirMensaje(BytesALeer);
+
+			stringLength -= BytesALeer;
+
+			if (stringLength > MAX_BUFFER_LENGTH) {
+				BytesALeer = MAX_BUFFER_LENGTH - 1;
+			}
+			else {
+				BytesALeer = stringLength;
+			}
+		}
+	}
+	else {
+		mensaje = RecibirMensaje(stringLength);
+	}	
 
 	return mensaje;
 }
