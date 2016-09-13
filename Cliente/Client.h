@@ -19,6 +19,7 @@ private:
 	ofstream logFile;  //Archivo para el log
 public:
 	Client();
+	Client(int log);
 	int EnviarMensaje(string, int sizeDatos);
 	int EnviarMensajeTamanoVariable(string);
 	bool ConectarAServidor(string ip, string puerto);
@@ -28,4 +29,3 @@ public:
 	void EscribirLog(string mensaje);
 	~Client();
 };
-

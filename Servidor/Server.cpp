@@ -23,9 +23,9 @@ Server::Server()
 
 void Server::agregarMensaje(Mensaje* unMensaje)
 {
-	
+
 	//UnMutex.lock();
-	std::cout << "El contenido es: " << unMensaje->obtenerContenido() << std::endl << std::endl;
+	//std::cout << "El contenido es: " << unMensaje->obtenerContenido() << std::endl << std::endl;
 	todosLosMensajes->agregar(unMensaje);
 	//UnMutex.unlock();
 }
@@ -35,14 +35,14 @@ void Server::enviarATodos(std::string contenidoMensaje, std::string emisor)
 	Usuarios* instanciaUsuarios = new Usuarios();
 	Lista<std::string>* todosLosUsuarios = instanciaUsuarios->obtenerTodos();
 	todosLosUsuarios->iniciarCursor();
-	while(todosLosUsuarios->avanzarCursor())
+	while (todosLosUsuarios->avanzarCursor())
 	{
-		Mensaje* unMensaje = new Mensaje(emisor,todosLosUsuarios->obtenerCursor(),contenidoMensaje);
+		Mensaje* unMensaje = new Mensaje(emisor, todosLosUsuarios->obtenerCursor(), contenidoMensaje);
 		//UnMutex.lock();
 		todosLosMensajes->agregar(unMensaje);
 		//UnMutex.unlock();
 	}
-	
+
 }
 
 Lista<Mensaje*>* Server::obtenerMensajesPara(std::string destinatario)
@@ -58,14 +58,14 @@ Lista<Mensaje*>* Server::obtenerMensajesPara(std::string destinatario)
 
 	// Convierte nombre de usuario a LowerCase
 	transform(destinatario.begin(), destinatario.end(), destinatario.begin(), (int(*)(int))tolower);
-	
-	while(todosLosMensajes->avanzarCursor())
+
+	while (todosLosMensajes->avanzarCursor())
 	{
 		TmpNombreUsuario = todosLosMensajes->obtenerCursor()->obtenerDestinatario();
 		// Convierte nombre de usuario a LowerCase
 		transform(TmpNombreUsuario.begin(), TmpNombreUsuario.end(), TmpNombreUsuario.begin(), (int(*)(int))tolower);
 
-		if(TmpNombreUsuario == destinatario)
+		if (TmpNombreUsuario == destinatario)
 		{
 			buzon->agregar(todosLosMensajes->obtenerCursor());
 			posicionesAEliminar->agregar(posicion);
@@ -73,9 +73,9 @@ Lista<Mensaje*>* Server::obtenerMensajesPara(std::string destinatario)
 		posicion++;
 	}
 	posicionesAEliminar->iniciarCursor();
-	while(posicionesAEliminar->avanzarCursor())
+	while (posicionesAEliminar->avanzarCursor())
 	{
-		todosLosMensajes->remover(posicionesAEliminar->obtenerCursor()-vuelta);
+		todosLosMensajes->remover(posicionesAEliminar->obtenerCursor() - vuelta);
 		vuelta++;
 	}
 
@@ -89,10 +89,10 @@ void Server::Abrir(std::string UnPuerto) {
 	// Inicializacion de las variables
 
 	WSADATA wsaData;
-	//sockaddr_in dirSocketServidor; La comento porque está sin referencia
+	//sockaddr_in dirSocketServidor; La comento porque est? sin referencia
 	struct addrinfo *result;
 	struct addrinfo hints;
-	//int iSendResult; La comento porque está sin referencia
+	//int iSendResult; La comento porque est? sin referencia
 
 	this->ListenSocket = INVALID_SOCKET;
 
@@ -179,13 +179,13 @@ SOCKET Server::RecibirNuevaConexion() {
 }
 
 const std::string obtenerDateTime() {
-    time_t     now = time(0);
-    struct tm  tstruct;
-    char       buf[80];
-    tstruct = *localtime(&now);
-    strftime(buf, sizeof(buf), "%d-%m-%Y - %X - ", &tstruct);
+	time_t     now = time(0);
+	struct tm  tstruct;
+	char       buf[80];
+	tstruct = *localtime(&now);
+	strftime(buf, sizeof(buf), "%d-%m-%Y - %X - ", &tstruct);
 
-    return buf;
+	return buf;
 }
 
 //Log del cliente
@@ -193,9 +193,9 @@ void Server::EscribirLog(std::string mens, bool cortar)
 {
 	std::string logString = obtenerDateTime() + mens;
 
-	if(logString.size() > 128 && cortar)
+	if (logString.size() > 128 && cortar)
 	{
-		logString.resize (125); // Lo corto en 125 para que no exceda los 128 caracteres con los 3 puntos.
+		logString.resize(125); // Lo corto en 125 para que no exceda los 128 caracteres con los 3 puntos.
 		logString = logString + "...";
 	}
 	logFile << logString << std::endl;
@@ -218,7 +218,7 @@ std::string Server::RecibirMensaje(SOCKET ClientSocket, int tam) {
 
 	memset(recvbuf, 0, sizeof(recvbuf)); // Reseteo el array a 0 para no arrastrar basura
 
-	std::cout		<< "Mensaje del cliente: " << mensajeCliente << std::endl;
+	std::cout << "Mensaje del cliente: " << mensajeCliente << std::endl;
 
 	return mensajeCliente;
 }

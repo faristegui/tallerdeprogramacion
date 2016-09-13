@@ -18,7 +18,12 @@ using namespace std;
 
 Client::Client()
 {
-    logFile.open("logCliente.txt");
+	logFile.open("logCliente.txt");
+}
+
+Client::Client(int log)
+{
+	//Crea el cliente sin la definici?n del archivo
 }
 
 bool Client::ConectarAServidor(string UnaIP, string UnPuerto)
@@ -70,7 +75,7 @@ bool Client::ConectarAServidor(string UnaIP, string UnPuerto)
 		return false;
 	}
 	// conectarse con la ip del server
-	for (ptr= result; ptr != NULL; ptr = ptr->ai_next) {
+	for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
 
 
 		// Conectando al servidor
@@ -99,13 +104,13 @@ bool Client::ConectarAServidor(string UnaIP, string UnPuerto)
 }
 
 const string obtenerDateTime() {
-    time_t     now = time(0);
-    struct tm  tstruct;
-    char       buf[80];
-    tstruct = *localtime(&now);
-    strftime(buf, sizeof(buf), "%d-%m-%Y - %X - ", &tstruct);
+	time_t     now = time(0);
+	struct tm  tstruct;
+	char       buf[80];
+	tstruct = *localtime(&now);
+	strftime(buf, sizeof(buf), "%d-%m-%Y - %X - ", &tstruct);
 
-    return buf;
+	return buf;
 }
 
 //Log del cliente
@@ -113,9 +118,9 @@ void Client::EscribirLog(string mens)
 {
 	string logString = obtenerDateTime() + mens;
 
-	if(logString.size() > 128)
+	if (logString.size() > 128)
 	{
-		logString.resize (125); // Lo corto en 125 para que no exceda los 128 caracteres con los 3 puntos.
+		logString.resize(125); // Lo corto en 125 para que no exceda los 128 caracteres con los 3 puntos.
 		logString = logString + "...";
 	}
 
@@ -129,9 +134,9 @@ int Client::EnviarMensaje(string mensaje, int sizeDatos)
 	cantidadBytesEnviados = send(this->ClientConnectionSocket, datosEnviados, sizeDatos, 0);
 	if (cantidadBytesEnviados == SOCKET_ERROR) {
 		ClearScreen();
- 		//Entiendo que la unica posibilidad que se falle al enviar el mensaje sea porque se desconecto el servidor.
- 		//Agregaria en el log. Debido a perdida de conexion con el servidor. que opinan? [MZ]
- 		//Adopte esta solucion porque no se cerraba el programa cuando lo pausabamos. 
+		//Entiendo que la unica posibilidad que se falle al enviar el mensaje sea porque se desconecto el servidor.
+		//Agregaria en el log. Debido a perdida de conexion con el servidor. que opinan? [MZ]
+		//Adopte esta solucion porque no se cerraba el programa cuando lo pausabamos. 
 		this->EscribirLog("Fallo al enviar mensaje.");
 		cout << "Se ha perdido la conexion con el servidor. El programa se cerrara en 5 segundos." << endl << endl;
 		Sleep(5000);
@@ -142,7 +147,7 @@ int Client::EnviarMensaje(string mensaje, int sizeDatos)
 
 
 int Client::EnviarMensajeTamanoVariable(string mensaje)
-{		
+{
 	// Como long de msj es variable envio:
 	// 1: Tamano de string (fijo de 8)
 	// 2: Msj (variable)
@@ -161,7 +166,7 @@ int Client::EnviarMensajeTamanoVariable(string mensaje)
 string Client::RecibirMensaje(int sizeDatos)
 {
 	int cantidadBytesRecibidos;
-	
+
 	cantidadBytesRecibidos = recv(this->ClientConnectionSocket, recvbuf, sizeDatos, 0);
 	recvbuf[cantidadBytesRecibidos] = 0;
 	string mensajeCliente(recvbuf);

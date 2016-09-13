@@ -1,4 +1,4 @@
-#include <winsock2.h>
+﻿#include <winsock2.h>
 #include <windows.h>
 #include <ws2tcpip.h>
 #include <stdlib.h>
@@ -69,8 +69,8 @@ void ThreadEnviaMensaje(void* pParams)
 
 void ThreadStatus(void* pParams)
 {
-	Client ClientePing;
-	//Env?a mensajes al servidor y setea la variable serverStatus en TRUE o FALSE
+	Client ClientePing(0);
+	//Env�a mensajes al servidor y setea la variable serverStatus en TRUE o FALSE
 	bool status = false;
 	bool errorYaLogueado = false;
 	bool serverCaido = false;
@@ -80,7 +80,7 @@ void ThreadStatus(void* pParams)
 	string ip = datos->destinatario;
 	string puerto = datos->mensaje;
 
-	ClientePing.ConectarAServidor(ip, puerto); //Env?o primero puerto e IP.
+	ClientePing.ConectarAServidor(ip, puerto); //Env�o primero puerto e IP.
 
 	while (clienteAbierto && !serverCaido)
 	{
@@ -104,11 +104,11 @@ void ThreadStatus(void* pParams)
 
 		if (!status && !errorYaLogueado)// si el server se cayo lo logueo una sola vez
 		{
-			ClientePing.EscribirLog("Conexion con el servidor terminada. (Server Offline).");
+			UnCliente.EscribirLog("Conexion con el servidor terminada. (Server Offline)."); //Uso la instancia del otro cliente para no pisar el Log
 			errorYaLogueado = true;
 		}
 		serverStatus = status;
-		Sleep(30000);
+		Sleep(30000); // pingueo cada medio segundo para ver si el server esta caido o no
 	}
 	if (serverStatus) ClientePing.EnviarMensaje("EXIT", 4); //solo tiene sentido enviar un mensaje de exit del cliente si el server no esta caido!!
 }
@@ -363,7 +363,7 @@ void LoremIpsum()
 	if (Respuesta == "SI") {
 
 		srand(time(NULL));
-		tamanio = rand() % 201; //Random entre 1 y 200, tama?o m?ximo del mensaje a enviar.
+		tamanio = rand() % 201; //Random entre 1 y 200, tama�o m�ximo del mensaje a enviar.
 
 		lectura = new char[tamanio];
 
