@@ -139,11 +139,12 @@ void MainListenThread(void* arg) {
 		if (mensaje == "ENVT")
 		{
 			string contenidoMensaje = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
+			Lista<std::string>* TodosLosUsuarios = ControlUsuarios.obtenerTodos();
 
 			// Eespera que termine de ejecutar
 			WaitForSingleObject(ghMutex, INFINITE);
 
-			UnServer.enviarATodos(contenidoMensaje, Usuario);
+			UnServer.enviarATodos(contenidoMensaje, Usuario, TodosLosUsuarios);
 
 			ReleaseMutex(ghMutex);
 

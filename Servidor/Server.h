@@ -32,7 +32,7 @@ public:
 	int EnviarMensaje(std::string mensaje, int sizeDatos, SOCKET ClientSocket);
 	int EnviarMensajeTamanoVariable(std::string mensaje, SOCKET ClientSocket);
 	void EscribirLog(std::string mensaje, bool cortar);
-	void enviarATodos(std::string contenidoMensaje, std::string emisor);
+	void enviarATodos(std::string contenidoMensaje, std::string emisor, Lista<std::string>* TodosLosUsuarios);
 	Lista<Mensaje*>* obtenerMensajesPara(std::string destinatario);
 	~Server();
 };

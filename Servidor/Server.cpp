@@ -30,14 +30,13 @@ void Server::agregarMensaje(Mensaje* unMensaje)
 	//UnMutex.unlock();
 }
 
-void Server::enviarATodos(std::string contenidoMensaje, std::string emisor)
+void Server::enviarATodos(std::string contenidoMensaje, std::string emisor, Lista<std::string>* TodosLosUsuarios)
 {
 	Usuarios* instanciaUsuarios = new Usuarios();
-	Lista<std::string>* todosLosUsuarios = instanciaUsuarios->obtenerTodos();
-	todosLosUsuarios->iniciarCursor();
-	while (todosLosUsuarios->avanzarCursor())
+	TodosLosUsuarios->iniciarCursor();
+	while (TodosLosUsuarios->avanzarCursor())
 	{
-		Mensaje* unMensaje = new Mensaje(emisor, todosLosUsuarios->obtenerCursor(), contenidoMensaje);
+		Mensaje* unMensaje = new Mensaje(emisor, TodosLosUsuarios->obtenerCursor(), contenidoMensaje);
 		//UnMutex.lock();
 		todosLosMensajes->agregar(unMensaje);
 		//UnMutex.unlock();
