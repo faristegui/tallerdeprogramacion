@@ -70,21 +70,20 @@ void ThreadEnviaMensaje(void* pParams)
 void ThreadStatus(void* pParams)
 {
 	Client ClientePing;
-	//Envía mensajes al servidor y setea la variable serverStatus en TRUE o FALSE
+	//Env?a mensajes al servidor y setea la variable serverStatus en TRUE o FALSE
 	bool status = false;
 	bool errorYaLogueado = false;
 	bool serverCaido = false;
-
-	EnvioThreadData* datos = (EnvioThreadData*) pParams;
+	int resultado = 0;
+	EnvioThreadData* datos = (EnvioThreadData*)pParams;
 
 	string ip = datos->destinatario;
 	string puerto = datos->mensaje;
 
-	ClientePing.ConectarAServidor(ip, puerto); //Envío primero puerto e IP.
+	ClientePing.ConectarAServidor(ip, puerto); //Env?o primero puerto e IP.
 
 	while (clienteAbierto && !serverCaido)
 	{
-		
 
 		if (ClientePing.EnviarMensaje("PING", 4) == -1)//si el servidor no nos responde (enviarMensaje retorna -1)
 		{
@@ -92,28 +91,26 @@ void ThreadStatus(void* pParams)
 			serverCaido = true;
 		}
 
-
 		else
 		{
 			string respuesta = ClientePing.RecibirMensaje(2);
 			if (respuesta == "OK")
 			{
 				status = true;
-				
+
 			}
 			else status = false;
 		}
-				
+
 		if (!status && !errorYaLogueado)// si el server se cayo lo logueo una sola vez
 		{
 			ClientePing.EscribirLog("Conexion con el servidor terminada. (Server Offline).");
 			errorYaLogueado = true;
 		}
 		serverStatus = status;
-		Sleep(30000); // pingueo cada medio segundo para ver si el server esta caido o no
+		Sleep(30000);
 	}
-
-	if(serverStatus) ClientePing.EnviarMensaje("EXIT", 4); //solo tiene sentido enviar un mensaje de exit del cliente si el server no esta caido!!
+	if (serverStatus) ClientePing.EnviarMensaje("EXIT", 4); //solo tiene sentido enviar un mensaje de exit del cliente si el server no esta caido!!
 }
 
 
@@ -224,23 +221,23 @@ void MenuDestinatarioMensaje(EnvioThreadData* datosOpcionEnvio)
 	string destinatario;
 	string mensaje;
 
-	while((opcion < 1) || (opcion > 2))
+	while ((opcion < 1) || (opcion > 2))
 	{
 		ClearScreen();
 		cout << "Seleccione destinatario" << endl << endl
-		<< "1- Destinatario unico" << endl
-		<< "2- Todos los usuarios" << endl;
+			<< "1- Destinatario unico" << endl
+			<< "2- Todos los usuarios" << endl;
 		cin >> opcion;
 		datosOpcionEnvio->opcion = opcion;
 	}
-	
-	switch(opcion)
+
+	switch (opcion)
 	{
 	case 1:
 	{
 		bool UsuarioValido = false;
 		UnCliente.EnviarMensaje("ENVI", 4);
-		
+
 		MostrarListaUsuarios();
 
 		while (!UsuarioValido) {
@@ -261,7 +258,7 @@ void MenuDestinatarioMensaje(EnvioThreadData* datosOpcionEnvio)
 	case 2:
 
 		UnCliente.EnviarMensaje("ENVT", 4);
-		
+
 		cin.ignore();
 		cout << "Ingrese el mensaje que desea enviar a todos los usuarios:" << endl;
 		getline(cin, mensaje);
@@ -298,7 +295,7 @@ void RecibirMensajes()
 {
 	int CantMensajes;
 	string respuestaServer;
-	string tamanioEmisor,tamanioMensaje;
+	string tamanioEmisor, tamanioMensaje;
 	UnCliente.EnviarMensaje("REC", 3);
 
 	//El servidor responde la cantidad de mensajes
@@ -321,7 +318,8 @@ void RecibirMensajes()
 
 			CantMensajes--;
 		}
-	} else {
+	}
+	else {
 		cout << "Tiene que iniciar sesion para poder recibir mensajes" << endl;
 	}
 
@@ -331,7 +329,7 @@ void RecibirMensajes()
 string obtenerDestinatario()
 {
 	string destinatario;
-	
+
 	UnCliente.EnviarMensaje("USER", 4);
 	destinatario = UnCliente.RecibirMensaje(15);
 
@@ -365,16 +363,16 @@ void LoremIpsum()
 	if (Respuesta == "SI") {
 
 		srand(time(NULL));
-		tamanio = rand() % 201; //Random entre 1 y 200, tamaño máximo del mensaje a enviar.
+		tamanio = rand() % 201; //Random entre 1 y 200, tama?o m?ximo del mensaje a enviar.
 
 		lectura = new char[tamanio];
 
-		string destinatario = "jorgito";//obtenerDestinatario();
+		string destinatario = obtenerDestinatario();
 
 		UnCliente.EscribirLog("Secuencia de envio automatico iniciada.");
 
 		FILE *archivoLoremIpsum;
-		archivoLoremIpsum = fopen("D:\\Projects\\GitHub\\tallerdeprogramacion\\loremIpsum.txt", "r"); // TODO: Arreglar path absoluto
+		archivoLoremIpsum = fopen("loremIpsum.txt", "rb"); //el directorio actual era tallerdeprogramacion/Cliente. Ahi hay que tirar el archivo
 
 		if (archivoLoremIpsum) {
 
@@ -414,12 +412,12 @@ void LoremIpsum()
 
 			pause();
 		}
+
 		else {
 
 			cout << "Archivo loremIpsum.txt no encontrado" << endl;
 			pause();
 		}
-
 	}
 	else {
 
@@ -438,10 +436,10 @@ void CerrarPrograma() {
 void mostrarMensajeServerNoDisponible(string operacion)
 {
 	ClearScreen();
-	cout << "El server se encuentra inaccesible por el momento"  << endl;
+	cout << "El server se encuentra inaccesible por el momento" << endl;
 	cout << "No se puede ejecutar la operacion de " << operacion << endl;
 	cout << endl;
-	cout << "Cierre el cliente e intente conectarse nuevamente con el server"  << endl;
+	cout << "Cierre el cliente e intente conectarse nuevamente con el server" << endl;
 	system("pause");
 	UnCliente.EscribirLog("Server inaccesible: No se puede ejecutar la operacion de " + operacion);
 }
@@ -460,14 +458,14 @@ void MenuPrincipal()
 		ClearScreen();
 		if (IsUsuarioLogueado)
 		{
-				cout << "Usuario Logueado: " << usuarioLogueado << endl << endl <<
+			cout << "Usuario Logueado: " << usuarioLogueado << endl << endl <<
 				"2- Cerrar Sesion" << endl <<
 				"3- Salir" << endl <<
 				"4- Enviar" << endl <<
 				"5- Recibir" << endl <<
 				"6- Lorem Ipsum" << endl << endl;
-				MostrarListaUsuarios();
-				cout << "Ingrese una opcion: " << endl;
+			MostrarListaUsuarios();
+			cout << "Ingrese una opcion: " << endl;
 		}
 		else
 		{
@@ -478,8 +476,8 @@ void MenuPrincipal()
 				"4- Enviar" << endl <<
 				"5- Recibir" << endl <<
 				"6- Lorem Ipsum" << endl << endl;
-				MostrarListaUsuarios();
-				cout << "Ingrese una opcion: " << endl;
+			MostrarListaUsuarios();
+			cout << "Ingrese una opcion: " << endl;
 
 		}
 
@@ -528,7 +526,7 @@ void MenuPrincipal()
 
 int main(int argc, char **argv)
 {
-	
+
 	bool conexionOk = false;
 	string ip;
 	string puerto;
@@ -568,12 +566,13 @@ int main(int argc, char **argv)
 		_beginthread(ThreadStatus, 0, (void*)datosPing);
 
 		MenuPrincipal();
-	} else {
+	}
+	else {
 
-		string MensajeError = UnCliente.RecibirMensaje(65);		
+		string MensajeError = UnCliente.RecibirMensaje(65);
 		cout << MensajeError << endl;
 		pause();
 	}
-	
+
 	return 0;
 }

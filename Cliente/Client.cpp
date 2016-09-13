@@ -129,8 +129,12 @@ int Client::EnviarMensaje(string mensaje, int sizeDatos)
 	cantidadBytesEnviados = send(this->ClientConnectionSocket, datosEnviados, sizeDatos, 0);
 	if (cantidadBytesEnviados == SOCKET_ERROR) {
 		ClearScreen();
+ 		//Entiendo que la unica posibilidad que se falle al enviar el mensaje sea porque se desconecto el servidor.
+ 		//Agregaria en el log. Debido a perdida de conexion con el servidor. que opinan? [MZ]
+ 		//Adopte esta solucion porque no se cerraba el programa cuando lo pausabamos. 
 		this->EscribirLog("Fallo al enviar mensaje.");
-		pause();
+		cout << "Se ha perdido la conexion con el servidor. El programa se cerrara en 5 segundos." << endl << endl;
+		Sleep(5000);
 		exit(0);
 	}
 	return cantidadBytesEnviados;
