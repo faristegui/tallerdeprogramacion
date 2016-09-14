@@ -1,6 +1,5 @@
 #ifndef NodoSimplementeEnlazado_H
 #define NodoSimplementeEnlazado_H
-#include <cstddef>
 template <class T>
 
 class NodoSimplementeEnlazado {
