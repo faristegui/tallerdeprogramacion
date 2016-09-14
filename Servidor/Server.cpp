@@ -10,11 +10,7 @@
 #define pause() system("pause");
 #endif
 
-//#include <mutex>
-//using namespace std;
 #define MAX_BUFFER_LENGTH 512
-//std::mutex UnMutex;
-//using namespace System::Threading;
 Server::Server()
 {
 	todosLosMensajes = new Lista<Mensaje*>;
@@ -23,11 +19,7 @@ Server::Server()
 
 void Server::agregarMensaje(Mensaje* unMensaje)
 {
-
-	//UnMutex.lock();
-	//std::cout << "El contenido es: " << unMensaje->obtenerContenido() << std::endl << std::endl;
 	todosLosMensajes->agregar(unMensaje);
-	//UnMutex.unlock();
 }
 
 void Server::enviarATodos(std::string contenidoMensaje, std::string emisor, Lista<std::string>* TodosLosUsuarios)
@@ -37,16 +29,13 @@ void Server::enviarATodos(std::string contenidoMensaje, std::string emisor, List
 	while (TodosLosUsuarios->avanzarCursor())
 	{
 		Mensaje* unMensaje = new Mensaje(emisor, TodosLosUsuarios->obtenerCursor(), contenidoMensaje);
-		//UnMutex.lock();
 		todosLosMensajes->agregar(unMensaje);
-		//UnMutex.unlock();
 	}
 
 }
 
 Lista<Mensaje*>* Server::obtenerMensajesPara(std::string destinatario)
 {
-	//UnMutex.lock();
 
 	Lista<Mensaje*>* buzon = new Lista<Mensaje*>;
 	int posicion = 1;
@@ -78,8 +67,6 @@ Lista<Mensaje*>* Server::obtenerMensajesPara(std::string destinatario)
 		vuelta++;
 	}
 
-
-	//UnMutex.unlock();
 	return buzon;
 }
 
@@ -88,10 +75,8 @@ void Server::Abrir(std::string UnPuerto) {
 	// Inicializacion de las variables
 
 	WSADATA wsaData;
-	//sockaddr_in dirSocketServidor; La comento porque est? sin referencia
 	struct addrinfo *result;
 	struct addrinfo hints;
-	//int iSendResult; La comento porque est? sin referencia
 
 	this->ListenSocket = INVALID_SOCKET;
 
@@ -138,7 +123,7 @@ void Server::Abrir(std::string UnPuerto) {
 		exit(0);
 	}
 
-	// Setup the TCP listening socket	
+	//Configuracion TCP de socket escuchando 
 	if (bind(this->ListenSocket, result->ai_addr, (int)result->ai_addrlen) == SOCKET_ERROR)
 	{
 		ClearScreen();
@@ -273,8 +258,7 @@ int Server::EnviarMensajeTamanoVariable(std::string mensaje, SOCKET ClientSocket
 int Server::EnviarMensaje(std::string mensaje, int sizeDatos, SOCKET ClientSocket)
 {
 	const char* datosEnviados = mensaje.c_str();
-	// Send an initial buffer
-	// int respuesta = send(ClientSocket, datosEnviados, (int)strlen(datosEnviados), 0);
+	// Envia un buffer inicial
 	int respuesta = send(ClientSocket, datosEnviados, sizeDatos, 0);
 	return respuesta;
 }
@@ -282,7 +266,6 @@ int Server::EnviarMensaje(std::string mensaje, int sizeDatos, SOCKET ClientSocke
 Server::~Server()
 {
 	closesocket(this->ListenSocket);
-	//std::cout << "Cerrando server: .." << WSAGetLastError() << std::endl;
 	this->EscribirLog("Servidor cerrado.", true);
 	WSACleanup();
 	logFile.close();
