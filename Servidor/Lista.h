@@ -1,6 +1,4 @@
 #include "NodoSimplementeEnlazado.h"
-#include <cstddef>
-#include <iostream>
 #ifndef _LISTA_H
 #define _LISTA_H
 //using namespace std;

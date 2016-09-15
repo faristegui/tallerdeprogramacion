@@ -209,9 +209,6 @@ std::string Client::RecibirMensajeTamanoVariable() {
 
 void Client::cerrarConexionConServer()
 {
-
-	// shutdown the connection since no more data will be sent
-
 	if (shutdown(this->ClientConnectionSocket, SD_SEND) == SOCKET_ERROR)
 	{
 		ClearScreen();

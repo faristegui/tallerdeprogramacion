@@ -123,8 +123,8 @@ void MainListenThread(void* arg) {
 		{
 			if (Usuario != "") {
 				string respuestaServer = "";
-				//En teoria espera que termine de ejecutar o como maximo los 5 segundos y libera el recurso [MZ]
-				WaitForSingleObject(ghMutex, INFINITE); //se apodera del recurso, puse 5 segundos por poner algo.
+				//Uso del recurso
+				WaitForSingleObject(ghMutex, INFINITE); 
 
 				Lista<Mensaje*>* buzon = UnServer.obtenerMensajesPara(Usuario);
 				stringstream ss;
@@ -143,6 +143,7 @@ void MainListenThread(void* arg) {
 					UnServer.EnviarMensajeTamanoVariable(ContenidoMensaje, ClientSocket);
 				}
 				ReleaseMutex(ghMutex);
+				//Liberacion del recurso
 			} else {
 
 				UnServer.EnviarMensaje("NOLOGIN", 8, ClientSocket);
