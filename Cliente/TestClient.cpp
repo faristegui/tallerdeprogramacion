@@ -106,6 +106,9 @@ void ThreadStatus(void* pParams)
 		{
 			UnCliente.EscribirLog("Conexion con el servidor terminada. (Server Offline)."); //Uso la instancia del otro cliente para no pisar el Log
 			errorYaLogueado = true;
+			cout << "Se ha perdido la conexion con el servidor. El programa se cerrara en 5 segundos." << endl << endl;
+			Sleep(5000);
+			exit(0);
 		}
 		serverStatus = status;
 		Sleep(30000); // pingueo cada medio segundo para ver si el server esta caido o no
@@ -368,6 +371,7 @@ void LoremIpsum()
 	int cantidad;
 	int milisegundos;
 	char* lectura;
+	char* tmpLectura;
 	int tamanio = 0;
 
 	string Mensaje;
@@ -383,8 +387,11 @@ void LoremIpsum()
 		tamanio = rand() % 201; //Random entre 1 y 200, tama�o m�ximo del mensaje a enviar.
 
 		lectura = new char[tamanio];
+		tmpLectura = new char[tamanio];
 
 		string destinatario = ObtenerDestinatarioRandom();
+		string tmpString1 = "";
+		string tmpString2 = "";
 
 		UnCliente.EscribirLog("Secuencia de envio automatico iniciada.");
 

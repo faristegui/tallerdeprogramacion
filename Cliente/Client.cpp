@@ -158,15 +158,22 @@ int Client::EnviarMensajeTamanoVariable(string mensaje)
 string Client::RecibirMensaje(int sizeDatos)
 {
 	int cantidadBytesRecibidos;
+	std::string mensajeServer;
 
 	cantidadBytesRecibidos = recv(this->ClientConnectionSocket, recvbuf, sizeDatos, 0);
-	recvbuf[cantidadBytesRecibidos] = 0;
-	string mensajeCliente(recvbuf);
+
+	if (cantidadBytesRecibidos > 0) {
+		recvbuf[cantidadBytesRecibidos] = 0; // 0 = NULL terminator del std::string
+		std::string tmpMsj(recvbuf);
+		mensajeServer = tmpMsj;
+	}
+	else {
+		mensajeServer = "LOST";
+	}
 
 	memset(recvbuf, 0, sizeof(recvbuf)); // Reseteo el array a 0 para no arrastrar basura
 
-	return mensajeCliente;
-
+	return mensajeServer;
 }
 
 std::string Client::RecibirMensajeTamanoVariable() {
