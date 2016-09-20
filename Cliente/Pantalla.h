@@ -15,11 +15,11 @@ public:
 	void MostrarMensaje(std::string Mensaje);
 	void IniciarJuego();
 private:
-	int ParamsPedidos = 0;
+	int ParamsPedidos;
 	Uint32  Starting_Tick;
 	SDL_Renderer *Renderer;
 	SDL_Window *Window;
-	SDL_Color COLOR_WHITE = { 255, 255, 255 };
+	SDL_Color COLOR_WHITE;
 	SDL_Event Event;
 
 	void get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::string UnTexto,

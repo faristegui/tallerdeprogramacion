@@ -6,6 +6,10 @@
 
 Pantalla::Pantalla()
 {
+	ParamsPedidos = 0;
+	COLOR_WHITE.r = 255;
+	COLOR_WHITE.g = 255;
+	COLOR_WHITE.b = 255;
 	SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();
 
