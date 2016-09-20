@@ -12,6 +12,7 @@
 // Para ToLower
 #include <algorithm>
 
+
 using namespace std;
 
 //Se necesita linkear con Ws2_32.lib, Mswsock.lib, and Advapi32.lib
@@ -70,7 +71,7 @@ void ThreadEnviaMensaje(void* pParams)
 void ThreadStatus(void* pParams)
 {
 	Client ClientePing(0);
-	//Env�a mensajes al servidor y setea la variable serverStatus en TRUE o FALSE
+	//Envia mensajes al servidor y setea la variable serverStatus en TRUE o FALSE
 	bool status = false;
 	bool errorYaLogueado = false;
 	bool serverCaido = false;
@@ -547,8 +548,8 @@ void MenuPrincipal()
 
 	MenuPrincipal();
 }
-
-int main(int argc, char **argv)
+/*
+int main(int argc, char* args[])
 {
 
 	bool conexionOk = false;
@@ -615,3 +616,4 @@ int main(int argc, char **argv)
 
 	return 0;
 }
+*/
