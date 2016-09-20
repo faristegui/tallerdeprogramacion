@@ -152,6 +152,15 @@ void Pantalla::IniciarJuego() {
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
 					Ball_Rect.x += 20;
 				}
+				if (Event.key.keysym.sym == SDLK_LEFT) {
+					Ball_Rect.x -= 20;
+				}
+				if (Event.key.keysym.sym == SDLK_UP) {
+					Ball_Rect.y -= 20;
+				}
+				if (Event.key.keysym.sym == SDLK_DOWN) {
+					Ball_Rect.y += 20;
+				}
 			}
 
 		}
