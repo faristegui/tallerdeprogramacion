@@ -11,8 +11,9 @@ public:
 	Pantalla();
 	~Pantalla();
 
-	std::string PedirParametro(std::string NombreParametro, std::string ValorXDefecto);
-	void MostrarMensaje(std::string Mensaje);
+	std::string PedirParametro(std::string NombreParametro, std::string ValorXDefecto, int posX, int posY);
+	void MostrarMenu();
+	void MostrarMensaje(std::string Mensaje, int posX, int posY);
 	void IniciarJuego();
 private:
 	int ParamsPedidos;

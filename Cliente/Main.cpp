@@ -63,16 +63,16 @@ void PedirParametrosConexion() {
 	std::string IP;
 	std::string Puerto;
 	std::string Respuesta;
-
+	std::string entrar;
 	while (!ConexionOk) {
 
-		IP = UnaPantalla.PedirParametro("IP", "localhost");
-		Puerto = UnaPantalla.PedirParametro("Puerto", "1000");
+		IP = UnaPantalla.PedirParametro("Ingrese IP", "localhost", 150, 250);
+		Puerto = UnaPantalla.PedirParametro("Ingrese Puerto", "1000", 150, 270);
 
-		ConexionOk = UnCliente2.ConectarAServidor(IP, Puerto);
+		ConexionOk = UnCliente2.ConectarAServidor(IP,Puerto);
 
 		if (!ConexionOk) {
-			UnaPantalla.MostrarMensaje("Ha habido un error al intentar conectarse");
+			UnaPantalla.MostrarMensaje("Ha habido un error al intentar conectarse",100,250);
 		}
 	}
 
@@ -109,26 +109,28 @@ bool UsuarioYPassValidos() {
 	// Pido usuario
 	Parametro = "";
 	while (Parametro == "") {
-		Parametro = UnaPantalla.PedirParametro("Usuario", "");
+		Parametro = UnaPantalla.PedirParametro("Usuario", "", 0, 0);
 	}
 	UnCliente2.EnviarMensaje(Parametro, 15);
 	// Pido contrasena
 	Parametro = "";
 	while (Parametro == "") {
-		Parametro = UnaPantalla.PedirParametro("Contrasena", "");
+		Parametro = UnaPantalla.PedirParametro("Contrasena", "", 0, 0);
 	}
 	UnCliente2.EnviarMensaje(Parametro, 15);
 
 	CodigoRespuesta = UnCliente2.RecibirMensaje(3);
 	UnCliente2.EscribirLog("Autorizar usuario. Mensaje del servidor: " + Respuesta + ".");
 	Respuesta = UnCliente2.RecibirMensaje(40);
-	UnaPantalla.MostrarMensaje(Respuesta);
+	UnaPantalla.MostrarMensaje(Respuesta,100,400);
 
 	return (CodigoRespuesta == "000");
 }
 
 int main(int argc, char* args[])
 {
+	//UnaPantalla.MostrarMenu();
+
 	PedirParametrosConexion();
 
 	if (UsuarioYPassValidos()) {

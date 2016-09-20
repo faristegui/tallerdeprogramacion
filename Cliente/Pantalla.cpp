@@ -1,7 +1,7 @@
 #include "Pantalla.h"
 
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
 #define FPS 30
 
 Pantalla::Pantalla()
@@ -36,11 +36,11 @@ void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::stri
 	int text_width = 0;
 	int text_height = 0;
 	SDL_Surface *surface;
-	SDL_Color textColor = { 255, 255, 255, 0 };
+	SDL_Color textColor = { 255, 255, 255, 50 };
 
-	TTF_Font* Arial = TTF_OpenFont("Arial.ttf", 24); //this opens a font style and sets a size
+	TTF_Font* Fuente = TTF_OpenFont("start.ttf", 15); //this opens a font style and sets a size
 
-	surface = TTF_RenderText_Solid(Arial, UnTexto.c_str(), textColor);
+	surface = TTF_RenderText_Solid(Fuente, UnTexto.c_str(), textColor);
 	*texture = SDL_CreateTextureFromSurface(renderer, surface);
 	if (surface != NULL) {
 		text_width = surface->w;
@@ -53,7 +53,7 @@ void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::stri
 	rect->h = text_height;
 }
 
-void Pantalla::MostrarMensaje(std::string Mensaje) {
+void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 	SDL_Rect Message_Rect;
 	SDL_Texture* Message;
 	std::string tmp;
@@ -63,7 +63,7 @@ void Pantalla::MostrarMensaje(std::string Mensaje) {
 	get_text_and_rect(Renderer, 0, 0, Mensaje.c_str(), &Message, &Message_Rect);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 	Mensaje = "Presione cualquier tecla para continuar...";
-	get_text_and_rect(Renderer, 0, 20, Mensaje.c_str(), &Message, &Message_Rect);
+	get_text_and_rect(Renderer, 0, 18, Mensaje.c_str(), &Message, &Message_Rect);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 	SDL_RenderPresent(Renderer);
 
@@ -81,7 +81,22 @@ void Pantalla::MostrarMensaje(std::string Mensaje) {
 	}
 }
 
-std::string Pantalla::PedirParametro(std::string NombreParametro, std::string ValorXDefecto) {
+void Pantalla::MostrarMenu() {
+	SDL_Texture *background = IMG_LoadTexture(Renderer, "images/start.bmp");
+	SDL_Rect background_Rect;
+
+	background_Rect.x = 0;
+	background_Rect.y = 0;
+	background_Rect.w = 800;
+	background_Rect.h = 600;
+	SDL_RenderClear(Renderer);
+
+	SDL_RenderCopy(Renderer, background, NULL, &background_Rect);
+
+	SDL_RenderPresent(Renderer);
+}
+
+std::string Pantalla::PedirParametro(std::string NombreParametro, std::string ValorXDefecto, int posX, int posY) {
 	std::string UnTexto = ValorXDefecto;
 	bool ParamValido = false;
 	SDL_Rect Message_Rect;
@@ -117,10 +132,13 @@ std::string Pantalla::PedirParametro(std::string NombreParametro, std::string Va
 
 		SDL_RenderClear(Renderer);
 
-		get_text_and_rect(Renderer, 0, 0, NombreParametro.c_str(), &Message, &Message_Rect);
+		get_text_and_rect(Renderer, posX, posY, NombreParametro.c_str(), &Message, &Message_Rect);
 		SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
-		get_text_and_rect(Renderer, Message_Rect.w + 10, 0, UnTexto.c_str(), &Message, &Message_Rect);
+		get_text_and_rect(Renderer, Message_Rect.w + 10, posY, UnTexto.c_str(), &Message, &Message_Rect);
 		SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
+		
+		SDL_SetTextureBlendMode(Message, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureAlphaMod(Message, 150);
 
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);
