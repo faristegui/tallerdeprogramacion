@@ -69,8 +69,8 @@ void PedirParametrosConexion() {
 	std::string entrar;
 	while (!ConexionOk) {
 
-		IP = UnaPantalla.PedirParametro("Ingrese IP", "localhost", 180, 270);
-		Puerto = UnaPantalla.PedirParametro("Ingrese Puerto", "1000", 180, 270);
+		IP = UnaPantalla.PedirParametro("Ingrese IP", "localhost", 190, 270);
+		Puerto = UnaPantalla.PedirParametro("Ingrese Puerto", "1000", 190, 270);
 
 		ConexionOk = UnCliente2.ConectarAServidor(IP,Puerto);
 
