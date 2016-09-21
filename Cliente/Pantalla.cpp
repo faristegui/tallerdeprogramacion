@@ -42,6 +42,7 @@ void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::stri
 	TTF_Font* Fuente = TTF_OpenFont("start.ttf", fontSize); //this opens a font style and sets a size
 
 	surface = TTF_RenderText_Solid(Fuente, UnTexto.c_str(), textColor);
+
 	*texture = SDL_CreateTextureFromSurface(renderer, surface);
 	if (surface != NULL) {
 		text_width = surface->w;
