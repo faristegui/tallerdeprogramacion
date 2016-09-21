@@ -129,7 +129,7 @@ bool UsuarioYPassValidos() {
 
 int main(int argc, char* args[])
 {
-	//UnaPantalla.MostrarMenu();
+	UnaPantalla.MostrarMenu();
 
 	PedirParametrosConexion();
 

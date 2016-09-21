@@ -36,7 +36,7 @@ void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::stri
 	int text_width = 0;
 	int text_height = 0;
 	SDL_Surface *surface;
-	SDL_Color textColor = { 255, 255, 255, 50 };
+	SDL_Color textColor = { 255, 255, 255, 0 };
 
 	TTF_Font* Fuente = TTF_OpenFont("start.ttf", 15); //this opens a font style and sets a size
 
@@ -60,7 +60,7 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 	bool Sale = false;
 	
 	SDL_RenderClear(Renderer);
-	get_text_and_rect(Renderer, 0, 0, Mensaje.c_str(), &Message, &Message_Rect);
+	get_text_and_rect(Renderer, posX, posY, Mensaje.c_str(), &Message, &Message_Rect);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 	Mensaje = "Presione cualquier tecla para continuar...";
 	get_text_and_rect(Renderer, 0, 18, Mensaje.c_str(), &Message, &Message_Rect);
@@ -131,14 +131,11 @@ std::string Pantalla::PedirParametro(std::string NombreParametro, std::string Va
 		}
 
 		SDL_RenderClear(Renderer);
-
+		
 		get_text_and_rect(Renderer, posX, posY, NombreParametro.c_str(), &Message, &Message_Rect);
 		SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
-		get_text_and_rect(Renderer, Message_Rect.w + 10, posY, UnTexto.c_str(), &Message, &Message_Rect);
+		get_text_and_rect(Renderer, posX + Message_Rect.w + 10, posY, UnTexto.c_str(), &Message, &Message_Rect);
 		SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
-		
-		SDL_SetTextureBlendMode(Message, SDL_BLENDMODE_BLEND);
-		SDL_SetTextureAlphaMod(Message, 150);
 
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);
@@ -151,6 +148,7 @@ void Pantalla::IniciarJuego() {
 
 	SDL_Texture *Ball = IMG_LoadTexture(Renderer, "Sprite.bmp");
 	SDL_Rect Ball_Rect;
+
 
 	Ball_Rect.x = 10;
 	Ball_Rect.y = 10;
