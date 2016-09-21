@@ -12,7 +12,7 @@ public:
 	~Pantalla();
 
 	std::string PedirParametro(std::string NombreParametro, std::string ValorXDefecto, int posX, int posY);
-	void MostrarMenu();
+	SDL_Rect crearFondo(char* path);
 	void MostrarMensaje(std::string Mensaje, int posX, int posY);
 	void IniciarJuego();
 private:
@@ -26,7 +26,7 @@ private:
 	SDL_Event Event;
 
 	void get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::string UnTexto,
-		SDL_Texture **texture, SDL_Rect *rect);
+		SDL_Texture **texture, SDL_Rect *rect, int fontSize);
 	void WaitFPS(Uint32 starting_tick);
 };
 

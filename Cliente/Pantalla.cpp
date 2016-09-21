@@ -32,14 +32,14 @@ void Pantalla::WaitFPS(Uint32 starting_tick) {
 }
 
 void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::string UnTexto,
-	SDL_Texture **texture, SDL_Rect *rect) {
+	SDL_Texture **texture, SDL_Rect *rect, int fontSize) {
 
 	int text_width = 0;
 	int text_height = 0;
 	SDL_Surface *surface;
 	SDL_Color textColor = { 255, 255, 255, 0 };
 
-	TTF_Font* Fuente = TTF_OpenFont("start.ttf", 15); //this opens a font style and sets a size
+	TTF_Font* Fuente = TTF_OpenFont("start.ttf", fontSize); //this opens a font style and sets a size
 
 	surface = TTF_RenderText_Solid(Fuente, UnTexto.c_str(), textColor);
 	*texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -60,11 +60,16 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 	std::string tmp;
 	bool Sale = false;
 	
+	SDL_Rect back = this->crearFondo("images/partida.bmp");
+
 	SDL_RenderClear(Renderer);
-	get_text_and_rect(Renderer, posX, posY, Mensaje.c_str(), &Message, &Message_Rect);
+
+	SDL_RenderCopy(Renderer, texture, NULL, &back);
+
+	get_text_and_rect(Renderer, posX, posY, Mensaje.c_str(), &Message, &Message_Rect, 26);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
-	Mensaje = "Presione cualquier tecla para continuar...";
-	get_text_and_rect(Renderer, 0, 18, Mensaje.c_str(), &Message, &Message_Rect);
+	Mensaje = "¡¡Press START!!";
+	get_text_and_rect(Renderer, 170, 370, Mensaje.c_str(), &Message, &Message_Rect, 30);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 	SDL_RenderPresent(Renderer);
 
@@ -81,14 +86,10 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 		}
 	}
 }
-void Pantalla::MostrarMenu() {
-	//Logre trasponer el fondo con la imagen del juego, habria que ver como se aplica 
-	//(el efecto de transposicion) cuando hay que regenerar la imagen con texto [MZ]
 
-	//creo el fondo que contiene la imagen
-	background = SDL_LoadBMP("images/start.bmp");
+SDL_Rect Pantalla::crearFondo(char* path) {
+	background = SDL_LoadBMP(path);
 
-	//creo el marco del fondo, con la resolucion de pantalla: 800 x 600
 	SDL_Rect background_Rect;
 
 	background_Rect.x = 0;
@@ -96,25 +97,9 @@ void Pantalla::MostrarMenu() {
 	background_Rect.w = 800;
 	background_Rect.h = 600;
 	
-	//creo la textura, es decir, la fusion del fondo negro con la imagen del juego
 	texture = SDL_CreateTextureFromSurface(Renderer,background);
 
-	//aplico el efecto de transparencia del fondo con la imagen
-	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_ADD);
-	SDL_SetTextureAlphaMod(texture,100);
-
-	//creo que es para asentar el color del fondo
-	SDL_RenderClear(Renderer);
-
-	//genero la imagen de la ventana
-	SDL_RenderCopy(Renderer, texture, NULL, &background_Rect);
-
-	//la muestra en pantalla
-	SDL_RenderPresent(Renderer);
-
-	//agrego un delay para que se vea
-	SDL_Delay(5000);
-	
+	return background_Rect;
 }
 
 std::string Pantalla::PedirParametro(std::string NombreParametro, std::string ValorXDefecto, int posX, int posY) {
@@ -122,6 +107,8 @@ std::string Pantalla::PedirParametro(std::string NombreParametro, std::string Va
 	bool ParamValido = false;
 	SDL_Rect Message_Rect;
 	SDL_Texture* Message;
+
+	SDL_Rect back = this->crearFondo("images/start.bmp");
 
 	NombreParametro = NombreParametro + ":";
 
@@ -153,12 +140,16 @@ std::string Pantalla::PedirParametro(std::string NombreParametro, std::string Va
 
 		SDL_RenderClear(Renderer);
 		
-		get_text_and_rect(Renderer, posX, posY, NombreParametro.c_str(), &Message, &Message_Rect);
+		SDL_RenderCopy(Renderer, texture, NULL, &back);
+
+		get_text_and_rect(Renderer, posX, posY, NombreParametro.c_str(), &Message, &Message_Rect, 16);
 		SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
-		get_text_and_rect(Renderer, posX + Message_Rect.w + 10, posY, UnTexto.c_str(), &Message, &Message_Rect);
+		// Ingresa el parámetro
+		get_text_and_rect(Renderer, posX + Message_Rect.w + 10, posY, UnTexto.c_str(), &Message, &Message_Rect, 16);
 		SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 
 		WaitFPS(Starting_Tick);
+
 		SDL_RenderPresent(Renderer);
 	}
 
@@ -170,6 +161,8 @@ void Pantalla::IniciarJuego() {
 	SDL_Texture *Ball = IMG_LoadTexture(Renderer, "Sprite.bmp");
 	SDL_Rect Ball_Rect;
 
+	// Imagen para el escenario del juego
+	SDL_Rect back = this->crearFondo("images/escenario.bmp");
 
 	Ball_Rect.x = 10;
 	Ball_Rect.y = 10;
@@ -209,8 +202,10 @@ void Pantalla::IniciarJuego() {
 		SDL_RenderClear(Renderer);
 
 		//SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
+		SDL_RenderCopy(Renderer, texture, NULL, &back);
+		
 		SDL_RenderCopy(Renderer, Ball, NULL, &Ball_Rect);
-
+		
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);
 	}

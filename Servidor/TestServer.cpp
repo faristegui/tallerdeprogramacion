@@ -59,7 +59,7 @@ void MainListenThread(void* arg) {
 				Usuario = UsuarioMsj;
 
 				CodigoRespuesta = "000";
-				MensajeRespuesta = "Bienvenido, " + Usuario;
+				MensajeRespuesta = "Player: " + Usuario;
 
 				UnServer.EscribirLog("Usuario " + Usuario + " logueado correctamente.", true);
 			}

@@ -69,8 +69,8 @@ void PedirParametrosConexion() {
 	std::string entrar;
 	while (!ConexionOk) {
 
-		IP = UnaPantalla.PedirParametro("Ingrese IP", "localhost", 150, 250);
-		Puerto = UnaPantalla.PedirParametro("Ingrese Puerto", "1000", 150, 270);
+		IP = UnaPantalla.PedirParametro("Ingrese IP", "localhost", 180, 270);
+		Puerto = UnaPantalla.PedirParametro("Ingrese Puerto", "1000", 180, 270);
 
 		ConexionOk = UnCliente2.ConectarAServidor(IP,Puerto);
 
@@ -112,31 +112,28 @@ bool UsuarioYPassValidos() {
 	// Pido usuario
 	Parametro = "";
 	while (Parametro == "") {
-		Parametro = UnaPantalla.PedirParametro("Usuario", "", 0, 0);
+		Parametro = UnaPantalla.PedirParametro("Usuario", "", 230, 270);
 	}
 	UnCliente2.EnviarMensaje(Parametro, 15);
 	// Pido contrasena
 	Parametro = "";
 	while (Parametro == "") {
-		Parametro = UnaPantalla.PedirParametro("Contrasena", "", 0, 0);
+		Parametro = UnaPantalla.PedirParametro("Contrasena", "", 230, 270);
 	}
 	UnCliente2.EnviarMensaje(Parametro, 15);
 
 	CodigoRespuesta = UnCliente2.RecibirMensaje(3);
 	UnCliente2.EscribirLog("Autorizar usuario. Mensaje del servidor: " + Respuesta + ".");
 	Respuesta = UnCliente2.RecibirMensaje(40);
-	UnaPantalla.MostrarMensaje(Respuesta,100,400);
+	UnaPantalla.MostrarMensaje(Respuesta,190,300);
 
 	return (CodigoRespuesta == "000");
 }
 
 int main(int argc, char* args[])
 {
-	
-	UnaPantalla.MostrarMenu();
-
 	PedirParametrosConexion();
-	
+
 	if (UsuarioYPassValidos()) {
 
 		UnaPantalla.IniciarJuego();
