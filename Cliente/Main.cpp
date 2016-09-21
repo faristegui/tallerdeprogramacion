@@ -4,6 +4,9 @@
 Client UnCliente2;
 Pantalla UnaPantalla;
 
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
+
 struct ParametrosThread
 {
 	int Entero1;
@@ -129,15 +132,15 @@ bool UsuarioYPassValidos() {
 
 int main(int argc, char* args[])
 {
+	
 	UnaPantalla.MostrarMenu();
 
 	PedirParametrosConexion();
-
+	
 	if (UsuarioYPassValidos()) {
 
 		UnaPantalla.IniciarJuego();
 		//UnaPantalla.IniciarJuego(UnCliente); TODO: Enviarle cliente para enviar msjs de acuerdo a los eventos
 	}
-
 	return 0;
 }

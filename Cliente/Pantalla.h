@@ -20,6 +20,8 @@ private:
 	Uint32  Starting_Tick;
 	SDL_Renderer *Renderer;
 	SDL_Window *Window;
+	SDL_Texture *texture;
+	SDL_Surface *background;
 	SDL_Color COLOR_WHITE;
 	SDL_Event Event;
 

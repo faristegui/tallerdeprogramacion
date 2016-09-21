@@ -16,7 +16,8 @@ Pantalla::Pantalla()
 	// Create an application window with the following settings:
 	Window = SDL_CreateWindow("Metal Slug", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
 	Renderer = SDL_CreateRenderer(Window, -1, SDL_RENDERER_ACCELERATED);
-
+	//Seteo el color del render (negro)
+	SDL_SetRenderDrawColor(Renderer,0,0,0,255);
 	if (Window == NULL) {
 		// TODO: Log "Could not create window"
 	}
@@ -80,20 +81,40 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 		}
 	}
 }
-
 void Pantalla::MostrarMenu() {
-	SDL_Texture *background = IMG_LoadTexture(Renderer, "images/start.bmp");
+	//Logre trasponer el fondo con la imagen del juego, habria que ver como se aplica 
+	//(el efecto de transposicion) cuando hay que regenerar la imagen con texto [MZ]
+
+	//creo el fondo que contiene la imagen
+	background = SDL_LoadBMP("images/start.bmp");
+
+	//creo el marco del fondo, con la resolucion de pantalla: 800 x 600
 	SDL_Rect background_Rect;
 
 	background_Rect.x = 0;
 	background_Rect.y = 0;
 	background_Rect.w = 800;
 	background_Rect.h = 600;
+	
+	//creo la textura, es decir, la fusion del fondo negro con la imagen del juego
+	texture = SDL_CreateTextureFromSurface(Renderer,background);
+
+	//aplico el efecto de transparencia del fondo con la imagen
+	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_ADD);
+	SDL_SetTextureAlphaMod(texture,100);
+
+	//creo que es para asentar el color del fondo
 	SDL_RenderClear(Renderer);
 
-	SDL_RenderCopy(Renderer, background, NULL, &background_Rect);
+	//genero la imagen de la ventana
+	SDL_RenderCopy(Renderer, texture, NULL, &background_Rect);
 
+	//la muestra en pantalla
 	SDL_RenderPresent(Renderer);
+
+	//agrego un delay para que se vea
+	SDL_Delay(5000);
+	
 }
 
 std::string Pantalla::PedirParametro(std::string NombreParametro, std::string ValorXDefecto, int posX, int posY) {
