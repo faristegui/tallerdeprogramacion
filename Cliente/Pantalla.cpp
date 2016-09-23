@@ -1,15 +1,19 @@
 #include "Pantalla.h"
-
+#include <sstream>
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 #define FPS 30
 
-Pantalla::Pantalla()
+using namespace std;
+
+Pantalla::Pantalla(Client* unCliente)
 {
 	ParamsPedidos = 0;
 	COLOR_WHITE.r = 255;
 	COLOR_WHITE.g = 255;
 	COLOR_WHITE.b = 255;
+	bolaPos =  new Posicion();
+	cliente = unCliente;
 	SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();
 
@@ -157,11 +161,17 @@ std::string Pantalla::PedirParametro(std::string NombreParametro, std::string Va
 	return UnTexto;
 }
 
+Posicion* Pantalla::obtenerPosicion()
+{
+	return bolaPos;
+}
+
 void Pantalla::IniciarJuego() {
 
 	SDL_Texture *Ball = IMG_LoadTexture(Renderer, "Sprite.bmp");
 	SDL_Rect Ball_Rect;
-
+	string respuestaServer = "1";
+	int movimiento = -1;
 	// Imagen para el escenario del juego
 	SDL_Rect back = this->crearFondo("images/escenario.bmp");
 
@@ -169,6 +179,7 @@ void Pantalla::IniciarJuego() {
 	Ball_Rect.y = 10;
 	Ball_Rect.w = 64;
 	Ball_Rect.h = 64;
+
 	bool GameRunning = true;
 
 	while (GameRunning) {
@@ -186,20 +197,77 @@ void Pantalla::IniciarJuego() {
 			if (Event.type == SDL_KEYDOWN) {
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
 					Ball_Rect.x += 20;
+					movimiento = 1;
 				}
 				if (Event.key.keysym.sym == SDLK_LEFT) {
 					Ball_Rect.x -= 20;
+					movimiento = 2;
 				}
 				if (Event.key.keysym.sym == SDLK_UP) {
 					Ball_Rect.y -= 20;
+					movimiento = 3;
 				}
 				if (Event.key.keysym.sym == SDLK_DOWN) {
 					Ball_Rect.y += 20;
+					movimiento = 4;
 				}
+				//Envio posicion actual
+				cliente->EnviarMensaje("ENVI",4);
+				cliente->EnviarMensaje("fulano", 15);
+
+				std::stringstream convertir;
+				convertir << movimiento;
+				cliente->EnviarMensajeTamanoVariable(convertir.str());
+				/*
+				bolaPos->x = Ball_Rect.x;
+				bolaPos->y = Ball_Rect.y;
+				Probablemente haga falta NO BORRAR
+				string coordenadas = "";
+				std::stringstream convertir;
+				convertir << bolaPos->x;
+				coordenadas = convertir.str();
+				convertir.str("");
+				coordenadas += " ";
+
+				convertir << bolaPos->y;
+				
+				coordenadas += convertir.str();
+				*/
+				
 			}
 
 		}
 
+		//Actualizacion posicion rival
+			cliente->EnviarMensaje("REC",3);
+			respuestaServer = cliente->RecibirMensaje(8);
+			if(stoi(respuestaServer) > 0)
+			{
+				string UsuarioEmisor = cliente->RecibirMensaje(15);
+				string ContenidoMensaje = cliente->RecibirMensajeTamanoVariable();
+
+				switch (stoi(ContenidoMensaje))
+				{
+					case 1:
+						Ball_Rect.x += 20;
+						break;
+					case 2:
+						Ball_Rect.x -= 20;
+						break;
+					case 3:
+						Ball_Rect.y -= 20;
+						break;
+					case 4: 
+						Ball_Rect.y += 20;
+						break;
+					default:
+						break;
+				}
+
+			}
+			respuestaServer = "";
+			
+		
 		SDL_RenderClear(Renderer);
 
 		//SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);

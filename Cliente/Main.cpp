@@ -2,7 +2,7 @@
 #include "Client.h"
 
 Client UnCliente2;
-Pantalla UnaPantalla;
+Pantalla UnaPantalla(&UnCliente2);
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
