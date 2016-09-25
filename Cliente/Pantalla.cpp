@@ -168,12 +168,16 @@ Posicion* Pantalla::obtenerPosicion()
 
 void Pantalla::IniciarJuego() {
 
-	SDL_Texture *Ball = IMG_LoadTexture(Renderer, "Sprite.bmp");
+	SDL_Surface *SurfaceBall = IMG_Load("Sprite.bmp");
+	SDL_SetColorKey(SurfaceBall, SDL_TRUE, SDL_MapRGB(SurfaceBall->format, 128, 255, 0));
+	SDL_Texture *Ball = SDL_CreateTextureFromSurface(Renderer, SurfaceBall); //IMG_LoadTexture(Renderer, "Sprite.bmp");
 	SDL_Rect Ball_Rect;
 	string respuestaServer = "1";
 	int movimiento = -1;
 	// Imagen para el escenario del juego
 	SDL_Rect back = this->crearFondo("images/escenario.bmp");
+
+	
 
 	Ball_Rect.x = 10;
 	Ball_Rect.y = 10;
