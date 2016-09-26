@@ -66,7 +66,7 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 	std::string tmp;
 	bool Sale = false;
 	
-	SDL_Rect back = this->crearFondo("ClientResources/partida.bmp");
+	SDL_Rect back = this->crearFondo("ClientResources/partida.bmp",800,600);
 
 	SDL_RenderClear(Renderer);
 
@@ -93,15 +93,15 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 	}
 }
 
-SDL_Rect Pantalla::crearFondo(char* path) {
+SDL_Rect Pantalla::crearFondo(char* path, int width, int heigth) {
 	background = SDL_LoadBMP(path);
 
 	SDL_Rect background_Rect;
 
 	background_Rect.x = 0;
 	background_Rect.y = 0;
-	background_Rect.w = 800;
-	background_Rect.h = 600;
+	background_Rect.w = width;
+	background_Rect.h = heigth;
 	
 	texture = SDL_CreateTextureFromSurface(Renderer,background);
 
@@ -114,7 +114,7 @@ std::string Pantalla::PedirParametro(std::string NombreParametro, std::string Va
 	SDL_Rect Message_Rect;
 	SDL_Texture* Message;
 
-	SDL_Rect back = this->crearFondo("ClientResources/start.bmp");
+	SDL_Rect back = this->crearFondo("ClientResources/start.bmp",800,600);
 
 	NombreParametro = NombreParametro + ":";
 
@@ -189,8 +189,8 @@ void Pantalla::IniciarJuego() {
 	Player_Rect.w = 64;
 	Player_Rect.h = 64;
 
-	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario.bmp"); // Imagen para el escenario del juego
-	
+	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario.bmp", 800, 600); // Imagen para el escenario del juego
+
 	bool GameRunning = true;
 
 	while (GameRunning) {

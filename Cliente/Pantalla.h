@@ -18,7 +18,7 @@ public:
 	~Pantalla();
 
 	std::string PedirParametro(std::string NombreParametro, std::string ValorXDefecto, int posX, int posY);
-	SDL_Rect crearFondo(char* path);
+	SDL_Rect crearFondo(char* path, int width, int heigth);
 	void MostrarMensaje(std::string Mensaje, int posX, int posY);
 	void IniciarJuego();
 	Posicion* obtenerPosicion();
