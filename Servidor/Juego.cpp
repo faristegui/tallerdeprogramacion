@@ -25,13 +25,11 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 int Juego::GetIndexUsuario(std::string Usuario) {
 	Usuario = ToLowerCase(Usuario);
 	
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < CantJugadores; i++) {
 
-		if (Jugadores[i]) {
-			if (ToLowerCase(Jugadores[i]->GetNombre()) == Usuario) {
+		if (ToLowerCase(Jugadores[i]->GetNombre()) == Usuario) {
 
-				return i;
-			}
+			return i;
 		}
 	}
 
