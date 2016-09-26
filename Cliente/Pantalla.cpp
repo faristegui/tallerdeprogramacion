@@ -44,7 +44,7 @@ void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::stri
 	SDL_Surface *surface;
 	SDL_Color textColor = { 255, 255, 255, 0 };
 
-	TTF_Font* Fuente = TTF_OpenFont("start.ttf", fontSize); //this opens a font style and sets a size
+	TTF_Font* Fuente = TTF_OpenFont("ClientResources/start.ttf", fontSize); //this opens a font style and sets a size
 
 	surface = TTF_RenderText_Solid(Fuente, UnTexto.c_str(), textColor);
 
@@ -66,7 +66,7 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 	std::string tmp;
 	bool Sale = false;
 	
-	SDL_Rect back = this->crearFondo("images/partida.bmp");
+	SDL_Rect back = this->crearFondo("ClientResources/partida.bmp");
 
 	SDL_RenderClear(Renderer);
 
@@ -114,7 +114,7 @@ std::string Pantalla::PedirParametro(std::string NombreParametro, std::string Va
 	SDL_Rect Message_Rect;
 	SDL_Texture* Message;
 
-	SDL_Rect back = this->crearFondo("images/start.bmp");
+	SDL_Rect back = this->crearFondo("ClientResources/start.bmp");
 
 	NombreParametro = NombreParametro + ":";
 
@@ -171,15 +171,15 @@ Posicion* Pantalla::obtenerPosicion()
 void Pantalla::CargarSpritesJugadores() {
 	SDL_Surface *TmpSurface;
 	// Cargo bola roja
-	TmpSurface = IMG_Load("PlayerRed.bmp");
+	TmpSurface = IMG_Load("ClientResources/PlayerRed.bmp");
 	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
 	PlayerRed = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
 	// Cargo bola azul
-	TmpSurface = IMG_Load("PlayerBlue.bmp");
+	TmpSurface = IMG_Load("ClientResources/PlayerBlue.bmp");
 	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
 	PlayerBlue = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
 	// Cargo bola amarilla
-	TmpSurface = IMG_Load("PlayerYellow.bmp");
+	TmpSurface = IMG_Load("ClientResources/PlayerYellow.bmp");
 	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
 	PlayerYellow = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
 }
@@ -189,7 +189,7 @@ void Pantalla::IniciarJuego() {
 	Player_Rect.w = 64;
 	Player_Rect.h = 64;
 
-	SDL_Rect Back_Rect = crearFondo("images/escenario.bmp"); // Imagen para el escenario del juego
+	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario.bmp"); // Imagen para el escenario del juego
 	
 	bool GameRunning = true;
 
