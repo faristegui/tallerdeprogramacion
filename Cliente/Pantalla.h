@@ -36,5 +36,8 @@ private:
 	void get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::string UnTexto,
 		SDL_Texture **texture, SDL_Rect *rect, int fontSize);
 	void WaitFPS(Uint32 starting_tick);
+	void CargarSpritesJugadores();
+	SDL_Texture *PlayerRed;
+	SDL_Texture *PlayerBlue;
 };
 

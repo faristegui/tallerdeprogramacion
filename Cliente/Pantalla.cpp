@@ -25,6 +25,7 @@ Pantalla::Pantalla(Client* unCliente)
 	if (Window == NULL) {
 		// TODO: Log "Could not create window"
 	}
+	CargarSpritesJugadores();
 }
 
 void Pantalla::WaitFPS(Uint32 starting_tick) {
@@ -167,22 +168,25 @@ Posicion* Pantalla::obtenerPosicion()
 	return bolaPos;
 }
 
+void Pantalla::CargarSpritesJugadores() {
+	SDL_Surface *TmpSurface;
+	// Cargo bola roja
+	TmpSurface = IMG_Load("PlayerRed.bmp");
+	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
+	PlayerRed = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
+	// Cargo bola azul
+	TmpSurface = IMG_Load("PlayerBlue.bmp");
+	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
+	PlayerBlue = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
+}
+
 void Pantalla::IniciarJuego() {
+	SDL_Rect Player_Rect;
+	Player_Rect.w = 64;
+	Player_Rect.h = 64;
 
-	SDL_Surface *SurfaceBall = IMG_Load("Sprite.bmp");
-	SDL_SetColorKey(SurfaceBall, SDL_TRUE, SDL_MapRGB(SurfaceBall->format, 128, 255, 0));
-	SDL_Texture *Ball = SDL_CreateTextureFromSurface(Renderer, SurfaceBall); //IMG_LoadTexture(Renderer, "Sprite.bmp");
-	SDL_Rect Ball_Rect;
-	string respuestaServer = "1";
-	int movimiento = -1;
-	// Imagen para el escenario del juego
-	SDL_Rect Back_Rect = this->crearFondo("images/escenario.bmp");	
-
-	Ball_Rect.x = 10;
-	Ball_Rect.y = 10;
-	Ball_Rect.w = 64;
-	Ball_Rect.h = 64;
-
+	SDL_Rect Back_Rect = crearFondo("images/escenario.bmp"); // Imagen para el escenario del juego
+	
 	bool GameRunning = true;
 
 	while (GameRunning) {
@@ -222,18 +226,29 @@ void Pantalla::IniciarJuego() {
 
 		}
 
-		cliente->EnviarMensaje("POS", 4);
-		string x = cliente->RecibirMensaje(4);
-		string y = cliente->RecibirMensaje(4);
-
-		Ball_Rect.x = stoi(x);
-		Ball_Rect.y = stoi(y);		
-
 		SDL_RenderClear(Renderer);
+		SDL_RenderCopy(Renderer, texture, NULL, &Back_Rect); // Fondo
 
-		//SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
-		SDL_RenderCopy(Renderer, texture, NULL, &Back_Rect);
-		SDL_RenderCopy(Renderer, Ball, NULL, &Ball_Rect);
+		cliente->EnviarMensaje("STAT", 4);
+		string StrCantJugadores = cliente->RecibirMensaje(1);
+		int CantJugadores = stoi(StrCantJugadores);
+
+		for (int i = 0; i < CantJugadores; i++) {
+
+			string x = cliente->RecibirMensaje(4);
+			string y = cliente->RecibirMensaje(4);
+
+			Player_Rect.x = stoi(x);
+			Player_Rect.y = stoi(y);
+
+			if (i == 0) {
+				SDL_RenderCopy(Renderer, PlayerRed, NULL, &Player_Rect);
+			} else {
+				SDL_RenderCopy(Renderer, PlayerBlue, NULL, &Player_Rect);
+			}
+
+		}
+
 		
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);

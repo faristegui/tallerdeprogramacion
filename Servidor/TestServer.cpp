@@ -83,15 +83,23 @@ void MainListenThread(void* arg) {
 			string Tipo = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
 			UnJuego.RecibirEvento(Usuario, Tipo);
 		}
-		if (mensaje == "POS") {
+		if (mensaje == "STAT") {
 
-			Jugador UnJugador = UnJuego.GetJugador(Usuario);
+			int CantJugadores = UnJuego.GetCantJugadores();
+			std::string StrCantJugadores = std::to_string(CantJugadores);
+			
+			UnServer.EnviarMensaje(StrCantJugadores, 1, ClientSocket);
 
-			string x = std::to_string(UnJugador.GetX());
-			string y = std::to_string(UnJugador.GetY());
+			for (int i = 0; i < CantJugadores; i++) {
 
-			UnServer.EnviarMensaje(x, 4, ClientSocket);
-			UnServer.EnviarMensaje(y, 4, ClientSocket);
+				Jugador UnJugador = UnJuego.GetJugador(i);
+
+				string x = std::to_string(UnJugador.GetX());
+				string y = std::to_string(UnJugador.GetY());
+
+				UnServer.EnviarMensaje(x, 4, ClientSocket);
+				UnServer.EnviarMensaje(y, 4, ClientSocket);
+			}
 
 		}
 		if (mensaje == "ENVI")

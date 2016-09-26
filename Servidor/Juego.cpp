@@ -31,10 +31,20 @@ int Juego::GetIndexUsuario(std::string Usuario) {
 	}
 }
 
+int Juego::GetCantJugadores() {
+
+	return CantJugadores;
+}
+
 Jugador Juego::GetJugador(std::string Usuario) {
 	int i = GetIndexUsuario(Usuario);
 
 	return *Jugadores[i];
+}
+
+Jugador Juego::GetJugador(int Index) {
+	
+	return *Jugadores[Index];
 }
 
 Juego::~Juego()
