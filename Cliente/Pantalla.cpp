@@ -128,6 +128,7 @@ std::string Pantalla::PedirParametro(std::string NombreParametro, std::string Va
 			}
 
 			if (Event.type == SDL_KEYDOWN) {
+
 				if ((Event.key.keysym.sym == SDLK_BACKSPACE) && (UnTexto.length() > 0)) {
 					UnTexto = UnTexto.substr(0, UnTexto.length() - 1);
 				}
@@ -175,9 +176,7 @@ void Pantalla::IniciarJuego() {
 	string respuestaServer = "1";
 	int movimiento = -1;
 	// Imagen para el escenario del juego
-	SDL_Rect back = this->crearFondo("images/escenario.bmp");
-
-	
+	SDL_Rect Back_Rect = this->crearFondo("images/escenario.bmp");	
 
 	Ball_Rect.x = 10;
 	Ball_Rect.y = 10;
@@ -199,84 +198,41 @@ void Pantalla::IniciarJuego() {
 			}
 
 			if (Event.type == SDL_KEYDOWN) {
+
+				cliente->EnviarMensaje("EVEN", 4);
+
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
-					Ball_Rect.x += 20;
-					movimiento = 1;
+
+					cliente->EnviarMensajeTamanoVariable("RIGHT");
 				}
 				if (Event.key.keysym.sym == SDLK_LEFT) {
-					Ball_Rect.x -= 20;
-					movimiento = 2;
+
+					cliente->EnviarMensajeTamanoVariable("LEFT");
 				}
 				if (Event.key.keysym.sym == SDLK_UP) {
-					Ball_Rect.y -= 20;
-					movimiento = 3;
+
+					cliente->EnviarMensajeTamanoVariable("UP");
 				}
+
 				if (Event.key.keysym.sym == SDLK_DOWN) {
-					Ball_Rect.y += 20;
-					movimiento = 4;
+
+					cliente->EnviarMensajeTamanoVariable("DOWN");
 				}
-				//Envio posicion actual
-				cliente->EnviarMensaje("ENVI",4);
-				cliente->EnviarMensaje("fulano", 15);
-
-				std::stringstream convertir;
-				convertir << movimiento;
-				cliente->EnviarMensajeTamanoVariable(convertir.str());
-				/*
-				bolaPos->x = Ball_Rect.x;
-				bolaPos->y = Ball_Rect.y;
-				Probablemente haga falta NO BORRAR
-				string coordenadas = "";
-				std::stringstream convertir;
-				convertir << bolaPos->x;
-				coordenadas = convertir.str();
-				convertir.str("");
-				coordenadas += " ";
-
-				convertir << bolaPos->y;
-				
-				coordenadas += convertir.str();
-				*/
-				
 			}
 
 		}
 
-		//Actualizacion posicion rival
-			cliente->EnviarMensaje("REC",3);
-			respuestaServer = cliente->RecibirMensaje(8);
-			if(stoi(respuestaServer) > 0)
-			{
-				string UsuarioEmisor = cliente->RecibirMensaje(15);
-				string ContenidoMensaje = cliente->RecibirMensajeTamanoVariable();
+		cliente->EnviarMensaje("POS", 4);
+		string x = cliente->RecibirMensaje(4);
+		string y = cliente->RecibirMensaje(4);
 
-				switch (stoi(ContenidoMensaje))
-				{
-					case 1:
-						Ball_Rect.x += 20;
-						break;
-					case 2:
-						Ball_Rect.x -= 20;
-						break;
-					case 3:
-						Ball_Rect.y -= 20;
-						break;
-					case 4: 
-						Ball_Rect.y += 20;
-						break;
-					default:
-						break;
-				}
+		Ball_Rect.x = stoi(x);
+		Ball_Rect.y = stoi(y);		
 
-			}
-			respuestaServer = "";
-			
-		
 		SDL_RenderClear(Renderer);
 
 		//SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
-		SDL_RenderCopy(Renderer, texture, NULL, &back);
-		
+		SDL_RenderCopy(Renderer, texture, NULL, &Back_Rect);
 		SDL_RenderCopy(Renderer, Ball, NULL, &Ball_Rect);
 		
 		WaitFPS(Starting_Tick);

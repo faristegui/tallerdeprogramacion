@@ -10,6 +10,7 @@
 #include <process.h>
 
 #include "Server.h"
+#include "Juego.h"
 #include "Usuarios.h"
 #include "Mensaje.h"
 
@@ -31,6 +32,7 @@ Usuarios ControlUsuarios;
 int CantidadClientes = 0;
 
 HANDLE ghMutex;
+Juego UnJuego;
 
 void MostrarListaComandos() {
 	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
@@ -62,6 +64,8 @@ void MainListenThread(void* arg) {
 				MensajeRespuesta = "Player: " + Usuario;
 
 				UnServer.EscribirLog("Usuario " + Usuario + " logueado correctamente.", true);
+
+				UnJuego.AgregarJugador(Usuario);
 			}
 			else {
 
@@ -73,6 +77,22 @@ void MainListenThread(void* arg) {
 
 			UnServer.EnviarMensaje(CodigoRespuesta, 3, ClientSocket);
 			UnServer.EnviarMensaje(MensajeRespuesta, 40, ClientSocket);
+		}
+		if (mensaje == "EVEN") {
+
+			string Tipo = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
+			UnJuego.RecibirEvento(Usuario, Tipo);
+		}
+		if (mensaje == "POS") {
+
+			Jugador UnJugador = UnJuego.GetJugador(Usuario);
+
+			string x = std::to_string(UnJugador.GetX());
+			string y = std::to_string(UnJugador.GetY());
+
+			UnServer.EnviarMensaje(x, 4, ClientSocket);
+			UnServer.EnviarMensaje(y, 4, ClientSocket);
+
 		}
 		if (mensaje == "ENVI")
 		{
