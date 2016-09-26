@@ -13,6 +13,7 @@
 #include "Juego.h"
 #include "Usuarios.h"
 #include "Mensaje.h"
+#include "Globales.h"
 
 using namespace std;
 
@@ -58,14 +59,21 @@ void MainListenThread(void* arg) {
 
 			if (ControlUsuarios.ContrasenaValida(UsuarioMsj, PasswordMsj)) {
 
-				Usuario = UsuarioMsj;
+				if (!UnJuego.UsuarioYaLogueado(UsuarioMsj)) {
+					Usuario = UsuarioMsj;
+					UnJuego.AgregarJugador(Usuario);
 
-				CodigoRespuesta = "000";
-				MensajeRespuesta = "Player: " + Usuario;
+					CodigoRespuesta = "000";
+					MensajeRespuesta = "Player: " + Usuario;
 
-				UnServer.EscribirLog("Usuario " + Usuario + " logueado correctamente.", true);
+					UnServer.EscribirLog("Usuario " + Usuario + " logueado correctamente.", true);
+				} else {
 
-				UnJuego.AgregarJugador(Usuario);
+					CodigoRespuesta = "410";
+					MensajeRespuesta = UsuarioMsj + " ya se encuentra en logueado.";
+
+					UnServer.EscribirLog("Usuario " + Usuario + " logueado correctamente.", true);
+				}
 			}
 			else {
 
@@ -86,7 +94,7 @@ void MainListenThread(void* arg) {
 		if (mensaje == "STAT") {
 
 			int CantJugadores = UnJuego.GetCantJugadores();
-			std::string StrCantJugadores = std::to_string(CantJugadores);
+			std::string StrCantJugadores = IntAString(CantJugadores);
 			
 			UnServer.EnviarMensaje(StrCantJugadores, 1, ClientSocket);
 
@@ -94,8 +102,8 @@ void MainListenThread(void* arg) {
 
 				Jugador UnJugador = UnJuego.GetJugador(i);
 
-				string x = std::to_string(UnJugador.GetX());
-				string y = std::to_string(UnJugador.GetY());
+				string x = IntAString(UnJugador.GetX());
+				string y = IntAString(UnJugador.GetY());
 
 				UnServer.EnviarMensaje(x, 4, ClientSocket);
 				UnServer.EnviarMensaje(y, 4, ClientSocket);

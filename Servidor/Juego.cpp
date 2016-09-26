@@ -24,11 +24,15 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 int Juego::GetIndexUsuario(std::string Usuario) {
 	for (int i = 0; i < 6; i++) {
 
-		if (Jugadores[i]->GetNombre() == Usuario) {
+		if (Jugadores[i]) {
+			if (Jugadores[i]->GetNombre() == Usuario) {
 
-			return i;
+				return i;
+			}
 		}
 	}
+
+	return -1;
 }
 
 int Juego::GetCantJugadores() {
@@ -45,6 +49,11 @@ Jugador Juego::GetJugador(std::string Usuario) {
 Jugador Juego::GetJugador(int Index) {
 	
 	return *Jugadores[Index];
+}
+
+
+bool Juego::UsuarioYaLogueado(std::string Usuario) {
+	return !(GetIndexUsuario(Usuario) == -1);
 }
 
 Juego::~Juego()

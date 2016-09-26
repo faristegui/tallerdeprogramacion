@@ -8,6 +8,7 @@ public:
 	~Juego();
 	void AgregarJugador(std::string UnNombre);
 	void RecibirEvento(std::string Usuario, std::string Tipo);
+	bool UsuarioYaLogueado(std::string Usuario);
 	Jugador GetJugador(std::string UnNombre);
 	Jugador GetJugador(int Index);
 	int GetCantJugadores();
