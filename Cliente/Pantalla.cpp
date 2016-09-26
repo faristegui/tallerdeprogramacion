@@ -260,9 +260,7 @@ void Pantalla::IniciarJuego() {
 					SDL_RenderCopy(Renderer, PlayerYellow, NULL, &Player_Rect);
 				}
 			}
-
 		}
-
 		
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);

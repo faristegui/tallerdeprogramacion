@@ -7,3 +7,9 @@ std::string IntAString(int UnInt) {
 
 	return str;
 }
+
+std::string ToLowerCase(std::string UnString) {
+	transform(UnString.begin(), UnString.end(), UnString.begin(), (int(*)(int))tolower);
+
+	return UnString;
+}

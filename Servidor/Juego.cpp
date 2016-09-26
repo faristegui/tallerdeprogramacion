@@ -1,4 +1,5 @@
 #include "Juego.h"
+#include "Globales.h"
 
 Juego::Juego()
 {
@@ -22,10 +23,12 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 }
 
 int Juego::GetIndexUsuario(std::string Usuario) {
+	Usuario = ToLowerCase(Usuario);
+	
 	for (int i = 0; i < 6; i++) {
 
 		if (Jugadores[i]) {
-			if (Jugadores[i]->GetNombre() == Usuario) {
+			if (ToLowerCase(Jugadores[i]->GetNombre()) == Usuario) {
 
 				return i;
 			}
