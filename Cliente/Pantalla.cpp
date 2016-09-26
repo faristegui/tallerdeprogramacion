@@ -178,6 +178,10 @@ void Pantalla::CargarSpritesJugadores() {
 	TmpSurface = IMG_Load("PlayerBlue.bmp");
 	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
 	PlayerBlue = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
+	// Cargo bola amarilla
+	TmpSurface = IMG_Load("PlayerYellow.bmp");
+	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
+	PlayerYellow = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
 }
 
 void Pantalla::IniciarJuego() {
@@ -203,24 +207,28 @@ void Pantalla::IniciarJuego() {
 
 			if (Event.type == SDL_KEYDOWN) {
 
-				cliente->EnviarMensaje("EVEN", 4);
+				string Evento = "";
 
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
 
-					cliente->EnviarMensajeTamanoVariable("RIGHT");
+					Evento = "RIGHT";
 				}
 				if (Event.key.keysym.sym == SDLK_LEFT) {
 
-					cliente->EnviarMensajeTamanoVariable("LEFT");
+					Evento = "LEFT";
 				}
 				if (Event.key.keysym.sym == SDLK_UP) {
 
-					cliente->EnviarMensajeTamanoVariable("UP");
+					Evento = "UP";
 				}
-
 				if (Event.key.keysym.sym == SDLK_DOWN) {
 
-					cliente->EnviarMensajeTamanoVariable("DOWN");
+					Evento = "DOWN";
+				}
+
+				if (Evento != "") {
+					cliente->EnviarMensaje("EVEN", 4);
+					cliente->EnviarMensajeTamanoVariable(Evento);
 				}
 			}
 
@@ -241,10 +249,16 @@ void Pantalla::IniciarJuego() {
 			Player_Rect.x = stoi(x);
 			Player_Rect.y = stoi(y);
 
+			// TODO: El server indica cual es el sprite a renderizar dependiendo el jugador
+
 			if (i == 0) {
 				SDL_RenderCopy(Renderer, PlayerRed, NULL, &Player_Rect);
 			} else {
-				SDL_RenderCopy(Renderer, PlayerBlue, NULL, &Player_Rect);
+				if (i == 1) {
+					SDL_RenderCopy(Renderer, PlayerBlue, NULL, &Player_Rect);
+				} else {
+					SDL_RenderCopy(Renderer, PlayerYellow, NULL, &Player_Rect);
+				}
 			}
 
 		}

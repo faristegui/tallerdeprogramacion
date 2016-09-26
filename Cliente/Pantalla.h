@@ -39,5 +39,6 @@ private:
 	void CargarSpritesJugadores();
 	SDL_Texture *PlayerRed;
 	SDL_Texture *PlayerBlue;
+	SDL_Texture *PlayerYellow;
 };
 
