@@ -37,6 +37,7 @@ private:
 		SDL_Texture **texture, SDL_Rect *rect, int fontSize);
 	void WaitFPS(Uint32 starting_tick);
 	void CargarSpritesJugadores();
+	void cargarSpritesEnemigos();
 	SDL_Texture *PlayerRed;
 	SDL_Texture *PlayerBlue;
 	SDL_Texture *PlayerYellow;

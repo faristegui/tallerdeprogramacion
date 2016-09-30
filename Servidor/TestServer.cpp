@@ -42,6 +42,8 @@ void MostrarListaComandos() {
 void MainListenThread(void* arg) {
 	string Usuario = "";
 	string mensaje = "";
+	int posX = 0;
+	int posY = 500;
 	SOCKET ClientSocket = *(SOCKET*)arg;
 	bool EsThreadDePing = false;
 
@@ -95,7 +97,8 @@ void MainListenThread(void* arg) {
 
 			int CantJugadores = UnJuego.GetCantJugadores();
 			std::string StrCantJugadores = IntAString(CantJugadores);
-			
+
+			WaitForSingleObject(ghMutex, INFINITE);
 			UnServer.EnviarMensaje(StrCantJugadores, 1, ClientSocket);
 
 			for (int i = 0; i < CantJugadores; i++) {
@@ -108,6 +111,7 @@ void MainListenThread(void* arg) {
 				UnServer.EnviarMensaje(x, 4, ClientSocket);
 				UnServer.EnviarMensaje(y, 4, ClientSocket);
 			}
+			ReleaseMutex(ghMutex);
 
 		}
 		if (mensaje == "ENVI")
@@ -192,6 +196,30 @@ void MainListenThread(void* arg) {
 			} else {
 				UnServer.EnviarMensaje("SI", 2, ClientSocket);
 			}
+		}
+		//Sprite enemigo
+		if (mensaje == "SPRE")
+		{
+			//Envio tamaño del mensaje
+			WaitForSingleObject(ghMutex, INFINITE);
+			UnServer.EnviarMensaje("6",1,ClientSocket);
+			//Envio el nombre del sprite que el cliente guarda en la carpeta llamada 'sprites'
+			//hardcodeo el nombre del sprite, pero supongo que como el servidor tiene una lista con los nombres
+			//de sprites hace un random y puede salir cualquiera
+			UnServer.EnviarMensajeTamanoVariable("hombre",ClientSocket);
+			//Envio posicion en X
+			UnServer.EnviarMensajeTamanoVariable(IntAString(posX),ClientSocket);
+			//Envio posicion en Y
+			UnServer.EnviarMensajeTamanoVariable(IntAString(posY),ClientSocket);
+			if(posX < 800)
+			{
+				posX+=20;
+			}
+			else
+			{
+				posX = 0;
+			}
+			ReleaseMutex(ghMutex);
 		}
 		if (mensaje == "NEWC") {
 

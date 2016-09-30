@@ -28,6 +28,11 @@ Pantalla::Pantalla(Client* unCliente)
 	CargarSpritesJugadores();
 }
 
+void Pantalla::cargarSpritesEnemigos()
+{
+
+}
+
 void Pantalla::WaitFPS(Uint32 starting_tick) {
 
 	if ((1000 / FPS) > SDL_GetTicks() - starting_tick) {
@@ -191,6 +196,8 @@ void Pantalla::IniciarJuego() {
 
 	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario.bmp", 800, 600); // Imagen para el escenario del juego
 
+
+	bool sprite = false;
 	bool GameRunning = true;
 
 	while (GameRunning) {
@@ -237,6 +244,8 @@ void Pantalla::IniciarJuego() {
 		SDL_RenderClear(Renderer);
 		SDL_RenderCopy(Renderer, texture, NULL, &Back_Rect); // Fondo
 
+		//Actualizacion de estado de jugadores
+		
 		cliente->EnviarMensaje("STAT", 4);
 		string StrCantJugadores = cliente->RecibirMensaje(1);
 		int CantJugadores = stoi(StrCantJugadores);
@@ -261,7 +270,35 @@ void Pantalla::IniciarJuego() {
 				}
 			}
 		}
-		
+			//Carga de sprites enemigos ("hombre")
+			cliente->EnviarMensaje("SPRE",4);
+			
+			//El cliente recibe el tamaño del nombre del sprite
+			string tamanioMensaje = cliente->RecibirMensaje(1);
+			
+			//Luego recibe el nombre, que coincide con el que tiene en la carpeta 'sprites'
+			string nombreSprite = cliente->RecibirMensajeTamanoVariable();
+			string ruta = "sprites/" + nombreSprite + ".bmp";
+			SDL_Surface * imagenSprite = SDL_LoadBMP(ruta.c_str());
+
+			//Recibe posicion en X
+			string posX = cliente->RecibirMensajeTamanoVariable();
+
+			//Recibe posicion en Y
+			string posY = cliente->RecibirMensajeTamanoVariable();
+	//		while(numero > 250)
+	//		{
+				SDL_Texture * texturaSprite = SDL_CreateTextureFromSurface(Renderer,imagenSprite);
+				SDL_Event event;
+				Uint32 ticks = SDL_GetTicks();
+				Uint32 sprite = (ticks / 100) % 4;
+				SDL_Rect srcrect = { sprite * 32, 0, 32, 64 };
+				//la posicion deberia enviarla el server
+				SDL_Rect dstrect = {stoi(posX), stoi(posY), 32, 64 };
+				SDL_PollEvent(&event);
+				SDL_RenderCopy(Renderer, texturaSprite,&srcrect,&dstrect);
+		//	}
+
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);
 	}

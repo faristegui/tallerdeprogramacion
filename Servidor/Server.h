@@ -20,6 +20,7 @@ class Server
 {
 private:
 	SOCKET ListenSocket;
+	Lista<std::string>* nombresSprites;
 	Lista<Mensaje*>* todosLosMensajes;
 	std::ofstream logFile;  //Archivo para el log
 public:
