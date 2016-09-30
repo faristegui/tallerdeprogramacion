@@ -5,10 +5,15 @@
 #include <string>
 #include <iostream>
 #include "Client.h"
+#include "Lista.h"
 struct Posicion
 {
 	int x;
 	int y;
+};
+struct Sprite {
+	std::string ID;
+	SDL_Texture *Texture;
 };
 
 class Pantalla
@@ -36,10 +41,9 @@ private:
 	void get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::string UnTexto,
 		SDL_Texture **texture, SDL_Rect *rect, int fontSize);
 	void WaitFPS(Uint32 starting_tick);
-	void CargarSpritesJugadores();
-	void cargarSpritesEnemigos();
-	SDL_Texture *PlayerRed;
-	SDL_Texture *PlayerBlue;
-	SDL_Texture *PlayerYellow;
+	void AgregarSprite(std::string ID);
+	void CargarSprites();
+	Lista<Sprite> *Sprites;
+	SDL_Texture* GetTexture(std::string ID);
 };
 

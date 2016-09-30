@@ -25,12 +25,6 @@ Pantalla::Pantalla(Client* unCliente)
 	if (Window == NULL) {
 		// TODO: Log "Could not create window"
 	}
-	CargarSpritesJugadores();
-}
-
-void Pantalla::cargarSpritesEnemigos()
-{
-
 }
 
 void Pantalla::WaitFPS(Uint32 starting_tick) {
@@ -173,20 +167,51 @@ Posicion* Pantalla::obtenerPosicion()
 	return bolaPos;
 }
 
-void Pantalla::CargarSpritesJugadores() {
+void Pantalla::AgregarSprite(std::string ID) {
 	SDL_Surface *TmpSurface;
-	// Cargo bola roja
-	TmpSurface = IMG_Load("ClientResources/PlayerRed.bmp");
+	SDL_Texture *TmpTexture;
+	Sprite UnSprite;
+
+	UnSprite.ID = ID;
+
+	ID = "ClientResources/" + ID + ".bmp";
+
+	TmpSurface = IMG_Load(ID.c_str());
 	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
-	PlayerRed = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
-	// Cargo bola azul
-	TmpSurface = IMG_Load("ClientResources/PlayerBlue.bmp");
-	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
-	PlayerBlue = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
-	// Cargo bola amarilla
-	TmpSurface = IMG_Load("ClientResources/PlayerYellow.bmp");
-	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
-	PlayerYellow = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
+	TmpTexture = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
+
+	UnSprite.Texture = TmpTexture;
+
+	Sprites->agregar(UnSprite);
+}
+void Pantalla::CargarSprites() {
+
+	Sprites = new Lista<Sprite>();
+
+	cliente->EnviarMensaje("SPRI", 4);
+	int CantidadSprites = stoi(cliente->RecibirMensajeTamanoVariable());
+
+	for (int i = 0; i < CantidadSprites; i++) {
+		std::string ID = cliente->RecibirMensajeTamanoVariable();
+		AgregarSprite(ID);
+	}
+}
+
+SDL_Texture* Pantalla::GetTexture(std::string ID) {
+
+	int CantidadSprites = Sprites->getTamanio();
+
+	Sprites->iniciarCursor();
+
+	while (Sprites->avanzarCursor())
+	{
+		if (ID == Sprites->obtenerCursor().ID) {
+
+			return Sprites->obtenerCursor().Texture;
+		}
+	}
+
+	return NULL;
 }
 
 void Pantalla::IniciarJuego() {
@@ -194,8 +219,8 @@ void Pantalla::IniciarJuego() {
 	Player_Rect.w = 64;
 	Player_Rect.h = 64;
 
+	CargarSprites();
 	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario.bmp", 800, 600); // Imagen para el escenario del juego
-
 
 	bool sprite = false;
 	bool GameRunning = true;
@@ -260,44 +285,17 @@ void Pantalla::IniciarJuego() {
 
 			// TODO: El server indica cual es el sprite a renderizar dependiendo el jugador
 
-			if (i == 0) {
-				SDL_RenderCopy(Renderer, PlayerRed, NULL, &Player_Rect);
-			} else {
-				if (i == 1) {
-					SDL_RenderCopy(Renderer, PlayerBlue, NULL, &Player_Rect);
-				} else {
-					SDL_RenderCopy(Renderer, PlayerYellow, NULL, &Player_Rect);
-				}
-			}
+			SDL_Texture *PlayerSprite = GetTexture("PlayerRed");
+			SDL_RenderCopy(Renderer, PlayerSprite, NULL, &Player_Rect);
 		}
-			//Carga de sprites enemigos ("hombre")
-			cliente->EnviarMensaje("SPRE",4);
-			
-			//El cliente recibe el tamaño del nombre del sprite
-			string tamanioMensaje = cliente->RecibirMensaje(1);
-			
-			//Luego recibe el nombre, que coincide con el que tiene en la carpeta 'sprites'
-			string nombreSprite = cliente->RecibirMensajeTamanoVariable();
-			string ruta = "sprites/" + nombreSprite + ".bmp";
-			SDL_Surface * imagenSprite = SDL_LoadBMP(ruta.c_str());
 
-			//Recibe posicion en X
-			string posX = cliente->RecibirMensajeTamanoVariable();
+		SDL_Texture *texturaSprite = GetTexture("hombre");
 
-			//Recibe posicion en Y
-			string posY = cliente->RecibirMensajeTamanoVariable();
-	//		while(numero > 250)
-	//		{
-				SDL_Texture * texturaSprite = SDL_CreateTextureFromSurface(Renderer,imagenSprite);
-				SDL_Event event;
-				Uint32 ticks = SDL_GetTicks();
-				Uint32 sprite = (ticks / 100) % 4;
-				SDL_Rect srcrect = { sprite * 32, 0, 32, 64 };
-				//la posicion deberia enviarla el server
-				SDL_Rect dstrect = {stoi(posX), stoi(posY), 32, 64 };
-				SDL_PollEvent(&event);
-				SDL_RenderCopy(Renderer, texturaSprite,&srcrect,&dstrect);
-		//	}
+		Uint32 xPos = (Starting_Tick / 100) % 4;
+		SDL_Rect srcrect = { xPos * 32, 0, 32, 64 };
+		SDL_Rect dstrect = {0, 0, 32, 64 };
+		SDL_RenderCopy(Renderer, texturaSprite, &srcrect, &dstrect);
+		
 
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);

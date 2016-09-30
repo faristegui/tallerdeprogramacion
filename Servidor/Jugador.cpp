@@ -1,7 +1,5 @@
 #include "Jugador.h"
 
-
-
 Jugador::Jugador(std::string UnNombre)
 {
 	Nombre = UnNombre;
