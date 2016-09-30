@@ -60,8 +60,20 @@ void MainListenThread(void* arg) {
 			if (ControlUsuarios.ContrasenaValida(UsuarioMsj, PasswordMsj)) {
 
 				if (!UnJuego.UsuarioYaLogueado(UsuarioMsj)) {
+
 					Usuario = UsuarioMsj;
-					UnJuego.AgregarJugador(Usuario);
+
+					std::string IDSprite;
+
+					// TODO: Ver como determinar que sprite mandarle a cada player
+					if (UnJuego.GetCantJugadores() == 0) {
+						IDSprite = "PlayerRed";
+					} 
+					else {
+						IDSprite = "PlayerYellow";
+					}
+
+					UnJuego.AgregarJugador(Usuario, IDSprite);
 
 					CodigoRespuesta = "000";
 					MensajeRespuesta = "Player: " + Usuario;
@@ -103,9 +115,11 @@ void MainListenThread(void* arg) {
 
 				Jugador UnJugador = UnJuego.GetJugador(i);
 
+				string IDSprite = UnJugador.GetIDSprite();
 				string x = IntAString(UnJugador.GetX());
 				string y = IntAString(UnJugador.GetY());
 
+				UnServer.EnviarMensajeTamanoVariable(IDSprite, ClientSocket);
 				UnServer.EnviarMensaje(x, 4, ClientSocket);
 				UnServer.EnviarMensaje(y, 4, ClientSocket);
 			}

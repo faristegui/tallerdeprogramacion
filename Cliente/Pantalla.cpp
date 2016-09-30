@@ -277,6 +277,7 @@ void Pantalla::IniciarJuego() {
 
 		for (int i = 0; i < CantJugadores; i++) {
 
+			string IDSprite = cliente->RecibirMensajeTamanoVariable();
 			string x = cliente->RecibirMensaje(4);
 			string y = cliente->RecibirMensaje(4);
 
@@ -285,17 +286,18 @@ void Pantalla::IniciarJuego() {
 
 			// TODO: El server indica cual es el sprite a renderizar dependiendo el jugador
 
-			SDL_Texture *PlayerSprite = GetTexture("PlayerRed");
+			SDL_Texture *PlayerSprite = GetTexture(IDSprite);
 			SDL_RenderCopy(Renderer, PlayerSprite, NULL, &Player_Rect);
 		}
 
-		SDL_Texture *texturaSprite = GetTexture("hombre");
+		// TODO: El stat tambien tiene que enviar los enemigos (en realidad manda TODO lo del juego)
+		//		Entonces mandaria el nombre del sprite (en este caso "hombre") y su posicion
 
+		SDL_Texture *texturaSprite = GetTexture("hombre");
 		Uint32 xPos = (Starting_Tick / 100) % 4;
 		SDL_Rect srcrect = { xPos * 32, 0, 32, 64 };
 		SDL_Rect dstrect = {0, 0, 32, 64 };
 		SDL_RenderCopy(Renderer, texturaSprite, &srcrect, &dstrect);
-		
 
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);

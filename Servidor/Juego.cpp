@@ -7,8 +7,8 @@ Juego::Juego()
 }
 
 
-void Juego::AgregarJugador(std::string UnNombre) {
-	Jugadores[CantJugadores] = new Jugador(UnNombre);
+void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {
+	Jugadores[CantJugadores] = new Jugador(UnNombre, UnIDSprite);
 	CantJugadores++;
 }
 

@@ -1,8 +1,9 @@
 #include "Jugador.h"
 
-Jugador::Jugador(std::string UnNombre)
+Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 {
 	Nombre = UnNombre;
+	IDSprite = UnIDSprite;
 	x = 0;
 	y = 0;
 }
@@ -29,6 +30,11 @@ void Jugador::Mover(std::string Direccion) {
 std::string Jugador::GetNombre() {
 
 	return Nombre;
+}
+
+std::string Jugador::GetIDSprite() {
+
+	return IDSprite;
 }
 
 int Jugador::GetX() {
