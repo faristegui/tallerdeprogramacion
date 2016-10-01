@@ -108,7 +108,6 @@ void MainListenThread(void* arg) {
 			int CantJugadores = UnJuego.GetCantJugadores();
 			std::string StrCantJugadores = IntAString(CantJugadores);
 
-			WaitForSingleObject(ghMutex, INFINITE);
 			UnServer.EnviarMensaje(StrCantJugadores, 1, ClientSocket);
 
 			for (int i = 0; i < CantJugadores; i++) {
@@ -116,14 +115,15 @@ void MainListenThread(void* arg) {
 				Jugador UnJugador = UnJuego.GetJugador(i);
 
 				string IDSprite = UnJugador.GetIDSprite();
-				string x = IntAString(UnJugador.GetX());
-				string y = IntAString(UnJugador.GetY());
+				string Estado = UnJugador.GetEstado();
+				string PosX = IntAString(UnJugador.GetX());
+				string PosY = IntAString(UnJugador.GetY());
 
 				UnServer.EnviarMensajeTamanoVariable(IDSprite, ClientSocket);
-				UnServer.EnviarMensaje(x, 4, ClientSocket);
-				UnServer.EnviarMensaje(y, 4, ClientSocket);
+				UnServer.EnviarMensajeTamanoVariable(Estado, ClientSocket);
+				UnServer.EnviarMensaje(PosX, 4, ClientSocket);
+				UnServer.EnviarMensaje(PosY, 4, ClientSocket);
 			}
-			ReleaseMutex(ghMutex);
 
 		}
 		if (mensaje == "ENVI")
@@ -212,15 +212,22 @@ void MainListenThread(void* arg) {
 		// Carga de Sprites
 		if (mensaje == "SPRI")
 		{
-			// TODO: De una lista
+			// TODO: Del archivo XML
 
 			// Envio cantidad de sprites a cargar
-			UnServer.EnviarMensajeTamanoVariable("4", ClientSocket);
-			// Envio los id de los sprites a cargar
-			UnServer.EnviarMensajeTamanoVariable("PlayerRed", ClientSocket);
-			UnServer.EnviarMensajeTamanoVariable("PlayerBlue", ClientSocket);
-			UnServer.EnviarMensajeTamanoVariable("PlayerYellow", ClientSocket);
-			UnServer.EnviarMensajeTamanoVariable("hombre", ClientSocket);
+			UnServer.EnviarMensajeTamanoVariable("1", ClientSocket);
+			// Envio info de los sprites a cargar
+			UnServer.EnviarMensajeTamanoVariable("PlayerRed", ClientSocket);	// ID
+			UnServer.EnviarMensajeTamanoVariable("30", ClientSocket);			// FRAME WIDTH
+			UnServer.EnviarMensajeTamanoVariable("40", ClientSocket);			// FRAME HEIGHT
+			UnServer.EnviarMensajeTamanoVariable("1", ClientSocket);			// CANT ESTADOS
+			UnServer.EnviarMensajeTamanoVariable("QUIETO", ClientSocket);		// NOMBRE ESTADO
+			UnServer.EnviarMensajeTamanoVariable("3", ClientSocket);			// CANT FRAMES ESTADO
+			UnServer.EnviarMensajeTamanoVariable("0", ClientSocket);			// OFFSET "Y" DEL ESTADO
+
+			//UnServer.EnviarMensajeTamanoVariable("PlayerBlue", ClientSocket);
+			//UnServer.EnviarMensajeTamanoVariable("PlayerYellow", ClientSocket);
+			//UnServer.EnviarMensajeTamanoVariable("hombre", ClientSocket);
 		}
 		if (mensaje == "NEWC") {
 

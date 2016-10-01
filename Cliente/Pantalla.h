@@ -11,9 +11,19 @@ struct Posicion
 	int x;
 	int y;
 };
+struct SpriteEstado
+{
+	std::string Nombre;
+	int OffsetY;
+	int CantFrames;
+};
 struct Sprite {
 	std::string ID;
 	SDL_Texture *Texture;
+	// TODO: Ver si lo siguiente esta ok:
+	int FrameWidth;
+	int FrameHeight;
+	Lista<SpriteEstado> *Estados;
 };
 
 class Pantalla
@@ -41,9 +51,10 @@ private:
 	void get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::string UnTexto,
 		SDL_Texture **texture, SDL_Rect *rect, int fontSize);
 	void WaitFPS(Uint32 starting_tick);
-	void AgregarSprite(std::string ID);
+	void AgregarSprite(std::string ID, int FrameWidth, int FrameHeight);
 	void CargarSprites();
 	Lista<Sprite> *Sprites;
-	SDL_Texture* GetTexture(std::string ID);
+	void RenderSprite(std::string ID, std::string NombreEstado, Uint32 Ticks, SDL_Renderer *Renderer, int PosX, int PosY);
+	SpriteEstado GetEstado(Lista<SpriteEstado> *Estados, std::string Nombre);
 };
 

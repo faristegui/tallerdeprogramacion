@@ -167,12 +167,27 @@ Posicion* Pantalla::obtenerPosicion()
 	return bolaPos;
 }
 
-void Pantalla::AgregarSprite(std::string ID) {
+void Pantalla::AgregarSprite(std::string ID, int FrameWidth, int FrameHeight) {
 	SDL_Surface *TmpSurface;
 	SDL_Texture *TmpTexture;
 	Sprite UnSprite;
+	SpriteEstado UnEstado;
+
+	int CantEstados = stoi(cliente->RecibirMensajeTamanoVariable());
+	UnSprite.Estados = new Lista<SpriteEstado>();
+
+	for (int i = 0; i < CantEstados; i++) {
+
+		UnEstado.Nombre = cliente->RecibirMensajeTamanoVariable();
+		UnEstado.CantFrames = stoi(cliente->RecibirMensajeTamanoVariable());
+		UnEstado.OffsetY = stoi(cliente->RecibirMensajeTamanoVariable());
+
+		UnSprite.Estados->agregar(UnEstado);
+	}
 
 	UnSprite.ID = ID;
+	UnSprite.FrameWidth = FrameWidth;
+	UnSprite.FrameHeight = FrameHeight;
 
 	ID = "ClientResources/" + ID + ".bmp";
 
@@ -192,14 +207,38 @@ void Pantalla::CargarSprites() {
 	int CantidadSprites = stoi(cliente->RecibirMensajeTamanoVariable());
 
 	for (int i = 0; i < CantidadSprites; i++) {
+
 		std::string ID = cliente->RecibirMensajeTamanoVariable();
-		AgregarSprite(ID);
+		int FrameWidth = stoi(cliente->RecibirMensajeTamanoVariable());
+		int FrameHeight = stoi(cliente->RecibirMensajeTamanoVariable());
+
+		AgregarSprite(ID, FrameWidth, FrameHeight);
 	}
 }
 
-SDL_Texture* Pantalla::GetTexture(std::string ID) {
+SpriteEstado Pantalla::GetEstado(Lista<SpriteEstado> *Estados, std::string Nombre) {
 
-	int CantidadSprites = Sprites->getTamanio();
+	Estados->iniciarCursor();
+
+	while (Estados->avanzarCursor()) {
+
+		if (Nombre == Estados->obtenerCursor().Nombre) {
+
+			return Estados->obtenerCursor();
+		}
+	}
+
+}
+
+void Pantalla::RenderSprite(std::string ID, std::string NombreEstado, Uint32 Ticks, SDL_Renderer *Renderer,
+							int PosX, int PosY) {
+
+	SpriteEstado UnEstado;
+	Sprite UnSprite;
+	Uint32 OffsetX;
+	Uint32 OffsetY;
+	SDL_Rect Crop_Rect;
+	SDL_Rect Posicion_Rect;
 
 	Sprites->iniciarCursor();
 
@@ -207,19 +246,33 @@ SDL_Texture* Pantalla::GetTexture(std::string ID) {
 	{
 		if (ID == Sprites->obtenerCursor().ID) {
 
-			return Sprites->obtenerCursor().Texture;
+			UnSprite = Sprites->obtenerCursor();
+			UnEstado = GetEstado(UnSprite.Estados, NombreEstado);
+
+			OffsetX = (Starting_Tick / 200) % UnEstado.CantFrames;
+			OffsetY = UnEstado.OffsetY;
+
+			Crop_Rect.x = OffsetX * UnSprite.FrameWidth;
+			Crop_Rect.y = OffsetY * UnSprite.FrameHeight;
+			Crop_Rect.w = UnSprite.FrameWidth;
+			Crop_Rect.h = UnSprite.FrameHeight;
+
+			Posicion_Rect.x = PosX;
+			Posicion_Rect.y = PosY;
+			Posicion_Rect.w = UnSprite.FrameWidth * 2;
+			Posicion_Rect.h = UnSprite.FrameHeight * 2;
+
+			SDL_RenderCopy(Renderer, UnSprite.Texture, &Crop_Rect, &Posicion_Rect);
+
+			break;
 		}
 	}
-
-	return NULL;
 }
 
 void Pantalla::IniciarJuego() {
-	SDL_Rect Player_Rect;
-	Player_Rect.w = 64;
-	Player_Rect.h = 64;
 
 	CargarSprites();
+
 	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario.bmp", 800, 600); // Imagen para el escenario del juego
 
 	bool sprite = false;
@@ -268,8 +321,6 @@ void Pantalla::IniciarJuego() {
 
 		SDL_RenderClear(Renderer);
 		SDL_RenderCopy(Renderer, texture, NULL, &Back_Rect); // Fondo
-
-		//Actualizacion de estado de jugadores
 		
 		cliente->EnviarMensaje("STAT", 4);
 		string StrCantJugadores = cliente->RecibirMensaje(1);
@@ -278,32 +329,17 @@ void Pantalla::IniciarJuego() {
 		for (int i = 0; i < CantJugadores; i++) {
 
 			string IDSprite = cliente->RecibirMensajeTamanoVariable();
-			string x = cliente->RecibirMensaje(4);
-			string y = cliente->RecibirMensaje(4);
-
-			Player_Rect.x = stoi(x);
-			Player_Rect.y = stoi(y);
-
-			// TODO: El server indica cual es el sprite a renderizar dependiendo el jugador
-
-			SDL_Texture *PlayerSprite = GetTexture(IDSprite);
-			SDL_RenderCopy(Renderer, PlayerSprite, NULL, &Player_Rect);
+			string Estado = cliente->RecibirMensajeTamanoVariable();
+			int PosX = stoi(cliente->RecibirMensaje(4));
+			int PosY = stoi(cliente->RecibirMensaje(4));
+			
+			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
 		}
-
-		// TODO: El stat tambien tiene que enviar los enemigos (en realidad manda TODO lo del juego)
-		//		Entonces mandaria el nombre del sprite (en este caso "hombre") y su posicion
-
-		SDL_Texture *texturaSprite = GetTexture("hombre");
-		Uint32 xPos = (Starting_Tick / 100) % 4;
-		SDL_Rect srcrect = { xPos * 32, 0, 32, 64 };
-		SDL_Rect dstrect = {0, 0, 32, 64 };
-		SDL_RenderCopy(Renderer, texturaSprite, &srcrect, &dstrect);
 
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);
 	}
 }
-
 
 Pantalla::~Pantalla()
 {
