@@ -223,7 +223,6 @@ void MainListenThread(void* arg) {
 			UnServer.EnviarMensajeTamanoVariable("1", ClientSocket);			// CANT ESTADOS
 			UnServer.EnviarMensajeTamanoVariable("QUIETO", ClientSocket);		// NOMBRE ESTADO
 			UnServer.EnviarMensajeTamanoVariable("3", ClientSocket);			// CANT FRAMES ESTADO
-			UnServer.EnviarMensajeTamanoVariable("0", ClientSocket);			// OFFSET "Y" DEL ESTADO
 
 			//UnServer.EnviarMensajeTamanoVariable("PlayerBlue", ClientSocket);
 			//UnServer.EnviarMensajeTamanoVariable("PlayerYellow", ClientSocket);

@@ -14,8 +14,8 @@ struct Posicion
 struct SpriteEstado
 {
 	std::string Nombre;
-	int OffsetY;
 	int CantFrames;
+	int Numero;
 };
 struct Sprite {
 	std::string ID;

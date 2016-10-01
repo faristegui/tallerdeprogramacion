@@ -180,7 +180,7 @@ void Pantalla::AgregarSprite(std::string ID, int FrameWidth, int FrameHeight) {
 
 		UnEstado.Nombre = cliente->RecibirMensajeTamanoVariable();
 		UnEstado.CantFrames = stoi(cliente->RecibirMensajeTamanoVariable());
-		UnEstado.OffsetY = stoi(cliente->RecibirMensajeTamanoVariable());
+		UnEstado.Numero = i;
 
 		UnSprite.Estados->agregar(UnEstado);
 	}
@@ -250,7 +250,7 @@ void Pantalla::RenderSprite(std::string ID, std::string NombreEstado, Uint32 Tic
 			UnEstado = GetEstado(UnSprite.Estados, NombreEstado);
 
 			OffsetX = (Starting_Tick / 200) % UnEstado.CantFrames;
-			OffsetY = UnEstado.OffsetY;
+			OffsetY = UnEstado.Numero * UnSprite.FrameHeight;
 
 			Crop_Rect.x = OffsetX * UnSprite.FrameWidth;
 			Crop_Rect.y = OffsetY * UnSprite.FrameHeight;
