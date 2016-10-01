@@ -4,6 +4,7 @@ Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 {
 	Nombre = UnNombre;
 	IDSprite = UnIDSprite;
+	Estado = "QUIETO";
 	x = 0;
 	y = 0;
 }
@@ -35,6 +36,11 @@ std::string Jugador::GetNombre() {
 std::string Jugador::GetIDSprite() {
 
 	return IDSprite;
+}
+
+std::string Jugador::GetEstado() {
+
+	return Estado;
 }
 
 int Jugador::GetX() {

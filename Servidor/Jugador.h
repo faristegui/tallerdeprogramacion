@@ -8,11 +8,13 @@ public:
 	void Mover(std::string Direccion);
 	std::string GetNombre();
 	std::string GetIDSprite();
+	std::string GetEstado();
 	int GetX();
 	int GetY();
 private:
 	std::string Nombre;
 	std::string IDSprite;
+	std::string Estado;
 	int x;
 	int y;
 };
