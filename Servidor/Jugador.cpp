@@ -5,8 +5,8 @@ Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 	Nombre = UnNombre;
 	IDSprite = UnIDSprite;
 	Estado = "QUIETO";
-	x = 0;
-	y = 0;
+	x = 20;
+	y = 455;
 }
 
 void Jugador::Mover(std::string Direccion) {
@@ -19,11 +19,11 @@ void Jugador::Mover(std::string Direccion) {
 		x += 10;
 	}
 
-	if (Direccion == "DOWN") {
+	if ((Direccion == "DOWN") && (y <= 450)) { //No permite que se vaya para abajo del escenario
 		y += 10;
 	}
 
-	if (Direccion == "LEFT") {
+	if ((Direccion == "LEFT") && (x >= 20)) { //No permite que vuelva para atrás de la pantalla.
 		x -= 10;
 	}
 }
