@@ -274,10 +274,17 @@ void Pantalla::IniciarJuego() {
 	CargarSprites();
 
 	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario.bmp", 1800, 600); // Imagen para el escenario del juego
-
 	bool sprite = false;
 	bool GameRunning = true;
-
+	SDL_Rect camara;
+	camara.x = 0;
+	camara.y = 0;
+	camara.w = 1800;
+	camara.h = 600;
+	int speed = 5;
+	bool b[2] = {0,0};
+	int x = 0;
+	int y = 0;
 	while (GameRunning) {
 
 		Starting_Tick = SDL_GetTicks();
@@ -295,11 +302,11 @@ void Pantalla::IniciarJuego() {
 				string Evento = "";
 
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
-
+					b[0] = 1;
 					Evento = "RIGHT";
 				}
 				if (Event.key.keysym.sym == SDLK_LEFT) {
-
+					b[1] = 1;
 					Evento = "LEFT";
 				}
 				if (Event.key.keysym.sym == SDLK_UP) {
@@ -316,11 +323,42 @@ void Pantalla::IniciarJuego() {
 					cliente->EnviarMensajeTamanoVariable(Evento);
 				}
 			}
+			/*
+			if(Event.type = SDL_KEYUP)
+			{
+					if (Event.key.keysym.sym == SDLK_RIGHT) {
+					b[0] = 0;
+				}
+				if (Event.key.keysym.sym == SDLK_LEFT) {
+					b[1] = 0;
+				}
+			}
+			*/
+			if(b[0])
+			{
+				//x+=speed;
+				camara.x+=speed;
+				if(camara.x >= 1800-800)
+				{
+					camara.x = 0;
+				}
+				b[0] = 0;
+			}
+			else if (b[1])
+			{
+				//x-=speed;
+				camara.x -= speed;
+				if(camara.x <= 0)
+				{
+					camara.x = 1800-800;
+				}
+				b[1] = 0;
+			}
 
 		}
 
 		SDL_RenderClear(Renderer);
-		SDL_RenderCopy(Renderer, texture, NULL, &Back_Rect); // Fondo
+		SDL_RenderCopy(Renderer, texture,&camara, &Back_Rect); // Fondo
 		
 		cliente->EnviarMensaje("STAT", 4);
 		string StrCantJugadores = cliente->RecibirMensaje(1);
