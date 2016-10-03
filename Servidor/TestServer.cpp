@@ -14,6 +14,7 @@
 #include "Usuarios.h"
 #include "Mensaje.h"
 #include "Globales.h"
+#include "tinyxml2.h"
 
 using namespace std;
 
@@ -212,21 +213,52 @@ void MainListenThread(void* arg) {
 		// Carga de Sprites
 		if (mensaje == "SPRI")
 		{
-			// TODO: Del archivo XML
+			
 
-			// Envio cantidad de sprites a cargar
-			UnServer.EnviarMensajeTamanoVariable("1", ClientSocket);
-			// Envio info de los sprites a cargar
-			UnServer.EnviarMensajeTamanoVariable("PlayerRed", ClientSocket);	// ID
-			UnServer.EnviarMensajeTamanoVariable("30", ClientSocket);			// FRAME WIDTH
-			UnServer.EnviarMensajeTamanoVariable("40", ClientSocket);			// FRAME HEIGHT
-			UnServer.EnviarMensajeTamanoVariable("1", ClientSocket);			// CANT ESTADOS
-			UnServer.EnviarMensajeTamanoVariable("QUIETO", ClientSocket);		// NOMBRE ESTADO
-			UnServer.EnviarMensajeTamanoVariable("3", ClientSocket);			// CANT FRAMES ESTADO
+			tinyxml2::XMLDocument docu;
 
-			//UnServer.EnviarMensajeTamanoVariable("PlayerBlue", ClientSocket);
-			//UnServer.EnviarMensajeTamanoVariable("PlayerYellow", ClientSocket);
-			//UnServer.EnviarMensajeTamanoVariable("hombre", ClientSocket);
+
+			if (docu.LoadFile("Archivos\\escenario.xml") != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
+			{
+
+				tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
+
+				tinyxml2::XMLElement* elementoSprites = elementoEscenario->FirstChildElement("SPRITES");
+
+				const char* cantidadSrites = elementoSprites->Attribute("cantidad");
+				// Envio cantidad de sprites a cargar
+				UnServer.EnviarMensajeTamanoVariable(cantidadSrites, ClientSocket);
+
+				//iterando sobre todos los Sprites 
+				for (tinyxml2::XMLElement* elementoSprite = elementoSprites->FirstChildElement("SPRITE"); elementoSprite != NULL; elementoSprite = elementoSprite->NextSiblingElement("SPRITE"))
+				{
+
+					// Envio info de los sprites a cargar
+					const char* idSprite = elementoSprite->Attribute("id");
+					UnServer.EnviarMensajeTamanoVariable(idSprite, ClientSocket);	// ID
+					const char* frameWidthSprite = elementoSprite->Attribute("frameWidth");
+					UnServer.EnviarMensajeTamanoVariable(frameWidthSprite, ClientSocket);			// FRAME WIDTH
+					const char* frameHeightSprite = elementoSprite->Attribute("frameHeight");
+					UnServer.EnviarMensajeTamanoVariable(frameHeightSprite, ClientSocket);			// FRAME HEIGHT
+
+					tinyxml2::XMLElement* elementoEstados = elementoSprite->FirstChildElement("ESTADOS");
+					const char* cantidadEstados = elementoEstados->Attribute("cantidad");
+					UnServer.EnviarMensajeTamanoVariable(cantidadEstados, ClientSocket);			// CANT ESTADOS
+
+					//iterando sobre todos los estados de un Sprite
+					for (tinyxml2::XMLElement* elementoEstado = elementoEstados->FirstChildElement("ESTADO"); elementoEstado != NULL; elementoEstado = elementoEstado->NextSiblingElement("ESTADO"))
+					{
+
+						const char* idEstado = elementoEstado->Attribute("id");
+						UnServer.EnviarMensajeTamanoVariable(idEstado, ClientSocket);		// NOMBRE ESTADO
+						const char* cantFramesEstado = elementoEstado->Attribute("cantFrames");
+						UnServer.EnviarMensajeTamanoVariable(cantFramesEstado, ClientSocket);			// CANT FRAMES ESTADO
+					}
+
+				}
+
+			}
+			else std::cout << "error al cargar el archivo de configuracion de escenario.xml " << std::endl;
 		}
 		if (mensaje == "NEWC") {
 
