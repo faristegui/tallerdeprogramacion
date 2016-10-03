@@ -273,15 +273,15 @@ void Pantalla::IniciarJuego() {
 
 	CargarSprites();
 
-	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario.bmp", 1800, 600); // Imagen para el escenario del juego
+	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario.bmp", 800, 600); // Imagen para el escenario del juego
 	bool sprite = false;
 	bool GameRunning = true;
 	SDL_Rect camara;
 	camara.x = 0;
 	camara.y = 0;
-	camara.w = 1800;
+	camara.w = 800;
 	camara.h = 600;
-	int speed = 5;
+	int speed = 10;
 	bool b[2] = {0,0};
 	int x = 0;
 	int y = 0;
