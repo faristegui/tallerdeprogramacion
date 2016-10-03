@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ESCENARIO anchoPX="800" altoPX="600">
+	<FONDO>
+		<CAPAS cantidad="2">
+			<IMAGEN nombre="imagen1.png" zIndex="1"/>
+			<IMAGEN nombre="imagen2.png" zIndex="2"/>
+		</CAPAS>
+	</FONDO>
+	<JUGADORES cantidadMaxima="4">
+		<JUGADOR user="fulano" password="567" conectado="si">
+			<PERSONAJE anchoPX="80" altoPX="60" coordX_izq="" coordX_der="">
+			</PERSONAJE>
+		</JUGADOR>
+		<JUGADOR user="leandro" password="miClave" conectado="no">
+			<PERSONAJE anchoPX="80" altoPX="60" coordX_izq="" coordX_der="">
+			</PERSONAJE>
+		</JUGADOR>
+		<JUGADOR user="jorgito" password="1234" conectado="no">
+			<PERSONAJE anchoPX="80" altoPX="60" coordX_izq="" coordX_der="">
+			</PERSONAJE>
+		</JUGADOR>
+	</JUGADORES>	
+	<SPRITES cantidad="1">
+		<SPRITE id="PlayerRed" frameWidth="30" frameHeight="40">
+				<ESTADOS cantidad="1">
+					<ESTADO id="QUIETO" cantFrames="3"/>
+				</ESTADOS>
+		</SPRITE>
+	</SPRITES>
+</ESCENARIO>
