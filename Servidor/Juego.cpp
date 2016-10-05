@@ -8,8 +8,22 @@ Juego::Juego()
 
 
 void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {
-	Jugadores[CantJugadores] = new Jugador(UnNombre, UnIDSprite);
-	CantJugadores++;
+
+	bool JugadorYaSeHabiaConectado = false;
+
+	for (int i = 0; i < CantJugadores; i++) {
+		if (Jugadores[i]->GetNombre() == UnNombre) {
+
+			Jugadores[i]->SetEstaConectado(true);
+			JugadorYaSeHabiaConectado = true;
+			break;
+		}
+	}
+
+	if (!JugadorYaSeHabiaConectado) {
+		Jugadores[CantJugadores] = new Jugador(UnNombre, UnIDSprite);
+		CantJugadores++;
+	}
 }
 
 Posicion Juego::GetCamara() {
@@ -102,7 +116,14 @@ Jugador* Juego::GetJugador(int Index) {
 
 
 bool Juego::UsuarioYaLogueado(std::string Usuario) {
-	return !(GetIndexUsuario(Usuario) == -1);
+	int i = GetIndexUsuario(Usuario);
+
+	if (i > -1) {
+
+		return Jugadores[i]->GetEstaConectado();
+	}
+
+	return false;
 }
 
 Juego::~Juego()
