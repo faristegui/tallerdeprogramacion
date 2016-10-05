@@ -16,6 +16,7 @@ public:
 	bool UsuarioYaLogueado(std::string Usuario);
 	Jugador* GetJugador(std::string UnNombre);
 	Jugador* GetJugador(int Index);
+	int GetIndiceJugador(std::string Usuario);
 	int GetCantJugadores();
 	Posicion GetCamara();
 private:

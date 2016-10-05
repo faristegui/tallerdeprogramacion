@@ -118,20 +118,31 @@ void MainListenThread(void* arg) {
 
 			UnServer.EnviarMensaje(StrCantJugadores, 1, ClientSocket);
 
+			int IndiceMiJugador = UnJuego.GetIndiceJugador(Usuario);
+			Jugador* MiJugador = UnJuego.GetJugador(IndiceMiJugador);
+			
 			for (int i = 0; i < CantJugadores; i++) {
 
-				Jugador* UnJugador = UnJuego.GetJugador(i);
+				if (i != IndiceMiJugador) {
 
-				string IDSprite = UnJugador->GetIDSprite();
-				string Estado = UnJugador->GetEstado();
-				string PosX = IntAString(UnJugador->GetX());
-				string PosY = IntAString(UnJugador->GetY());
+					Jugador* OtroJugador = UnJuego.GetJugador(i);
 
-				UnServer.EnviarMensajeTamanoVariable(IDSprite, ClientSocket);
-				UnServer.EnviarMensajeTamanoVariable(Estado, ClientSocket);
-				UnServer.EnviarMensaje(PosX, 4, ClientSocket);
-				UnServer.EnviarMensaje(PosY, 4, ClientSocket);
+					string IDSprite = OtroJugador->GetIDSprite();
+					string Estado = OtroJugador->GetEstado();
+					string PosX = IntAString(OtroJugador->GetX());
+					string PosY = IntAString(OtroJugador->GetY());
+
+					UnServer.EnviarMensajeTamanoVariable(IDSprite, ClientSocket);
+					UnServer.EnviarMensajeTamanoVariable(Estado, ClientSocket);
+					UnServer.EnviarMensaje(PosX, 4, ClientSocket);
+					UnServer.EnviarMensaje(PosY, 4, ClientSocket);
+				}
 			}
+
+			UnServer.EnviarMensajeTamanoVariable(MiJugador->GetIDSprite(), ClientSocket);
+			UnServer.EnviarMensajeTamanoVariable(MiJugador->GetEstado(), ClientSocket);
+			UnServer.EnviarMensaje(IntAString(MiJugador->GetX()), 4, ClientSocket);
+			UnServer.EnviarMensaje(IntAString(MiJugador->GetY()), 4, ClientSocket);
 
 		}
 		if (mensaje == "ENVI")

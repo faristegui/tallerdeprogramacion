@@ -118,6 +118,10 @@ Jugador* Juego::GetJugador(int Index) {
 	return Jugadores[Index];
 }
 
+int Juego::GetIndiceJugador(std::string Usuario) {
+
+	return GetIndexUsuario(Usuario);
+}
 
 bool Juego::UsuarioYaLogueado(std::string Usuario) {
 	int i = GetIndexUsuario(Usuario);
