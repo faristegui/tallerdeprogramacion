@@ -301,12 +301,12 @@ void Pantalla::IniciarJuego() {
 
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
 					Evento = "RIGHT";
-
+					/*
 					camara.x += speed;
 					if (camara.x >= 1800 - 800)
 					{
 						camara.x = 0;
-					}
+					}*/
 				}
 				if (Event.key.keysym.sym == SDLK_LEFT) {
 					Evento = "LEFT";
@@ -328,9 +328,14 @@ void Pantalla::IniciarJuego() {
 		}
 
 		SDL_RenderClear(Renderer);
-		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect); // Fondo
-		
+
 		cliente->EnviarMensaje("STAT", 4);
+		
+		camara.x = stoi(cliente->RecibirMensajeTamanoVariable());
+		camara.y = stoi(cliente->RecibirMensajeTamanoVariable());
+
+		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect); // Fondo
+
 		string StrCantJugadores = cliente->RecibirMensaje(1);
 		int CantJugadores = stoi(StrCantJugadores);
 
@@ -343,7 +348,7 @@ void Pantalla::IniciarJuego() {
 			
 			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
 		}
-
+		
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);
 	}

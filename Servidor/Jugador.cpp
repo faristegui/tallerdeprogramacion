@@ -15,8 +15,11 @@ void Jugador::Mover(std::string Direccion) {
 		y -= 10;
 	}
 
-	if ((Direccion == "RIGHT") && (x <= 730)) { //No puede avanzar más allá de la cámara
-		x += 10;
+	if (Direccion == "RIGHT") {
+
+		if (x <= 730) { //No puede avanzar más allá de la cámara
+			x += 10;
+		}
 	}
 
 	if ((Direccion == "DOWN") && (y <= 450)) { //No permite que se vaya para abajo del escenario
@@ -35,6 +38,10 @@ void Jugador::setEstadoConexion(bool estadoConexion)
 		this->desconectado = estadoConexion;
 		this->Estado = "DESCONECTADO";
 	}
+}
+void Jugador::MoverAdelante(int UnX) {
+
+	x += UnX;
 }
 
 std::string Jugador::GetNombre() {

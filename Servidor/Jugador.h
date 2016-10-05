@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+
 class Jugador
 {
 public:
@@ -12,6 +13,7 @@ public:
 	void setEstadoConexion(bool estadoConexion);
 	int GetX();
 	int GetY();
+	void MoverAdelante(int UnX);
 private:
 	std::string Nombre;
 	std::string IDSprite;

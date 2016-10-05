@@ -109,6 +109,13 @@ void MainListenThread(void* arg) {
 			int CantJugadores = UnJuego.GetCantJugadores();
 			std::string StrCantJugadores = IntAString(CantJugadores);
 
+			Posicion UnaCamara = UnJuego.GetCamara();
+			std::string CamaraX = IntAString(UnaCamara.x);
+			std::string CamaraY = IntAString(UnaCamara.y);
+
+			UnServer.EnviarMensajeTamanoVariable(CamaraX, ClientSocket);
+			UnServer.EnviarMensajeTamanoVariable(CamaraY, ClientSocket);
+
 			UnServer.EnviarMensaje(StrCantJugadores, 1, ClientSocket);
 
 			for (int i = 0; i < CantJugadores; i++) {
