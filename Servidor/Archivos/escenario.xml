@@ -20,8 +20,13 @@
 			</PERSONAJE>
 		</JUGADOR>
 	</JUGADORES>	
-	<SPRITES cantidad="1">
+	<SPRITES cantidad="2">
 		<SPRITE id="PlayerRed" frameWidth="30" frameHeight="40">
+				<ESTADOS cantidad="1">
+					<ESTADO id="QUIETO" cantFrames="3"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerYellow" frameWidth="30" frameHeight="40">
 				<ESTADOS cantidad="1">
 					<ESTADO id="QUIETO" cantFrames="3"/>
 				</ESTADOS>

@@ -282,9 +282,7 @@ void Pantalla::IniciarJuego() {
 	camara.w = 800;
 	camara.h = 600;
 	int speed = 10;
-	bool b[2] = {0,0};
-	int x = 0;
-	int y = 0;
+
 	while (GameRunning) {
 
 		Starting_Tick = SDL_GetTicks();
@@ -302,12 +300,22 @@ void Pantalla::IniciarJuego() {
 				string Evento = "";
 
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
-					b[0] = 1;
 					Evento = "RIGHT";
+
+					camara.x += speed;
+					if (camara.x >= 1800 - 800)
+					{
+						camara.x = 0;
+					}
 				}
 				if (Event.key.keysym.sym == SDLK_LEFT) {
-					b[1] = 1;
 					Evento = "LEFT";
+
+					camara.x -= speed;
+					if (camara.x <= 0)
+					{
+						camara.x = 1800 - 800;
+					}
 				}
 				if (Event.key.keysym.sym == SDLK_UP) {
 
@@ -323,38 +331,6 @@ void Pantalla::IniciarJuego() {
 					cliente->EnviarMensajeTamanoVariable(Evento);
 				}
 			}
-			/*
-			if(Event.type = SDL_KEYUP)
-			{
-					if (Event.key.keysym.sym == SDLK_RIGHT) {
-					b[0] = 0;
-				}
-				if (Event.key.keysym.sym == SDLK_LEFT) {
-					b[1] = 0;
-				}
-			}
-			*/
-			if(b[0])
-			{
-				//x+=speed;
-				camara.x+=speed;
-				if(camara.x >= 1800-800)
-				{
-					camara.x = 0;
-				}
-				b[0] = 0;
-			}
-			else if (b[1])
-			{
-				//x-=speed;
-				camara.x -= speed;
-				if(camara.x <= 0)
-				{
-					camara.x = 1800-800;
-				}
-				b[1] = 0;
-			}
-
 		}
 
 		SDL_RenderClear(Renderer);
