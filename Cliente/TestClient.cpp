@@ -107,8 +107,6 @@ void ThreadStatus(void* pParams)
 		{
 			UnCliente.EscribirLog("Conexion con el servidor terminada. (Server Offline)."); //Uso la instancia del otro cliente para no pisar el Log
 			errorYaLogueado = true;
-			cout << "Se ha perdido la conexion con el servidor. El programa se cerrara en 5 segundos." << endl << endl;
-			Sleep(5000);
 			exit(0);
 		}
 		serverStatus = status;
