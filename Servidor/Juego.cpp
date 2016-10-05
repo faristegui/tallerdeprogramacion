@@ -37,7 +37,9 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 
 		if ((Jugadores[i]->GetX() < MinX) || (MinX == -1)) {
 
-			MinX = Jugadores[i]->GetX();
+			if (Jugadores[i]->GetEstaConectado()) {
+				MinX = Jugadores[i]->GetX();
+			}
 		}
 	}
 
@@ -57,9 +59,9 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 				
 				for (int i = 0; i < CantJugadores; i++) {
 
-					if (i != IndiceJugador) {
+					if ((i != IndiceJugador) && (Jugadores[i]->GetEstaConectado())) {
 
-						Jugadores[i]->MoverAdelante(-10);
+						Jugadores[i]->MoverEnX(-10);
 					}
 				}
 			}

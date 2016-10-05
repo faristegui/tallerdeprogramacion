@@ -10,16 +10,17 @@ public:
 	std::string GetNombre();
 	std::string GetIDSprite();
 	std::string GetEstado();
-	void setEstadoConexion(bool estadoConexion);
+	void SetEstaConectado(bool EstaConectado);
+	bool GetEstaConectado();
 	int GetX();
 	int GetY();
-	void MoverAdelante(int UnX);
+	void MoverEnX(int UnX);
 private:
 	std::string Nombre;
 	std::string IDSprite;
 	std::string Estado;
 	int x;
 	int y;
-	bool desconectado;
+	bool Conectado;
 };
 
