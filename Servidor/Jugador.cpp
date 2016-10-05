@@ -15,7 +15,7 @@ void Jugador::Mover(std::string Direccion) {
 		y -= 10;
 	}
 
-	if (Direccion == "RIGHT") {
+	if ((Direccion == "RIGHT") && (x <= 730)) { //No puede avanzar más allá de la cámara
 		x += 10;
 	}
 

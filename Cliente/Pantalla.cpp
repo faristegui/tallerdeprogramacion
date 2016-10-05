@@ -347,12 +347,12 @@ void Pantalla::IniciarJuego() {
 			else if (b[1])
 			{
 				//x-=speed;
-				camara.x -= speed;
+				/*camara.x -= speed;
 				if(camara.x <= 0)
 				{
 					camara.x = 1800-800;
 				}
-				b[1] = 0;
+				b[1] = 0;*/
 			}
 
 		}
