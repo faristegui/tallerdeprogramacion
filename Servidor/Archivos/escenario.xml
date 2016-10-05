@@ -24,7 +24,8 @@
 		<SPRITE id="PlayerRed" frameWidth="37" frameHeight="41">
 				<ESTADOS cantidad="3">
 					<ESTADO id="QUIETO" cantFrames="3"/>
-					<ESTADO id="CAMINANDO" cantFrames="5"/>
+					<ESTADO id="CAMINA" cantFrames="5"/>
+					
 					<ESTADO id="DESCONECTADO" cantFrames="1"/>
 				</ESTADOS>
 		</SPRITE>

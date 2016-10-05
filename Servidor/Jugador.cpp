@@ -20,6 +20,7 @@ void Jugador::Mover(std::string Direccion) {
 		if (x <= 730) { //No puede avanzar más allá de la cámara
 			x += 10;
 		}
+		this->Estado = "CAMINA";
 	}
 
 	if ((Direccion == "DOWN") && (y <= 450)) { //No permite que se vaya para abajo del escenario
@@ -28,6 +29,7 @@ void Jugador::Mover(std::string Direccion) {
 
 	if ((Direccion == "LEFT") && (x >= 20)) { //No permite que vuelva para atrás de la pantalla.
 		x -= 10;
+		this->Estado = "CAMINA";
 	}
 }
 
@@ -42,6 +44,11 @@ void Jugador::setEstadoConexion(bool estadoConexion)
 void Jugador::MoverAdelante(int UnX) {
 
 	x += UnX;
+}
+
+void Jugador::SetEstado(std::string nuevoEstado) {
+
+	this->Estado = nuevoEstado;
 }
 
 std::string Jugador::GetNombre() {

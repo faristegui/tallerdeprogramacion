@@ -10,6 +10,7 @@ public:
 	std::string GetNombre();
 	std::string GetIDSprite();
 	std::string GetEstado();
+	void SetEstado(std::string nuevoEstado);
 	void setEstadoConexion(bool estadoConexion);
 	int GetX();
 	int GetY();

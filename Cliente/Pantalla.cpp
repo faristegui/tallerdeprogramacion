@@ -295,10 +295,9 @@ void Pantalla::IniciarJuego() {
 				break;
 			}
 
+			string Evento = "";
+
 			if (Event.type == SDL_KEYDOWN) {
-
-				string Evento = "";
-
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
 					Evento = "RIGHT";
 					/*
@@ -319,12 +318,22 @@ void Pantalla::IniciarJuego() {
 
 					Evento = "DOWN";
 				}
-
-				if (Evento != "") {
-					cliente->EnviarMensaje("EVEN", 4);
-					cliente->EnviarMensajeTamanoVariable(Evento);
-				}
 			}
+			if(Event.type == SDL_KEYUP)
+			{
+				if (Event.key.keysym.sym == SDLK_RIGHT) {
+					Evento = "SOLTO-RIGHT";
+				}
+				if (Event.key.keysym.sym == SDLK_LEFT) {
+					Evento = "SOLTO-LEFT";
+				}
+			}	
+
+			if (Evento != "") {
+				cliente->EnviarMensaje("EVEN", 4);
+				cliente->EnviarMensajeTamanoVariable(Evento);
+			}
+
 		}
 
 		SDL_RenderClear(Renderer);
