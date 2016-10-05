@@ -12,12 +12,58 @@ void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {
 	CantJugadores++;
 }
 
+Posicion Juego::GetCamara() {
+
+	return Camara;
+}
+
 void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
-	int i = GetIndexUsuario(Usuario);
+
+	int MinX = -1;
+	bool PuedeAvanzarCamara = true;
+	int IndiceJugador = 0;
+
+	for (int i = 0; i < CantJugadores; i++) {
+
+		if (ToLowerCase(Jugadores[i]->GetNombre()) == Usuario) {
+			
+			IndiceJugador = i;
+
+			if (Jugadores[i]->GetX() < 710) {
+
+				PuedeAvanzarCamara = false;
+			}
+		}
+
+		if ((Jugadores[i]->GetX() < MinX) || (MinX == -1)) {
+
+			MinX = Jugadores[i]->GetX();
+		}
+	}
+
+	if (MinX < 20) {
+		PuedeAvanzarCamara = false;
+	}
 
 	if ((Tipo == "UP") || (Tipo == "RIGHT") || (Tipo == "DOWN") || (Tipo == "LEFT")) {
 
-		Jugadores[i]->Mover(Tipo);
+		Jugadores[IndiceJugador]->Mover(Tipo);
+
+		if (Tipo == "RIGHT") {
+
+			if (PuedeAvanzarCamara) {
+
+				Camara.x += 10;
+				
+				for (int i = 0; i < CantJugadores; i++) {
+
+					if (i != IndiceJugador) {
+
+						Jugadores[i]->MoverAdelante(-10);
+					}
+				}
+			}
+		}
 	}
 
 }
