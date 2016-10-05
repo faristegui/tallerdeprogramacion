@@ -7,6 +7,7 @@ Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 	Estado = "QUIETO";
 	x = 20;
 	y = 455;
+	Conectado = true;
 }
 
 void Jugador::Mover(std::string Direccion) {
@@ -33,15 +34,26 @@ void Jugador::Mover(std::string Direccion) {
 	}
 }
 
-void Jugador::setEstadoConexion(bool estadoConexion)
+void Jugador::SetEstaConectado(bool EstaConectado)
 {
-	if(estadoConexion)
+	this->Conectado = EstaConectado;
+
+	if(!EstaConectado)
 	{
-		this->desconectado = estadoConexion;
 		this->Estado = "DESCONECTADO";
+		this->x = 0;
+	}
+	else {
+		this->Estado = "QUIETO";
 	}
 }
-void Jugador::MoverAdelante(int UnX) {
+
+bool Jugador::GetEstaConectado() {
+
+	return Conectado;
+}
+
+void Jugador::MoverEnX(int UnX) {
 
 	x += UnX;
 }

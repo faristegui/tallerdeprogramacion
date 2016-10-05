@@ -285,7 +285,7 @@ void MainListenThread(void* arg) {
 
 	if (!EsThreadDePing) { // Cliente se desconecto
 
-		UnJuego.GetJugador(Usuario)->setEstadoConexion(true);
+		UnJuego.GetJugador(Usuario)->SetEstaConectado(false);
 
 		CantidadClientes--;
 
