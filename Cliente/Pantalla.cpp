@@ -253,7 +253,7 @@ void Pantalla::RenderSprite(std::string ID, std::string NombreEstado, Uint32 Tic
 			OffsetY = UnEstado.Numero * UnSprite.FrameHeight;
 
 			Crop_Rect.x = OffsetX * UnSprite.FrameWidth;
-			Crop_Rect.y = OffsetY * UnSprite.FrameHeight;
+			Crop_Rect.y = OffsetY;
 			Crop_Rect.w = UnSprite.FrameWidth;
 			Crop_Rect.h = UnSprite.FrameHeight;
 

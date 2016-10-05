@@ -9,6 +9,7 @@ public:
 	std::string GetNombre();
 	std::string GetIDSprite();
 	std::string GetEstado();
+	void setEstadoConexion(bool estadoConexion);
 	int GetX();
 	int GetY();
 private:
@@ -17,5 +18,6 @@ private:
 	std::string Estado;
 	int x;
 	int y;
+	bool desconectado;
 };
 

@@ -41,15 +41,15 @@ int Juego::GetCantJugadores() {
 	return CantJugadores;
 }
 
-Jugador Juego::GetJugador(std::string Usuario) {
+Jugador* Juego::GetJugador(std::string Usuario) {
 	int i = GetIndexUsuario(Usuario);
 
-	return *Jugadores[i];
+	return Jugadores[i];
 }
 
-Jugador Juego::GetJugador(int Index) {
+Jugador* Juego::GetJugador(int Index) {
 	
-	return *Jugadores[Index];
+	return Jugadores[Index];
 }
 
 

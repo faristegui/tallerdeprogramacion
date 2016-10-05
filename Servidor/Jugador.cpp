@@ -28,6 +28,15 @@ void Jugador::Mover(std::string Direccion) {
 	}
 }
 
+void Jugador::setEstadoConexion(bool estadoConexion)
+{
+	if(estadoConexion)
+	{
+		this->desconectado = estadoConexion;
+		this->Estado = "DESCONECTADO";
+	}
+}
+
 std::string Jugador::GetNombre() {
 
 	return Nombre;

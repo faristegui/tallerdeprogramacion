@@ -113,12 +113,12 @@ void MainListenThread(void* arg) {
 
 			for (int i = 0; i < CantJugadores; i++) {
 
-				Jugador UnJugador = UnJuego.GetJugador(i);
+				Jugador* UnJugador = UnJuego.GetJugador(i);
 
-				string IDSprite = UnJugador.GetIDSprite();
-				string Estado = UnJugador.GetEstado();
-				string PosX = IntAString(UnJugador.GetX());
-				string PosY = IntAString(UnJugador.GetY());
+				string IDSprite = UnJugador->GetIDSprite();
+				string Estado = UnJugador->GetEstado();
+				string PosX = IntAString(UnJugador->GetX());
+				string PosY = IntAString(UnJugador->GetY());
 
 				UnServer.EnviarMensajeTamanoVariable(IDSprite, ClientSocket);
 				UnServer.EnviarMensajeTamanoVariable(Estado, ClientSocket);
@@ -276,7 +276,9 @@ void MainListenThread(void* arg) {
 		}
 	}
 
-	if (!EsThreadDePing) {
+	if (!EsThreadDePing) { // Cliente se desconecto
+
+		UnJuego.GetJugador(Usuario)->setEstadoConexion(true);
 
 		CantidadClientes--;
 
