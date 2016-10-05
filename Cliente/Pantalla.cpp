@@ -310,12 +310,6 @@ void Pantalla::IniciarJuego() {
 				}
 				if (Event.key.keysym.sym == SDLK_LEFT) {
 					Evento = "LEFT";
-
-					camara.x -= speed;
-					if (camara.x <= 0)
-					{
-						camara.x = 1800 - 800;
-					}
 				}
 				if (Event.key.keysym.sym == SDLK_UP) {
 
@@ -334,7 +328,7 @@ void Pantalla::IniciarJuego() {
 		}
 
 		SDL_RenderClear(Renderer);
-		SDL_RenderCopy(Renderer, texture,&camara, &Back_Rect); // Fondo
+		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect); // Fondo
 		
 		cliente->EnviarMensaje("STAT", 4);
 		string StrCantJugadores = cliente->RecibirMensaje(1);
