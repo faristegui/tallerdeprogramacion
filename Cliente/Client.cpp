@@ -130,8 +130,6 @@ int Client::EnviarMensaje(string mensaje, int sizeDatos)
 		//Agregaria en el log. Debido a perdida de conexion con el servidor. que opinan? [MZ]
 		//Adopte esta solucion porque no se cerraba el programa cuando lo pausabamos. 
 		this->EscribirLog("Se ha perdido la conexion con el servidor.");
-		cout << "Se ha perdido la conexion con el servidor. El programa se cerrara en 5 segundos." << endl << endl;
-		Sleep(5000);
 		exit(0);
 	}
 	return cantidadBytesEnviados;
