@@ -93,16 +93,19 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 }
 
 SDL_Rect Pantalla::crearFondo(char* path, int width, int heigth) {
-	background = SDL_LoadBMP(path);
 
 	SDL_Rect background_Rect;
+
+	SDL_Surface *TmpSurface;
 
 	background_Rect.x = 0;
 	background_Rect.y = 0;
 	background_Rect.w = width;
 	background_Rect.h = heigth;
-	
-	texture = SDL_CreateTextureFromSurface(Renderer,background);
+
+	TmpSurface = IMG_Load(path);
+	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
+	texture = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
 
 	return background_Rect;
 }
@@ -273,7 +276,8 @@ void Pantalla::IniciarJuego() {
 
 	CargarSprites();
 
-	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario.bmp", 800, 600); // Imagen para el escenario del juego
+	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario.bmp", 800, 600); // Escenario movible
+
 	bool sprite = false;
 	bool GameRunning = true;
 	SDL_Rect camara;
@@ -300,8 +304,11 @@ void Pantalla::IniciarJuego() {
 			if (Event.type == SDL_KEYDOWN) {
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
 					Evento = "RIGHT";
-					/*
-					camara.x += speed;
+					if (camara.x >= 1800 - 800)
+					{
+						camara.x = 0;
+					}
+					/*camara.x += speed;
 					if (camara.x >= 1800 - 800)
 					{
 						camara.x = 0;
@@ -327,6 +334,12 @@ void Pantalla::IniciarJuego() {
 				if (Event.key.keysym.sym == SDLK_LEFT) {
 					Evento = "SOLTO-LEFT";
 				}
+				if (Event.key.keysym.sym == SDLK_DOWN) {
+					Evento = "SOLTO-DOWN";
+				}
+				if (Event.key.keysym.sym == SDLK_UP) {
+					Evento = "SOLTO-UP";
+				}
 			}	
 
 			if (Evento != "") {
@@ -343,7 +356,7 @@ void Pantalla::IniciarJuego() {
 		camara.x = stoi(cliente->RecibirMensajeTamanoVariable());
 		camara.y = stoi(cliente->RecibirMensajeTamanoVariable());
 
-		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect); // Fondo
+		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect); // Escenario movible
 
 		string StrCantJugadores = cliente->RecibirMensaje(1);
 		int CantJugadores = stoi(StrCantJugadores);

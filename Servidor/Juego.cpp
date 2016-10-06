@@ -81,7 +81,7 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 			}
 		}
 	}
-	if((Tipo == "SOLTO-RIGHT") || (Tipo == "SOLTO-LEFT"))
+	if((Tipo == "SOLTO-RIGHT") || (Tipo == "SOLTO-LEFT") || (Tipo == "SOLTO-DOWN"))
 	{
 		Jugadores[IndiceJugador]->SetEstado("QUIETO");
 	}

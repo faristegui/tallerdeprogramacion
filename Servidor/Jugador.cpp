@@ -1,4 +1,5 @@
 #include "Jugador.h"
+#include <windows.h>
 
 Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 {
@@ -13,7 +14,8 @@ Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 void Jugador::Mover(std::string Direccion) {
 
 	if (Direccion == "UP") {
-		y -= 10;
+		this->Estado = "SALTANDO";
+		this->saltoVertical();
 	}
 
 	if (Direccion == "RIGHT") {
@@ -24,8 +26,9 @@ void Jugador::Mover(std::string Direccion) {
 		this->Estado = "CAMINA";
 	}
 
-	if ((Direccion == "DOWN") && (y <= 450)) { //No permite que se vaya para abajo del escenario
-		y += 10;
+	if (Direccion == "DOWN") { //No se mueve para abajo, solo en el salto
+		//y += 10;
+		this->Estado = "AGACHADO";
 	}
 
 	if ((Direccion == "LEFT") && (x >= 20)) { //No permite que vuelva para atrás de la pantalla.
@@ -46,6 +49,12 @@ void Jugador::SetEstaConectado(bool EstaConectado)
 	else {
 		this->Estado = "QUIETO";
 	}
+}
+
+void Jugador::saltoVertical()
+{
+	
+	this->Estado = "QUIETO";
 }
 
 bool Jugador::GetEstaConectado() {
