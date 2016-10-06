@@ -304,10 +304,6 @@ void Pantalla::IniciarJuego() {
 			if (Event.type == SDL_KEYDOWN) {
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
 					Evento = "RIGHT";
-					if (camara.x >= 1800 - 800)
-					{
-						camara.x = 0;
-					}
 					/*camara.x += speed;
 					if (camara.x >= 1800 - 800)
 					{
@@ -356,7 +352,7 @@ void Pantalla::IniciarJuego() {
 		camara.x = stoi(cliente->RecibirMensajeTamanoVariable());
 		camara.y = stoi(cliente->RecibirMensajeTamanoVariable());
 
-		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect); // Escenario movible
+		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect);
 
 		string StrCantJugadores = cliente->RecibirMensaje(1);
 		int CantJugadores = stoi(StrCantJugadores);
