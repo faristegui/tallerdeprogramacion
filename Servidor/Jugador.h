@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <ctime>
 
 class Jugador
 {
@@ -21,6 +22,7 @@ private:
 	std::string Nombre;
 	std::string IDSprite;
 	std::string Estado;
+	float deltaBeginJump;
 	int x;
 	int y;
 	bool Conectado;

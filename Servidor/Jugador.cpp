@@ -15,7 +15,8 @@ void Jugador::Mover(std::string Direccion) {
 
 	if (Direccion == "UP") {
 		this->Estado = "SALTANDO";
-		this->saltoVertical();
+		deltaBeginJump = clock();
+		//this->saltoVertical();
 	}
 
 	if (Direccion == "RIGHT") {
@@ -54,7 +55,7 @@ void Jugador::SetEstaConectado(bool EstaConectado)
 void Jugador::saltoVertical()
 {
 	
-	this->Estado = "QUIETO";
+	//this->Estado = "QUIETO";
 }
 
 bool Jugador::GetEstaConectado() {
@@ -92,7 +93,25 @@ int Jugador::GetX() {
 	return x;
 }
 
+int a(float t, float b, float c, float d) {
+	t /= d / 2;
+	if (t < 1) return c / 2 * t*t + b;
+	t--;
+	return -c / 2 * (t*(t - 2) - 1) + b;
+}
+
 int Jugador::GetY() {
+
+	if (this->Estado == "SALTANDO") {
+		
+		float newTime = clock();
+		float dif = a(newTime - deltaBeginJump, 0, 60, 300);
+		y = 455 - dif;
+		if (newTime - deltaBeginJump >= 600) {
+			this->Estado = "QUIETO";
+			y = 455;
+		}
+	}
 
 	return y;
 }
