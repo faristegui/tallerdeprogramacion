@@ -350,6 +350,7 @@ void Pantalla::IniciarJuego() {
 		cliente->EnviarMensaje("STAT", 4);
 		
 		camara.x = stoi(cliente->RecibirMensajeTamanoVariable());
+		
 		camara.y = stoi(cliente->RecibirMensajeTamanoVariable());
 
 		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect);

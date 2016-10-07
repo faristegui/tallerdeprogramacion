@@ -70,6 +70,11 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 			if (PuedeAvanzarCamara) {
 
 				Camara.x += 10;
+
+				if(Camara.x > 1000)
+				{
+					Camara.x = 0;
+				}
 				
 				for (int i = 0; i < CantJugadores; i++) {
 
