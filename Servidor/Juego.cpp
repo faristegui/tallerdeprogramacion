@@ -35,7 +35,7 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 
 	int MinX = -1;
 	bool PuedeAvanzarCamara = true;
-	int IndiceJugador = 0;
+	int IndiceJugador = -1;
 
 	for (int i = 0; i < CantJugadores; i++) {
 
@@ -86,11 +86,18 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 			}
 		}
 	}
-	if((Tipo == "SOLTO-RIGHT") || (Tipo == "SOLTO-LEFT") || (Tipo == "SOLTO-DOWN"))
+	if((Tipo == "SOLTO-RIGHT") || (Tipo == "SOLTO-LEFT"))
 	{
-		Jugadores[IndiceJugador]->SetEstado("QUIETO");
+		if (Jugadores[IndiceJugador]->GetEstado() == "CAMINA") {
+			Jugadores[IndiceJugador]->SetEstado("QUIETO");
+		}
 	}
 
+	if (Tipo == "SOLTO-DOWN") {
+		if (Jugadores[IndiceJugador]->GetEstado() == "AGACHADO") {
+			Jugadores[IndiceJugador]->SetEstado("QUIETO");
+		}
+	}
 }
 
 int Juego::GetIndexUsuario(std::string Usuario) {

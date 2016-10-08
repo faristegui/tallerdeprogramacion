@@ -14,27 +14,37 @@ Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 void Jugador::Mover(std::string Direccion) {
 
 	if (Direccion == "UP") {
-		this->Estado = "SALTANDO";
-		deltaBeginJump = clock();
-		//this->saltoVertical();
+
+		if (this->Estado != "SALTANDO") {
+
+			this->Estado = "SALTANDO";
+			TiempoInicioSalto = clock();
+			PosicionYInicioSalto = y;
+		}
 	}
 
 	if (Direccion == "RIGHT") {
 
-		if (x <= 730) { //No puede avanzar más allá de la cámara
+		if (x <= 730) {
 			x += 10;
 		}
-		this->Estado = "CAMINA";
+
+		if (this->Estado != "SALTANDO") {
+			this->Estado = "CAMINA";
+		}
 	}
 
-	if (Direccion == "DOWN") { //No se mueve para abajo, solo en el salto
-		//y += 10;
-		this->Estado = "AGACHADO";
+	if (Direccion == "DOWN") {
+		if (this->Estado != "SALTANDO") {
+			this->Estado = "AGACHADO";
+		}
 	}
 
-	if ((Direccion == "LEFT") && (x >= 20)) { //No permite que vuelva para atrás de la pantalla.
+	if ((Direccion == "LEFT") && (x >= 20)) {
 		x -= 10;
-		this->Estado = "CAMINA";
+		if (this->Estado != "SALTANDO") {
+			this->Estado = "CAMINA";
+		}
 	}
 }
 
@@ -104,12 +114,12 @@ int Jugador::GetY() {
 
 	if (this->Estado == "SALTANDO") {
 		
-		float newTime = clock();
-		float dif = a(newTime - deltaBeginJump, 0, 60, 300);
-		y = 455 - dif;
-		if (newTime - deltaBeginJump >= 600) {
+		float TiempoActual = clock();
+		float dif = a(TiempoActual - TiempoInicioSalto, 0, 60, 300);
+		y = PosicionYInicioSalto - dif;
+		if (TiempoActual - TiempoInicioSalto >= 500) {
 			this->Estado = "QUIETO";
-			y = 455;
+			y = PosicionYInicioSalto;
 		}
 	}
 

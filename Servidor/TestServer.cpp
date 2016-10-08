@@ -62,7 +62,7 @@ void MainListenThread(void* arg) {
 
 				if (!UnJuego.UsuarioYaLogueado(UsuarioMsj)) {
 
-					Usuario = UsuarioMsj;
+					Usuario = ToLowerCase(UsuarioMsj);
 
 					std::string IDSprite;
 

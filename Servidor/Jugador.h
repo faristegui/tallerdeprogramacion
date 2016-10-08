@@ -22,7 +22,8 @@ private:
 	std::string Nombre;
 	std::string IDSprite;
 	std::string Estado;
-	float deltaBeginJump;
+	float TiempoInicioSalto;
+	int PosicionYInicioSalto;
 	int x;
 	int y;
 	bool Conectado;
