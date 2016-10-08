@@ -111,7 +111,7 @@ SDL_Rect Pantalla::crearFondo(char* path, int width, int heigth) {
 	background_Rect.w = width;
 	background_Rect.h = heigth;
 
-	TmpSurface = IMG_Load(path);
+	TmpSurface = SDL_LoadBMP(path);
 	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
 	texture = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
 
@@ -285,7 +285,8 @@ void Pantalla::IniciarJuego() {
 	CargarSprites();
 
 	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario.bmp", 800, 600); // Escenario movible
-
+	SDL_Surface* button_surface = SDL_LoadBMP("ClientResources/fondocielo.bmp");
+	SDL_Texture* button_texture = SDL_CreateTextureFromSurface(Renderer, button_surface);
 	bool sprite = false;
 	bool GameRunning = true;
 	SDL_Rect camara;
@@ -295,10 +296,16 @@ void Pantalla::IniciarJuego() {
 	camara.h = 600;
 	int speed = 10;
 
+	SDL_Rect camaraCielo;
+	camaraCielo.x = 0;
+	camaraCielo.y = 0;
+	camaraCielo.w = 800;
+	camaraCielo.h = 600;
+
 	while (GameRunning) {
 
 		Starting_Tick = SDL_GetTicks();
-
+		string Evento = "";
 		while (SDL_PollEvent(&Event)) {
 
 			if (Event.type == SDL_QUIT) {
@@ -306,8 +313,6 @@ void Pantalla::IniciarJuego() {
 				GameRunning = false;
 				break;
 			}
-
-			string Evento = "";
 
 			if (Event.type == SDL_KEYDOWN) {
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
@@ -356,6 +361,8 @@ void Pantalla::IniciarJuego() {
 		
 		camara.y = stoi(cliente->RecibirMensajeTamanoVariable());
 
+
+		SDL_RenderCopy(Renderer, button_texture, &camaraCielo,NULL);
 		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect);
 
 		string StrCantJugadores = cliente->RecibirMensaje(1);
@@ -368,6 +375,11 @@ void Pantalla::IniciarJuego() {
 			int PosX = stoi(cliente->RecibirMensaje(4));
 			int PosY = stoi(cliente->RecibirMensaje(4));
 			
+			if (PosX > 710 && Evento == "RIGHT")
+			{
+				camaraCielo.x += 5;
+			}
+
 			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
 			EscribirMensaje("Player", PosX, PosY + 85, 12, Renderer);
 		}
