@@ -50,6 +50,7 @@ private:
 	Posicion* bolaPos;
 	void get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::string UnTexto,
 		SDL_Texture **texture, SDL_Rect *rect, int fontSize);
+	void EscribirMensaje(std::string Mensaje, int X, int Y, int Tamano, SDL_Renderer *Renderer);
 	void WaitFPS(Uint32 starting_tick);
 	void AgregarSprite(std::string ID, int FrameWidth, int FrameHeight);
 	void CargarSprites();

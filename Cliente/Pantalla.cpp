@@ -59,6 +59,14 @@ void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::stri
 	rect->h = text_height;
 }
 
+void Pantalla::EscribirMensaje(std::string Mensaje, int PosX, int PosY, int Tamano, SDL_Renderer *Renderer) {
+	SDL_Rect Message_Rect;
+	SDL_Texture* Message;
+
+	get_text_and_rect(Renderer, PosX, PosY, Mensaje.c_str(), &Message, &Message_Rect, Tamano);
+	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
+}
+
 void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 	SDL_Rect Message_Rect;
 	SDL_Texture* Message;
@@ -304,11 +312,6 @@ void Pantalla::IniciarJuego() {
 			if (Event.type == SDL_KEYDOWN) {
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
 					Evento = "RIGHT";
-					/*camara.x += speed;
-					if (camara.x >= 1800 - 800)
-					{
-						camara.x = 0;
-					}*/
 				}
 				if (Event.key.keysym.sym == SDLK_LEFT) {
 					Evento = "LEFT";
@@ -366,6 +369,7 @@ void Pantalla::IniciarJuego() {
 			int PosY = stoi(cliente->RecibirMensaje(4));
 			
 			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
+			EscribirMensaje("Player", PosX, PosY + 85, 12, Renderer);
 		}
 		
 		WaitFPS(Starting_Tick);
