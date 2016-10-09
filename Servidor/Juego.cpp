@@ -72,15 +72,10 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 				Camara.x += 10;
 
 				//Loop en imagen del escenario
-				if((Camara.x == 1000) && (Camara.y == 0))
+				
+				if((Camara.x == 1800))
 				{
 					Camara.x = 0;
-					Camara.y = 600;
-				}
-				if((Camara.x == 1000) && (Camara.y == 600))
-				{
-					Camara.x = 0;
-					Camara.y = 0;
 				}
 				
 				for (int i = 0; i < CantJugadores; i++) {

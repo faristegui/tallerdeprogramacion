@@ -25,7 +25,7 @@ void Jugador::Mover(std::string Direccion) {
 
 	if (Direccion == "RIGHT") {
 
-		if (x <= 730) {
+		if (x <= 710) {
 			x += 10;
 		}
 
