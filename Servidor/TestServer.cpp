@@ -138,11 +138,24 @@ void MainListenThread(void* arg) {
 					UnServer.EnviarMensaje(PosY, 4, ClientSocket);
 				}
 			}
-
+			// Renderizo por ultimo mi jugador para asi aparece al frente
 			UnServer.EnviarMensajeTamanoVariable(MiJugador->GetIDSprite(), ClientSocket);
 			UnServer.EnviarMensajeTamanoVariable(MiJugador->GetEstado(), ClientSocket);
 			UnServer.EnviarMensaje(IntAString(MiJugador->GetX()), 4, ClientSocket);
 			UnServer.EnviarMensaje(IntAString(MiJugador->GetY()), 4, ClientSocket);
+			// Si hay mensajes para el usuario -> le envio
+			Lista<Mensaje*>* Buzon = UnServer.obtenerMensajesPara(Usuario);
+			int CantidadMensajes = Buzon->getTamanio();
+			UnServer.EnviarMensaje(IntAString(CantidadMensajes), 8, ClientSocket);
+			if (CantidadMensajes > 0) {
+				Buzon->iniciarCursor();
+
+				while (Buzon->avanzarCursor())
+				{
+					string ContenidoMensaje = Buzon->obtenerCursor()->obtenerContenido();
+					UnServer.EnviarMensajeTamanoVariable(ContenidoMensaje, ClientSocket);
+				}
+			}
 
 		}
 		if (mensaje == "ENVI")
@@ -299,6 +312,10 @@ void MainListenThread(void* arg) {
 		UnJuego.GetJugador(Usuario)->SetEstaConectado(false);
 
 		CantidadClientes--;
+
+		Lista<std::string>* TodosLosUsuarios = ControlUsuarios.obtenerTodos();
+		std::string Mensaje = Usuario + " se desconecto";
+		UnServer.enviarATodos(Mensaje, Usuario, TodosLosUsuarios);
 
 		if (mensaje == "EXIT") {
 			UnServer.EscribirLog("Un cliente se desconecto", true);

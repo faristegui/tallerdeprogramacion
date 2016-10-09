@@ -16,6 +16,7 @@ Pantalla::Pantalla(Client* unCliente)
 	cliente = unCliente;
 	SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();
+	Mensajes = new Lista<MensajeConsola>();
 
 	// Create an application window with the following settings:
 	Window = SDL_CreateWindow("Metal Slug", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
@@ -25,6 +26,16 @@ Pantalla::Pantalla(Client* unCliente)
 	if (Window == NULL) {
 		// TODO: Log "Could not create window"
 	}
+}
+
+void Pantalla::AgregarMensaje(std::string Mensaje, int Duracion, int TiempoDibujo) {
+	MensajeConsola UnMensaje;
+	
+	UnMensaje.Mensaje = Mensaje;
+	UnMensaje.Duracion = Duracion;
+	UnMensaje.TiempoDibujo = TiempoDibujo;
+
+	Mensajes->agregar(UnMensaje);
 }
 
 void Pantalla::WaitFPS(Uint32 starting_tick) {
@@ -375,6 +386,8 @@ void Pantalla::IniciarJuego() {
 			int PosX = stoi(cliente->RecibirMensaje(4));
 			int PosY = stoi(cliente->RecibirMensaje(4));
 			
+			// TODO: Desde aca
+			// TODO: Esto no tiene que estar adentro del for
 			if (PosX > 710 && Evento == "RIGHT")
 			{
 				camaraCielo.x += 5;
@@ -384,13 +397,43 @@ void Pantalla::IniciarJuego() {
 				//Reinicia el cielo
 				camaraCielo.x = 0;
 			}
+			// TODO: Hasta aca
 
 			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
 			EscribirMensaje("Player", PosX, PosY + 85, 12, Renderer);
 		}
-		
+
+		int CantidadMensajes = stoi(cliente->RecibirMensaje(8));
+		if (CantidadMensajes > 0) {
+			string Mensaje = cliente->RecibirMensajeTamanoVariable();
+			AgregarMensaje(Mensaje, 5, Starting_Tick);
+		}
+
+		MostrarMensajes(Starting_Tick);
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);
+	}
+}
+
+void Pantalla::MostrarMensajes(int StartingTick) {
+	int OffsetY = 5;
+	int i = 0;
+	Mensajes->iniciarCursor();
+
+	while (Mensajes->avanzarCursor()) {
+		
+		MensajeConsola UnMensaje = Mensajes->obtenerCursor();
+
+		if (StartingTick - UnMensaje.TiempoDibujo < UnMensaje.Duracion * 1000) {
+
+			EscribirMensaje(UnMensaje.Mensaje, 0, OffsetY, 20, Renderer);
+			OffsetY += 20;
+		}
+		else {
+
+			Mensajes->remover(i); //TODO: No esta borrando
+		}
+		i++;
 	}
 }
 
