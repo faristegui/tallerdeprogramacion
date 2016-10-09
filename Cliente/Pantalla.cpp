@@ -379,6 +379,11 @@ void Pantalla::IniciarJuego() {
 			{
 				camaraCielo.x += 5;
 			}
+			if(camaraCielo.x > 1000)
+			{
+				//Reinicia el cielo
+				camaraCielo.x = 0;
+			}
 
 			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
 			EscribirMensaje("Player", PosX, PosY + 85, 12, Renderer);
