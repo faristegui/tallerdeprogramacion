@@ -14,7 +14,6 @@ public:
 	void SetEstado(std::string nuevoEstado);
 	void SetEstaConectado(bool EstaConectado);
 	bool GetEstaConectado();
-	void saltoVertical();
 	int GetX();
 	int GetY();
 	void MoverEnX(int UnX);

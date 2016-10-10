@@ -62,12 +62,6 @@ void Jugador::SetEstaConectado(bool EstaConectado)
 	}
 }
 
-void Jugador::saltoVertical()
-{
-	
-	//this->Estado = "QUIETO";
-}
-
 bool Jugador::GetEstaConectado() {
 
 	return Conectado;

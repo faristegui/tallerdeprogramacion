@@ -54,7 +54,9 @@ void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::stri
 	SDL_Surface *surface;
 	SDL_Color textColor = { 255, 255, 255, 0 };
 
-	TTF_Font* Fuente = TTF_OpenFont("ClientResources/start.ttf", fontSize); //this opens a font style and sets a size
+	char* font = VerificarRecurso("start.ttf");
+
+	TTF_Font* Fuente = TTF_OpenFont(font, fontSize); //this opens a font style and sets a size
 
 	surface = TTF_RenderText_Solid(Fuente, UnTexto.c_str(), textColor);
 
@@ -83,8 +85,10 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 	SDL_Texture* Message;
 	std::string tmp;
 	bool Sale = false;
+
+	char* fondo = VerificarRecurso("partida.bmp");
 	
-	SDL_Rect back = this->crearFondo("ClientResources/partida.bmp",800,600);
+	SDL_Rect back = this->crearFondo(fondo,800,600);
 
 	SDL_RenderClear(Renderer);
 
@@ -111,7 +115,7 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 	}
 }
 
-SDL_Rect Pantalla::crearFondo(char* path, int width, int heigth) {
+SDL_Rect Pantalla::crearFondo(const char* path, int width, int heigth) {
 
 	SDL_Rect background_Rect;
 
@@ -135,7 +139,9 @@ std::string Pantalla::PedirParametro(std::string NombreParametro, std::string Va
 	SDL_Rect Message_Rect;
 	SDL_Texture* Message;
 
-	SDL_Rect back = this->crearFondo("ClientResources/start.bmp",800,600);
+	char* start = VerificarRecurso("start.bmp");
+
+	SDL_Rect back = this->crearFondo(start,800,600);
 
 	NombreParametro = NombreParametro + ":";
 
@@ -211,9 +217,9 @@ void Pantalla::AgregarSprite(std::string ID, int FrameWidth, int FrameHeight) {
 	UnSprite.FrameWidth = FrameWidth;
 	UnSprite.FrameHeight = FrameHeight;
 
-	ID = "ClientResources/" + ID + ".bmp";
+	ID = ID + ".bmp";
 
-	TmpSurface = IMG_Load(ID.c_str());
+	TmpSurface = IMG_Load(VerificarRecurso(ID));
 	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
 	TmpTexture = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
 
@@ -236,6 +242,21 @@ void Pantalla::CargarSprites() {
 
 		AgregarSprite(ID, FrameWidth, FrameHeight);
 	}
+}
+
+char* Pantalla::VerificarRecurso(std::string path)
+{
+	std::string pathDefault = "ClientResources/";
+
+	if(std::ifstream(pathDefault + path))
+	{
+		pathDefault = "ClientResources/" + path;
+	}
+	else
+	{
+		pathDefault = "Default/" + path;
+	}
+	return strdup(pathDefault.c_str());;
 }
 
 SpriteEstado Pantalla::GetEstado(Lista<SpriteEstado> *Estados, std::string Nombre) {
@@ -295,8 +316,12 @@ void Pantalla::IniciarJuego() {
 
 	CargarSprites();
 
-	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario.bmp", 800, 600); // Escenario movible
-	SDL_Surface* button_surface = SDL_LoadBMP("ClientResources/fondocielo.bmp");
+	//Verifica que el path exista y si no usa una carpeta Default
+	char* fondo = VerificarRecurso("escenario.bmp");
+	char* cielo = VerificarRecurso("fondocielo.bmp");
+
+	SDL_Rect Back_Rect = crearFondo(fondo, 800, 600); // Escenario movible
+	SDL_Surface* button_surface = SDL_LoadBMP(cielo);
 	SDL_Texture* button_texture = SDL_CreateTextureFromSurface(Renderer, button_surface);
 	bool sprite = false;
 	bool GameRunning = true;
@@ -379,28 +404,28 @@ void Pantalla::IniciarJuego() {
 		string StrCantJugadores = cliente->RecibirMensaje(1);
 		int CantJugadores = stoi(StrCantJugadores);
 
+		int PosX = 0;
+		int PosY = 0;
+
 		for (int i = 0; i < CantJugadores; i++) {
 
 			string IDSprite = cliente->RecibirMensajeTamanoVariable();
 			string Estado = cliente->RecibirMensajeTamanoVariable();
-			int PosX = stoi(cliente->RecibirMensaje(4));
-			int PosY = stoi(cliente->RecibirMensaje(4));
+			PosX = stoi(cliente->RecibirMensaje(4));
+			PosY = stoi(cliente->RecibirMensaje(4));
 			
-			// TODO: Desde aca
-			// TODO: Esto no tiene que estar adentro del for
-			if (PosX > 710 && Evento == "RIGHT")
-			{
-				camaraCielo.x += 5;
-			}
-			if(camaraCielo.x > 1000)
-			{
-				//Reinicia el cielo
-				camaraCielo.x = 0;
-			}
-			// TODO: Hasta aca
-
 			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
 			EscribirMensaje("Player", PosX, PosY + 85, 12, Renderer);
+		}
+
+		if (PosX > 710 && Evento == "RIGHT")
+		{
+			camaraCielo.x += 5;
+		}
+		if(camaraCielo.x > 1000)
+		{
+			//Reinicia el cielo
+			camaraCielo.x = 0;
 		}
 
 		int CantidadMensajes = stoi(cliente->RecibirMensaje(8));
