@@ -16,6 +16,7 @@ Pantalla::Pantalla(Client* unCliente)
 	cliente = unCliente;
 	SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();
+	Mensajes = new Lista<MensajeConsola>();
 
 	// Create an application window with the following settings:
 	Window = SDL_CreateWindow("Metal Slug", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
@@ -25,6 +26,16 @@ Pantalla::Pantalla(Client* unCliente)
 	if (Window == NULL) {
 		// TODO: Log "Could not create window"
 	}
+}
+
+void Pantalla::AgregarMensaje(std::string Mensaje, int Duracion, int TiempoDibujo) {
+	MensajeConsola UnMensaje;
+	
+	UnMensaje.Mensaje = Mensaje;
+	UnMensaje.Duracion = Duracion;
+	UnMensaje.TiempoDibujo = TiempoDibujo;
+
+	Mensajes->agregar(UnMensaje);
 }
 
 void Pantalla::WaitFPS(Uint32 starting_tick) {
@@ -43,7 +54,9 @@ void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::stri
 	SDL_Surface *surface;
 	SDL_Color textColor = { 255, 255, 255, 0 };
 
-	TTF_Font* Fuente = TTF_OpenFont("ClientResources/start.ttf", fontSize); //this opens a font style and sets a size
+	char* font = VerificarRecurso("start.ttf");
+
+	TTF_Font* Fuente = TTF_OpenFont(font, fontSize); //this opens a font style and sets a size
 
 	surface = TTF_RenderText_Solid(Fuente, UnTexto.c_str(), textColor);
 
@@ -72,8 +85,10 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 	SDL_Texture* Message;
 	std::string tmp;
 	bool Sale = false;
+
+	char* fondo = VerificarRecurso("partida.bmp");
 	
-	SDL_Rect back = this->crearFondo("ClientResources/partida.bmp",800,600);
+	SDL_Rect back = this->crearFondo(fondo,800,600);
 
 	SDL_RenderClear(Renderer);
 
@@ -100,7 +115,7 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 	}
 }
 
-SDL_Rect Pantalla::crearFondo(char* path, int width, int heigth) {
+SDL_Rect Pantalla::crearFondo(const char* path, int width, int heigth) {
 
 	SDL_Rect background_Rect;
 
@@ -124,7 +139,9 @@ std::string Pantalla::PedirParametro(std::string NombreParametro, std::string Va
 	SDL_Rect Message_Rect;
 	SDL_Texture* Message;
 
-	SDL_Rect back = this->crearFondo("ClientResources/start.bmp",800,600);
+	char* start = VerificarRecurso("start.bmp");
+
+	SDL_Rect back = this->crearFondo(start,800,600);
 
 	NombreParametro = NombreParametro + ":";
 
@@ -200,9 +217,9 @@ void Pantalla::AgregarSprite(std::string ID, int FrameWidth, int FrameHeight) {
 	UnSprite.FrameWidth = FrameWidth;
 	UnSprite.FrameHeight = FrameHeight;
 
-	ID = "ClientResources/" + ID + ".bmp";
+	ID = ID + ".bmp";
 
-	TmpSurface = IMG_Load(ID.c_str());
+	TmpSurface = IMG_Load(VerificarRecurso(ID));
 	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
 	TmpTexture = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
 
@@ -225,6 +242,21 @@ void Pantalla::CargarSprites() {
 
 		AgregarSprite(ID, FrameWidth, FrameHeight);
 	}
+}
+
+char* Pantalla::VerificarRecurso(std::string path)
+{
+	std::string pathDefault = "ClientResources/";
+
+	if(std::ifstream(pathDefault + path))
+	{
+		pathDefault = "ClientResources/" + path;
+	}
+	else
+	{
+		pathDefault = "Default/" + path;
+	}
+	return strdup(pathDefault.c_str());;
 }
 
 SpriteEstado Pantalla::GetEstado(Lista<SpriteEstado> *Estados, std::string Nombre) {
@@ -284,17 +316,21 @@ void Pantalla::IniciarJuego() {
 
 	CargarSprites();
 
-	SDL_Rect Back_Rect = crearFondo("ClientResources/escenario3.bmp", 800, 600);// Escenario movible
+	//Verifica que el path exista y si no usa una carpeta Default
+	char* fondo = VerificarRecurso("fondo.bmp");
+	char* escenario = VerificarRecurso("escenario3.bmp");
+	char* cielo = VerificarRecurso("fondocielo.bmp");
 
-	SDL_Surface* fondoCielo = SDL_LoadBMP("ClientResources/fondocielo.bmp");
+	SDL_Rect Back_Rect = crearFondo(escenario, 800, 600);// Escenario movible
+
+	SDL_Surface* fondoCielo = SDL_LoadBMP(cielo);
 	SDL_Texture* texturaCielo = SDL_CreateTextureFromSurface(Renderer, fondoCielo);
 
-	SDL_Surface* fondoEscenario = SDL_LoadBMP("ClientResources/fondo.bmp");
+	SDL_Surface* fondoEscenario = SDL_LoadBMP(fondo);
 	fondoEscenario->w = 800;
 	fondoEscenario->h = 600;
 	SDL_SetColorKey(fondoEscenario, SDL_TRUE, SDL_MapRGB(fondoEscenario->format, 128, 255, 0));
 	SDL_Texture* texturaFondoEscenario = SDL_CreateTextureFromSurface(Renderer, fondoEscenario);
-
 	bool sprite = false;
 	bool GameRunning = true;
 	SDL_Rect camara;
@@ -304,6 +340,11 @@ void Pantalla::IniciarJuego() {
 	camara.h = 600;
 	int speed = 10;
 
+	SDL_Rect camaraCielo;
+	camaraCielo.x = 0;
+	camaraCielo.y = 0;
+	camaraCielo.w = 800;
+	camaraCielo.h = 600;
 
 	while (GameRunning) {
 
@@ -364,6 +405,7 @@ void Pantalla::IniciarJuego() {
 		
 		camara.y = stoi(cliente->RecibirMensajeTamanoVariable());
 
+
 		SDL_RenderCopy(Renderer, texturaCielo,NULL,NULL);
 		SDL_RenderCopy(Renderer, texturaFondoEscenario,NULL,NULL);
 		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect);
@@ -371,19 +413,61 @@ void Pantalla::IniciarJuego() {
 		string StrCantJugadores = cliente->RecibirMensaje(1);
 		int CantJugadores = stoi(StrCantJugadores);
 
+		int PosX = 0;
+		int PosY = 0;
+
 		for (int i = 0; i < CantJugadores; i++) {
 
 			string IDSprite = cliente->RecibirMensajeTamanoVariable();
 			string Estado = cliente->RecibirMensajeTamanoVariable();
-			int PosX = stoi(cliente->RecibirMensaje(4));
-			int PosY = stoi(cliente->RecibirMensaje(4));
-
+			PosX = stoi(cliente->RecibirMensaje(4));
+			PosY = stoi(cliente->RecibirMensaje(4));
+			
 			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
 			EscribirMensaje("Player", PosX, PosY + 85, 12, Renderer);
 		}
-		
+
+		if (PosX > 710 && Evento == "RIGHT")
+		{
+			camaraCielo.x += 5;
+		}
+		if(camaraCielo.x > 1000)
+		{
+			//Reinicia el cielo
+			camaraCielo.x = 0;
+		}
+
+		int CantidadMensajes = stoi(cliente->RecibirMensaje(8));
+		if (CantidadMensajes > 0) {
+			string Mensaje = cliente->RecibirMensajeTamanoVariable();
+			AgregarMensaje(Mensaje, 5, Starting_Tick);
+		}
+
+		MostrarMensajes(Starting_Tick);
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);
+	}
+}
+
+void Pantalla::MostrarMensajes(int StartingTick) {
+	int OffsetY = 5;
+	int i = 0;
+	Mensajes->iniciarCursor();
+
+	while (Mensajes->avanzarCursor()) {
+		
+		MensajeConsola UnMensaje = Mensajes->obtenerCursor();
+
+		if (StartingTick - UnMensaje.TiempoDibujo < UnMensaje.Duracion * 1000) {
+
+			EscribirMensaje(UnMensaje.Mensaje, 0, OffsetY, 20, Renderer);
+			OffsetY += 20;
+		}
+		else {
+
+			Mensajes->remover(i); //TODO: No esta borrando
+		}
+		i++;
 	}
 }
 
