@@ -25,11 +25,6 @@ struct Sprite {
 	int FrameHeight;
 	Lista<SpriteEstado> *Estados;
 };
-struct MensajeConsola {
-	std::string Mensaje;
-	int TiempoDibujo;
-	int Duracion;
-};
 
 class Pantalla
 {
@@ -38,7 +33,7 @@ public:
 	~Pantalla();
 
 	std::string PedirParametro(std::string NombreParametro, std::string ValorXDefecto, int posX, int posY);
-	SDL_Rect crearFondo(const char* path, int width, int heigth);
+	SDL_Rect crearFondo(char* path, int width, int heigth);
 	void MostrarMensaje(std::string Mensaje, int posX, int posY);
 	void IniciarJuego();
 	Posicion* obtenerPosicion();
@@ -59,11 +54,7 @@ private:
 	void WaitFPS(Uint32 starting_tick);
 	void AgregarSprite(std::string ID, int FrameWidth, int FrameHeight);
 	void CargarSprites();
-	char* VerificarRecurso(std::string path);
 	Lista<Sprite> *Sprites;
-	Lista<MensajeConsola> *Mensajes;
-	void AgregarMensaje(std::string Mensaje, int Duracion, int TiempoDibujo);
-	void MostrarMensajes(int StartingTick);
 	void RenderSprite(std::string ID, std::string NombreEstado, Uint32 Ticks, SDL_Renderer *Renderer, int PosX, int PosY);
 	SpriteEstado GetEstado(Lista<SpriteEstado> *Estados, std::string Nombre);
 };
