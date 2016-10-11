@@ -68,7 +68,7 @@ void Jugador::Mover(std::string Direccion) {
 			if (x >= 20) {
 				x -= 10;
 			}
-		}
+		}  
 		else {
 			if (this->Estado != "SALTANDO-IZQ") {
 

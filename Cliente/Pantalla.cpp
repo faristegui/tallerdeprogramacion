@@ -425,14 +425,14 @@ void Pantalla::IniciarJuego() {
 
 		for (int i = 0; i < CantJugadores; i++) {
 
-
+			string Nombre = cliente->RecibirMensaje(15);
 			string IDSprite = cliente->RecibirMensajeTamanoVariable();
 			string Estado = cliente->RecibirMensajeTamanoVariable();
 			PosX = stoi(cliente->RecibirMensaje(4));
 			PosY = stoi(cliente->RecibirMensaje(4));
 			
 			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
-			EscribirMensaje("Player", PosX, PosY + 85, 12, Renderer);
+			EscribirMensaje(Nombre, PosX, PosY + 85, 12, Renderer);
 		}
 
 		if (PosX > 710 && Evento == "RIGHT")

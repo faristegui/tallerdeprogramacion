@@ -131,11 +131,13 @@ void MainListenThread(void* arg) {
 
 					Jugador* OtroJugador = UnJuego.GetJugador(i);
 
+					string Nombre = OtroJugador->GetNombre();
 					string IDSprite = OtroJugador->GetIDSprite();
 					string Estado = OtroJugador->GetEstado();
 					string PosX = IntAString(OtroJugador->GetX());
 					string PosY = IntAString(OtroJugador->GetY());
 
+					UnServer.EnviarMensaje(Nombre, 15, ClientSocket);
 					UnServer.EnviarMensajeTamanoVariable(IDSprite, ClientSocket);
 					UnServer.EnviarMensajeTamanoVariable(Estado, ClientSocket);
 					UnServer.EnviarMensaje(PosX, 4, ClientSocket);
@@ -143,6 +145,7 @@ void MainListenThread(void* arg) {
 				}
 			}
 			// Renderizo por ultimo mi jugador para asi aparece al frente
+			UnServer.EnviarMensaje(MiJugador->GetNombre(), 15, ClientSocket);
 			UnServer.EnviarMensajeTamanoVariable(MiJugador->GetIDSprite(), ClientSocket);
 			UnServer.EnviarMensajeTamanoVariable(MiJugador->GetEstado(), ClientSocket);
 			UnServer.EnviarMensaje(IntAString(MiJugador->GetX()), 4, ClientSocket);
