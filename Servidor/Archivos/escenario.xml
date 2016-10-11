@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ESCENARIO anchoPX="800" altoPX="600">
 	<FONDO>
-		<CAPAS cantidad="2">
-			<IMAGEN nombre="imagen1.png" zIndex="1"/>
-			<IMAGEN nombre="imagen2.png" zIndex="2"/>
+		<CAPAS cantidad="3">
+			<IMAGEN nombre="escenario3.bmp" zIndex="1"/>
+			<IMAGEN nombre="fondocielo.bmp" zIndex="2"/>
+			<IMAGEN nombre="fondo.bmp" zIndex="3"/>
 		</CAPAS>
 	</FONDO>
 	<JUGADORES cantidadMaxima="4">

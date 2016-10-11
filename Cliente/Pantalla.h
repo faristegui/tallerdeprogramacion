@@ -31,6 +31,12 @@ struct MensajeConsola {
 	int Duracion;
 };
 
+struct CapaFondoEscenario {
+
+	std::string nombreImagen;
+	int zIndex;
+};
+
 class Pantalla
 {
 public:
@@ -66,4 +72,8 @@ private:
 	void MostrarMensajes(int StartingTick);
 	void RenderSprite(std::string ID, std::string NombreEstado, Uint32 Ticks, SDL_Renderer *Renderer, int PosX, int PosY);
 	SpriteEstado GetEstado(Lista<SpriteEstado> *Estados, std::string Nombre);
+	void CargarCapasFondoEscenario();
+	Lista<CapaFondoEscenario> *CapasFondoEscenario;
+	void AgregarCapaFondoEscenario(std::string nombreImagen, int zIndex);
+	CapaFondoEscenario getCapaFondoEscenario(Lista<CapaFondoEscenario> *CapasFondoEscenario, int zindex);
 };

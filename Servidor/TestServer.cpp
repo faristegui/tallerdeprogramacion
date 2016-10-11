@@ -305,6 +305,49 @@ void MainListenThread(void* arg) {
 				CantidadClientes++;
 			}
 		}
+
+		if (mensaje == "ESCN")
+		{
+
+
+			tinyxml2::XMLDocument docu;
+
+
+			if (docu.LoadFile("Archivos\\escenario.xml") != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
+			{
+
+				tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
+
+				tinyxml2::XMLElement* elementoFondo = elementoEscenario->FirstChildElement("FONDO");
+
+
+
+				//iterando sobre todas las capas del fondo 
+				for (tinyxml2::XMLElement* elementoCapas = elementoFondo->FirstChildElement("CAPAS"); elementoCapas != NULL; elementoCapas = elementoCapas->NextSiblingElement("CAPAS"))
+				{
+
+					const char* cantidadCapasFondo = elementoCapas->Attribute("cantidad");
+					// Envio cantidad de capas a cargar
+					UnServer.EnviarMensajeTamanoVariable(cantidadCapasFondo, ClientSocket);
+
+
+
+					//iterando sobre todos los estados de un Sprite
+					for (tinyxml2::XMLElement* elementoImagen = elementoCapas->FirstChildElement("IMAGEN"); elementoImagen != NULL; elementoImagen = elementoImagen->NextSiblingElement("IMAGEN"))
+					{
+
+						const char* nombreImagen = elementoImagen->Attribute("nombre");
+						UnServer.EnviarMensajeTamanoVariable(nombreImagen, ClientSocket);		// NOMBRE Imagen de la capa
+						const char* zIndex = elementoImagen->Attribute("zIndex");
+						UnServer.EnviarMensajeTamanoVariable(zIndex, ClientSocket);			// zIndex de la capa en el fondo
+					}
+
+				}
+
+			}
+			else std::cout << "error al cargar el archivo de configuracion de escenario.xml " << std::endl;
+		}
+
 	}
 
 	if (!EsThreadDePing) { // Cliente se desconecto

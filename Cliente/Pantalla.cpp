@@ -319,14 +319,62 @@ void Pantalla::RenderSprite(std::string ID, std::string NombreEstado, Uint32 Tic
 	}
 }
 
+
+void Pantalla::CargarCapasFondoEscenario()
+{
+
+	CapasFondoEscenario = new Lista<CapaFondoEscenario>();
+
+	cliente->EnviarMensaje("ESCN", 4);
+	int CantidadCapasXFondoEscenario = stoi(cliente->RecibirMensajeTamanoVariable());
+
+	for (int i = 0; i < CantidadCapasXFondoEscenario; i++) {
+
+		std::string nombreImagen = cliente->RecibirMensajeTamanoVariable();
+		int zIndex = stoi(cliente->RecibirMensajeTamanoVariable());
+
+
+		AgregarCapaFondoEscenario(nombreImagen, zIndex);
+	}
+
+}
+
+void Pantalla::AgregarCapaFondoEscenario(std::string nombreImagen, int zIndex)
+{
+	CapaFondoEscenario unaCapa;
+	unaCapa.nombreImagen = nombreImagen;
+	unaCapa.zIndex = zIndex;
+	CapasFondoEscenario->agregar(unaCapa);
+
+}
+
+CapaFondoEscenario Pantalla::getCapaFondoEscenario(Lista<CapaFondoEscenario> *CapasFondoEscenario, int zindex)
+{
+
+	CapasFondoEscenario->iniciarCursor();
+
+	while (CapasFondoEscenario->avanzarCursor()) {
+
+		if (zindex == CapasFondoEscenario->obtenerCursor().zIndex) {
+
+			return CapasFondoEscenario->obtenerCursor();
+		}
+	}
+
+}
+
 void Pantalla::IniciarJuego() {
 
 	CargarSprites();
 
+	CargarCapasFondoEscenario();
+
+
 	//Verifica que el path exista y si no usa una carpeta Default
-	char* fondo = VerificarRecurso("fondo.bmp");
-	char* escenario = VerificarRecurso("escenario3.bmp");
-	char* cielo = VerificarRecurso("fondocielo.bmp");
+
+	char* escenario = VerificarRecurso(getCapaFondoEscenario(CapasFondoEscenario, 1).nombreImagen);
+	char* cielo = VerificarRecurso(getCapaFondoEscenario(CapasFondoEscenario, 2).nombreImagen);
+	char* fondo = VerificarRecurso(getCapaFondoEscenario(CapasFondoEscenario, 3).nombreImagen);
 
 	SDL_Rect Back_Rect = crearFondo(escenario, 800, 600);// Escenario movible
 
