@@ -39,12 +39,15 @@ void Jugador::Mover(std::string Direccion) {
 		}
 	}
 
-	if ((Direccion == "RIGHT") && (x <= 710))  {
+	if (Direccion == "RIGHT")  {
 		
 		if (!EstaSaltando()) {
 
 			this->Estado = "CAMINA-DER";
-			x += 10;
+
+			if (x <= 710) {
+				x += 10;
+			}
 		}
 		else {
 			if (this->Estado != "SALTANDO-DER") {
@@ -56,12 +59,15 @@ void Jugador::Mover(std::string Direccion) {
 		}
 	}
 
-	if ((Direccion == "LEFT") && (x >= 20)) {
+	if (Direccion == "LEFT") {
 
 		if (!EstaSaltando()) {
 
 			this->Estado = "CAMINA-IZQ";
-			x -= 10;
+
+			if (x >= 20) {
+				x -= 10;
+			}
 		}
 		else {
 			if (this->Estado != "SALTANDO-IZQ") {
