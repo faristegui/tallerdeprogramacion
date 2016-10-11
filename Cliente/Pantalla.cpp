@@ -461,8 +461,8 @@ void Pantalla::IniciarJuego() {
 		camara.y = stoi(cliente->RecibirMensajeTamanoVariable());
 
 
-		SDL_RenderCopy(Renderer, texturaCielo,NULL,NULL);
-		SDL_RenderCopy(Renderer, texturaFondoEscenario,NULL,NULL);
+		SDL_RenderCopy(Renderer, texturaCielo,&camaraCielo,NULL);
+		SDL_RenderCopy(Renderer, texturaFondoEscenario,&camara,NULL);
 		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect);
 
 		string StrCantJugadores = cliente->RecibirMensaje(1);
