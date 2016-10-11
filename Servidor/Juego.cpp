@@ -43,7 +43,7 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 			
 			IndiceJugador = i;
 
-			if (Jugadores[i]->GetX() < 710) {
+			if (Jugadores[i]->GetX() <= 710) {
 
 				PuedeAvanzarCamara = false;
 			}
@@ -137,6 +137,20 @@ Jugador* Juego::GetJugador(int Index) {
 int Juego::GetIndiceJugador(std::string Usuario) {
 
 	return GetIndexUsuario(Usuario);
+}
+
+Lista<std::string>* Juego::GetNombresJugadoresOnline() {
+	Lista<std::string>* JugadoresOnline = new Lista<std::string>();
+
+	for (int i = 0; i < CantJugadores; i++) {
+
+		if (Jugadores[i]->GetEstaConectado()) {
+
+			JugadoresOnline->agregar(Jugadores[i]->GetNombre());
+		}
+	}
+
+	return JugadoresOnline;
 }
 
 bool Juego::UsuarioYaLogueado(std::string Usuario) {

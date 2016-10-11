@@ -64,6 +64,10 @@ void MainListenThread(void* arg) {
 
 					Usuario = ToLowerCase(UsuarioMsj);
 
+					Lista<std::string>* UsuariosOnline = UnJuego.GetNombresJugadoresOnline();
+					std::string Mensaje = Usuario + " se conecto";
+					UnServer.enviarATodos(Mensaje, Usuario, UsuariosOnline);
+
 					std::string IDSprite;
 
 					// TODO: Ver como determinar que sprite mandarle a cada player
@@ -313,9 +317,9 @@ void MainListenThread(void* arg) {
 
 		CantidadClientes--;
 
-		Lista<std::string>* TodosLosUsuarios = ControlUsuarios.obtenerTodos();
+		Lista<std::string>* UsuariosOnline = UnJuego.GetNombresJugadoresOnline();
 		std::string Mensaje = Usuario + " se desconecto";
-		UnServer.enviarATodos(Mensaje, Usuario, TodosLosUsuarios);
+		UnServer.enviarATodos(Mensaje, Usuario, UsuariosOnline);
 
 		if (mensaje == "EXIT") {
 			UnServer.EscribirLog("Un cliente se desconecto", true);

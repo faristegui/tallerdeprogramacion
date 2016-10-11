@@ -425,6 +425,7 @@ void Pantalla::IniciarJuego() {
 
 		for (int i = 0; i < CantJugadores; i++) {
 
+
 			string IDSprite = cliente->RecibirMensajeTamanoVariable();
 			string Estado = cliente->RecibirMensajeTamanoVariable();
 			PosX = stoi(cliente->RecibirMensaje(4));

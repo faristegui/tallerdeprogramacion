@@ -1,4 +1,5 @@
 #include "Jugador.h"
+#include "Lista.h"
 
 #pragma once
 struct Posicion {
@@ -16,6 +17,7 @@ public:
 	bool UsuarioYaLogueado(std::string Usuario);
 	Jugador* GetJugador(std::string UnNombre);
 	Jugador* GetJugador(int Index);
+	Lista<std::string>* GetNombresJugadoresOnline();
 	int GetIndiceJugador(std::string Usuario);
 	int GetCantJugadores();
 	Posicion GetCamara();
