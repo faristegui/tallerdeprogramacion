@@ -17,14 +17,18 @@ public:
 	int GetX();
 	int GetY();
 	void MoverEnX(int UnX);
+	bool EstaCaminando();
 private:
 	std::string Nombre;
 	std::string IDSprite;
 	std::string Estado;
-	float TiempoInicioSalto;
+	float TiempoInicioSaltoY;
+	float TiempoInicioSaltoX;
 	int PosicionYInicioSalto;
+	int PosicionXInicioSalto;
 	int x;
 	int y;
 	bool Conectado;
+	bool EstaSaltando();
 };
 

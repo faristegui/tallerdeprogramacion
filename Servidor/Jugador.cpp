@@ -15,35 +15,68 @@ void Jugador::Mover(std::string Direccion) {
 
 	if (Direccion == "UP") {
 
-		if (this->Estado != "SALTANDO") {
+		if (!EstaSaltando()) {
+
+			TiempoInicioSaltoY = clock();
+			PosicionYInicioSalto = y;
+
+			if (EstaCaminando()) {
+
+				if (this->Estado == "CAMINA-DER") {
+					Direccion = "RIGHT";
+				} else {
+					Direccion = "LEFT";
+				}
+			}
 
 			this->Estado = "SALTANDO";
-			TiempoInicioSalto = clock();
-			PosicionYInicioSalto = y;
+		}
+		else {
+			if ((this->Estado != "SALTANDO-IZQ") || (this->Estado != "SALTANDO-DER")) {
+
+				this->Estado = "SALTANDO";
+			}
 		}
 	}
 
-	if (Direccion == "RIGHT") {
+	if ((Direccion == "RIGHT") && (x <= 710))  {
+		
+		if (!EstaSaltando()) {
 
-		if (x <= 710) {
+			this->Estado = "CAMINA-DER";
 			x += 10;
 		}
+		else {
+			if (this->Estado != "SALTANDO-DER") {
 
-		if (this->Estado != "SALTANDO") {
-			this->Estado = "CAMINA";
-		}
-	}
-
-	if (Direccion == "DOWN") {
-		if (this->Estado != "SALTANDO") {
-			this->Estado = "AGACHADO";
+				this->Estado = "SALTANDO-DER";
+				TiempoInicioSaltoX = clock();
+				PosicionXInicioSalto = x;
+			}
 		}
 	}
 
 	if ((Direccion == "LEFT") && (x >= 20)) {
-		x -= 10;
+
+		if (!EstaSaltando()) {
+
+			this->Estado = "CAMINA-IZQ";
+			x -= 10;
+		}
+		else {
+			if (this->Estado != "SALTANDO-IZQ") {
+
+				this->Estado = "SALTANDO-IZQ";
+				TiempoInicioSaltoX = clock();
+				PosicionXInicioSalto = x;
+			}
+		}
+	}
+
+	if (Direccion == "DOWN") {
+
 		if (this->Estado != "SALTANDO") {
-			this->Estado = "CAMINA";
+			this->Estado = "AGACHADO";
 		}
 	}
 }
@@ -92,11 +125,6 @@ std::string Jugador::GetEstado() {
 	return Estado;
 }
 
-int Jugador::GetX() {
-
-	return x;
-}
-
 int a(float t, float b, float c, float d) {
 	t /= d / 2;
 	if (t < 1) return c / 2 * t*t + b;
@@ -104,20 +132,60 @@ int a(float t, float b, float c, float d) {
 	return -c / 2 * (t*(t - 2) - 1) + b;
 }
 
+int Jugador::GetX() {
+
+	if (EstaSaltando()) {
+		float TiempoActual = clock();
+		float dif = a(TiempoActual - TiempoInicioSaltoX, 0, 120, 600);
+
+		if (this->Estado == "SALTANDO-DER") {
+			x = PosicionXInicioSalto + dif;
+		} 
+		else {
+			if (this->Estado == "SALTANDO-IZQ") {
+				x = PosicionXInicioSalto - dif;
+			}
+		}
+
+		if (x >= 710) {
+			this->Estado = "SALTANDO";
+			x = 710;
+		}
+		else {
+			if (x <= 20) {
+				this->Estado = "SALTANDO";
+				x = 20;
+			}
+		}
+	}
+
+	return x;
+}
+
 int Jugador::GetY() {
 
-	if (this->Estado == "SALTANDO") {
+	if (EstaSaltando()) {
 		
 		float TiempoActual = clock();
-		float dif = a(TiempoActual - TiempoInicioSalto, 0, 60, 300);
+		float dif = a(TiempoActual - TiempoInicioSaltoY, 0, 60, 300);
 		y = PosicionYInicioSalto - dif;
-		if (TiempoActual - TiempoInicioSalto >= 500) {
+		if (TiempoActual - TiempoInicioSaltoY >= 500) {
 			this->Estado = "QUIETO";
 			y = PosicionYInicioSalto;
 		}
 	}
 
 	return y;
+}
+
+bool Jugador::EstaSaltando() {
+
+	return ((this->Estado == "SALTANDO") || (this->Estado == "SALTANDO-DER") || (this->Estado == "SALTANDO-IZQ"));
+}
+
+bool Jugador::EstaCaminando() {
+
+	return ((this->Estado == "CAMINA-DER") || (this->Estado == "CAMINA-IZQ"));
 }
 
 Jugador::~Jugador()

@@ -90,13 +90,15 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 	}
 	if((Tipo == "SOLTO-RIGHT") || (Tipo == "SOLTO-LEFT"))
 	{
-		if (Jugadores[IndiceJugador]->GetEstado() == "CAMINA") {
+		if (Jugadores[IndiceJugador]->EstaCaminando()) {
+
 			Jugadores[IndiceJugador]->SetEstado("QUIETO");
 		}
 	}
 
 	if (Tipo == "SOLTO-DOWN") {
 		if (Jugadores[IndiceJugador]->GetEstado() == "AGACHADO") {
+
 			Jugadores[IndiceJugador]->SetEstado("QUIETO");
 		}
 	}

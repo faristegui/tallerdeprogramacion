@@ -261,6 +261,13 @@ char* Pantalla::VerificarRecurso(std::string path)
 
 SpriteEstado Pantalla::GetEstado(Lista<SpriteEstado> *Estados, std::string Nombre) {
 
+	int PosSep = Nombre.find("-");
+
+	if (PosSep > -1) {
+
+		Nombre = Nombre.substr(0, PosSep);
+	}
+
 	Estados->iniciarCursor();
 
 	while (Estados->avanzarCursor()) {
