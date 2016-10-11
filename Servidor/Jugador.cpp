@@ -75,7 +75,8 @@ void Jugador::Mover(std::string Direccion) {
 
 	if (Direccion == "DOWN") {
 
-		if (this->Estado != "SALTANDO") {
+		if (!EstaSaltando()) {
+
 			this->Estado = "AGACHADO";
 		}
 	}
