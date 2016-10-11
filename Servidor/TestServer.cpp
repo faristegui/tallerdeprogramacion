@@ -64,6 +64,10 @@ void MainListenThread(void* arg) {
 
 					Usuario = ToLowerCase(UsuarioMsj);
 
+					Lista<std::string>* UsuariosOnline = UnJuego.GetNombresJugadoresOnline();
+					std::string Mensaje = Usuario + " se conecto";
+					UnServer.enviarATodos(Mensaje, Usuario, UsuariosOnline);
+
 					std::string IDSprite;
 
 					// TODO: Ver como determinar que sprite mandarle a cada player
@@ -127,11 +131,13 @@ void MainListenThread(void* arg) {
 
 					Jugador* OtroJugador = UnJuego.GetJugador(i);
 
+					string Nombre = OtroJugador->GetNombre();
 					string IDSprite = OtroJugador->GetIDSprite();
 					string Estado = OtroJugador->GetEstado();
 					string PosX = IntAString(OtroJugador->GetX());
 					string PosY = IntAString(OtroJugador->GetY());
 
+					UnServer.EnviarMensaje(Nombre, 15, ClientSocket);
 					UnServer.EnviarMensajeTamanoVariable(IDSprite, ClientSocket);
 					UnServer.EnviarMensajeTamanoVariable(Estado, ClientSocket);
 					UnServer.EnviarMensaje(PosX, 4, ClientSocket);
@@ -139,6 +145,7 @@ void MainListenThread(void* arg) {
 				}
 			}
 			// Renderizo por ultimo mi jugador para asi aparece al frente
+			UnServer.EnviarMensaje(MiJugador->GetNombre(), 15, ClientSocket);
 			UnServer.EnviarMensajeTamanoVariable(MiJugador->GetIDSprite(), ClientSocket);
 			UnServer.EnviarMensajeTamanoVariable(MiJugador->GetEstado(), ClientSocket);
 			UnServer.EnviarMensaje(IntAString(MiJugador->GetX()), 4, ClientSocket);
@@ -356,9 +363,9 @@ void MainListenThread(void* arg) {
 
 		CantidadClientes--;
 
-		Lista<std::string>* TodosLosUsuarios = ControlUsuarios.obtenerTodos();
+		Lista<std::string>* UsuariosOnline = UnJuego.GetNombresJugadoresOnline();
 		std::string Mensaje = Usuario + " se desconecto";
-		UnServer.enviarATodos(Mensaje, Usuario, TodosLosUsuarios);
+		UnServer.enviarATodos(Mensaje, Usuario, UsuariosOnline);
 
 		if (mensaje == "EXIT") {
 			UnServer.EscribirLog("Un cliente se desconecto", true);
