@@ -21,10 +21,12 @@ public:
 	int GetIndiceJugador(std::string Usuario);
 	int GetCantJugadores();
 	Posicion GetCamara();
+	Posicion getCamaraPared();
 private:
 	int CantJugadores;
 	int GetIndexUsuario(std::string Usuario);
 	Jugador *Jugadores[5];
 	Posicion Camara;
+	Posicion camaraPared;
 };
 

@@ -382,7 +382,7 @@ void Pantalla::IniciarJuego() {
 	SDL_Texture* texturaCielo = SDL_CreateTextureFromSurface(Renderer, fondoCielo);
 
 	SDL_Surface* fondoEscenario = SDL_LoadBMP(fondo);
-	fondoEscenario->w = 800;
+	fondoEscenario->w = 2600;
 	fondoEscenario->h = 600;
 	SDL_SetColorKey(fondoEscenario, SDL_TRUE, SDL_MapRGB(fondoEscenario->format, 128, 255, 0));
 	SDL_Texture* texturaFondoEscenario = SDL_CreateTextureFromSurface(Renderer, fondoEscenario);
@@ -394,6 +394,12 @@ void Pantalla::IniciarJuego() {
 	camara.w = 800;
 	camara.h = 600;
 	int speed = 10;
+
+	SDL_Rect camaraPared;
+	camaraPared.x = 0;
+	camaraPared.y = 0;
+	camaraPared.w = 800;
+	camaraPared.h = 600;
 
 	SDL_Rect camaraCielo;
 	camaraCielo.x = 0;
@@ -460,9 +466,11 @@ void Pantalla::IniciarJuego() {
 		
 		camara.y = stoi(cliente->RecibirMensajeTamanoVariable());
 
+		camaraPared.x = stoi(cliente->RecibirMensajeTamanoVariable());
+		camaraPared.y = stoi(cliente->RecibirMensajeTamanoVariable());
 
 		SDL_RenderCopy(Renderer, texturaCielo,&camaraCielo,NULL);
-		SDL_RenderCopy(Renderer, texturaFondoEscenario,&camara,NULL);
+		SDL_RenderCopy(Renderer, texturaFondoEscenario,&camaraPared,NULL);
 		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect);
 
 		string StrCantJugadores = cliente->RecibirMensaje(1);
