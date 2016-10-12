@@ -11,7 +11,10 @@ Posicion Juego::getCamaraPared()
 	return camaraPared;
 }
 
-
+Posicion Juego::getCamaraCielo()
+{
+		return camaraCielo;
+}
 void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {
 
 	bool JugadorYaSeHabiaConectado = false;
@@ -78,6 +81,7 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 
 				camaraPared.x += 10;
 
+				camaraCielo.x += 5;
 				//Loop en imagen del escenario
 				
 				if((Camara.x == 1800))
@@ -90,6 +94,10 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 					camaraPared.x = 0;
 				}
 
+				if (camaraCielo.x > 1000)
+				{	
+					camaraCielo.x = 0;
+				}
 				for (int i = 0; i < CantJugadores; i++) {
 
 					if ((i != IndiceJugador) && (Jugadores[i]->GetEstaConectado())) {

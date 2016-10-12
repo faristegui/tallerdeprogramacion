@@ -379,8 +379,10 @@ void Pantalla::IniciarJuego() {
 	SDL_Rect Back_Rect = crearFondo(escenario, 800, 600);// Escenario movible
 
 	SDL_Surface* fondoCielo = SDL_LoadBMP(cielo);
+	fondoCielo->w = 2600;
+	fondoCielo->h = 600;
 	SDL_Texture* texturaCielo = SDL_CreateTextureFromSurface(Renderer, fondoCielo);
-
+	
 	SDL_Surface* fondoEscenario = SDL_LoadBMP(fondo);
 	fondoEscenario->w = 2600;
 	fondoEscenario->h = 600;
@@ -469,7 +471,10 @@ void Pantalla::IniciarJuego() {
 		camaraPared.x = stoi(cliente->RecibirMensajeTamanoVariable());
 		camaraPared.y = stoi(cliente->RecibirMensajeTamanoVariable());
 
-		SDL_RenderCopy(Renderer, texturaCielo,&camaraCielo,NULL);
+		camaraCielo.x = stoi(cliente->RecibirMensajeTamanoVariable());
+		camaraCielo.y = stoi(cliente->RecibirMensajeTamanoVariable());
+
+		SDL_RenderCopy(Renderer, texturaCielo,&camara,NULL);
 		SDL_RenderCopy(Renderer, texturaFondoEscenario,&camaraPared,NULL);
 		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect);
 

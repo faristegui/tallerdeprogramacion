@@ -125,6 +125,11 @@ void MainListenThread(void* arg) {
 			UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraPared.x),ClientSocket);
 			UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraPared.y),ClientSocket);
 
+			Posicion unaCamaraCielo = UnJuego.getCamaraCielo();
+
+			UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraCielo.x),ClientSocket);
+			UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraCielo.y),ClientSocket);
+
 			UnServer.EnviarMensaje(StrCantJugadores, 1, ClientSocket);
 
 			int IndiceMiJugador = UnJuego.GetIndiceJugador(Usuario);
