@@ -369,13 +369,15 @@ void MainListenThread(void* arg) {
 
 	if (!EsThreadDePing) { // Cliente se desconecto
 
-		UnJuego.GetJugador(Usuario)->SetEstaConectado(false);
+		if (Usuario != "") {
+
+			UnJuego.GetJugador(Usuario)->SetEstaConectado(false);
+			Lista<std::string>* UsuariosOnline = UnJuego.GetNombresJugadoresOnline();
+			std::string Mensaje = Usuario + " se desconecto";
+			UnServer.enviarATodos(Mensaje, Usuario, UsuariosOnline);
+		}
 
 		CantidadClientes--;
-
-		Lista<std::string>* UsuariosOnline = UnJuego.GetNombresJugadoresOnline();
-		std::string Mensaje = Usuario + " se desconecto";
-		UnServer.enviarATodos(Mensaje, Usuario, UsuariosOnline);
 
 		if (mensaje == "EXIT") {
 			UnServer.EscribirLog("Un cliente se desconecto", true);
