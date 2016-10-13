@@ -15,6 +15,13 @@ public:
 	void SetEstadoAnterior(std::string nuevoEstado);
 	void SetEstaConectado(bool EstaConectado);
 	bool GetEstaConectado();
+	void SetX(int UnX);
+	void SetY(int UnY);
+	std::string GetEstadoAnterior();
+	float GetTiempoInicioSaltoY();
+	float GetTiempoInicioSaltoX();
+	int GetPosicionYInicioSalto();
+	int GetPosicionXInicioSalto();
 	int GetX();
 	int GetY();
 	void MoverEnX(int UnX);

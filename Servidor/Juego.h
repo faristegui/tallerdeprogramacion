@@ -1,5 +1,7 @@
 #include "Jugador.h"
 #include "Lista.h"
+#include <windows.h>
+#include <process.h>
 
 #pragma once
 struct Posicion {
