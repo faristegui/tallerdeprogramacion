@@ -467,6 +467,10 @@ void Pantalla::IniciarJuego() {
 				if (Event.key.keysym.sym == SDLK_UP) {
 					Evento = "SOLTO-UP";
 				}
+				if (Event.key.keysym.sym == SDLK_r) {
+
+					CargarSprites();
+				}
 			}
 
 			if ((Evento != "") && (eventoAnterior != Evento)) {
