@@ -122,20 +122,23 @@ void FisicaThread(void* arg) {
 				bool MoverParaAtras = false;
 				Jugador *UnJugador = UnJuego->GetJugador(i);
 
-				if (UnJugador->GetEstado() != "CAMINA-DER") {
-
-					MoverParaAtras = true;
-				} else {
-					
-					if (UnJugador->GetX() < BordeEnXMaxCamara) {
+				if (UnJugador->GetEstaConectado()) {
+					if (UnJugador->GetEstado() != "CAMINA-DER") {
 
 						MoverParaAtras = true;
 					}
-				}
+					else {
 
-				if (MoverParaAtras) {
+						if (UnJugador->GetX() < BordeEnXMaxCamara) {
 
-					UnJugador->MoverEnX(-VelocidadEnX);
+							MoverParaAtras = true;
+						}
+					}
+
+					if (MoverParaAtras) {
+
+						UnJugador->MoverEnX(-VelocidadEnX);
+					}
 				}
 			}
 		}
