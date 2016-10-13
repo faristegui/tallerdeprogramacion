@@ -155,7 +155,10 @@ Juego::Juego()
 void Juego::AvanzarCamara() {
 
 	Camara.x += 10;
-	// TODO: Aca logica para que no se estiren los objetos
+	if(Camara.x > 1800)
+	{
+		Camara.x = 0;
+	}
 }
 
 Posicion Juego::getCamaraPared()

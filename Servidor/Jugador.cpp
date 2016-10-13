@@ -7,7 +7,7 @@ Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 	IDSprite = UnIDSprite;
 	Estado = "QUIETO";
 	x = 20;
-	y = 455;
+	y = 405;
 	Conectado = true;
 }
 

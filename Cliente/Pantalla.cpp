@@ -381,6 +381,16 @@ std::vector<std::string> split(const std::string &s, char delim) {
     return elems;
 }
 
+SDL_Rect crearCamara(){
+	SDL_Rect camara;
+	camara.x = 0;
+	camara.y = 0;
+	camara.w = 800;
+	camara.h = 600;
+
+	return camara;
+}
+
 void Pantalla::IniciarJuego() {
 
 	CargarSprites();
@@ -407,24 +417,12 @@ void Pantalla::IniciarJuego() {
 	SDL_Texture* texturaFondoEscenario = SDL_CreateTextureFromSurface(Renderer, fondoEscenario);
 	bool sprite = false;
 	bool GameRunning = true;
-	SDL_Rect camara;
-	camara.x = 0;
-	camara.y = 0;
-	camara.w = 800;
-	camara.h = 600;
+
+	SDL_Rect camara = crearCamara();
+	SDL_Rect camaraPared = crearCamara();
+	SDL_Rect camaraCielo = crearCamara();
+
 	int speed = 10;
-
-	SDL_Rect camaraPared;
-	camaraPared.x = 0;
-	camaraPared.y = 0;
-	camaraPared.w = 800;
-	camaraPared.h = 600;
-
-	SDL_Rect camaraCielo;
-	camaraCielo.x = 0;
-	camaraCielo.y = 0;
-	camaraCielo.w = 800;
-	camaraCielo.h = 600;
 	
 	string eventoAnterior = "";
 	while (GameRunning) {
@@ -442,12 +440,6 @@ void Pantalla::IniciarJuego() {
 			if (Event.type == SDL_KEYDOWN) {
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
 					Evento = "RIGHT";
-					camaraPared.x += 10;
-					//Loop de la pared
-					if(camaraPared.x > 800)
-					{
-						camaraPared.x = 0;
-					}
 				}
 				if (Event.key.keysym.sym == SDLK_LEFT) {
 					Evento = "LEFT";
@@ -494,6 +486,9 @@ void Pantalla::IniciarJuego() {
 
 		camara.x = stoi(mensajes[0]);
 		camara.y = stoi(mensajes[1]);
+
+		camaraPared.x = stoi(mensajes[0]);
+		camaraPared.y = stoi(mensajes[1]);
 
 		/*camara.x = stoi(cliente->RecibirMensajeTamanoVariable());
 		

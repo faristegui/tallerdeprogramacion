@@ -2,7 +2,7 @@
 <ESCENARIO anchoPX="800" altoPX="600">
 	<FONDO>
 		<CAPAS cantidad="3">
-			<IMAGEN nombre="escenario3.bmp" zIndex="1"/>
+			<IMAGEN nombre="objetos.bmp" zIndex="1"/>
 			<IMAGEN nombre="fondocielo.bmp" zIndex="2"/>
 			<IMAGEN nombre="fondo.bmp" zIndex="3"/>
 		</CAPAS>
@@ -25,7 +25,7 @@
 		<SPRITE id="PlayerRed" frameWidth="37" frameHeight="41">
 				<ESTADOS cantidad="5">
 					<ESTADO id="QUIETO" cantFrames="3"/>
-					<ESTADO id="CAMINA" cantFrames="5"/>
+					<ESTADO id="CAMINA" cantFrames="9"/>
 					<ESTADO id="DESCONECTADO" cantFrames="1"/>
 					<ESTADO id="AGACHADO" cantFrames="2"/>
 					<ESTADO id="SALTANDO" cantFrames="3"/>
@@ -34,7 +34,7 @@
 		<SPRITE id="PlayerYellow" frameWidth="37" frameHeight="41">
 				<ESTADOS cantidad="5">
 					<ESTADO id="QUIETO" cantFrames="3"/>
-					<ESTADO id="CAMINA" cantFrames="5"/>
+					<ESTADO id="CAMINA" cantFrames="9"/>
 					<ESTADO id="DESCONECTADO" cantFrames="1"/>
 					<ESTADO id="AGACHADO" cantFrames="2"/>
 					<ESTADO id="SALTANDO" cantFrames="3"/>
