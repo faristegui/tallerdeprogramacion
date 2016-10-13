@@ -1,5 +1,7 @@
 #include "Pantalla.h"
 #include <sstream>
+#include <string>
+#include <vector>
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 #define FPS 30
@@ -363,13 +365,28 @@ CapaFondoEscenario Pantalla::getCapaFondoEscenario(Lista<CapaFondoEscenario> *Ca
 
 }
 
+void split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    std::stringstream ss;
+    ss.str(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+}
+
+
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, elems);
+    return elems;
+}
+
 void Pantalla::IniciarJuego() {
 
 	CargarSprites();
 
 	CargarCapasFondoEscenario();
-
-
+	
 	//Verifica que el path exista y si no usa una carpeta Default
 
 	char* escenario = VerificarRecurso(getCapaFondoEscenario(CapasFondoEscenario, 1).nombreImagen);
@@ -408,7 +425,8 @@ void Pantalla::IniciarJuego() {
 	camaraCielo.y = 0;
 	camaraCielo.w = 800;
 	camaraCielo.h = 600;
-
+	
+	string eventoAnterior = "";
 	while (GameRunning) {
 
 		Starting_Tick = SDL_GetTicks();
@@ -420,7 +438,7 @@ void Pantalla::IniciarJuego() {
 				GameRunning = false;
 				break;
 			}
-
+			
 			if (Event.type == SDL_KEYDOWN) {
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
 					Evento = "RIGHT";
@@ -451,20 +469,27 @@ void Pantalla::IniciarJuego() {
 				if (Event.key.keysym.sym == SDLK_UP) {
 					Evento = "SOLTO-UP";
 				}
-			}	
-
-			if (Evento != "") {
-				cliente->EnviarMensaje("EVEN", 4);
-				cliente->EnviarMensajeTamanoVariable(Evento);
 			}
 
+			if ((Evento != "") && (eventoAnterior != Evento)) {
+				cliente->EnviarMensaje("EVEN", 4);
+				cliente->EnviarMensajeTamanoVariable(Evento);
+				eventoAnterior = Evento;
+			}
 		}
 
 		SDL_RenderClear(Renderer);
 
 		cliente->EnviarMensaje("STAT", 4);
 		
-		camara.x = stoi(cliente->RecibirMensajeTamanoVariable());
+		std::string respuestaServidor = cliente->RecibirMensaje(150);
+
+		std::vector<std::string> mensajes = split(respuestaServidor, ';');
+
+		camara.x = stoi(mensajes[0]);
+		camara.y = stoi(mensajes[1]);
+
+		/*camara.x = stoi(cliente->RecibirMensajeTamanoVariable());
 		
 		camara.y = stoi(cliente->RecibirMensajeTamanoVariable());
 
@@ -473,39 +498,30 @@ void Pantalla::IniciarJuego() {
 
 		camaraCielo.x = stoi(cliente->RecibirMensajeTamanoVariable());
 		camaraCielo.y = stoi(cliente->RecibirMensajeTamanoVariable());
-
+		*/
 		SDL_RenderCopy(Renderer, texturaCielo,&camara,NULL);
 		SDL_RenderCopy(Renderer, texturaFondoEscenario,&camaraPared,NULL);
 		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect);
 
-		string StrCantJugadores = cliente->RecibirMensaje(1);
-		int CantJugadores = stoi(StrCantJugadores);
+		//string StrCantJugadores = cliente->RecibirMensaje(1);
+		//int CantJugadores = stoi(StrCantJugadores);
+		int CantJugadores = stoi(mensajes[2]);
 
 		int PosX = 0;
 		int PosY = 0;
 
-		for (int i = 0; i < CantJugadores; i++) {
+		for (int i = 0; i < CantJugadores*5; i+=5) {
 
-			string Nombre = cliente->RecibirMensaje(15);
-			string IDSprite = cliente->RecibirMensajeTamanoVariable();
-			string Estado = cliente->RecibirMensajeTamanoVariable();
-			PosX = stoi(cliente->RecibirMensaje(4));
-			PosY = stoi(cliente->RecibirMensaje(4));
+			string Nombre = mensajes[i + 3]; //cliente->RecibirMensaje(15);
+			string IDSprite = mensajes[i + 4]; //cliente->RecibirMensajeTamanoVariable();
+			string Estado = mensajes[i + 5]; //cliente->RecibirMensajeTamanoVariable();
+			PosX = stoi(mensajes[i + 6]);//stoi(cliente->RecibirMensaje(4));
+			PosY = stoi(mensajes[i + 7]);//stoi(cliente->RecibirMensaje(4));
 			
 			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
 			EscribirMensaje(Nombre, PosX, PosY + 85, 12, Renderer);
 		}
-
-		if (PosX > 710 && Evento == "RIGHT")
-		{
-			camaraCielo.x += 5;
-		}
-		if(camaraCielo.x > 1000)
-		{
-			//Reinicia el cielo
-			camaraCielo.x = 0;
-		}
-
+		/*
 		int CantidadMensajes = stoi(cliente->RecibirMensaje(8));
 		if (CantidadMensajes > 0) {
 			string Mensaje = cliente->RecibirMensajeTamanoVariable();
@@ -513,6 +529,7 @@ void Pantalla::IniciarJuego() {
 		}
 
 		MostrarMensajes(Starting_Tick);
+		*/
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);
 	}
