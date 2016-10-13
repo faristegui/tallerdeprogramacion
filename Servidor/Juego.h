@@ -25,6 +25,7 @@ public:
 	Posicion GetCamara();
 	Posicion getCamaraPared();
 	Posicion getCamaraCielo();
+	void AvanzarCamara();
 private:
 	int CantJugadores;
 	int GetIndexUsuario(std::string Usuario);

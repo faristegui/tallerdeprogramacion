@@ -17,21 +17,10 @@ void FisicaThread(void* arg) {
 	Juego *UnJuego = (Juego*)arg;
 
 	while (true) {
-
-		bool PuedeAvanzarCamara = true;
-
+		
+		int MinPosX = -1;
+		bool AvanzaCamara = false;
 		int CantJugadores = UnJuego->GetCantJugadores();
-
-		for (int i = 0; i < CantJugadores; i++) {
-
-			Jugador *UnJugador = UnJuego->GetJugador(i);
-
-			if (UnJugador->GetX() < BordeEnXMinCamara) {
-
-				PuedeAvanzarCamara = false;
-				break;
-			}
-		}
 
 		for (int i = 0; i < CantJugadores; i++) {
 
@@ -48,7 +37,7 @@ void FisicaThread(void* arg) {
 							UnJugador->MoverEnX(VelocidadEnX);
 						} else {
 							
-							// TODO: Logica avanzar camara
+							AvanzaCamara = true;
 						}
 					}
 					else {
@@ -98,18 +87,55 @@ void FisicaThread(void* arg) {
 						}
 					}
 
-					// TODO: Pensar logica p avanzar camara si puede (si pasar a saltando)
-					/*
-					if (x >= 710) {
-						this->Estado = "SALTANDO";
-						x = 710;
+					if (UnJugador->GetX() >= BordeEnXMaxCamara) {
+
+						UnJugador->SetEstado("SALTANDO");
+						UnJugador->SetX(BordeEnXMaxCamara);
 					}
 					else {
-						if (x <= 20) {
-							this->Estado = "SALTANDO";
-							x = 20;
+						if (UnJugador->GetX() <= BordeEnXMinCamara) {
+
+							UnJugador->SetEstado("SALTANDO");
+							UnJugador->SetX(BordeEnXMinCamara);
 						}
-					}*/
+					}
+				}
+
+				if ((MinPosX == -1) || (UnJugador->GetX() < MinPosX)) {
+
+					MinPosX = UnJugador->GetX();
+				}
+			}
+		}
+
+		if (MinPosX <= BordeEnXMinCamara) {
+
+			AvanzaCamara = false;
+		}
+
+		if (AvanzaCamara) {
+
+			UnJuego->AvanzarCamara();
+
+			for (int i = 0; i < CantJugadores; i++) {
+
+				bool MoverParaAtras = false;
+				Jugador *UnJugador = UnJuego->GetJugador(i);
+
+				if (UnJugador->GetEstado() != "CAMINA-DER") {
+
+					MoverParaAtras = true;
+				} else {
+					
+					if (UnJugador->GetX() < BordeEnXMaxCamara) {
+
+						MoverParaAtras = true;
+					}
+				}
+
+				if (MoverParaAtras) {
+
+					UnJugador->MoverEnX(-VelocidadEnX);
 				}
 			}
 		}
@@ -124,6 +150,12 @@ Juego::Juego()
 {
 	CantJugadores = 0;
 	_beginthread(FisicaThread, 0, this);
+}
+
+void Juego::AvanzarCamara() {
+
+	Camara.x += 10;
+	// TODO: Aca logica para que no se estiren los objetos
 }
 
 Posicion Juego::getCamaraPared()
@@ -161,59 +193,13 @@ Posicion Juego::GetCamara() {
 
 void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 
-	int MinX = -1;
-	bool PuedeAvanzarCamara = true;
-	int IndiceJugador = -1;
-
-	for (int i = 0; i < CantJugadores; i++) {
-
-		if (ToLowerCase(Jugadores[i]->GetNombre()) == Usuario) {
-			
-			IndiceJugador = i;
-
-			if (Jugadores[i]->GetX() <= 710) {
-
-				PuedeAvanzarCamara = false;
-			}
-		}
-
-		if ((Jugadores[i]->GetX() < MinX) || (MinX == -1)) {
-
-			if (Jugadores[i]->GetEstaConectado()) {
-				MinX = Jugadores[i]->GetX();
-			}
-		}
-	}
-
-	if (MinX < 20) {
-		PuedeAvanzarCamara = false;
-	}
+	int IndiceJugador = GetIndexUsuario(Usuario);
 
 	if ((Tipo == "UP") || (Tipo == "RIGHT") || (Tipo == "DOWN") || (Tipo == "LEFT")) {
 
 		Jugadores[IndiceJugador]->Mover(Tipo);
-
-		if (Tipo == "RIGHT") {
-
-			if (PuedeAvanzarCamara) {
-
-				Camara.x += 10;
-
-				if((Camara.x == 1800))
-				{
-					Camara.x = 0;
-				}
-				
-				for (int i = 0; i < CantJugadores; i++) {
-
-					if ((i != IndiceJugador) && (Jugadores[i]->GetEstaConectado())) {
-
-						Jugadores[i]->MoverEnX(-10);
-					}
-				}
-			}
-		}
 	}
+
 	if((Tipo == "SOLTO-RIGHT") || (Tipo == "SOLTO-LEFT"))
 	{
 		if (Jugadores[IndiceJugador]->EstaCaminando()) {
