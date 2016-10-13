@@ -442,6 +442,12 @@ void Pantalla::IniciarJuego() {
 			if (Event.type == SDL_KEYDOWN) {
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
 					Evento = "RIGHT";
+					camaraPared.x += 10;
+					//Loop de la pared
+					if(camaraPared.x > 800)
+					{
+						camaraPared.x = 0;
+					}
 				}
 				if (Event.key.keysym.sym == SDLK_LEFT) {
 					Evento = "LEFT";
@@ -529,7 +535,12 @@ void Pantalla::IniciarJuego() {
 		MostrarMensajes(Starting_Tick);
 		*/
 
+		//Loop del cielo.
 		camaraCielo.x += 1;
+		if(camaraCielo.x > 1800)
+		{
+			camaraCielo.x = 0;
+		}
 
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);
