@@ -496,10 +496,8 @@ void Pantalla::IniciarJuego() {
 		camaraPared.x = stoi(cliente->RecibirMensajeTamanoVariable());
 		camaraPared.y = stoi(cliente->RecibirMensajeTamanoVariable());
 
-		camaraCielo.x = stoi(cliente->RecibirMensajeTamanoVariable());
-		camaraCielo.y = stoi(cliente->RecibirMensajeTamanoVariable());
 		*/
-		SDL_RenderCopy(Renderer, texturaCielo,&camara,NULL);
+		SDL_RenderCopy(Renderer, texturaCielo,&camaraCielo,NULL);
 		SDL_RenderCopy(Renderer, texturaFondoEscenario,&camaraPared,NULL);
 		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect);
 
@@ -530,6 +528,9 @@ void Pantalla::IniciarJuego() {
 
 		MostrarMensajes(Starting_Tick);
 		*/
+
+		camaraCielo.x += 1;
+
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);
 	}

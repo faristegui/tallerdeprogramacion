@@ -28,7 +28,7 @@
 					<ESTADO id="CAMINA" cantFrames="5"/>
 					<ESTADO id="DESCONECTADO" cantFrames="1"/>
 					<ESTADO id="AGACHADO" cantFrames="2"/>
-					<ESTADO id="SALTANDO" cantFrames="1"/>
+					<ESTADO id="SALTANDO" cantFrames="3"/>
 				</ESTADOS>
 		</SPRITE>
 		<SPRITE id="PlayerYellow" frameWidth="37" frameHeight="41">
@@ -37,7 +37,7 @@
 					<ESTADO id="CAMINA" cantFrames="5"/>
 					<ESTADO id="DESCONECTADO" cantFrames="1"/>
 					<ESTADO id="AGACHADO" cantFrames="2"/>
-					<ESTADO id="SALTANDO" cantFrames="1"/>
+					<ESTADO id="SALTANDO" cantFrames="3"/>
 				</ESTADOS>
 		</SPRITE>
 	</SPRITES>

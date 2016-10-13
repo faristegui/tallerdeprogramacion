@@ -114,6 +114,13 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 
 			Jugadores[IndiceJugador]->SetEstado("QUIETO");
 		}
+		else {
+			
+			if (Jugadores[IndiceJugador]->EstaSaltando()) {
+
+				Jugadores[IndiceJugador]->SetEstadoAnterior("QUIETO");
+			}
+		}
 	}
 
 	if (Tipo == "SOLTO-DOWN") {

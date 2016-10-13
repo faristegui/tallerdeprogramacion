@@ -12,16 +12,19 @@ public:
 	std::string GetIDSprite();
 	std::string GetEstado();
 	void SetEstado(std::string nuevoEstado);
+	void SetEstadoAnterior(std::string nuevoEstado);
 	void SetEstaConectado(bool EstaConectado);
 	bool GetEstaConectado();
 	int GetX();
 	int GetY();
 	void MoverEnX(int UnX);
 	bool EstaCaminando();
+	bool EstaSaltando();
 private:
 	std::string Nombre;
 	std::string IDSprite;
 	std::string Estado;
+	std::string EstadoAnterior;
 	float TiempoInicioSaltoY;
 	float TiempoInicioSaltoX;
 	int PosicionYInicioSalto;
@@ -29,6 +32,5 @@ private:
 	int x;
 	int y;
 	bool Conectado;
-	bool EstaSaltando();
 };
 

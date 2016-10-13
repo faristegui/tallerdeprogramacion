@@ -112,6 +112,8 @@ void Server::Abrir(std::string UnPuerto) {
 
 	// Creacion del socket 
 	this->ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
+	int flag = 1;
+	setsockopt(this->ListenSocket, IPPROTO_TCP, TCP_NODELAY, (char *)&flag, sizeof(int));
 	if (this->ListenSocket == INVALID_SOCKET)
 	{
 		ClearScreen();

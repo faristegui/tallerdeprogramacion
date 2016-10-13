@@ -117,23 +117,31 @@ void MainListenThread(void* arg) {
 			std::string CamaraX = IntAString(UnaCamara.x);
 			std::string CamaraY = IntAString(UnaCamara.y);
 
-			UnServer.EnviarMensajeTamanoVariable(CamaraX, ClientSocket);
-			UnServer.EnviarMensajeTamanoVariable(CamaraY, ClientSocket);
+			std::string GranMensaje = "";
 
-			Posicion unaCamaraPared = UnJuego.getCamaraPared();
+			//UnServer.EnviarMensajeTamanoVariable("0", ClientSocket);
+			//UnServer.EnviarMensajeTamanoVariable("0", ClientSocket);
 
-			UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraPared.x),ClientSocket);
-			UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraPared.y),ClientSocket);
+			//Posicion unaCamaraPared = UnJuego.getCamaraPared();
 
-			Posicion unaCamaraCielo = UnJuego.getCamaraCielo();
+			//UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraPared.x),ClientSocket);
+			//UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraPared.y),ClientSocket);
 
-			UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraCielo.x),ClientSocket);
-			UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraCielo.y),ClientSocket);
+			//Posicion unaCamaraCielo = UnJuego.getCamaraCielo();
 
-			UnServer.EnviarMensaje(StrCantJugadores, 1, ClientSocket);
+			//UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraCielo.x),ClientSocket);
+			//UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraCielo.y),ClientSocket);
 
+			//UnServer.EnviarMensaje(StrCantJugadores, 1, ClientSocket);
 			int IndiceMiJugador = UnJuego.GetIndiceJugador(Usuario);
 			Jugador* MiJugador = UnJuego.GetJugador(IndiceMiJugador);
+
+			GranMensaje.append(CamaraX); // CamaraX
+			GranMensaje.append(";");
+			GranMensaje.append(CamaraY); // CamaraY
+			GranMensaje.append(";");
+			GranMensaje.append(StrCantJugadores);
+			GranMensaje.append(";");
 			
 			for (int i = 0; i < CantJugadores; i++) {
 
@@ -147,20 +155,34 @@ void MainListenThread(void* arg) {
 					string PosX = IntAString(OtroJugador->GetX());
 					string PosY = IntAString(OtroJugador->GetY());
 
-					UnServer.EnviarMensaje(Nombre, 15, ClientSocket);
-					UnServer.EnviarMensajeTamanoVariable(IDSprite, ClientSocket);
-					UnServer.EnviarMensajeTamanoVariable(Estado, ClientSocket);
-					UnServer.EnviarMensaje(PosX, 4, ClientSocket);
-					UnServer.EnviarMensaje(PosY, 4, ClientSocket);
+					GranMensaje.append(Nombre);
+					GranMensaje.append(";");
+					GranMensaje.append(IDSprite);
+					GranMensaje.append(";");
+					GranMensaje.append(Estado);
+					GranMensaje.append(";");
+					GranMensaje.append(PosX);
+					GranMensaje.append(";");
+					GranMensaje.append(PosY);
+					GranMensaje.append(";");
 				}
 			}
 			// Renderizo por ultimo mi jugador para asi aparece al frente
-			UnServer.EnviarMensaje(MiJugador->GetNombre(), 15, ClientSocket);
-			UnServer.EnviarMensajeTamanoVariable(MiJugador->GetIDSprite(), ClientSocket);
-			UnServer.EnviarMensajeTamanoVariable(MiJugador->GetEstado(), ClientSocket);
-			UnServer.EnviarMensaje(IntAString(MiJugador->GetX()), 4, ClientSocket);
-			UnServer.EnviarMensaje(IntAString(MiJugador->GetY()), 4, ClientSocket);
+
+			GranMensaje.append(MiJugador->GetNombre().c_str()); // Nombre
+			GranMensaje.append(";");
+			GranMensaje.append(MiJugador->GetIDSprite().c_str()); // Sprite
+			GranMensaje.append(";");
+			GranMensaje.append(MiJugador->GetEstado().c_str()); // Estado
+			GranMensaje.append(";");
+			GranMensaje.append(IntAString(MiJugador->GetX())); // PosX
+			GranMensaje.append(";");
+			GranMensaje.append(IntAString(MiJugador->GetY())); // PosY
+
+			UnServer.EnviarMensaje(GranMensaje, 150, ClientSocket);
+
 			// Si hay mensajes para el usuario -> le envio
+			/*
 			Lista<Mensaje*>* Buzon = UnServer.obtenerMensajesPara(Usuario);
 			int CantidadMensajes = Buzon->getTamanio();
 			UnServer.EnviarMensaje(IntAString(CantidadMensajes), 8, ClientSocket);
@@ -173,7 +195,7 @@ void MainListenThread(void* arg) {
 					UnServer.EnviarMensajeTamanoVariable(ContenidoMensaje, ClientSocket);
 				}
 			}
-
+			*/
 		}
 		if (mensaje == "ENVI")
 		{

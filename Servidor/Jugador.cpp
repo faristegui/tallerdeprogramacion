@@ -22,6 +22,7 @@ void Jugador::Mover(std::string Direccion) {
 
 			if (EstaCaminando()) {
 
+				EstadoAnterior = this->Estado;
 				if (this->Estado == "CAMINA-DER") {
 					Direccion = "RIGHT";
 				} else {
@@ -44,15 +45,12 @@ void Jugador::Mover(std::string Direccion) {
 		if (!EstaSaltando()) {
 
 			this->Estado = "CAMINA-DER";
-
-			if (x <= 710) {
-				x += 10;
-			}
 		}
 		else {
 			if (this->Estado != "SALTANDO-DER") {
 
 				this->Estado = "SALTANDO-DER";
+				SetEstadoAnterior("CAMINA-DER");
 				TiempoInicioSaltoX = clock();
 				PosicionXInicioSalto = x;
 			}
@@ -64,15 +62,12 @@ void Jugador::Mover(std::string Direccion) {
 		if (!EstaSaltando()) {
 
 			this->Estado = "CAMINA-IZQ";
-
-			if (x >= 20) {
-				x -= 10;
-			}
 		}  
 		else {
 			if (this->Estado != "SALTANDO-IZQ") {
 
 				this->Estado = "SALTANDO-IZQ";
+				SetEstadoAnterior("CAMINA-IZQ");
 				TiempoInicioSaltoX = clock();
 				PosicionXInicioSalto = x;
 			}
@@ -115,6 +110,11 @@ void Jugador::MoverEnX(int UnX) {
 void Jugador::SetEstado(std::string nuevoEstado) {
 
 	this->Estado = nuevoEstado;
+}
+
+void Jugador::SetEstadoAnterior(std::string nuevoEstado) {
+
+	this->EstadoAnterior = nuevoEstado;
 }
 
 std::string Jugador::GetNombre() {
@@ -165,6 +165,21 @@ int Jugador::GetX() {
 			}
 		}
 	}
+	else {
+		if (this->Estado == "CAMINA-DER") {
+
+			if (x <= 710) {
+				x += 5;
+			}
+		}
+		else {
+			if (this->Estado == "CAMINA-IZQ") {
+				if (x >= 20) {
+					x -= 5;
+				}
+			}
+		}
+	}
 
 	return x;
 }
@@ -177,7 +192,11 @@ int Jugador::GetY() {
 		float dif = a(TiempoActual - TiempoInicioSaltoY, 0, 60, 300);
 		y = PosicionYInicioSalto - dif;
 		if (TiempoActual - TiempoInicioSaltoY >= 500) {
-			this->Estado = "QUIETO";
+			if (EstadoAnterior == "") {
+				EstadoAnterior = "QUIETO";
+			}
+			this->Estado = EstadoAnterior;
+			EstadoAnterior = "";
 			y = PosicionYInicioSalto;
 		}
 	}
