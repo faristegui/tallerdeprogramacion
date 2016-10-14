@@ -78,25 +78,26 @@ void FisicaThread(void* arg) {
 
 						Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoX, 0, 120, 600);
 						UnJugador->SetX(PosicionXInicioSalto + Diferencia);
+
+						if (UnJugador->GetX() >= BordeEnXMaxCamara) {
+
+							AvanzaCamara = true;
+							UnJugador->SetEstado("SALTANDO");
+							UnJugador->SetX(BordeEnXMaxCamara);
+						}
 					}
 					else {
 
 						if (UnJugador->GetEstado() == "SALTANDO-IZQ") {
+
 							Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoX, 0, 120, 600);
 							UnJugador->SetX(PosicionXInicioSalto - Diferencia);
-						}
-					}
 
-					if (UnJugador->GetX() >= BordeEnXMaxCamara) {
+							if (UnJugador->GetX() <= BordeEnXMinCamara) {
 
-						UnJugador->SetEstado("SALTANDO");
-						UnJugador->SetX(BordeEnXMaxCamara);
-					}
-					else {
-						if (UnJugador->GetX() <= BordeEnXMinCamara) {
-
-							UnJugador->SetEstado("SALTANDO");
-							UnJugador->SetX(BordeEnXMinCamara);
+								UnJugador->SetEstado("SALTANDO");
+								UnJugador->SetX(BordeEnXMinCamara);
+							}
 						}
 					}
 				}

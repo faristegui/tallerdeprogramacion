@@ -90,7 +90,8 @@ void Jugador::SetEstaConectado(bool EstaConectado)
 	if(!EstaConectado)
 	{
 		this->Estado = "DESCONECTADO";
-		this->x = 0;
+		this->x = 20;
+		this->y = 405;
 	}
 	else {
 		this->Estado = "QUIETO";
