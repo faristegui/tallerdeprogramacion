@@ -35,6 +35,8 @@ struct CapaFondoEscenario {
 
 	std::string nombreImagen;
 	int zIndex;
+	int ancho;
+	int altura;
 };
 
 class Pantalla
@@ -74,6 +76,6 @@ private:
 	SpriteEstado GetEstado(Lista<SpriteEstado> *Estados, std::string Nombre);
 	void CargarCapasFondoEscenario();
 	Lista<CapaFondoEscenario> *CapasFondoEscenario;
-	void AgregarCapaFondoEscenario(std::string nombreImagen, int zIndex);
+	void AgregarCapaFondoEscenario(std::string nombreImagen, int zIndex,int ancho,int altura);
 	CapaFondoEscenario getCapaFondoEscenario(Lista<CapaFondoEscenario> *CapasFondoEscenario, int zindex);
 };
