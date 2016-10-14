@@ -480,6 +480,10 @@ void Pantalla::IniciarJuego() {
 					fondoCielo->h = 600;
 					texturaCielo = SDL_CreateTextureFromSurface(Renderer, fondoCielo);
 					fondoEscenario = SDL_LoadBMP(fondo);
+					fondoEscenario->w = 2600;
+					fondoEscenario->h = 600;
+					SDL_SetColorKey(fondoEscenario, SDL_TRUE, SDL_MapRGB(fondoEscenario->format, 128, 255, 0));
+					texturaFondoEscenario = SDL_CreateTextureFromSurface(Renderer, fondoEscenario);
 				}
 			}
 
