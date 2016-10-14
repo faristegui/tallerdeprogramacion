@@ -154,7 +154,7 @@ void Server::Abrir(std::string UnPuerto) {
 		exit(0);
 	}
 
-	std::cout << "Server activado escuchando en el puerto: " << UnPuerto << std::endl;
+	std::cout << std::endl << "Server activado escuchando en el puerto: " << UnPuerto << std::endl;
 	this->EscribirLog("Servidor activado. Puerto: " + UnPuerto, true);
 }
 

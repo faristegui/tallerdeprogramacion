@@ -33,6 +33,8 @@ Usuarios ControlUsuarios;
 #define MAX_CLIENTES 6
 int CantidadClientes = 0;
 
+string ArchivoEscenarios = "";
+
 HANDLE ghMutex;
 Juego UnJuego;
 
@@ -287,8 +289,9 @@ void MainListenThread(void* arg) {
 
 			tinyxml2::XMLDocument docu;
 
+			char* pathXML = strdup(ArchivoEscenarios.c_str()); //"Archivos\\escenario.xml";
 
-			if (docu.LoadFile("Archivos\\escenario.xml") != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
+			if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
 			{
 
 				tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
@@ -351,8 +354,9 @@ void MainListenThread(void* arg) {
 
 			tinyxml2::XMLDocument docu;
 
+			char* pathXML =  strdup(ArchivoEscenarios.c_str()); //"Archivos\\escenario.xml"; //strdup(ArchivoEscenarios.c_str());
 
-			if (docu.LoadFile("Archivos\\escenario.xml") != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
+			if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
 			{
 
 				tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
@@ -445,14 +449,14 @@ int main()
 	if (Puerto.empty())
 	{
 		Puerto = "1000";
-		cout << "Se usara el puerto por default: 1000" << endl;
+		cout << endl << "Se usara el puerto por default: 1000" << endl;
 	}
 
 	string NombreArchivoUsuarios = "";
 
 	while (!ControlUsuarios.SetNombreArchivo(NombreArchivoUsuarios)) {
 
-		cout << "Ingrese el nombre del archivo de usuarios: ";
+		cout << endl << "Ingrese el nombre del archivo de usuarios: ";
 		std::getline(std::cin, NombreArchivoUsuarios);
 
 		if (NombreArchivoUsuarios.empty())
@@ -462,6 +466,22 @@ int main()
 		}
 	}
 
+	string pathEscenario = "";
+	//while (!ControlUsuarios.SetNombreArchivo(pathEscenario))
+	while(!std::ifstream("Archivos\\" + pathEscenario))
+	{
+		cout << endl << "Ingrese el nombre del archivo de escenario: ";
+		std::getline(std::cin, pathEscenario);
+
+		if (pathEscenario.empty())
+		{
+			pathEscenario = "escenario1.xml";
+			cout << "Se usara el archivo por default: escenario1.xml" << endl;
+		}
+	}
+	
+	ArchivoEscenarios = "Archivos\\" + pathEscenario;
+	
 	// Thread 1: Inicializacion del server
 
 	_beginthread(MainServerThread, 0, (void*)&Puerto);
