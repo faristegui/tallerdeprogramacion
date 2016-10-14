@@ -256,7 +256,7 @@ char* Pantalla::VerificarRecurso(std::string path)
 	}
 	else
 	{
-		pathDefault = "Default/" + path;
+		pathDefault = "ClientResources/cross.bmp";
 	}
 	return strdup(pathDefault.c_str());;
 }
@@ -335,7 +335,6 @@ void Pantalla::CargarCapasFondoEscenario()
 		std::string nombreImagen = cliente->RecibirMensajeTamanoVariable();
 		int zIndex = stoi(cliente->RecibirMensajeTamanoVariable());
 
-
 		AgregarCapaFondoEscenario(nombreImagen, zIndex);
 	}
 
@@ -394,7 +393,6 @@ SDL_Rect crearCamara(){
 void Pantalla::IniciarJuego() {
 
 	CargarSprites();
-
 	CargarCapasFondoEscenario();
 	
 	//Verifica que el path exista y si no usa una carpeta Default
@@ -470,6 +468,18 @@ void Pantalla::IniciarJuego() {
 				if (Event.key.keysym.sym == SDLK_r) {
 
 					CargarSprites();
+					CargarCapasFondoEscenario();
+
+					escenario = VerificarRecurso(getCapaFondoEscenario(CapasFondoEscenario, 1).nombreImagen);
+					cielo = VerificarRecurso(getCapaFondoEscenario(CapasFondoEscenario, 2).nombreImagen);
+					fondo = VerificarRecurso(getCapaFondoEscenario(CapasFondoEscenario, 3).nombreImagen);
+
+					Back_Rect = crearFondo(escenario, 800, 600);
+					fondoCielo = SDL_LoadBMP(cielo);
+					fondoCielo->w = 2600;
+					fondoCielo->h = 600;
+					texturaCielo = SDL_CreateTextureFromSurface(Renderer, fondoCielo);
+					fondoEscenario = SDL_LoadBMP(fondo);
 				}
 			}
 
@@ -502,8 +512,8 @@ void Pantalla::IniciarJuego() {
 		camaraPared.y = stoi(cliente->RecibirMensajeTamanoVariable());
 
 		*/
-		SDL_RenderCopy(Renderer, texturaCielo,&camaraCielo,NULL);
-		SDL_RenderCopy(Renderer, texturaFondoEscenario,&camaraPared,NULL);
+		SDL_RenderCopy(Renderer, texturaCielo, &camaraCielo, NULL);
+		SDL_RenderCopy(Renderer, texturaFondoEscenario, &camaraPared, NULL);
 		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect);
 
 		//string StrCantJugadores = cliente->RecibirMensaje(1);

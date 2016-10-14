@@ -359,8 +359,6 @@ void MainListenThread(void* arg) {
 
 				tinyxml2::XMLElement* elementoFondo = elementoEscenario->FirstChildElement("FONDO");
 
-
-
 				//iterando sobre todas las capas del fondo 
 				for (tinyxml2::XMLElement* elementoCapas = elementoFondo->FirstChildElement("CAPAS"); elementoCapas != NULL; elementoCapas = elementoCapas->NextSiblingElement("CAPAS"))
 				{
@@ -368,8 +366,6 @@ void MainListenThread(void* arg) {
 					const char* cantidadCapasFondo = elementoCapas->Attribute("cantidad");
 					// Envio cantidad de capas a cargar
 					UnServer.EnviarMensajeTamanoVariable(cantidadCapasFondo, ClientSocket);
-
-
 
 					//iterando sobre todos los estados de un Sprite
 					for (tinyxml2::XMLElement* elementoImagen = elementoCapas->FirstChildElement("IMAGEN"); elementoImagen != NULL; elementoImagen = elementoImagen->NextSiblingElement("IMAGEN"))
@@ -382,7 +378,6 @@ void MainListenThread(void* arg) {
 					}
 
 				}
-
 			}
 			else std::cout << "error al cargar el archivo de configuracion de escenario.xml " << std::endl;
 		}
