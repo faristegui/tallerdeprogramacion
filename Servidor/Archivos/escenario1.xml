@@ -2,9 +2,9 @@
 <ESCENARIO anchoPX="800" altoPX="600">
 	<FONDO>
 		<CAPAS cantidad="3">
-			<IMAGEN nombre="objetosScene1.bmp" zIndex="1"/>
-			<IMAGEN nombre="fondocieloScene1.bmp" zIndex="2"/>
-			<IMAGEN nombre="fondoScene1.bmp" zIndex="3"/>
+			<IMAGEN nombre="objetosScene1.bmp" zIndex="1" width="2600" height="600"/>
+			<IMAGEN nombre="fondocieloScene1.bmp" zIndex="2" width="2600" height="600"/>
+			<IMAGEN nombre="fondoScene1.bmp" zIndex="3" width="2600" height="600"/>
 		</CAPAS>
 	</FONDO>
 	<JUGADORES cantidadMaxima="4">

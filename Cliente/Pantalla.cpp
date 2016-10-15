@@ -334,17 +334,20 @@ void Pantalla::CargarCapasFondoEscenario()
 
 		std::string nombreImagen = cliente->RecibirMensajeTamanoVariable();
 		int zIndex = stoi(cliente->RecibirMensajeTamanoVariable());
-
-		AgregarCapaFondoEscenario(nombreImagen, zIndex);
+		int ancho = stoi(cliente->RecibirMensajeTamanoVariable());
+		int alto = stoi(cliente->RecibirMensajeTamanoVariable());
+		AgregarCapaFondoEscenario(nombreImagen, zIndex,ancho,alto);
 	}
 
 }
 
-void Pantalla::AgregarCapaFondoEscenario(std::string nombreImagen, int zIndex)
+void Pantalla::AgregarCapaFondoEscenario(std::string nombreImagen, int zIndex,int ancho, int altura)
 {
 	CapaFondoEscenario unaCapa;
 	unaCapa.nombreImagen = nombreImagen;
 	unaCapa.zIndex = zIndex;
+	unaCapa.ancho = ancho;
+	unaCapa.altura = altura;
 	CapasFondoEscenario->agregar(unaCapa);
 
 }
@@ -404,13 +407,13 @@ void Pantalla::IniciarJuego() {
 	SDL_Rect Back_Rect = crearFondo(escenario, 800, 600);// Escenario movible
 
 	SDL_Surface* fondoCielo = SDL_LoadBMP(cielo);
-	fondoCielo->w = 2600;
-	fondoCielo->h = 600;
+	fondoCielo->w = getCapaFondoEscenario(CapasFondoEscenario, 2).ancho;
+	fondoCielo->h = getCapaFondoEscenario(CapasFondoEscenario, 2).altura;
 	SDL_Texture* texturaCielo = SDL_CreateTextureFromSurface(Renderer, fondoCielo);
 	
 	SDL_Surface* fondoEscenario = SDL_LoadBMP(fondo);
-	fondoEscenario->w = 2600;
-	fondoEscenario->h = 600;
+	fondoEscenario->w =	getCapaFondoEscenario(CapasFondoEscenario, 3).ancho;
+	fondoEscenario->h = getCapaFondoEscenario(CapasFondoEscenario, 3).altura;
 	SDL_SetColorKey(fondoEscenario, SDL_TRUE, SDL_MapRGB(fondoEscenario->format, 128, 255, 0));
 	SDL_Texture* texturaFondoEscenario = SDL_CreateTextureFromSurface(Renderer, fondoEscenario);
 	bool sprite = false;

@@ -379,6 +379,12 @@ void MainListenThread(void* arg) {
 						UnServer.EnviarMensajeTamanoVariable(nombreImagen, ClientSocket);		// NOMBRE Imagen de la capa
 						const char* zIndex = elementoImagen->Attribute("zIndex");
 						UnServer.EnviarMensajeTamanoVariable(zIndex, ClientSocket);			// zIndex de la capa en el fondo
+						
+						const char* ancho = elementoImagen->Attribute("width");
+						UnServer.EnviarMensajeTamanoVariable(ancho,ClientSocket);
+
+						const char* alto = elementoImagen->Attribute("height");
+						UnServer.EnviarMensajeTamanoVariable(alto,ClientSocket);
 					}
 
 				}
