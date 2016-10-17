@@ -58,7 +58,11 @@ void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::stri
 
 	char* font = VerificarRecurso("start.ttf");
 
-	TTF_Font* Fuente = TTF_OpenFont(font, fontSize); //this opens a font style and sets a size
+	TTF_Font* Fuente = NULL;
+	
+	while (Fuente == NULL) {
+		Fuente = TTF_OpenFont(font, fontSize); //this opens a font style and sets a size
+	}
 
 	surface = TTF_RenderText_Solid(Fuente, UnTexto.c_str(), textColor);
 
