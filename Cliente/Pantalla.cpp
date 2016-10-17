@@ -506,10 +506,9 @@ void Pantalla::IniciarJuego() {
 		std::vector<std::string> mensajes = split(respuestaServidor, ';');
 
 		camara.x = stoi(mensajes[0]);
-		camara.y = stoi(mensajes[1]);
 
 		camaraPared.x = stoi(mensajes[0]);
-		camaraPared.y = stoi(mensajes[1]);
+		camaraCielo.x = stoi(mensajes[1]);
 
 		/*camara.x = stoi(cliente->RecibirMensajeTamanoVariable());
 		
