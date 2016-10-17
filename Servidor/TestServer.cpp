@@ -115,32 +115,20 @@ void MainListenThread(void* arg) {
 			int CantJugadores = UnJuego.GetCantJugadores();
 			std::string StrCantJugadores = IntAString(CantJugadores);
 
-			Posicion UnaCamara = UnJuego.GetCamara();
-			std::string CamaraX = IntAString(UnaCamara.x);
-			std::string CamaraY = IntAString(UnaCamara.y);
+			Camara UnaCamara = UnJuego.GetCamaraObjetos();
+			std::string CamaraObjetosX = IntAString(UnaCamara.X);
+
+			UnaCamara = UnJuego.GetCamaraCielo();
+			std::string CamaraCieloX = IntAString(UnaCamara.X);
 
 			std::string GranMensaje = "";
 
-			//UnServer.EnviarMensajeTamanoVariable("0", ClientSocket);
-			//UnServer.EnviarMensajeTamanoVariable("0", ClientSocket);
-
-			//Posicion unaCamaraPared = UnJuego.getCamaraPared();
-
-			//UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraPared.x),ClientSocket);
-			//UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraPared.y),ClientSocket);
-
-			//Posicion unaCamaraCielo = UnJuego.getCamaraCielo();
-
-			//UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraCielo.x),ClientSocket);
-			//UnServer.EnviarMensajeTamanoVariable(IntAString(unaCamaraCielo.y),ClientSocket);
-
-			//UnServer.EnviarMensaje(StrCantJugadores, 1, ClientSocket);
 			int IndiceMiJugador = UnJuego.GetIndiceJugador(Usuario);
 			Jugador* MiJugador = UnJuego.GetJugador(IndiceMiJugador);
 
-			GranMensaje.append(CamaraX); // CamaraX
+			GranMensaje.append(CamaraObjetosX); // CamaraX
 			GranMensaje.append(";");
-			GranMensaje.append(CamaraY); // CamaraY
+			GranMensaje.append(CamaraCieloX); // CamaraX
 			GranMensaje.append(";");
 			GranMensaje.append(StrCantJugadores);
 			GranMensaje.append(";");
@@ -354,7 +342,7 @@ void MainListenThread(void* arg) {
 
 			tinyxml2::XMLDocument docu;
 
-			char* pathXML =  strdup(ArchivoEscenarios.c_str()); //"Archivos\\escenario.xml"; //strdup(ArchivoEscenarios.c_str());
+			char* pathXML =  strdup(ArchivoEscenarios.c_str());
 
 			if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
 			{
@@ -370,6 +358,7 @@ void MainListenThread(void* arg) {
 					const char* cantidadCapasFondo = elementoCapas->Attribute("cantidad");
 					// Envio cantidad de capas a cargar
 					UnServer.EnviarMensajeTamanoVariable(cantidadCapasFondo, ClientSocket);
+					int NumeroFondo = 0;
 
 					//iterando sobre todos los estados de un Sprite
 					for (tinyxml2::XMLElement* elementoImagen = elementoCapas->FirstChildElement("IMAGEN"); elementoImagen != NULL; elementoImagen = elementoImagen->NextSiblingElement("IMAGEN"))
@@ -385,6 +374,21 @@ void MainListenThread(void* arg) {
 
 						const char* alto = elementoImagen->Attribute("height");
 						UnServer.EnviarMensajeTamanoVariable(alto,ClientSocket);
+						
+						// TODO: Arreglar esto
+
+						if (NumeroFondo == 0) {
+							UnJuego.SetAnchoCamaraObjetos(stoi(ancho));
+						}
+						else {
+							if (NumeroFondo == 1) {
+								UnJuego.SetAnchoCamaraCielo(stoi(ancho));
+							} else {
+								UnJuego.SetAnchoCamaraPared(stoi(ancho));
+							}
+						}
+
+						NumeroFondo++;
 					}
 
 				}

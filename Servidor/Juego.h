@@ -9,6 +9,14 @@ struct Posicion {
 	int y;
 };
 
+struct Camara {
+	int X;
+	int Y;
+	int AnchoImagen;
+	int Alto;
+	int Velocidad;
+};
+
 class Juego
 {
 public:
@@ -22,16 +30,19 @@ public:
 	Lista<std::string>* GetNombresJugadoresOnline();
 	int GetIndiceJugador(std::string Usuario);
 	int GetCantJugadores();
-	Posicion GetCamara();
-	Posicion getCamaraPared();
-	Posicion getCamaraCielo();
+	Camara GetCamaraObjetos();
+	Camara GetCamaraPared();
+	Camara GetCamaraCielo();
+	void SetAnchoCamaraObjetos(int Ancho);
+	void SetAnchoCamaraPared(int Ancho);
+	void SetAnchoCamaraCielo(int Ancho);
 	void AvanzarCamara();
 private:
 	int CantJugadores;
 	int GetIndexUsuario(std::string Usuario);
 	Jugador *Jugadores[5];
-	Posicion Camara;
-	Posicion camaraPared;
-	Posicion camaraCielo;
+	Camara CamaraObjetos;
+	Camara CamaraPared;
+	Camara CamaraCielo;
 };
 

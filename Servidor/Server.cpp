@@ -204,7 +204,7 @@ std::string Server::RecibirMensaje(SOCKET ClientSocket, int tam) {
 
 	memset(recvbuf, 0, sizeof(recvbuf)); // Reseteo el array a 0 para no arrastrar basura
 
-	std::cout << "Mensaje del cliente: " << mensajeCliente << std::endl;
+	//std::cout << "Mensaje del cliente: " << mensajeCliente << std::endl;
 
 	return mensajeCliente;
 }

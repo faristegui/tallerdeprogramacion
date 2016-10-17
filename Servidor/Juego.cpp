@@ -158,21 +158,44 @@ Juego::Juego()
 
 void Juego::AvanzarCamara() {
 
-	Camara.x += 10;
-	if(Camara.x > 1800)
+	CamaraObjetos.X += CamaraObjetos.Velocidad;
+	if(CamaraObjetos.X > CamaraObjetos.AnchoImagen - 800)
 	{
-		Camara.x = 0;
+		CamaraObjetos.X = 0;
+	}
+
+	CamaraCielo.X += CamaraCielo.Velocidad;
+	if (CamaraCielo.X > CamaraCielo.AnchoImagen - 800)
+	{
+		CamaraCielo.X = 0;
 	}
 }
 
-Posicion Juego::getCamaraPared()
-{
-	return camaraPared;
+int ObtenerVelocidadParaAncho(int UnAncho) {
+	return ((UnAncho * 10) / 2600);
 }
 
-Posicion Juego::getCamaraCielo()
+void Juego::SetAnchoCamaraObjetos(int Ancho) {
+	CamaraObjetos.AnchoImagen = Ancho;
+	CamaraObjetos.Velocidad = ObtenerVelocidadParaAncho(Ancho);
+}
+void Juego::SetAnchoCamaraPared(int Ancho) {
+	CamaraPared.AnchoImagen = Ancho;
+	CamaraPared.Velocidad = ObtenerVelocidadParaAncho(Ancho);
+}
+void Juego::SetAnchoCamaraCielo(int Ancho) {
+	CamaraCielo.AnchoImagen = Ancho;
+	CamaraCielo.Velocidad = ObtenerVelocidadParaAncho(Ancho);
+}
+
+Camara Juego::GetCamaraPared()
 {
-		return camaraCielo;
+	return CamaraPared;
+}
+
+Camara Juego::GetCamaraCielo()
+{
+		return CamaraCielo;
 }
 void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {
 
@@ -193,9 +216,9 @@ void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {
 	}
 }
 
-Posicion Juego::GetCamara() {
+Camara Juego::GetCamaraObjetos() {
 
-	return Camara;
+	return CamaraObjetos;
 }
 
 void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
