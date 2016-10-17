@@ -168,14 +168,16 @@ void MainListenThread(void* arg) {
 			GranMensaje.append(IntAString(MiJugador->GetX())); // PosX
 			GranMensaje.append(";");
 			GranMensaje.append(IntAString(MiJugador->GetY())); // PosY
-
-			UnServer.EnviarMensaje(GranMensaje, 150, ClientSocket);
-
+			GranMensaje.append(";");
+			
 			// Si hay mensajes para el usuario -> le envio
-			/*
 			Lista<Mensaje*>* Buzon = UnServer.obtenerMensajesPara(Usuario);
 			int CantidadMensajes = Buzon->getTamanio();
-			UnServer.EnviarMensaje(IntAString(CantidadMensajes), 8, ClientSocket);
+
+			GranMensaje.append(IntAString(CantidadMensajes));
+
+			UnServer.EnviarMensaje(GranMensaje, 200, ClientSocket);
+
 			if (CantidadMensajes > 0) {
 				Buzon->iniciarCursor();
 
@@ -185,7 +187,6 @@ void MainListenThread(void* arg) {
 					UnServer.EnviarMensajeTamanoVariable(ContenidoMensaje, ClientSocket);
 				}
 			}
-			*/
 		}
 		if (mensaje == "ENVI")
 		{
