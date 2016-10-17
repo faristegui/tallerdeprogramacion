@@ -77,7 +77,11 @@ void MainListenThread(void* arg) {
 						IDSprite = "PlayerRed";
 					} 
 					else {
-						IDSprite = "PlayerYellow";
+						if (UnJuego.GetCantJugadores() == 1) {
+							IDSprite = "PlayerYellow";
+						} else {
+							IDSprite = "PlayerBlue";
+						}
 					}
 
 					UnJuego.AgregarJugador(Usuario, IDSprite);

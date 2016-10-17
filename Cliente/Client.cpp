@@ -130,6 +130,8 @@ int Client::EnviarMensaje(string mensaje, int sizeDatos)
 		//Agregaria en el log. Debido a perdida de conexion con el servidor. que opinan? [MZ]
 		//Adopte esta solucion porque no se cerraba el programa cuando lo pausabamos. 
 		this->EscribirLog("Se ha perdido la conexion con el servidor.");
+		std::cout << "Se ha perdido la conexion con el servidor.";
+		Sleep(5000);
 		exit(0);
 	}
 	return cantidadBytesEnviados;
@@ -167,6 +169,9 @@ string Client::RecibirMensaje(int sizeDatos)
 	}
 	else {
 		mensajeServer = "LOST";
+		std::cout << "Se ha perdido la conexion con el servidor.";
+		Sleep(5000);
+		exit(0);
 	}
 
 	memset(recvbuf, 0, sizeof(recvbuf)); // Reseteo el array a 0 para no arrastrar basura

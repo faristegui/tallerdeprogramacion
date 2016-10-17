@@ -21,7 +21,7 @@
 			</PERSONAJE>
 		</JUGADOR>
 	</JUGADORES>	
-	<SPRITES cantidad="2">
+	<SPRITES cantidad="3">
 		<SPRITE id="PlayerRed" frameWidth="37" frameHeight="41">
 				<ESTADOS cantidad="5">
 					<ESTADO id="QUIETO" cantFrames="3"/>
@@ -32,6 +32,15 @@
 				</ESTADOS>
 		</SPRITE>
 		<SPRITE id="PlayerYellow" frameWidth="37" frameHeight="41">
+				<ESTADOS cantidad="5">
+					<ESTADO id="QUIETO" cantFrames="3"/>
+					<ESTADO id="CAMINA" cantFrames="9"/>
+					<ESTADO id="DESCONECTADO" cantFrames="1"/>
+					<ESTADO id="AGACHADO" cantFrames="2"/>
+					<ESTADO id="SALTANDO" cantFrames="3"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerBlue" frameWidth="37" frameHeight="41">
 				<ESTADOS cantidad="5">
 					<ESTADO id="QUIETO" cantFrames="3"/>
 					<ESTADO id="CAMINA" cantFrames="9"/>
