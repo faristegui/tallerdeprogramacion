@@ -501,7 +501,7 @@ void Pantalla::IniciarJuego() {
 
 		cliente->EnviarMensaje("STAT", 4);
 		
-		std::string respuestaServidor = cliente->RecibirMensaje(150);
+		std::string respuestaServidor = cliente->RecibirMensaje(200);
 
 		std::vector<std::string> mensajes = split(respuestaServidor, ';');
 
@@ -509,21 +509,10 @@ void Pantalla::IniciarJuego() {
 
 		camaraPared.x = stoi(mensajes[0]);
 		camaraCielo.x = stoi(mensajes[1]);
-
-		/*camara.x = stoi(cliente->RecibirMensajeTamanoVariable());
-		
-		camara.y = stoi(cliente->RecibirMensajeTamanoVariable());
-
-		camaraPared.x = stoi(cliente->RecibirMensajeTamanoVariable());
-		camaraPared.y = stoi(cliente->RecibirMensajeTamanoVariable());
-
-		*/
 		SDL_RenderCopy(Renderer, texturaCielo, &camaraCielo, NULL);
 		SDL_RenderCopy(Renderer, texturaFondoEscenario, &camaraPared, NULL);
 		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect);
 
-		//string StrCantJugadores = cliente->RecibirMensaje(1);
-		//int CantJugadores = stoi(StrCantJugadores);
 		int CantJugadores = stoi(mensajes[2]);
 
 		int PosX = 0;
@@ -531,31 +520,26 @@ void Pantalla::IniciarJuego() {
 
 		for (int i = 0; i < CantJugadores*5; i+=5) {
 
-			string Nombre = mensajes[i + 3]; //cliente->RecibirMensaje(15);
-			string IDSprite = mensajes[i + 4]; //cliente->RecibirMensajeTamanoVariable();
-			string Estado = mensajes[i + 5]; //cliente->RecibirMensajeTamanoVariable();
-			PosX = stoi(mensajes[i + 6]);//stoi(cliente->RecibirMensaje(4));
-			PosY = stoi(mensajes[i + 7]);//stoi(cliente->RecibirMensaje(4));
+			string Nombre = mensajes[i + 3];
+			string IDSprite = mensajes[i + 4];
+			string Estado = mensajes[i + 5];
+			PosX = stoi(mensajes[i + 6]);
+			PosY = stoi(mensajes[i + 7]);
 			
 			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
 			EscribirMensaje(Nombre, PosX, PosY + 85, 12, Renderer);
 		}
-		/*
-		int CantidadMensajes = stoi(cliente->RecibirMensaje(8));
+		
+		int Indice = CantJugadores*5;
+
+		int CantidadMensajes = stoi(mensajes[Indice]);
+
 		if (CantidadMensajes > 0) {
 			string Mensaje = cliente->RecibirMensajeTamanoVariable();
 			AgregarMensaje(Mensaje, 5, Starting_Tick);
 		}
 
 		MostrarMensajes(Starting_Tick);
-		*/
-
-		//Loop del cielo.
-		camaraCielo.x += 1;
-		if(camaraCielo.x > 1800)
-		{
-			camaraCielo.x = 0;
-		}
 
 		WaitFPS(Starting_Tick);
 		SDL_RenderPresent(Renderer);
