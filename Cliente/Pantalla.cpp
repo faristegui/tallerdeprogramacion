@@ -505,15 +505,19 @@ void Pantalla::IniciarJuego() {
 
 		std::vector<std::string> mensajes = split(respuestaServidor, ';');
 
-		camara.x = stoi(mensajes[0]);
+		int Indice = 0;
 
-		camaraPared.x = stoi(mensajes[0]);
-		camaraCielo.x = stoi(mensajes[1]);
+		camara.x = stoi(mensajes[Indice]);
+		camaraPared.x = stoi(mensajes[Indice]);
+		Indice++;
+		camaraCielo.x = stoi(mensajes[Indice]);
+		Indice++;
 		SDL_RenderCopy(Renderer, texturaCielo, &camaraCielo, NULL);
 		SDL_RenderCopy(Renderer, texturaFondoEscenario, &camaraPared, NULL);
 		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect);
 
-		int CantJugadores = stoi(mensajes[2]);
+		int CantJugadores = stoi(mensajes[Indice]);
+		Indice++;
 
 		int PosX = 0;
 		int PosY = 0;
@@ -530,7 +534,7 @@ void Pantalla::IniciarJuego() {
 			EscribirMensaje(Nombre, PosX, PosY + 85, 12, Renderer);
 		}
 		
-		int Indice = CantJugadores*5;
+		Indice += CantJugadores*5;
 
 		int CantidadMensajes = stoi(mensajes[Indice]);
 
