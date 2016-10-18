@@ -99,7 +99,7 @@ void MainListenThread(void* arg) {
 					std::string IDSprite;
 
 					// TODO: Ver como determinar que sprite mandarle a cada player
-					if (UnJuego.GetCantJugadores() == 0) {
+					/*if (UnJuego.GetCantJugadores() == 0) {
 						IDSprite = "PlayerRed";
 					} 
 					else {
@@ -108,6 +108,26 @@ void MainListenThread(void* arg) {
 						} else {
 							IDSprite = "PlayerBlue";
 						}
+					}*/
+
+					int cantJugadores = UnJuego.GetCantJugadores();
+
+					switch (cantJugadores)
+					{
+						case 0:
+							IDSprite = "PlayerRed";
+							break;
+						case 1:
+							IDSprite = "PlayerYellow";
+							break;
+						case 2:
+							IDSprite = "PlayerViolet";
+							break;
+						case 3: 
+							IDSprite = "PlayerBlue";
+							break;
+						default:
+							IDSprite = "PlayerBlue";
 					}
 
 					UnJuego.AgregarJugador(Usuario, IDSprite);
@@ -310,7 +330,7 @@ void MainListenThread(void* arg) {
 
 			tinyxml2::XMLDocument docu;
 
-			char* pathXML = strdup(ArchivoEscenarios.c_str()); //"Archivos\\escenario.xml";
+			char* pathXML = strdup(ArchivoEscenarios.c_str());
 
 			if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
 			{
@@ -356,7 +376,21 @@ void MainListenThread(void* arg) {
 		}
 		if (mensaje == "NEWC") {
 
-			if (CantidadClientes >= MAX_CLIENTES) {
+			tinyxml2::XMLDocument docu;
+
+			char* pathXML =  strdup(ArchivoEscenarios.c_str());
+			const char* cantMaxJugadores;
+
+			if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
+			{
+				tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
+				 cantMaxJugadores = elementoEscenario->Attribute("maxJugadores");
+			}
+			
+			int cantMax = stoi(cantMaxJugadores);
+
+			if ((CantidadClientes >= cantMax) && (cantMax != NULL)){
+
 				// Si el server alcanzo el maximo de usuarios -> Envio codigo de error
 				UnServer.EnviarMensaje("001", 3, ClientSocket);
 				UnServer.EnviarMensaje("El servidor alcanzo el maximo de clientes permitidos, vuelva a intentar mas tarde.", 65, ClientSocket);
