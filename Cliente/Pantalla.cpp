@@ -19,6 +19,7 @@ Pantalla::Pantalla(Client* unCliente)
 	SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();
 	Mensajes = new Lista<MensajeConsola>();
+	ListaTextPlayers = new Lista<TextPlayers>();
 
 	// Create an application window with the following settings:
 	Window = SDL_CreateWindow("Metal Slug", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
@@ -72,6 +73,7 @@ void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::stri
 		text_height = surface->h;
 	}
 	SDL_FreeSurface(surface);
+	TTF_CloseFont(Fuente);
 	rect->x = x;
 	rect->y = y;
 	rect->w = text_width;
@@ -84,6 +86,31 @@ void Pantalla::EscribirMensaje(std::string Mensaje, int PosX, int PosY, int Tama
 
 	get_text_and_rect(Renderer, PosX, PosY, Mensaje.c_str(), &Message, &Message_Rect, Tamano);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
+}
+
+void Pantalla::EscribirNombreJugador(std::string Nombre, int PosX, int PosY) {
+	bool blnEncontro = false;
+	ListaTextPlayers->iniciarCursor();
+
+	while (ListaTextPlayers->avanzarCursor()) {
+		TextPlayers UnText = ListaTextPlayers->obtenerCursor();
+		if (UnText.Nombre == Nombre) {
+
+			UnText.Message_Rect.x = PosX;
+			UnText.Message_Rect.y = PosY;
+			SDL_RenderCopy(Renderer, UnText.Message, NULL, &UnText.Message_Rect);
+			blnEncontro = true;
+			break;
+		}
+	}
+
+	if (!blnEncontro) {
+		TextPlayers UnText;
+		UnText.Nombre = Nombre;
+		get_text_and_rect(Renderer, PosX, PosY, Nombre, &UnText.Message, &UnText.Message_Rect, 12);
+		ListaTextPlayers->agregar(UnText);
+		SDL_RenderCopy(Renderer, UnText.Message, NULL, &UnText.Message_Rect);
+	}
 }
 
 void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
@@ -535,7 +562,7 @@ void Pantalla::IniciarJuego() {
 			PosY = stoi(mensajes[i + 7]);
 			
 			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
-			EscribirMensaje(Nombre, PosX, PosY + 85, 12, Renderer);
+			EscribirNombreJugador(Nombre, PosX, PosY + 85);
 		}
 		
 		Indice += CantJugadores*5;
