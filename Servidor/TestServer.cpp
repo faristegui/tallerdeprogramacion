@@ -73,7 +73,7 @@ void MainListenThread(void* arg) {
 					std::string IDSprite;
 
 					// TODO: Ver como determinar que sprite mandarle a cada player
-					if (UnJuego.GetCantJugadores() == 0) {
+					/*if (UnJuego.GetCantJugadores() == 0) {
 						IDSprite = "PlayerRed";
 					} 
 					else {
@@ -82,6 +82,26 @@ void MainListenThread(void* arg) {
 						} else {
 							IDSprite = "PlayerBlue";
 						}
+					}*/
+
+					int cantJugadores = UnJuego.GetCantJugadores();
+
+					switch (cantJugadores)
+					{
+						case 0:
+							IDSprite = "PlayerRed";
+							break;
+						case 1:
+							IDSprite = "PlayerYellow";
+							break;
+						case 2:
+							IDSprite = "PlayerViolet";
+							break;
+						case 3: 
+							IDSprite = "PlayerBlue";
+							break;
+						default:
+							IDSprite = "PlayerBlue";
 					}
 
 					UnJuego.AgregarJugador(Usuario, IDSprite);
