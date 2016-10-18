@@ -153,21 +153,19 @@ void FisicaThread(void* arg) {
 Juego::Juego()
 {
 	CantJugadores = 0;
+	CantCamaras = 0;
 	_beginthread(FisicaThread, 0, this);
 }
 
 void Juego::AvanzarCamara() {
 
-	CamaraObjetos.X += CamaraObjetos.Velocidad;
-	if(CamaraObjetos.X > CamaraObjetos.AnchoImagen - 800)
-	{
-		CamaraObjetos.X = 0;
-	}
+	for (int i = 0; i < CantCamaras; i++) {
 
-	CamaraCielo.X += CamaraCielo.Velocidad;
-	if (CamaraCielo.X > CamaraCielo.AnchoImagen - 800)
-	{
-		CamaraCielo.X = 0;
+		Camaras[i]->X += Camaras[i]->Velocidad;
+		if (Camaras[i]->X > Camaras[i]->AnchoImagen - 800)
+		{
+			Camaras[i]->X = 0;
+		}
 	}
 }
 
@@ -175,28 +173,26 @@ int ObtenerVelocidadParaAncho(int UnAncho) {
 	return ((UnAncho * 10) / 2600);
 }
 
-void Juego::SetAnchoCamaraObjetos(int Ancho) {
-	CamaraObjetos.AnchoImagen = Ancho;
-	CamaraObjetos.Velocidad = ObtenerVelocidadParaAncho(Ancho);
-}
-void Juego::SetAnchoCamaraPared(int Ancho) {
-	CamaraPared.AnchoImagen = Ancho;
-	CamaraPared.Velocidad = ObtenerVelocidadParaAncho(Ancho);
-}
-void Juego::SetAnchoCamaraCielo(int Ancho) {
-	CamaraCielo.AnchoImagen = Ancho;
-	CamaraCielo.Velocidad = ObtenerVelocidadParaAncho(Ancho);
+void Juego::SetAnchoCamara(int NrCamara, int UnAncho) {
+	Camaras[NrCamara]->AnchoImagen = UnAncho;
+	Camaras[NrCamara]->Velocidad = ObtenerVelocidadParaAncho(UnAncho);
 }
 
-Camara Juego::GetCamaraPared()
+Camara* Juego::GetCamara(int NrCamara)
 {
-	return CamaraPared;
+	return Camaras[NrCamara];
 }
 
-Camara Juego::GetCamaraCielo()
-{
-		return CamaraCielo;
+void Juego::AgregarCamara(int UnAncho) {
+
+	Camaras[CantCamaras] = new Camara;
+	Camaras[CantCamaras]->X = 0;
+	Camaras[CantCamaras]->Y = 0;
+	SetAnchoCamara(CantCamaras, UnAncho);
+
+	CantCamaras++;
 }
+
 void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {
 
 	bool JugadorYaSeHabiaConectado = false;
@@ -214,11 +210,6 @@ void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {
 		Jugadores[CantJugadores] = new Jugador(UnNombre, UnIDSprite);
 		CantJugadores++;
 	}
-}
-
-Camara Juego::GetCamaraObjetos() {
-
-	return CamaraObjetos;
 }
 
 void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
@@ -271,6 +262,11 @@ int Juego::GetCantJugadores() {
 	return CantJugadores;
 }
 
+int Juego::GetCantCamaras() {
+
+	return CantCamaras;
+}
+
 Jugador* Juego::GetJugador(std::string Usuario) {
 	int i = GetIndexUsuario(Usuario);
 
@@ -310,6 +306,11 @@ bool Juego::UsuarioYaLogueado(std::string Usuario) {
 	}
 
 	return false;
+}
+
+void Juego::BorrarCamaras() {
+
+	CantCamaras = 0;
 }
 
 Juego::~Juego()

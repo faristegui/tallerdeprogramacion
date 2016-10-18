@@ -42,6 +42,32 @@ void MostrarListaComandos() {
 	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
 }
 
+void CargarEscenariosEnJuego() {
+	tinyxml2::XMLDocument docu;
+
+	UnJuego.BorrarCamaras();
+
+	char* pathXML = strdup(ArchivoEscenarios.c_str());
+
+	if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
+	{
+
+		tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
+
+		tinyxml2::XMLElement* elementoFondo = elementoEscenario->FirstChildElement("FONDO");
+
+		//iterando sobre todas las capas del fondo 
+		for (tinyxml2::XMLElement* elementoCapas = elementoFondo->FirstChildElement("CAPAS"); elementoCapas != NULL; elementoCapas = elementoCapas->NextSiblingElement("CAPAS"))
+		{
+			for (tinyxml2::XMLElement* elementoImagen = elementoCapas->FirstChildElement("IMAGEN"); elementoImagen != NULL; elementoImagen = elementoImagen->NextSiblingElement("IMAGEN"))
+			{
+				const char* ancho = elementoImagen->Attribute("width");
+				UnJuego.AgregarCamara(stoi(ancho));
+			}
+		}
+	}
+}
+
 void MainListenThread(void* arg) {
 	string Usuario = "";
 	string mensaje = "";
@@ -113,29 +139,31 @@ void MainListenThread(void* arg) {
 
 			string Tipo = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
 			UnJuego.RecibirEvento(Usuario, Tipo);
+			if (Tipo == "RECARGA") {
+				CargarEscenariosEnJuego();
+			}
 		}
 		if (mensaje == "STAT") {
 
+			std::string GranMensaje = "";
+			
+			int CantCamaras = UnJuego.GetCantCamaras();
+
+			for (int i = 0; i < CantCamaras; i++) {
+
+				std::string CamaraX = IntAString(UnJuego.GetCamara(i)->X);
+				GranMensaje.append(CamaraX);
+				GranMensaje.append(";");
+			}
+			
 			int CantJugadores = UnJuego.GetCantJugadores();
 			std::string StrCantJugadores = IntAString(CantJugadores);
 
-			Camara UnaCamara = UnJuego.GetCamaraObjetos();
-			std::string CamaraObjetosX = IntAString(UnaCamara.X);
-
-			UnaCamara = UnJuego.GetCamaraCielo();
-			std::string CamaraCieloX = IntAString(UnaCamara.X);
-
-			std::string GranMensaje = "";
+			GranMensaje.append(StrCantJugadores);
+			GranMensaje.append(";");
 
 			int IndiceMiJugador = UnJuego.GetIndiceJugador(Usuario);
 			Jugador* MiJugador = UnJuego.GetJugador(IndiceMiJugador);
-
-			GranMensaje.append(CamaraObjetosX); // CamaraX
-			GranMensaje.append(";");
-			GranMensaje.append(CamaraCieloX); // CamaraX
-			GranMensaje.append(";");
-			GranMensaje.append(StrCantJugadores);
-			GranMensaje.append(";");
 			
 			for (int i = 0; i < CantJugadores; i++) {
 
@@ -343,8 +371,6 @@ void MainListenThread(void* arg) {
 
 		if (mensaje == "ESCN")
 		{
-
-
 			tinyxml2::XMLDocument docu;
 
 			char* pathXML =  strdup(ArchivoEscenarios.c_str());
@@ -363,7 +389,6 @@ void MainListenThread(void* arg) {
 					const char* cantidadCapasFondo = elementoCapas->Attribute("cantidad");
 					// Envio cantidad de capas a cargar
 					UnServer.EnviarMensajeTamanoVariable(cantidadCapasFondo, ClientSocket);
-					int NumeroFondo = 0;
 
 					//iterando sobre todos los estados de un Sprite
 					for (tinyxml2::XMLElement* elementoImagen = elementoCapas->FirstChildElement("IMAGEN"); elementoImagen != NULL; elementoImagen = elementoImagen->NextSiblingElement("IMAGEN"))
@@ -371,29 +396,15 @@ void MainListenThread(void* arg) {
 
 						const char* nombreImagen = elementoImagen->Attribute("nombre");
 						UnServer.EnviarMensajeTamanoVariable(nombreImagen, ClientSocket);		// NOMBRE Imagen de la capa
+
 						const char* zIndex = elementoImagen->Attribute("zIndex");
 						UnServer.EnviarMensajeTamanoVariable(zIndex, ClientSocket);			// zIndex de la capa en el fondo
 						
 						const char* ancho = elementoImagen->Attribute("width");
-						UnServer.EnviarMensajeTamanoVariable(ancho,ClientSocket);
+						UnServer.EnviarMensajeTamanoVariable(ancho, ClientSocket);
 
 						const char* alto = elementoImagen->Attribute("height");
-						UnServer.EnviarMensajeTamanoVariable(alto,ClientSocket);
-						
-						// TODO: Arreglar esto
-
-						if (NumeroFondo == 0) {
-							UnJuego.SetAnchoCamaraObjetos(stoi(ancho));
-						}
-						else {
-							if (NumeroFondo == 1) {
-								UnJuego.SetAnchoCamaraCielo(stoi(ancho));
-							} else {
-								UnJuego.SetAnchoCamaraPared(stoi(ancho));
-							}
-						}
-
-						NumeroFondo++;
+						UnServer.EnviarMensajeTamanoVariable(alto, ClientSocket);
 					}
 
 				}
@@ -496,6 +507,8 @@ int main()
 	}
 	
 	ArchivoEscenarios = "Archivos\\" + pathEscenario;
+
+	CargarEscenariosEnJuego();
 	
 	// Thread 1: Inicializacion del server
 

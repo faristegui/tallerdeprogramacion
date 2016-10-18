@@ -25,7 +25,7 @@ Pantalla::Pantalla(Client* unCliente)
 	Window = SDL_CreateWindow("Metal Slug", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
 	Renderer = SDL_CreateRenderer(Window, -1, SDL_RENDERER_ACCELERATED);
 	//Seteo el color del render (negro)
-	SDL_SetRenderDrawColor(Renderer,0,0,0,255);
+	SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
 	if (Window == NULL) {
 		// TODO: Log "Could not create window"
 	}
@@ -367,20 +367,28 @@ void Pantalla::CargarCapasFondoEscenario()
 		int zIndex = stoi(cliente->RecibirMensajeTamanoVariable());
 		int ancho = stoi(cliente->RecibirMensajeTamanoVariable());
 		int alto = stoi(cliente->RecibirMensajeTamanoVariable());
-		AgregarCapaFondoEscenario(nombreImagen, zIndex,ancho,alto);
+		AgregarCapaFondoEscenario(nombreImagen, zIndex, ancho, alto);
 	}
 
 }
 
 void Pantalla::AgregarCapaFondoEscenario(std::string nombreImagen, int zIndex,int ancho, int altura)
 {
-	CapaFondoEscenario unaCapa;
-	unaCapa.nombreImagen = nombreImagen;
-	unaCapa.zIndex = zIndex;
-	unaCapa.ancho = ancho;
-	unaCapa.altura = altura;
-	CapasFondoEscenario->agregar(unaCapa);
+	SDL_Surface *TmpSurface;
+	SDL_Texture *TmpTexture;
+	CapaFondoEscenario UnaCapa;
 
+	UnaCapa.nombreImagen = nombreImagen;
+	UnaCapa.zIndex = zIndex;
+	UnaCapa.ancho = ancho;
+	UnaCapa.altura = altura;
+
+	TmpSurface = IMG_Load(VerificarRecurso(nombreImagen));
+	SDL_SetColorKey(TmpSurface, SDL_TRUE, SDL_MapRGB(TmpSurface->format, 128, 255, 0));
+	TmpTexture = SDL_CreateTextureFromSurface(Renderer, TmpSurface);
+
+	UnaCapa.Texture = TmpTexture;
+	CapasFondoEscenario->agregar(UnaCapa);
 }
 
 CapaFondoEscenario Pantalla::getCapaFondoEscenario(Lista<CapaFondoEscenario> *CapasFondoEscenario, int zindex)
@@ -395,7 +403,6 @@ CapaFondoEscenario Pantalla::getCapaFondoEscenario(Lista<CapaFondoEscenario> *Ca
 			return CapasFondoEscenario->obtenerCursor();
 		}
 	}
-
 }
 
 void split(const std::string &s, char delim, std::vector<std::string> &elems) {
@@ -406,7 +413,6 @@ void split(const std::string &s, char delim, std::vector<std::string> &elems) {
         elems.push_back(item);
     }
 }
-
 
 std::vector<std::string> split(const std::string &s, char delim) {
     std::vector<std::string> elems;
@@ -428,31 +434,18 @@ void Pantalla::IniciarJuego() {
 
 	CargarSprites();
 	CargarCapasFondoEscenario();
-	
-	//Verifica que el path exista y si no usa una carpeta Default
 
-	char* escenario = VerificarRecurso(getCapaFondoEscenario(CapasFondoEscenario, 1).nombreImagen);
-	char* cielo = VerificarRecurso(getCapaFondoEscenario(CapasFondoEscenario, 2).nombreImagen);
-	char* fondo = VerificarRecurso(getCapaFondoEscenario(CapasFondoEscenario, 3).nombreImagen);
-
-	SDL_Rect Back_Rect = crearFondo(escenario, 800, 600);// Escenario movible
-
-	SDL_Surface* fondoCielo = SDL_LoadBMP(cielo);
-	fondoCielo->w = getCapaFondoEscenario(CapasFondoEscenario, 2).ancho;
-	fondoCielo->h = getCapaFondoEscenario(CapasFondoEscenario, 2).altura;
-	SDL_Texture* texturaCielo = SDL_CreateTextureFromSurface(Renderer, fondoCielo);
-	
-	SDL_Surface* fondoEscenario = SDL_LoadBMP(fondo);
-	fondoEscenario->w =	getCapaFondoEscenario(CapasFondoEscenario, 3).ancho;
-	fondoEscenario->h = getCapaFondoEscenario(CapasFondoEscenario, 3).altura;
-	SDL_SetColorKey(fondoEscenario, SDL_TRUE, SDL_MapRGB(fondoEscenario->format, 128, 255, 0));
-	SDL_Texture* texturaFondoEscenario = SDL_CreateTextureFromSurface(Renderer, fondoEscenario);
 	bool sprite = false;
 	bool GameRunning = true;
 
+	SDL_Rect background_Rect;
+	background_Rect.x = 0;
+	background_Rect.y = 0;
+	background_Rect.w = 800;
+	background_Rect.h = 600;
+
+	SDL_Rect otraCamara = crearCamara();
 	SDL_Rect camara = crearCamara();
-	SDL_Rect camaraPared = crearCamara();
-	SDL_Rect camaraCielo = crearCamara();
 
 	int speed = 10;
 	
@@ -502,22 +495,8 @@ void Pantalla::IniciarJuego() {
 				if (Event.key.keysym.sym == SDLK_r) {
 
 					CargarSprites();
+					Evento = "RECARGA";
 					CargarCapasFondoEscenario();
-
-					escenario = VerificarRecurso(getCapaFondoEscenario(CapasFondoEscenario, 1).nombreImagen);
-					cielo = VerificarRecurso(getCapaFondoEscenario(CapasFondoEscenario, 2).nombreImagen);
-					fondo = VerificarRecurso(getCapaFondoEscenario(CapasFondoEscenario, 3).nombreImagen);
-
-					Back_Rect = crearFondo(escenario, 800, 600);
-					fondoCielo = SDL_LoadBMP(cielo);
-					fondoCielo->w = 2600;
-					fondoCielo->h = 600;
-					texturaCielo = SDL_CreateTextureFromSurface(Renderer, fondoCielo);
-					fondoEscenario = SDL_LoadBMP(fondo);
-					fondoEscenario->w = 2600;
-					fondoEscenario->h = 600;
-					SDL_SetColorKey(fondoEscenario, SDL_TRUE, SDL_MapRGB(fondoEscenario->format, 128, 255, 0));
-					texturaFondoEscenario = SDL_CreateTextureFromSurface(Renderer, fondoEscenario);
 				}
 			}
 
@@ -538,14 +517,21 @@ void Pantalla::IniciarJuego() {
 
 		int Indice = 0;
 
-		camara.x = stoi(mensajes[Indice]);
-		camaraPared.x = stoi(mensajes[Indice]);
-		Indice++;
-		camaraCielo.x = stoi(mensajes[Indice]);
-		Indice++;
-		SDL_RenderCopy(Renderer, texturaCielo, &camaraCielo, NULL);
-		SDL_RenderCopy(Renderer, texturaFondoEscenario, &camaraPared, NULL);
-		SDL_RenderCopy(Renderer, texture, &camara, &Back_Rect);
+		CapasFondoEscenario->iniciarCursor();
+		while (CapasFondoEscenario->avanzarCursor())
+		{
+			CapaFondoEscenario UnaCapa = CapasFondoEscenario->obtenerCursor();
+
+			camara.x = stoi(mensajes[Indice]);
+			//camara.w = UnaCapa.ancho;
+			//camara.h = UnaCapa.altura;
+			otraCamara.x = 0;
+			otraCamara.y = 0;
+			otraCamara.w = UnaCapa.ancho;
+			otraCamara.h = UnaCapa.altura;
+			SDL_RenderCopy(Renderer, UnaCapa.Texture, &camara, NULL);
+			Indice++;
+		}
 
 		int CantJugadores = stoi(mensajes[Indice]);
 		Indice++;
@@ -553,19 +539,22 @@ void Pantalla::IniciarJuego() {
 		int PosX = 0;
 		int PosY = 0;
 
-		for (int i = 0; i < CantJugadores*5; i+=5) {
+		for (int i = 0; i < CantJugadores; i++) {
 
-			string Nombre = mensajes[i + 3];
-			string IDSprite = mensajes[i + 4];
-			string Estado = mensajes[i + 5];
-			PosX = stoi(mensajes[i + 6]);
-			PosY = stoi(mensajes[i + 7]);
+			string Nombre = mensajes[Indice];
+			Indice++;
+			string IDSprite = mensajes[Indice];
+			Indice++;
+			string Estado = mensajes[Indice];
+			Indice++;
+			PosX = stoi(mensajes[Indice]);
+			Indice++;
+			PosY = stoi(mensajes[Indice]);
+			Indice++;
 			
 			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
 			EscribirNombreJugador(Nombre, PosX, PosY + 85);
 		}
-		
-		Indice += CantJugadores*5;
 
 		int CantidadMensajes = stoi(mensajes[Indice]);
 

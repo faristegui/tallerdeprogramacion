@@ -20,7 +20,6 @@ struct SpriteEstado
 struct Sprite {
 	std::string ID;
 	SDL_Texture *Texture;
-	// TODO: Ver si lo siguiente esta ok:
 	int FrameWidth;
 	int FrameHeight;
 	Lista<SpriteEstado> *Estados;
@@ -32,11 +31,11 @@ struct MensajeConsola {
 };
 
 struct CapaFondoEscenario {
-
 	std::string nombreImagen;
 	int zIndex;
 	int ancho;
 	int altura;
+	SDL_Texture *Texture;
 };
 
 struct TextPlayers {
@@ -77,13 +76,13 @@ private:
 	void CargarSprites();
 	char* VerificarRecurso(std::string path);
 	Lista<Sprite> *Sprites;
+	Lista<CapaFondoEscenario> *CapasFondoEscenario;
 	Lista<MensajeConsola> *Mensajes;
 	void AgregarMensaje(std::string Mensaje, int Duracion, int TiempoDibujo);
 	void MostrarMensajes(int StartingTick);
 	void RenderSprite(std::string ID, std::string NombreEstado, Uint32 Ticks, SDL_Renderer *Renderer, int PosX, int PosY);
 	SpriteEstado GetEstado(Lista<SpriteEstado> *Estados, std::string Nombre);
 	void CargarCapasFondoEscenario();
-	Lista<CapaFondoEscenario> *CapasFondoEscenario;
 	void AgregarCapaFondoEscenario(std::string nombreImagen, int zIndex,int ancho,int altura);
 	CapaFondoEscenario getCapaFondoEscenario(Lista<CapaFondoEscenario> *CapasFondoEscenario, int zindex);
 };

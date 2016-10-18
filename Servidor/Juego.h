@@ -30,19 +30,17 @@ public:
 	Lista<std::string>* GetNombresJugadoresOnline();
 	int GetIndiceJugador(std::string Usuario);
 	int GetCantJugadores();
-	Camara GetCamaraObjetos();
-	Camara GetCamaraPared();
-	Camara GetCamaraCielo();
-	void SetAnchoCamaraObjetos(int Ancho);
-	void SetAnchoCamaraPared(int Ancho);
-	void SetAnchoCamaraCielo(int Ancho);
+	int GetCantCamaras();
+	Camara* GetCamara(int NrCamara);
+	void SetAnchoCamara(int NrCamara, int UnAncho);
+	void BorrarCamaras();
 	void AvanzarCamara();
+	void AgregarCamara(int UnAncho);
 private:
 	int CantJugadores;
 	int GetIndexUsuario(std::string Usuario);
 	Jugador *Jugadores[5];
-	Camara CamaraObjetos;
-	Camara CamaraPared;
-	Camara CamaraCielo;
+	Camara *Camaras[6];
+	int CantCamaras;
 };
 
