@@ -17,6 +17,7 @@ class Client
 private:
 	SOCKET ClientConnectionSocket;
 	ofstream logFile;  //Archivo para el log
+	bool EstaConectado;
 public:
 	Client();
 	Client(int log);
@@ -27,5 +28,6 @@ public:
 	std::string RecibirMensajeTamanoVariable();
 	void cerrarConexionConServer();
 	void EscribirLog(string mensaje);
+	bool TieneConexion();
 	~Client();
 };

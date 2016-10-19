@@ -450,7 +450,7 @@ void Pantalla::IniciarJuego() {
 	int speed = 10;
 	
 	string eventoAnterior = "";
-	while (GameRunning) {
+	while ((GameRunning) && (cliente->TieneConexion()))  {
 
 		Starting_Tick = SDL_GetTicks();
 		string Evento = "";
@@ -513,60 +513,70 @@ void Pantalla::IniciarJuego() {
 		
 		std::string respuestaServidor = cliente->RecibirMensaje(200);
 
-		std::vector<std::string> mensajes = split(respuestaServidor, ';');
+		if (respuestaServidor != "LOST") {
 
-		int Indice = 0;
+			std::vector<std::string> mensajes = split(respuestaServidor, ';');
 
-		CapasFondoEscenario->iniciarCursor();
-		while (CapasFondoEscenario->avanzarCursor())
-		{
-			CapaFondoEscenario UnaCapa = CapasFondoEscenario->obtenerCursor();
+			int Indice = 0;
 
-			camara.x = stoi(mensajes[Indice]);
-			//camara.w = UnaCapa.ancho;
-			//camara.h = UnaCapa.altura;
-			otraCamara.x = 0;
-			otraCamara.y = 0;
-			otraCamara.w = UnaCapa.ancho;
-			otraCamara.h = UnaCapa.altura;
-			SDL_RenderCopy(Renderer, UnaCapa.Texture, &camara, NULL);
+			CapasFondoEscenario->iniciarCursor();
+			while (CapasFondoEscenario->avanzarCursor())
+			{
+				CapaFondoEscenario UnaCapa = CapasFondoEscenario->obtenerCursor();
+
+				camara.x = stoi(mensajes[Indice]);
+				//camara.w = UnaCapa.ancho;
+				//camara.h = UnaCapa.altura;
+				otraCamara.x = 0;
+				otraCamara.y = 0;
+				otraCamara.w = UnaCapa.ancho;
+				otraCamara.h = UnaCapa.altura;
+				SDL_RenderCopy(Renderer, UnaCapa.Texture, &camara, NULL);
+				Indice++;
+			}
+
+			int CantJugadores = stoi(mensajes[Indice]);
 			Indice++;
+
+			int PosX = 0;
+			int PosY = 0;
+
+			for (int i = 0; i < CantJugadores; i++) {
+
+				string Nombre = mensajes[Indice];
+				Indice++;
+				string IDSprite = mensajes[Indice];
+				Indice++;
+				string Estado = mensajes[Indice];
+				Indice++;
+				PosX = stoi(mensajes[Indice]);
+				Indice++;
+				PosY = stoi(mensajes[Indice]);
+				Indice++;
+
+				RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
+				EscribirNombreJugador(Nombre, PosX, PosY + 85);
+			}
+
+			int CantidadMensajes = stoi(mensajes[Indice]);
+
+			if (CantidadMensajes > 0) {
+				string Mensaje = cliente->RecibirMensajeTamanoVariable();
+				AgregarMensaje(Mensaje, 5, Starting_Tick);
+			}
+
+			MostrarMensajes(Starting_Tick);
+
+			WaitFPS(Starting_Tick);
+			SDL_RenderPresent(Renderer);
 		}
+	}
 
-		int CantJugadores = stoi(mensajes[Indice]);
-		Indice++;
+	if (!cliente->TieneConexion()) {
 
-		int PosX = 0;
-		int PosY = 0;
-
-		for (int i = 0; i < CantJugadores; i++) {
-
-			string Nombre = mensajes[Indice];
-			Indice++;
-			string IDSprite = mensajes[Indice];
-			Indice++;
-			string Estado = mensajes[Indice];
-			Indice++;
-			PosX = stoi(mensajes[Indice]);
-			Indice++;
-			PosY = stoi(mensajes[Indice]);
-			Indice++;
-			
-			RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
-			EscribirNombreJugador(Nombre, PosX, PosY + 85);
-		}
-
-		int CantidadMensajes = stoi(mensajes[Indice]);
-
-		if (CantidadMensajes > 0) {
-			string Mensaje = cliente->RecibirMensajeTamanoVariable();
-			AgregarMensaje(Mensaje, 5, Starting_Tick);
-		}
-
-		MostrarMensajes(Starting_Tick);
-
-		WaitFPS(Starting_Tick);
+		EscribirMensaje("Se ha perdido la conexion con el servidor", 0, 5, 12, Renderer);
 		SDL_RenderPresent(Renderer);
+		Sleep(10000);
 	}
 }
 

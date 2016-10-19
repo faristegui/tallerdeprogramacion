@@ -98,6 +98,7 @@ bool Client::ConectarAServidor(string UnaIP, string UnPuerto)
 		return false;
 	}
 
+	EstaConectado = true;
 	return true;
 }
 
@@ -129,10 +130,11 @@ int Client::EnviarMensaje(string mensaje, int sizeDatos)
 		//Entiendo que la unica posibilidad que se falle al enviar el mensaje sea porque se desconecto el servidor.
 		//Agregaria en el log. Debido a perdida de conexion con el servidor. que opinan? [MZ]
 		//Adopte esta solucion porque no se cerraba el programa cuando lo pausabamos. 
-		this->EscribirLog("Se ha perdido la conexion con el servidor.");
-		std::cout << "Se ha perdido la conexion con el servidor.";
-		Sleep(5000);
-		exit(0);
+		//this->EscribirLog("Se ha perdido la conexion con el servidor.");
+		std::cout << "Se ha perdido la conexion con el servidor al enviar.";
+		EstaConectado = false;
+		//Sleep(5000);
+		//exit(0);
 	}
 	return cantidadBytesEnviados;
 }
@@ -155,6 +157,11 @@ int Client::EnviarMensajeTamanoVariable(string mensaje)
 	return EnviarMensaje(mensaje, mensaje.length());
 }
 
+bool Client::TieneConexion() {
+
+	return EstaConectado;
+}
+
 string Client::RecibirMensaje(int sizeDatos)
 {
 	int cantidadBytesRecibidos;
@@ -169,9 +176,10 @@ string Client::RecibirMensaje(int sizeDatos)
 	}
 	else {
 		mensajeServer = "LOST";
-		std::cout << "Se ha perdido la conexion con el servidor.";
-		Sleep(5000);
-		exit(0);
+		std::cout << "Se ha perdido la conexion con el servidor al recibir.";
+		EstaConectado = false;
+		//Sleep(5000);
+		//exit(0);
 	}
 
 	memset(recvbuf, 0, sizeof(recvbuf)); // Reseteo el array a 0 para no arrastrar basura
