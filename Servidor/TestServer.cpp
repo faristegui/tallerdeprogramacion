@@ -536,7 +536,7 @@ int main()
 		if (pathEscenario.empty())
 		{
 			pathEscenario = "escenariodef.xml";
-			cout << "Se usara el archivo por default: escenario1.xml" << endl;
+			cout << "Se usara el archivo por default: escenariodef.xml" << endl;
 		}
 	}
 	

@@ -293,14 +293,6 @@ char* Pantalla::VerificarRecurso(std::string path)
 }
 
 SpriteEstado Pantalla::GetEstado(Lista<SpriteEstado> *Estados, std::string Nombre) {
-
-	int PosSep = Nombre.find("-");
-
-	if (PosSep > -1) {
-
-		Nombre = Nombre.substr(0, PosSep);
-	}
-
 	Estados->iniciarCursor();
 
 	while (Estados->avanzarCursor()) {
@@ -332,7 +324,7 @@ void Pantalla::RenderSprite(std::string ID, std::string NombreEstado, Uint32 Tic
 			UnSprite = Sprites->obtenerCursor();
 			UnEstado = GetEstado(UnSprite.Estados, NombreEstado);
 
-			OffsetX = (Starting_Tick / 200) % UnEstado.CantFrames;
+			OffsetX = (Starting_Tick / 100) % UnEstado.CantFrames;
 			OffsetY = UnEstado.Numero * UnSprite.FrameHeight;
 
 			Crop_Rect.x = OffsetX * UnSprite.FrameWidth;
