@@ -444,8 +444,10 @@ void Pantalla::IniciarJuego() {
 	background_Rect.w = 800;
 	background_Rect.h = 600;
 
-	SDL_Rect otraCamara = crearCamara();
-	SDL_Rect camara = crearCamara();
+	SDL_Rect CamaraCorta1 = crearCamara();
+	SDL_Rect CamaraDibuja1 = crearCamara();
+	SDL_Rect CamaraCorta2 = crearCamara();
+	SDL_Rect CamaraDibuja2 = crearCamara();
 
 	int speed = 10;
 	
@@ -524,14 +526,22 @@ void Pantalla::IniciarJuego() {
 			{
 				CapaFondoEscenario UnaCapa = CapasFondoEscenario->obtenerCursor();
 
-				camara.x = stoi(mensajes[Indice]);
-				//camara.w = UnaCapa.ancho;
-				//camara.h = UnaCapa.altura;
-				otraCamara.x = 0;
-				otraCamara.y = 0;
-				otraCamara.w = UnaCapa.ancho;
-				otraCamara.h = UnaCapa.altura;
-				SDL_RenderCopy(Renderer, UnaCapa.Texture, &camara, NULL);
+				int NuevoX = stoi(mensajes[Indice]);
+
+				if (NuevoX > UnaCapa.ancho - 800) {
+					CamaraCorta1.x = UnaCapa.ancho - 800;
+					CamaraDibuja1.x = UnaCapa.ancho - 800 - NuevoX;
+
+					CamaraDibuja2.x = 800 + CamaraDibuja1.x;
+				}
+				else {
+					CamaraCorta1.x = NuevoX;
+					CamaraDibuja1.x = 0;
+					CamaraDibuja2.x = 850;
+				}
+
+				SDL_RenderCopy(Renderer, UnaCapa.Texture, &CamaraCorta1, &CamaraDibuja1);
+				SDL_RenderCopy(Renderer, UnaCapa.Texture, &CamaraCorta2, &CamaraDibuja2);
 				Indice++;
 			}
 

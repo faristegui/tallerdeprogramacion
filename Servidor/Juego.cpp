@@ -162,7 +162,8 @@ void Juego::AvanzarCamara() {
 	for (int i = 0; i < CantCamaras; i++) {
 
 		Camaras[i]->X += Camaras[i]->Velocidad;
-		if (Camaras[i]->X > Camaras[i]->AnchoImagen - 800)
+		
+		if (Camaras[i]->X > Camaras[i]->AnchoImagen)
 		{
 			Camaras[i]->X = 0;
 		}
