@@ -5,7 +5,7 @@ Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 {
 	Nombre = UnNombre;
 	IDSprite = UnIDSprite;
-	Estado = "QUIETO";
+	Estado = "QUIETO-DER";
 	x = 20;
 	y = 405;
 	Conectado = true;
@@ -94,7 +94,7 @@ void Jugador::SetEstaConectado(bool EstaConectado)
 		this->y = 405;
 	}
 	else {
-		this->Estado = "QUIETO";
+		this->Estado = "QUIETO-DER";
 	}
 }
 

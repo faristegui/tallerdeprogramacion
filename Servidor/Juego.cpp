@@ -66,7 +66,7 @@ void FisicaThread(void* arg) {
 
 						if (UnJugador->GetEstadoAnterior() == "") {
 
-							UnJugador->SetEstadoAnterior("QUIETO");
+							UnJugador->SetEstadoAnterior("QUIETO-DER");
 						}
 
 						UnJugador->SetEstado(UnJugador->GetEstadoAnterior());
@@ -222,16 +222,30 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 		Jugadores[IndiceJugador]->Mover(Tipo);
 	}
 
-	if((Tipo == "SOLTO-RIGHT") || (Tipo == "SOLTO-LEFT"))
+	if(Tipo == "SOLTO-RIGHT")
 	{
 		if (Jugadores[IndiceJugador]->EstaCaminando()) {
 
-			Jugadores[IndiceJugador]->SetEstado("QUIETO");
+			Jugadores[IndiceJugador]->SetEstado("QUIETO-DER");
 		}
 		else {			
 			if (Jugadores[IndiceJugador]->EstaSaltando()) {
 
-				Jugadores[IndiceJugador]->SetEstadoAnterior("QUIETO");
+				Jugadores[IndiceJugador]->SetEstadoAnterior("QUIETO-DER");
+			}
+		}
+	}
+
+	if(Tipo == "SOLTO-LEFT")
+	{
+		if (Jugadores[IndiceJugador]->EstaCaminando()) {
+
+			Jugadores[IndiceJugador]->SetEstado("QUIETO-IZQ");
+		}
+		else {			
+			if (Jugadores[IndiceJugador]->EstaSaltando()) {
+
+				Jugadores[IndiceJugador]->SetEstadoAnterior("QUIETO-IZQ");
 			}
 		}
 	}
@@ -239,7 +253,7 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 	if (Tipo == "SOLTO-DOWN") {
 		if (Jugadores[IndiceJugador]->GetEstado() == "AGACHADO") {
 
-			Jugadores[IndiceJugador]->SetEstado("QUIETO");
+			Jugadores[IndiceJugador]->SetEstado("QUIETO-DER");
 		}
 	}
 }

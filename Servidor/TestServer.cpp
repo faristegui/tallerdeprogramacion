@@ -372,7 +372,7 @@ void MainListenThread(void* arg) {
 				}
 
 			}
-			else std::cout << "error al cargar el archivo de configuracion de escenario.xml " << std::endl;
+			else std::cout << "error al cargar el archivo de configuracion de escenariodef.xml " << std::endl;
 		}
 		if (mensaje == "NEWC") {
 
