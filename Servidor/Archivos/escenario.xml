@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ESCENARIO anchoPX="800" altoPX="600">
+	<FONDO>
+		<CAPAS cantidad="3">
+			<IMAGEN nombre="objetos.bmp" zIndex="1" width="2600" height="600" />
+			<IMAGEN nombre="fondocielo.bmp" zIndex="2" width="2600" height="600" />
+			<IMAGEN nombre="fondo.bmp" zIndex="3" width="2600" height="600" />
+		</CAPAS>
+	</FONDO>
+	<JUGADORES cantidadMaxima="4">
+		<JUGADOR user="fulano" password="567" conectado="si">
+			<PERSONAJE anchoPX="80" altoPX="60" coordX_izq="" coordX_der="">
+			</PERSONAJE>
+		</JUGADOR>
+		<JUGADOR user="leandro" password="miClave" conectado="no">
+			<PERSONAJE anchoPX="80" altoPX="60" coordX_izq="" coordX_der="">
+			</PERSONAJE>
+		</JUGADOR>
+		<JUGADOR user="jorgito" password="1234" conectado="no">
+			<PERSONAJE anchoPX="80" altoPX="60" coordX_izq="" coordX_der="">
+			</PERSONAJE>
+		</JUGADOR>
+	</JUGADORES>	
+	<SPRITES cantidad="2">
+		<SPRITE id="PlayerRed" frameWidth="37" frameHeight="41">
+<ESTADOS cantidad="9">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="9"/>
+					<ESTADO id="DESCONECTADO" cantFrames="1"/>
+					<ESTADO id="AGACHADO" cantFrames="2"/>
+					<ESTADO id="SALTANDO" cantFrames="3"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="9"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="3"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerYellow" frameWidth="37" frameHeight="41">
+				<ESTADOS cantidad="9">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="9"/>
+					<ESTADO id="DESCONECTADO" cantFrames="1"/>
+					<ESTADO id="AGACHADO" cantFrames="2"/>
+					<ESTADO id="SALTANDO" cantFrames="3"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="9"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="3"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+			</ESTADOS>
+		</SPRITE>
+	</SPRITES>
+</ESCENARIO>
