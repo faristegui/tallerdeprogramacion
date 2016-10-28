@@ -167,6 +167,8 @@ void MainListenThread(void* arg) {
 
 			std::string GranMensaje = "";
 			
+			//std::string mensajeCamaras = "";
+
 			int CantCamaras = UnJuego.GetCantCamaras();
 
 			for (int i = 0; i < CantCamaras; i++) {
@@ -228,7 +230,7 @@ void MainListenThread(void* arg) {
 
 			GranMensaje.append(IntAString(CantidadMensajes));
 
-			UnServer.EnviarMensaje(GranMensaje, 200, ClientSocket);
+			UnServer.EnviarMensajeTamanoVariable(GranMensaje,ClientSocket);
 
 			if(UnJuego.GetCamara(0)->X == 0 && !paso)
 			{
@@ -250,6 +252,7 @@ void MainListenThread(void* arg) {
 					UnServer.EnviarMensajeTamanoVariable(ContenidoMensaje, ClientSocket);
 				}
 			}
+
 		}
 		if (mensaje == "ENVI")
 		{

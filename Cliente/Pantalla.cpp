@@ -505,7 +505,7 @@ void Pantalla::IniciarJuego() {
 
 		cliente->EnviarMensaje("STAT", 4);
 		
-		std::string respuestaServidor = cliente->RecibirMensaje(200);
+		std::string respuestaServidor = cliente->RecibirMensajeTamanoVariable();
 
 		if (respuestaServidor != "LOST") {
 
