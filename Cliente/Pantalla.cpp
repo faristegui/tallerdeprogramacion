@@ -559,7 +559,14 @@ void Pantalla::IniciarJuego() {
 				RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
 				EscribirNombreJugador(Nombre, PosX, PosY + 85);
 			}
-
+			//esto iria en un for
+			//{
+			string nombreEnemigo = cliente->RecibirMensajeTamanoVariable();
+			int posicionEnemigoX = stoi(cliente->RecibirMensajeTamanoVariable());
+			int posicionEnemigoY = stoi(cliente->RecibirMensajeTamanoVariable());
+			Sleep(40);
+			RenderSprite(nombreEnemigo, "CAMINANDO", Starting_Tick, Renderer, posicionEnemigoX, posicionEnemigoY);
+			//}
 			int CantidadMensajes = stoi(mensajes[Indice]);
 
 			if (CantidadMensajes > 0) {

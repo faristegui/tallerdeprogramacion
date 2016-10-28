@@ -194,6 +194,20 @@ void Juego::AgregarCamara(int UnAncho) {
 	CantCamaras++;
 }
 
+Enemigo* Juego::GetEnemigo(int posicion)
+{
+	return enemigos[posicion];
+
+}
+
+void Juego::AgregarEnemigo(std::string UnIDSprite)
+{
+	Enemigo* unEnemigo = new Enemigo(UnIDSprite);
+	enemigos[cantidadEnemigos] = unEnemigo;
+	cantidadEnemigos++;
+
+}
+
 void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {
 
 	bool JugadorYaSeHabiaConectado = false;

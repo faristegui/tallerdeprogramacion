@@ -41,7 +41,7 @@ Juego UnJuego;
 void MostrarListaComandos() {
 	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
 }
-
+bool paso = false;
 void CargarEscenariosEnJuego() {
 	tinyxml2::XMLDocument docu;
 
@@ -230,6 +230,17 @@ void MainListenThread(void* arg) {
 
 			UnServer.EnviarMensaje(GranMensaje, 200, ClientSocket);
 
+			if(UnJuego.GetCamara(0)->X == 0 && !paso)
+			{
+				paso = true;
+				UnJuego.AgregarEnemigo("PulpoEnemigo");
+			}
+				//Envio informacion de los enemigos
+				UnServer.EnviarMensajeTamanoVariable("PulpoEnemigo",ClientSocket);
+				UnServer.EnviarMensajeTamanoVariable(IntAString(UnJuego.GetEnemigo(0)->getX()),ClientSocket);
+				UnServer.EnviarMensajeTamanoVariable(IntAString(UnJuego.GetEnemigo(0)->getY()),ClientSocket);
+				UnJuego.GetEnemigo(0)->mover();
+	
 			if (CantidadMensajes > 0) {
 				Buzon->iniciarCursor();
 

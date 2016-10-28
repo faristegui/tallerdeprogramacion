@@ -1,4 +1,5 @@
 #include "Jugador.h"
+#include "Enemigo.h"
 #include "Lista.h"
 #include <windows.h>
 #include <process.h>
@@ -36,9 +37,13 @@ public:
 	void BorrarCamaras();
 	void AvanzarCamara();
 	void AgregarCamara(int UnAncho);
+	void AgregarEnemigo(std::string UnIDSprite);
+	Enemigo* GetEnemigo(int posicion);
 private:
 	int CantJugadores;
+	int cantidadEnemigos;
 	int GetIndexUsuario(std::string Usuario);
+	Enemigo* enemigos[10];
 	Jugador *Jugadores[5];
 	Camara *Camaras[6];
 	int CantCamaras;
