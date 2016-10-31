@@ -7,7 +7,7 @@
 			<IMAGEN nombre="fondoScene2.bmp" zIndex="3" width="1820" height="600"/>
 		</CAPAS>
 	</FONDO>
-	<SPRITES cantidad="5">
+	<SPRITES cantidad="6">
 		<SPRITE id="PlayerRed" frameWidth="37" frameHeight="41">
 				<ESTADOS cantidad="9">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
@@ -64,7 +64,14 @@
 		</SPRITE>
 		<SPRITE id="PulpoEnemigo" frameWidth="35" frameHeight="30">
 			<ESTADOS cantidad="1">
-				<ESTADO id="CAMINANDO" cantFrames="16"/>
+				<ESTADO id="CAMINA-IZQ" cantFrames="16"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="HumanoEnemigo" frameWidth="33" frameHeight="49">
+			<ESTADOS cantidad="3">
+				<ESTADO id="CAMINA-IZQ" cantFrames="10"/>
+				<ESTADO id="DISPARA-IZQ" cantFrames="3"/>
+				<ESTADO id="MUERTO" cantFrames="10"/>
 			</ESTADOS>
 		</SPRITE>
 	</SPRITES>

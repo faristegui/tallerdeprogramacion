@@ -31,13 +31,14 @@ public:
 	Lista<std::string>* GetNombresJugadoresOnline();
 	int GetIndiceJugador(std::string Usuario);
 	int GetCantJugadores();
+	int GetCantEnemigos();
 	int GetCantCamaras();
 	Camara* GetCamara(int NrCamara);
 	void SetAnchoCamara(int NrCamara, int UnAncho);
 	void BorrarCamaras();
 	void AvanzarCamara();
 	void AgregarCamara(int UnAncho);
-	void AgregarEnemigo(std::string UnIDSprite);
+	void AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad);
 	Enemigo* GetEnemigo(int posicion);
 private:
 	int CantJugadores;

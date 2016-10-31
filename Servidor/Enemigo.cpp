@@ -1,28 +1,51 @@
 #include "Enemigo.h"
 
 
-Enemigo::Enemigo(std::string unIdSprite)
+Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel)
 {
 	IDSprite = unIdSprite;
-	x = 740;
-	y = 425;
+	estado = "CAMINA-IZQ";
+	x = posX;
+	y = posY;
+	velocidad = vel;
 }
 int Enemigo::getX()
 {
 	return x;
 }
 
-void Enemigo::mover()
+std::string Enemigo::getID()
 {
-	if(x !=0)
+	return IDSprite;
+}
+
+void Enemigo::mover(int velocidad)
+{
+	if(x > -30) //Para que salga afuera de la pantalla
 	{
-		x-= 20;
+		x-= velocidad;
 	}
 	else
 	{
-		x = 740;
+		x = 800;
 	}
 }
+
+int Enemigo::getVelocidad()
+{
+	return velocidad;
+}
+
+void Enemigo::disparar()
+{
+	estado = "DISPARA-IZQ";
+}
+
+std::string Enemigo::getEstado()
+{
+	return estado;
+}
+
 
 int Enemigo::getY()
 {

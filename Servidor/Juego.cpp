@@ -200,9 +200,9 @@ Enemigo* Juego::GetEnemigo(int posicion)
 
 }
 
-void Juego::AgregarEnemigo(std::string UnIDSprite)
+void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad)
 {
-	Enemigo* unEnemigo = new Enemigo(UnIDSprite);
+	Enemigo* unEnemigo = new Enemigo(UnIDSprite, posX, posY, velocidad);
 	enemigos[cantidadEnemigos] = unEnemigo;
 	cantidadEnemigos++;
 
@@ -289,6 +289,11 @@ int Juego::GetIndexUsuario(std::string Usuario) {
 int Juego::GetCantJugadores() {
 
 	return CantJugadores;
+}
+
+int Juego::GetCantEnemigos() {
+
+	return cantidadEnemigos;
 }
 
 int Juego::GetCantCamaras() {
