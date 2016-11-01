@@ -1,6 +1,7 @@
 #include "Jugador.h"
 #include "Enemigo.h"
 #include "Lista.h"
+#include "Equipo.h"
 #include <windows.h>
 #include <process.h>
 
@@ -33,7 +34,9 @@ public:
 	int GetCantJugadores();
 	int GetCantEnemigos();
 	int GetCantCamaras();
+	int obtenerModo();
 	Camara* GetCamara(int NrCamara);
+	void establecerModo(std::string modo);
 	void SetAnchoCamara(int NrCamara, int UnAncho);
 	void BorrarCamaras();
 	void AvanzarCamara();
@@ -43,8 +46,10 @@ public:
 private:
 	int CantJugadores;
 	int cantidadEnemigos;
+	int modoJuego;
 	int GetIndexUsuario(std::string Usuario);
 	Enemigo* enemigos[10];
+	Equipo* equipos[4];
 	Jugador *Jugadores[5];
 	Camara *Camaras[6];
 	int CantCamaras;

@@ -8,6 +8,14 @@ int FuncionCuadratica(float t, float b, float c, float d) {
 	return -c / 2 * (t*(t - 2) - 1) + b;
 }
 
+void Juego::establecerModo(std::string modo)
+{
+	modoJuego = stoi(modo);
+}
+int Juego::obtenerModo()
+{
+	return modoJuego;
+}
 void FisicaThread(void* arg) {
 
 	int BordeEnXMinCamara = 20;
@@ -154,6 +162,7 @@ Juego::Juego()
 {
 	CantJugadores = 0;
 	CantCamaras = 0;
+	modoJuego = 0;
 	_beginthread(FisicaThread, 0, this);
 }
 
@@ -183,7 +192,10 @@ Camara* Juego::GetCamara(int NrCamara)
 {
 	return Camaras[NrCamara];
 }
+int Juego::GetCantEnemigos() {
 
+	return cantidadEnemigos;
+}
 void Juego::AgregarCamara(int UnAncho) {
 
 	Camaras[CantCamaras] = new Camara;
@@ -207,7 +219,6 @@ void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int veloc
 	cantidadEnemigos++;
 
 }
-
 void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {
 
 	bool JugadorYaSeHabiaConectado = false;
@@ -223,6 +234,38 @@ void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {
 
 	if (!JugadorYaSeHabiaConectado) {
 		Jugadores[CantJugadores] = new Jugador(UnNombre, UnIDSprite);
+		//hay un equipo por jugador
+		if(modoJuego == 1)
+		{
+			equipos[CantJugadores] = new Equipo();
+			equipos[CantJugadores]->agregarJugador(Jugadores[CantJugadores]);
+		}
+		//hay un solo equipo para todos los jugadorees
+		if (modoJuego == 2)
+		{
+			if(CantJugadores==0)
+			{
+				equipos[CantJugadores] = new Equipo();
+			}
+			equipos[0]->agregarJugador(Jugadores[CantJugadores]);
+		}
+		//hay 2 equipos de 2 jugadores
+		if(modoJuego == 3)
+		{
+			switch(CantJugadores)
+			{
+				case 0:
+					equipos[0] = new Equipo();
+					equipos[0]->agregarJugador(Jugadores[CantJugadores]);
+				case 1:
+					equipos[0]->agregarJugador(Jugadores[CantJugadores]);
+				case 2:
+					equipos[1] = new Equipo();
+					equipos[1]->agregarJugador(Jugadores[CantJugadores]);
+				case 3:
+					equipos[1]->agregarJugador(Jugadores[CantJugadores]);
+			}
+		}
 		CantJugadores++;
 	}
 }
@@ -289,11 +332,6 @@ int Juego::GetIndexUsuario(std::string Usuario) {
 int Juego::GetCantJugadores() {
 
 	return CantJugadores;
-}
-
-int Juego::GetCantEnemigos() {
-
-	return cantidadEnemigos;
 }
 
 int Juego::GetCantCamaras() {
