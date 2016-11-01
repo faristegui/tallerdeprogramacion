@@ -270,6 +270,30 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 			Jugadores[IndiceJugador]->SetEstado("QUIETO-DER");
 		}
 	}
+
+	if(Tipo == "DISPARA")
+	{
+		if ((Jugadores[IndiceJugador]->GetEstado() == "QUIETO-DER") || (Jugadores[IndiceJugador]->GetEstado() == "SALTANDO-DER")) {
+
+			Jugadores[IndiceJugador]->SetEstado("DISPARA-DER");
+		}
+		else
+		{
+			Jugadores[IndiceJugador]->SetEstado("DISPARA-IZQ");
+		}
+	}
+
+	if(Tipo == "SOLTO-DISPARA")
+	{
+		if (Jugadores[IndiceJugador]->GetEstado() == "DISPARA-DER") {
+
+			Jugadores[IndiceJugador]->SetEstado("QUIETO-DER");
+		}
+		else
+		{
+			Jugadores[IndiceJugador]->SetEstado("QUIETO-IZQ");
+		}
+	}
 }
 
 int Juego::GetIndexUsuario(std::string Usuario) {

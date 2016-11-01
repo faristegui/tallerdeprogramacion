@@ -244,10 +244,9 @@ void MainListenThread(void* arg) {
 
 			UnServer.EnviarMensajeTamanoVariable(IntAString(UnJuego.GetCantEnemigos()),ClientSocket);
 
-			string mensajeEnemigo = "";
-
 			for(int i = 0; i < UnJuego.GetCantEnemigos(); i++)
 			{
+				string mensajeEnemigo = "";
 				mensajeEnemigo.append(UnJuego.GetEnemigo(i)->getID() + ";"); //ID del sprite (0)
 				mensajeEnemigo.append(IntAString(UnJuego.GetEnemigo(i)->getX()) + ";"); // PosX(1)
 				mensajeEnemigo.append(IntAString(UnJuego.GetEnemigo(i)->getY()) + ";"); // PosY(2)

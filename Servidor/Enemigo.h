@@ -15,6 +15,7 @@ public:
 private:
 	std::string IDSprite;
 	std::string estado;
+	int vida;
 	int velocidad;
 	int x;
 	int y;

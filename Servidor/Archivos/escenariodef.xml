@@ -9,7 +9,7 @@
 	</FONDO>
 	<SPRITES cantidad="6">
 		<SPRITE id="PlayerRed" frameWidth="37" frameHeight="41">
-				<ESTADOS cantidad="9">
+				<ESTADOS cantidad="11">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="CAMINA-DER" cantFrames="9"/>
 					<ESTADO id="DESCONECTADO" cantFrames="1"/>
@@ -19,6 +19,8 @@
 					<ESTADO id="SALTANDO-DER" cantFrames="3"/>
 					<ESTADO id="SALTANDO-IZQ" cantFrames="3"/>
 					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="DISPARA-DER" cantFrames="2"/>
+					<ESTADO id="DISPARA-IZQ" cantFrames="2"/>
 				</ESTADOS>
 		</SPRITE>
 		<SPRITE id="PlayerYellow" frameWidth="37" frameHeight="41">

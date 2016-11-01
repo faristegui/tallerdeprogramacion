@@ -38,7 +38,7 @@ int Enemigo::getVelocidad()
 
 void Enemigo::disparar()
 {
-	estado = "DISPARA-IZQ";
+	estado = "DISPARA-DER";
 }
 
 std::string Enemigo::getEstado()

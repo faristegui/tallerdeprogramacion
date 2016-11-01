@@ -471,6 +471,19 @@ void Pantalla::IniciarJuego() {
 
 					Evento = "DOWN";
 				}
+				if (Event.key.keysym.sym == SDLK_d) { //Disparar Letra "D"
+
+					Evento = "DISPARA";
+				}
+				//Eventos de selección de armas
+				if (Event.key.keysym.sym == SDLK_h) { //Arma H
+
+					Evento = "ARMA-H";
+				}
+				if (Event.key.keysym.sym == SDLK_r) { //Arma R
+
+					Evento = "ARMA-R";
+				}
 			}
 			if(Event.type == SDL_KEYUP)
 			{
@@ -491,6 +504,9 @@ void Pantalla::IniciarJuego() {
 					CargarSprites();
 					Evento = "RECARGA";
 					CargarCapasFondoEscenario();
+				}
+				if (Event.key.keysym.sym == SDLK_d) {
+					Evento = "SOLTO-DISPARA";
 				}
 			}
 
@@ -560,7 +576,6 @@ void Pantalla::IniciarJuego() {
 				EscribirNombreJugador(Nombre, PosX, PosY + 85);
 			}
 
-			int index = 0;
 			int CantEnemigos = stoi(cliente->RecibirMensajeTamanoVariable());
 			
 			if (respuestaServidor != "LOST") {
@@ -568,15 +583,11 @@ void Pantalla::IniciarJuego() {
 				{
 					std::string respuestaServerEnemigos = cliente->RecibirMensajeTamanoVariable();
 					std::vector<std::string> mensajesEnemigo = split(respuestaServerEnemigos, ';');
-					string nombreEnemigo = mensajesEnemigo[index];
-					index++;
-					int posicionEnemigoX = stoi(mensajesEnemigo[index]);
-					index++;
-					int posicionEnemigoY = stoi(mensajesEnemigo[index]);
-					index++;
+					string nombreEnemigo = mensajesEnemigo[0];
+					int posicionEnemigoX = stoi(mensajesEnemigo[1]);
+					int posicionEnemigoY = stoi(mensajesEnemigo[2]);
 					Sleep(40);
-					RenderSprite(nombreEnemigo, mensajesEnemigo[index], Starting_Tick, Renderer, posicionEnemigoX, posicionEnemigoY);
-					index++;
+					RenderSprite(nombreEnemigo, mensajesEnemigo[3], Starting_Tick, Renderer, posicionEnemigoX, posicionEnemigoY);
 				}
 			}
 
