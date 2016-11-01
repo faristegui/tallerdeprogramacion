@@ -129,7 +129,7 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 
 	get_text_and_rect(Renderer, posX, posY, Mensaje.c_str(), &Message, &Message_Rect, 26);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
-	Mensaje = "¡¡Press START!!";
+	Mensaje = "Â¡Â¡Press START!!";
 	get_text_and_rect(Renderer, 170, 370, Mensaje.c_str(), &Message, &Message_Rect, 30);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 	SDL_RenderPresent(Renderer);
@@ -211,7 +211,7 @@ std::string Pantalla::PedirParametro(std::string NombreParametro, std::string Va
 
 		get_text_and_rect(Renderer, posX, posY, NombreParametro.c_str(), &Message, &Message_Rect, 16);
 		SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
-		// Ingresa el parámetro
+		// Ingresa el parÃ¡metro
 		get_text_and_rect(Renderer, posX + Message_Rect.w + 10, posY, UnTexto.c_str(), &Message, &Message_Rect, 16);
 		SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 
@@ -612,6 +612,7 @@ void Pantalla::IniciarJuego() {
 		Sleep(10000);
 	}
 }
+
 
 void Pantalla::MostrarMensajes(int StartingTick) {
 	int OffsetY = 5;

@@ -1,4 +1,4 @@
-﻿#include "Pantalla.h"
+#include "Pantalla.h"
 #include "Client.h"
 
 Client UnCliente2;
@@ -131,11 +131,29 @@ bool UsuarioYPassValidos() {
 	return (CodigoRespuesta == "000");
 }
 
+void PedirModoDeJuego()
+{
+	std::string opcion = "0";
+	while(opcion != "1" && opcion != "2" && opcion != "3")
+	{
+		opcion = UnaPantalla.PedirParametro("1- Individual MP 2-Colaborativo MP 3-Grupal MP","",0,270);
+	}
+	UnCliente2.EnviarMensaje("MODO",4);
+	UnCliente2.EnviarMensaje(opcion,1);
+}
+
 int main(int argc, char* args[])
 {
 	
 	PedirParametrosConexion();
-
+	//pregunto si el juego tiene establecido un modo
+	//el modo lo establece el primer jugador que se conecta
+	UnCliente2.EnviarMensaje("MODE",4);
+	std::string respuestaServer = UnCliente2.RecibirMensaje(2);
+	if(respuestaServer=="NO")
+	{
+		PedirModoDeJuego();
+	}
 	if (UsuarioYPassValidos()) {
 
 		UnaPantalla.IniciarJuego();

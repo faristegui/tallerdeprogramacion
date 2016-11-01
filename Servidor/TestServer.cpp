@@ -163,6 +163,22 @@ void MainListenThread(void* arg) {
 				CargarEscenariosEnJuego();
 			}
 		}
+		if(mensaje=="MODO")
+		{
+			string modo = UnServer.RecibirMensaje(ClientSocket,1);
+			UnJuego.establecerModo(modo);
+		}
+		if (mensaje=="MODE")
+		{
+			if(UnJuego.obtenerModo() == 0)
+			{
+				UnServer.EnviarMensaje("NO",2,ClientSocket);
+			}
+			else
+			{
+				UnServer.EnviarMensaje("SI",2,ClientSocket);
+			}
+		}
 		if (mensaje == "STAT") {
 
 			std::string GranMensaje = "";
