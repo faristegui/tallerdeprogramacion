@@ -148,12 +148,13 @@ int main(int argc, char* args[])
 	PedirParametrosConexion();
 	//pregunto si el juego tiene establecido un modo
 	//el modo lo establece el primer jugador que se conecta
-	UnCliente2.EnviarMensaje("MODE",4);
+	/*UnCliente2.EnviarMensaje("MODE",4);
 	std::string respuestaServer = UnCliente2.RecibirMensaje(2);
 	if(respuestaServer=="NO")
 	{
 		PedirModoDeJuego();
 	}
+	*/
 	if (UsuarioYPassValidos()) {
 
 		UnaPantalla.IniciarJuego();

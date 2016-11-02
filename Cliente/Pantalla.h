@@ -68,7 +68,7 @@ private:
 	Posicion* bolaPos;
 	Lista<TextPlayers> *ListaTextPlayers;
 	void get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::string UnTexto,
-		SDL_Texture **texture, SDL_Rect *rect, int fontSize);
+	SDL_Texture **texture, SDL_Rect *rect, int fontSize);
 	void EscribirMensaje(std::string Mensaje, int X, int Y, int Tamano, SDL_Renderer *Renderer);
 	void EscribirNombreJugador(std::string Nombre, int PosX, int PosY);
 	void WaitFPS(Uint32 starting_tick);

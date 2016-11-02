@@ -42,6 +42,16 @@ void MostrarListaComandos() {
 	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
 }
 bool paso = false;
+void PedirModoDeJuego()
+{
+	std::string opcion = "0";
+	while(opcion != "1" && opcion != "2" && opcion != "3")
+	{
+		cout << endl << "1- Individual MP 2-Colaborativo MP 3-Grupal MP" << endl;
+		std::getline(std::cin, opcion);
+	}
+	UnJuego.establecerModo(opcion);
+}
 void CargarEscenariosEnJuego() {
 	tinyxml2::XMLDocument docu;
 
@@ -586,6 +596,8 @@ int main()
 
 	CargarEscenariosEnJuego();
 	
+	PedirModoDeJuego();
+
 	// Thread 1: Inicializacion del server
 
 	_beginthread(MainServerThread, 0, (void*)&Puerto);
