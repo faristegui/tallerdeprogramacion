@@ -157,6 +157,16 @@ Juego::Juego()
 	_beginthread(FisicaThread, 0, this);
 }
 
+void Juego::establecerModo(std::string nuevoModo)
+{
+	modoJuego = stoi(nuevoModo);
+}
+
+int Juego::obtenerModo()
+{
+	return modoJuego;
+}
+
 void Juego::AvanzarCamara() {
 
 	for (int i = 0; i < CantCamaras; i++) {
