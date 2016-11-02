@@ -129,7 +129,7 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 
 	get_text_and_rect(Renderer, posX, posY, Mensaje.c_str(), &Message, &Message_Rect, 26);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
-	Mensaje = "Â¡Â¡Press START!!";
+	Mensaje = "¡¡Press START!!";
 	get_text_and_rect(Renderer, 170, 370, Mensaje.c_str(), &Message, &Message_Rect, 30);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 	SDL_RenderPresent(Renderer);
@@ -166,13 +166,13 @@ SDL_Rect Pantalla::crearFondo(const char* path, int width, int heigth) {
 	return background_Rect;
 }
 
-std::string Pantalla::PedirParametro(std::string NombreParametro, std::string ValorXDefecto, int posX, int posY) {
+std::string Pantalla::PedirParametro(std::string NombreParametro, std::string ValorXDefecto, int posX, int posY, char* pathFondo) {
 	std::string UnTexto = ValorXDefecto;
 	bool ParamValido = false;
 	SDL_Rect Message_Rect;
 	SDL_Texture* Message;
 
-	char* start = VerificarRecurso("start.bmp");
+	char* start = VerificarRecurso(pathFondo);
 
 	SDL_Rect back = this->crearFondo(start,800,600);
 

@@ -50,7 +50,7 @@ public:
 	Pantalla(Client* unCliente);
 	~Pantalla();
 
-	std::string PedirParametro(std::string NombreParametro, std::string ValorXDefecto, int posX, int posY);
+	std::string PedirParametro(std::string NombreParametro, std::string ValorXDefecto, int posX, int posY, char* pathFondo);
 	SDL_Rect crearFondo(const char* path, int width, int heigth);
 	void MostrarMensaje(std::string Mensaje, int posX, int posY);
 	void IniciarJuego();

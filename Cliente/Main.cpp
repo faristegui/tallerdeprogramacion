@@ -67,15 +67,18 @@ void PedirParametrosConexion() {
 	std::string Puerto;
 	std::string Respuesta;
 	std::string entrar;
+
+	char* fondo = "start.bmp";
+
 	while (!ConexionOk) {
 
-		IP = UnaPantalla.PedirParametro("Ingrese IP", "localhost", 190, 270);
-		Puerto = UnaPantalla.PedirParametro("Ingrese Puerto", "1000", 190, 270);
+		IP = UnaPantalla.PedirParametro("Ingrese IP", "localhost", 190, 270, fondo);
+		Puerto = UnaPantalla.PedirParametro("Ingrese Puerto", "1000", 190, 270, fondo);
 
 		ConexionOk = UnCliente2.ConectarAServidor(IP,Puerto);
 
 		if (!ConexionOk) {
-			UnaPantalla.MostrarMensaje("Ha habido un error al intentar conectarse",100,250);
+			UnaPantalla.MostrarMensaje("Ha habido un error al intentar conectarse.",100,250);
 		}
 	}
 
@@ -110,16 +113,18 @@ bool UsuarioYPassValidos() {
 	Mensaje = "AUTH";
 	UnCliente2.EnviarMensaje(Mensaje, 4);
 
+	char* fondo = "start.bmp";
+
 	// Pido usuario
 	Parametro = "";
 	while (Parametro == "") {
-		Parametro = UnaPantalla.PedirParametro("Usuario", "", 230, 270);
+		Parametro = UnaPantalla.PedirParametro("Usuario", "", 230, 270, fondo);
 	}
 	UnCliente2.EnviarMensaje(Parametro, 15);
 	// Pido contrasena
 	Parametro = "";
 	while (Parametro == "") {
-		Parametro = UnaPantalla.PedirParametro("Contrasena", "", 230, 270);
+		Parametro = UnaPantalla.PedirParametro("Contrasena", "", 230, 270, fondo);
 	}
 	UnCliente2.EnviarMensaje(Parametro, 15);
 
@@ -134,9 +139,10 @@ bool UsuarioYPassValidos() {
 void PedirModoDeJuego()
 {
 	std::string opcion = "0";
+	char* fondo = "modojuego.bmp";
 	while(opcion != "1" && opcion != "2" && opcion != "3")
 	{
-		opcion = UnaPantalla.PedirParametro("1- Individual MP 2-Colaborativo MP 3-Grupal MP","",0,270);
+		opcion = UnaPantalla.PedirParametro("Ingrese una opcion","",250,450, fondo);
 	}
 	UnCliente2.EnviarMensaje("MODO",4);
 	UnCliente2.EnviarMensaje(opcion,1);
