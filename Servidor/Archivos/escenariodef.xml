@@ -13,7 +13,7 @@
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="CAMINA-DER" cantFrames="9"/>
 					<ESTADO id="DESCONECTADO" cantFrames="1"/>
-					<ESTADO id="AGACHADO" cantFrames="2"/>
+					<ESTADO id="MUERTO" cantFrames="8"/>
 					<ESTADO id="SALTANDO" cantFrames="3"/>
 					<ESTADO id="CAMINA-IZQ" cantFrames="9"/>
 					<ESTADO id="SALTANDO-DER" cantFrames="3"/>
@@ -28,7 +28,7 @@
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="CAMINA-DER" cantFrames="9"/>
 					<ESTADO id="DESCONECTADO" cantFrames="1"/>
-					<ESTADO id="AGACHADO" cantFrames="2"/>
+					<ESTADO id="MUERTO" cantFrames="8"/>
 					<ESTADO id="SALTANDO" cantFrames="3"/>
 					<ESTADO id="CAMINA-IZQ" cantFrames="9"/>
 					<ESTADO id="SALTANDO-DER" cantFrames="3"/>
@@ -42,7 +42,7 @@
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="CAMINA-DER" cantFrames="9"/>
 					<ESTADO id="DESCONECTADO" cantFrames="1"/>
-					<ESTADO id="AGACHADO" cantFrames="2"/>
+					<ESTADO id="MUERTO" cantFrames="8"/>
 					<ESTADO id="SALTANDO" cantFrames="3"/>
 					<ESTADO id="CAMINA-IZQ" cantFrames="9"/>
 					<ESTADO id="SALTANDO-DER" cantFrames="3"/>
@@ -56,7 +56,7 @@
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="CAMINA-DER" cantFrames="9"/>
 					<ESTADO id="DESCONECTADO" cantFrames="1"/>
-					<ESTADO id="AGACHADO" cantFrames="2"/>
+					<ESTADO id="MUERTO" cantFrames="8"/>
 					<ESTADO id="SALTANDO" cantFrames="3"/>
 					<ESTADO id="CAMINA-IZQ" cantFrames="9"/>
 					<ESTADO id="SALTANDO-DER" cantFrames="3"/>

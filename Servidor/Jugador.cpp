@@ -78,7 +78,7 @@ void Jugador::Mover(std::string Direccion) {
 
 		if (!EstaSaltando()) {
 
-			this->Estado = "AGACHADO";
+			this->Estado = "MUERTO";
 		}
 	}
 }

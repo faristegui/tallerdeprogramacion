@@ -307,7 +307,7 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 	}
 
 	if (Tipo == "SOLTO-DOWN") {
-		if (Jugadores[IndiceJugador]->GetEstado() == "AGACHADO") {
+		if (Jugadores[IndiceJugador]->GetEstado() == "MUERTO") {
 
 			Jugadores[IndiceJugador]->SetEstado("QUIETO-DER");
 		}
