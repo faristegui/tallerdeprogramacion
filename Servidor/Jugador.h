@@ -25,10 +25,12 @@ public:
 	int GetPosicionXInicioSalto();
 	int GetX();
 	int GetY();
+	Arma* GetArma();
 	Proyectil* Disparar();
 	void MoverEnX(int UnX);
 	bool EstaCaminando();
 	bool EstaSaltando();
+	bool EstaDisparando();
 private:
 	std::string Nombre;
 	std::string IDSprite;

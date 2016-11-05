@@ -2,10 +2,11 @@
 
 
 
-Arma::Arma(std::string UnIDSprite, std::string UnaDireccion)
+Arma::Arma(std::string UnIDSprite, std::string UnaDireccion, int UnTiempoEntreDisparos)
 {
 	IDSprite = UnIDSprite;
 	Direccion = UnaDireccion;
+	TiempoEntreDisparos = UnTiempoEntreDisparos;
 }
 
 void Arma::CambiarDireccion(std::string UnaDireccion) {
@@ -24,9 +25,15 @@ void Arma::CambiarDireccion(std::string UnaDireccion) {
 	Direccion = UnaDireccion;
 }
 
-Proyectil* Arma::Disparar(int PosX, int PosY) {
+bool Arma::PuedeDisparar(float tickActual) {
+
+	return ((tickActual - tick_ultimoDisparo) > TiempoEntreDisparos);
+}
+
+Proyectil* Arma::Disparar(int PosX, int PosY, float tickActual) {
 
 	Proyectil* UnProyectil = new Proyectil("Bala_H", PosX, PosX, 10, Direccion);
+	tick_ultimoDisparo = tickActual;
 
 	return UnProyectil;
 }

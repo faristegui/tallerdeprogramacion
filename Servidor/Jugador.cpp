@@ -11,7 +11,7 @@ Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 	vida = 100;
 	Conectado = true;
 	
-	UnArma = new Arma("Arma_H", "DERECHA");
+	UnArma = new Arma("Arma_H", "DERECHA", 100);
 }
 
 void Jugador::Mover(std::string Direccion) {
@@ -99,6 +99,11 @@ Proyectil* Jugador::Disparar() {
 	return UnArma->Disparar(x, y);
 }
 
+Arma* Jugador::GetArma() {
+
+	return UnArma;
+}
+
 void Jugador::SetEstaConectado(bool EstaConectado)
 {
 	this->Conectado = EstaConectado;
@@ -162,6 +167,11 @@ int Jugador::GetY() {
 bool Jugador::EstaSaltando() {
 
 	return ((this->Estado == "SALTANDO") || (this->Estado == "SALTANDO-DER") || (this->Estado == "SALTANDO-IZQ"));
+}
+
+bool Jugador::EstaDisparando() {
+
+	return ((this->Estado == "DISPARA-DER") || (this->Estado == "DISPARA-IZQ"));
 }
 
 bool Jugador::EstaCaminando() {

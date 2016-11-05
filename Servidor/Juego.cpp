@@ -10,7 +10,7 @@ int FuncionCuadratica(float t, float b, float c, float d) {
 
 void FisicaThread(void* arg) {
 
-	int ticks_start = 0;
+	float ticks_start = 0;
 	int BordeEnXMinCamara = 20;
 	int BordeEnXMaxCamara = 710;
 	int VelocidadEnX = 10;
@@ -106,6 +106,18 @@ void FisicaThread(void* arg) {
 					}
 				}
 
+				if (UnJugador->EstaDisparando()) {
+
+					if (UnJugador->GetArma()->PuedeDisparar(ticks_start)) {
+
+						Proyectil* UnProyectil = UnJugador->GetArma()->Disparar(UnJugador->GetX(),
+																				UnJugador->GetY(),
+																				ticks_start);
+
+						// TODO: Agregar a una futura lista de proyectiles
+					}
+				}
+
 				if ((MinPosX == -1) || (UnJugador->GetX() < MinPosX)) {
 
 					MinPosX = UnJugador->GetX();
@@ -160,7 +172,7 @@ void FisicaThread(void* arg) {
 			}
 		}
 
-		int diff_ticks = std::clock() - ticks_start;
+		float diff_ticks = std::clock() - ticks_start;
 
 		if (diff_ticks >= 50) {
 			diff_ticks = 50;
