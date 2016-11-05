@@ -6,7 +6,7 @@ public:
 	Enemigo(std::string unIdSprite, int posX, int posY, int vel);
 	int getX();
 	int getY();
-	void mover(int velocidad);
+	void mover();
 	void disparar();
 	std::string getEstado();
 	std::string getID();

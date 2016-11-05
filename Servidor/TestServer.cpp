@@ -279,7 +279,6 @@ void MainListenThread(void* arg) {
 				mensajeEnemigo.append(UnJuego.GetEnemigo(i)->getEstado() + ";"); // Estado(3)
 
 				UnServer.EnviarMensajeTamanoVariable(mensajeEnemigo,ClientSocket);
-				UnJuego.GetEnemigo(i)->mover(UnJuego.GetEnemigo(i)->getVelocidad());
 			}
 			if (CantidadMensajes > 0) {
 				Buzon->iniciarCursor();

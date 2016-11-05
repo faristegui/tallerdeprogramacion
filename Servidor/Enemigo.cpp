@@ -19,7 +19,7 @@ std::string Enemigo::getID()
 	return IDSprite;
 }
 
-void Enemigo::mover(int velocidad)
+void Enemigo::mover()
 {
 	if(x > -30) //Para que salga afuera de la pantalla
 	{

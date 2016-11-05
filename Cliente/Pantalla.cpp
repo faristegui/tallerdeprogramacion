@@ -586,7 +586,7 @@ void Pantalla::IniciarJuego() {
 					string nombreEnemigo = mensajesEnemigo[0];
 					int posicionEnemigoX = stoi(mensajesEnemigo[1]);
 					int posicionEnemigoY = stoi(mensajesEnemigo[2]);
-					Sleep(40);
+					//Sleep(40); // Que funcion cumplia esto aca? Trababa todo el juego
 					RenderSprite(nombreEnemigo, mensajesEnemigo[3], Starting_Tick, Renderer, posicionEnemigoX, posicionEnemigoY);
 				}
 			}

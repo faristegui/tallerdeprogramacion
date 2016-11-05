@@ -10,6 +10,7 @@ int FuncionCuadratica(float t, float b, float c, float d) {
 
 void FisicaThread(void* arg) {
 
+	int ticks_start = 0;
 	int BordeEnXMinCamara = 20;
 	int BordeEnXMaxCamara = 710;
 	int VelocidadEnX = 10;
@@ -18,9 +19,12 @@ void FisicaThread(void* arg) {
 
 	while (true) {
 		
+		ticks_start = std::clock();
+
 		int MinPosX = -1;
 		bool AvanzaCamara = false;
 		int CantJugadores = UnJuego->GetCantJugadores();
+		int CantEnemigos = UnJuego->GetCantEnemigos();
 
 		for (int i = 0; i < CantJugadores; i++) {
 
@@ -109,11 +113,16 @@ void FisicaThread(void* arg) {
 			}
 		}
 
+		for (int i = 0; i < CantEnemigos; i++) {
+
+			UnJuego->GetEnemigo(i)->mover();
+		}
+
 		if (MinPosX <= BordeEnXMinCamara) {
 
 			AvanzaCamara = false;
 		}
-
+		
 		if (AvanzaCamara) {
 
 			UnJuego->AvanzarCamara();
@@ -144,7 +153,13 @@ void FisicaThread(void* arg) {
 			}
 		}
 
-		Sleep(50);
+		int diff_ticks = std::clock() - ticks_start;
+
+		if (diff_ticks >= 50) {
+			diff_ticks = 50;
+		}
+
+		Sleep(50 - diff_ticks);
 	}
 
 
