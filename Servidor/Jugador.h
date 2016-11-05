@@ -38,6 +38,7 @@ private:
 	int PosicionXInicioSalto;
 	int x;
 	int y;
+	int vida;
 	bool Conectado;
 };
 

@@ -255,31 +255,35 @@ void MainListenThread(void* arg) {
 			int CantidadMensajes = Buzon->getTamanio();
 
 			GranMensaje.append(IntAString(CantidadMensajes));
-
-			UnServer.EnviarMensajeTamanoVariable(GranMensaje,ClientSocket);
+			GranMensaje.append(";");
 
 			if(UnJuego.GetCamara(0)->X == 0 && !paso)
 			{
 				paso = true;
-				UnJuego.AgregarEnemigo("PulpoEnemigo",800,300,15);
-				UnJuego.AgregarEnemigo("HumanoEnemigo", 800, 390,10);
+				UnJuego.AgregarEnemigo("PulpoEnemigo", 800, 300, 15, 100);
+				UnJuego.AgregarEnemigo("HumanoEnemigo", 800, 390, 10, 100);
 			}
-			
-			//Envio informacion de los enemigos
-			//Cantidad de enemigos que aparecen
 
-			UnServer.EnviarMensajeTamanoVariable(IntAString(UnJuego.GetCantEnemigos()),ClientSocket);
+			GranMensaje.append(IntAString(UnJuego.GetCantEnemigos()));
+			GranMensaje.append(";");
 
 			for(int i = 0; i < UnJuego.GetCantEnemigos(); i++)
 			{
-				string mensajeEnemigo = "";
-				mensajeEnemigo.append(UnJuego.GetEnemigo(i)->getID() + ";"); //ID del sprite (0)
-				mensajeEnemigo.append(IntAString(UnJuego.GetEnemigo(i)->getX()) + ";"); // PosX(1)
-				mensajeEnemigo.append(IntAString(UnJuego.GetEnemigo(i)->getY()) + ";"); // PosY(2)
-				mensajeEnemigo.append(UnJuego.GetEnemigo(i)->getEstado() + ";"); // Estado(3)
+				GranMensaje.append(UnJuego.GetEnemigo(i)->getID());					// ID del sprite (0)
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.GetEnemigo(i)->getX()));		// PosX(1)
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.GetEnemigo(i)->getY()));		// PosY(2)
+				GranMensaje.append(";");
+				GranMensaje.append(UnJuego.GetEnemigo(i)->getEstado());	// Estado(3)
 
-				UnServer.EnviarMensajeTamanoVariable(mensajeEnemigo,ClientSocket);
+				if (i != UnJuego.GetCantEnemigos()) {
+					GranMensaje.append(";");
+				}
 			}
+
+			UnServer.EnviarMensajeTamanoVariable(GranMensaje, ClientSocket);
+
 			if (CantidadMensajes > 0) {
 				Buzon->iniciarCursor();
 

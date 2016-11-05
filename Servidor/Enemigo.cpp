@@ -1,12 +1,13 @@
 #include "Enemigo.h"
 
 
-Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel)
+Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel, int unaVida)
 {
 	IDSprite = unIdSprite;
 	estado = "CAMINA-IZQ";
 	x = posX;
 	y = posY;
+	vida = unaVida;
 	velocidad = vel;
 }
 int Enemigo::getX()

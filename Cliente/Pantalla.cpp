@@ -576,22 +576,25 @@ void Pantalla::IniciarJuego() {
 				EscribirNombreJugador(Nombre, PosX, PosY + 85);
 			}
 
-			int CantEnemigos = stoi(cliente->RecibirMensajeTamanoVariable());
-			
-			if (respuestaServidor != "LOST") {
-				for(int i = 0; i < CantEnemigos; i++)
-				{
-					std::string respuestaServerEnemigos = cliente->RecibirMensajeTamanoVariable();
-					std::vector<std::string> mensajesEnemigo = split(respuestaServerEnemigos, ';');
-					string nombreEnemigo = mensajesEnemigo[0];
-					int posicionEnemigoX = stoi(mensajesEnemigo[1]);
-					int posicionEnemigoY = stoi(mensajesEnemigo[2]);
-					//Sleep(40); // Que funcion cumplia esto aca? Trababa todo el juego
-					RenderSprite(nombreEnemigo, mensajesEnemigo[3], Starting_Tick, Renderer, posicionEnemigoX, posicionEnemigoY);
-				}
-			}
-
 			int CantidadMensajes = stoi(mensajes[Indice]);
+			Indice++;
+
+			int CantEnemigos = stoi(mensajes[Indice]);
+			Indice++;
+			
+			for(int i = 0; i < CantEnemigos; i++)
+			{
+				string nombreEnemigo = mensajes[Indice];
+				Indice++;
+				int posicionEnemigoX = stoi(mensajes[Indice]);
+				Indice++;
+				int posicionEnemigoY = stoi(mensajes[Indice]);
+				Indice++;
+				std::string nombreSprite = mensajes[Indice];
+				Indice++;
+				//Sleep(40); // Que funcion cumplia esto aca? Trababa todo el juego
+				RenderSprite(nombreEnemigo, nombreSprite, Starting_Tick, Renderer, posicionEnemigoX, posicionEnemigoY);
+			}
 
 			if (CantidadMensajes > 0) {
 				string Mensaje = cliente->RecibirMensajeTamanoVariable();
