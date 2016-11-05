@@ -1,4 +1,5 @@
 #pragma once
+#include "Arma.h"
 #include <string>
 #include <ctime>
 
@@ -24,6 +25,7 @@ public:
 	int GetPosicionXInicioSalto();
 	int GetX();
 	int GetY();
+	Proyectil* Disparar();
 	void MoverEnX(int UnX);
 	bool EstaCaminando();
 	bool EstaSaltando();
@@ -40,5 +42,6 @@ private:
 	int y;
 	int vida;
 	bool Conectado;
+	Arma *UnArma;
 };
 

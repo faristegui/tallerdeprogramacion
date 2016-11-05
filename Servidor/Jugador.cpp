@@ -10,6 +10,8 @@ Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 	y = 405;
 	vida = 100;
 	Conectado = true;
+	
+	UnArma = new Arma("Arma_H", "DERECHA");
 }
 
 void Jugador::Mover(std::string Direccion) {
@@ -39,6 +41,8 @@ void Jugador::Mover(std::string Direccion) {
 				this->Estado = "SALTANDO";
 			}
 		}
+
+		UnArma->CambiarDireccion("ARRIBA");
 	}
 
 	if (Direccion == "RIGHT")  {
@@ -56,6 +60,8 @@ void Jugador::Mover(std::string Direccion) {
 				PosicionXInicioSalto = x;
 			}
 		}
+
+		UnArma->CambiarDireccion("DERECHA");
 	}
 
 	if (Direccion == "LEFT") {
@@ -73,6 +79,8 @@ void Jugador::Mover(std::string Direccion) {
 				PosicionXInicioSalto = x;
 			}
 		}
+
+		UnArma->CambiarDireccion("IZQUIERDA");
 	}
 
 	if (Direccion == "DOWN") {
@@ -81,7 +89,14 @@ void Jugador::Mover(std::string Direccion) {
 
 			this->Estado = "MUERTO";
 		}
+
+		UnArma->CambiarDireccion("ABAJO");
 	}
+}
+
+Proyectil* Jugador::Disparar() {
+
+	return UnArma->Disparar(x, y);
 }
 
 void Jugador::SetEstaConectado(bool EstaConectado)
