@@ -113,6 +113,7 @@ void Pantalla::EscribirNombreJugador(std::string Nombre, int PosX, int PosY) {
 	}
 }
 
+
 void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 	SDL_Rect Message_Rect;
 	SDL_Texture* Message;
@@ -129,18 +130,19 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 
 	get_text_and_rect(Renderer, posX, posY, Mensaje.c_str(), &Message, &Message_Rect, 26);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
-	Mensaje = "¡¡Press START!!";
+	Mensaje = "¡¡Por favor espere..!!";
 	get_text_and_rect(Renderer, 170, 370, Mensaje.c_str(), &Message, &Message_Rect, 30);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 	SDL_RenderPresent(Renderer);
-
 	while (!Sale) {
 
 		Starting_Tick = SDL_GetTicks();
 
 		while (SDL_PollEvent(&Event)) {
-
-			if (Event.type == SDL_KEYDOWN) {
+			string respuestaServer = "";
+			cliente->EnviarMensaje("LIST",4);
+			respuestaServer = cliente->RecibirMensajeTamanoVariable();
+			if (respuestaServer == "OK"){
 				Sale = true;
 				break;
 			}
@@ -524,11 +526,10 @@ void Pantalla::IniciarJuego() {
 		std::string respuestaServidor = cliente->RecibirMensajeTamanoVariable();
 
 		if (respuestaServidor != "LOST") {
-
+			
 			std::vector<std::string> mensajes = split(respuestaServidor, ';');
 
 			int Indice = 0;
-
 			CapasFondoEscenario->iniciarCursor();
 			while (CapasFondoEscenario->avanzarCursor())
 			{
@@ -558,7 +559,7 @@ void Pantalla::IniciarJuego() {
 
 			int PosX = 0;
 			int PosY = 0;
-
+		
 			for (int i = 0; i < CantJugadores; i++) {
 
 				string Nombre = mensajes[Indice];
@@ -582,7 +583,7 @@ void Pantalla::IniciarJuego() {
 			int CantEnemigos = stoi(mensajes[Indice]);
 			Indice++;
 			
-			for(int i = 0; i < CantEnemigos; i++)
+		for(int i = 0; i < CantEnemigos; i++)
 			{
 				string nombreEnemigo = mensajes[Indice];
 				Indice++;
@@ -594,11 +595,15 @@ void Pantalla::IniciarJuego() {
 				Indice++;
 				//Sleep(40); // Que funcion cumplia esto aca? Trababa todo el juego
 				RenderSprite(nombreEnemigo, nombreSprite, Starting_Tick, Renderer, posicionEnemigoX, posicionEnemigoY);
-			}
+ 			}
+
 
 			if (CantidadMensajes > 0) {
-				string Mensaje = cliente->RecibirMensajeTamanoVariable();
-				AgregarMensaje(Mensaje, 5, Starting_Tick);
+				for(int i = 0; i < CantidadMensajes;i++)
+				{
+					string Mensaje = cliente->RecibirMensajeTamanoVariable();
+					AgregarMensaje(Mensaje, 5, Starting_Tick);
+				}
 			}
 
 			MostrarMensajes(Starting_Tick);

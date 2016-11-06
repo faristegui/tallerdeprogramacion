@@ -189,6 +189,17 @@ void MainListenThread(void* arg) {
 				UnServer.EnviarMensaje("SI",2,ClientSocket);
 			}
 		}
+		if (mensaje=="LIST")
+		{
+			if(UnJuego.GetCantJugadores() != 4)
+			{
+				UnServer.EnviarMensajeTamanoVariable("NOLISTO",ClientSocket);
+			}
+			else
+			{
+				UnServer.EnviarMensajeTamanoVariable("OK",ClientSocket);
+			}
+		}
 		if (mensaje == "STAT") {
 
 			std::string GranMensaje = "";
@@ -255,14 +266,17 @@ void MainListenThread(void* arg) {
 			int CantidadMensajes = Buzon->getTamanio();
 
 			GranMensaje.append(IntAString(CantidadMensajes));
-			GranMensaje.append(";");
 
+			GranMensaje.append(";");
 			if(UnJuego.GetCamara(0)->X == 0 && !paso)
 			{
 				paso = true;
-				UnJuego.AgregarEnemigo("PulpoEnemigo", 800, 300, 15, 100);
-				UnJuego.AgregarEnemigo("HumanoEnemigo", 800, 390, 10, 100);
+				UnJuego.AgregarEnemigo("PulpoEnemigo",800,300,15,100);
+				UnJuego.AgregarEnemigo("HumanoEnemigo", 800, 390,10,100);
 			}
+			
+			//Envio informacion de los enemigos
+			//Cantidad de enemigos que aparecen
 
 			GranMensaje.append(IntAString(UnJuego.GetCantEnemigos()));
 			GranMensaje.append(";");
@@ -277,13 +291,12 @@ void MainListenThread(void* arg) {
 				GranMensaje.append(";");
 				GranMensaje.append(UnJuego.GetEnemigo(i)->getEstado());	// Estado(3)
 
-				if (i != UnJuego.GetCantEnemigos()) {
+				if (i != UnJuego.GetCantEnemigos()) 
+				{
 					GranMensaje.append(";");
 				}
 			}
-
 			UnServer.EnviarMensajeTamanoVariable(GranMensaje, ClientSocket);
-
 			if (CantidadMensajes > 0) {
 				Buzon->iniciarCursor();
 

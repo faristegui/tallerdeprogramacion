@@ -18,9 +18,7 @@ void FisicaThread(void* arg) {
 	Juego *UnJuego = (Juego*)arg;
 
 	while (true) {
-		
 		ticks_start = std::clock();
-
 		int MinPosX = -1;
 		bool AvanzaCamara = false;
 		int CantJugadores = UnJuego->GetCantJugadores();
@@ -105,7 +103,6 @@ void FisicaThread(void* arg) {
 						}
 					}
 				}
-
 				if (UnJugador->EstaDisparando()) {
 
 					if (UnJugador->GetArma()->PuedeDisparar(ticks_start)) {
@@ -125,11 +122,19 @@ void FisicaThread(void* arg) {
 			}
 		}
 
+
 		if (MinPosX <= BordeEnXMinCamara) {
 
 			AvanzaCamara = false;
 		}
-		
+		for (int i = 0; i < CantEnemigos; i++) {
+
+			UnJuego->GetEnemigo(i)->mover();
+
+			if (AvanzaCamara) {
+				UnJuego->GetEnemigo(i)->mover();
+			}
+		}
 		if (AvanzaCamara) {
 
 			UnJuego->AvanzarCamara();
@@ -157,18 +162,6 @@ void FisicaThread(void* arg) {
 						UnJugador->MoverEnX(-VelocidadEnX);
 					}
 				}
-			}
-		}
-
-		// Los enemigos DEBEN ser renderizados despues del chequeo de avanzo de camara
-		// Si la camara avanza -> los enemigos deben ir mas rapido para atras (si es q estan caminando para ese lado)
-
-		for (int i = 0; i < CantEnemigos; i++) {
-
-			UnJuego->GetEnemigo(i)->mover();
-
-			if (AvanzaCamara) {
-				UnJuego->GetEnemigo(i)->mover();
 			}
 		}
 
@@ -244,12 +237,12 @@ Enemigo* Juego::GetEnemigo(int posicion)
 
 }
 
-void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad, int vida)
+void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida)
 {
-
-	Enemigo* unEnemigo = new Enemigo(UnIDSprite, posX, posY, velocidad, vida);
+	Enemigo* unEnemigo = new Enemigo(UnIDSprite, posX, posY, velocidad,vida);
 	enemigos[cantidadEnemigos] = unEnemigo;
 	cantidadEnemigos++;
+
 }
 
 void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {

@@ -131,7 +131,7 @@ bool UsuarioYPassValidos() {
 	CodigoRespuesta = UnCliente2.RecibirMensaje(3);
 	UnCliente2.EscribirLog("Autorizar usuario. Mensaje del servidor: " + Respuesta + ".");
 	Respuesta = UnCliente2.RecibirMensaje(40);
-	UnaPantalla.MostrarMensaje(Respuesta,190,300);
+	UnaPantalla.MostrarMensaje("Esperando por mas jugadores",0,300);
 
 	return (CodigoRespuesta == "000");
 }
@@ -162,7 +162,7 @@ int main(int argc, char* args[])
 	}
 	*/
 	if (UsuarioYPassValidos()) {
-
+		
 		UnaPantalla.IniciarJuego();
 	}
 	

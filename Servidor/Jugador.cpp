@@ -10,7 +10,6 @@ Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 	y = 405;
 	vida = 100;
 	Conectado = true;
-	
 	UnArma = new Arma("Arma_H", "DERECHA", 100);
 }
 
@@ -41,7 +40,6 @@ void Jugador::Mover(std::string Direccion) {
 				this->Estado = "SALTANDO";
 			}
 		}
-
 		UnArma->CambiarDireccion("ARRIBA");
 	}
 
@@ -60,8 +58,6 @@ void Jugador::Mover(std::string Direccion) {
 				PosicionXInicioSalto = x;
 			}
 		}
-
-		UnArma->CambiarDireccion("DERECHA");
 	}
 
 	if (Direccion == "LEFT") {
@@ -79,8 +75,6 @@ void Jugador::Mover(std::string Direccion) {
 				PosicionXInicioSalto = x;
 			}
 		}
-
-		UnArma->CambiarDireccion("IZQUIERDA");
 	}
 
 	if (Direccion == "DOWN") {
@@ -89,21 +83,19 @@ void Jugador::Mover(std::string Direccion) {
 
 			this->Estado = "MUERTO";
 		}
-
-		UnArma->CambiarDireccion("ABAJO");
 	}
 }
-
-Proyectil* Jugador::Disparar() {
-
-	return UnArma->Disparar(x, y);
-}
-
-Arma* Jugador::GetArma() {
+ Proyectil* Jugador::Disparar() {
+ 
+	 //lean fijate que esta linea le falta el parametro de los ticks
+	 //te la comento para que compile
+ 	//return UnArma->Disparar(x,y);
+ }
+Arma* Jugador::GetArma() 
+{
 
 	return UnArma;
 }
-
 void Jugador::SetEstaConectado(bool EstaConectado)
 {
 	this->Conectado = EstaConectado;
@@ -117,6 +109,11 @@ void Jugador::SetEstaConectado(bool EstaConectado)
 	else {
 		this->Estado = "QUIETO-DER";
 	}
+}
+
+bool Jugador::EstaDisparando() {
+
+	return ((this->Estado == "DISPARA-DER") || (this->Estado == "DISPARA-IZQ"));
 }
 
 bool Jugador::GetEstaConectado() {
@@ -167,11 +164,6 @@ int Jugador::GetY() {
 bool Jugador::EstaSaltando() {
 
 	return ((this->Estado == "SALTANDO") || (this->Estado == "SALTANDO-DER") || (this->Estado == "SALTANDO-IZQ"));
-}
-
-bool Jugador::EstaDisparando() {
-
-	return ((this->Estado == "DISPARA-DER") || (this->Estado == "DISPARA-IZQ"));
 }
 
 bool Jugador::EstaCaminando() {

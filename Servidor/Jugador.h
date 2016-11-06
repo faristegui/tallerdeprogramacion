@@ -1,8 +1,7 @@
 #pragma once
-#include "Arma.h"
 #include <string>
 #include <ctime>
-
+#include "Arma.h"
 class Jugador
 {
 public:
