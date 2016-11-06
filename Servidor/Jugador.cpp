@@ -85,12 +85,12 @@ void Jugador::Mover(std::string Direccion) {
 		}
 	}
 }
- Proyectil* Jugador::Disparar() {
+ /*Proyectil* Jugador::Disparar() {
  
 	 //lean fijate que esta linea le falta el parametro de los ticks
 	 //te la comento para que compile
  	//return UnArma->Disparar(x,y);
- }
+ }*/
 Arma* Jugador::GetArma() 
 {
 
