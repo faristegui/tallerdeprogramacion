@@ -269,8 +269,9 @@ void MainListenThread(void* arg) {
 			if(UnJuego.GetCamara(0)->X == 0 && !paso)
 			{
 				paso = true;
-				UnJuego.AgregarEnemigo("PulpoEnemigo",800,300,15,100);
-				UnJuego.AgregarEnemigo("HumanoEnemigo", 800, 390,10,100);
+				//UnJuego.AgregarEnemigo("PulpoEnemigo",800,300,15,100);
+				UnJuego.AgregarEnemigo("HumanoEnemigo", 800, 390,10,100, false);
+				UnJuego.AgregarEnemigo("EnemigoFinal1", 800, 200,10,1000, true);
 			}
 			
 			//Envio informacion de los enemigos

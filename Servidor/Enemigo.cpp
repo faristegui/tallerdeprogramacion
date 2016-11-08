@@ -1,7 +1,7 @@
 #include "Enemigo.h"
 
 
-Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel, int unaVida)
+Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel, int unaVida, bool esFinal)
 {
 	IDSprite = unIdSprite;
 	estado = "CAMINA-IZQ";
@@ -9,6 +9,7 @@ Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel, int unaVid
 	y = posY;
 	vida = unaVida;
 	velocidad = vel;
+	enemigoFinal = esFinal;
 }
 int Enemigo::getX()
 {
@@ -22,14 +23,34 @@ std::string Enemigo::getID()
 
 void Enemigo::mover()
 {
-	if(x > -30) //Para que salga afuera de la pantalla
+	//Solo enemigos finales
+	if(this->esEnemigoFinal())
 	{
-		x-= velocidad;
+		if(x > 500) //Se posiciona para disparar. No se mueve
+		{
+			x-= velocidad;
+		}
+		else
+		{
+			this->estado = "DISPARA";
+		}
 	}
 	else
 	{
-		x = 800;
+		if(x > -30) //Para que salga afuera de la pantalla
+		{
+			x-= velocidad;
+		}
+		else
+		{
+			x = 800;
+		}
 	}
+}
+
+bool Enemigo::esEnemigoFinal()
+{
+	return enemigoFinal;
 }
 
 int Enemigo::getVelocidad()

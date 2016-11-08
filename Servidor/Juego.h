@@ -41,7 +41,7 @@ public:
 	void BorrarCamaras();
 	void AvanzarCamara();
 	void AgregarCamara(int UnAncho);
-	void AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida);
+	void AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida, bool esFinal);
 	Enemigo* GetEnemigo(int posicion);
 	Lista<Proyectil *>* GetProyectiles();
 private:

@@ -272,9 +272,9 @@ Enemigo* Juego::GetEnemigo(int posicion)
 
 }
 
-void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida)
+void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida, bool esFinal)
 {
-	Enemigo* unEnemigo = new Enemigo(UnIDSprite, posX, posY, velocidad,vida);
+	Enemigo* unEnemigo = new Enemigo(UnIDSprite, posX, posY, velocidad,vida, esFinal);
 	enemigos[cantidadEnemigos] = unEnemigo;
 	cantidadEnemigos++;
 
