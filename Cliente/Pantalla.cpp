@@ -465,9 +465,9 @@ void Pantalla::IniciarJuego() {
 				if (Event.key.keysym.sym == SDLK_LEFT) {
 					Evento = "LEFT";
 				}
-				if (Event.key.keysym.sym == SDLK_UP) {
+				if (Event.key.keysym.sym == SDLK_SPACE) {
 
-					Evento = "UP";
+					Evento = "SPACE";
 				}
 				if (Event.key.keysym.sym == SDLK_DOWN) {
 
@@ -498,8 +498,8 @@ void Pantalla::IniciarJuego() {
 				if (Event.key.keysym.sym == SDLK_DOWN) {
 					Evento = "SOLTO-DOWN";
 				}
-				if (Event.key.keysym.sym == SDLK_UP) {
-					Evento = "SOLTO-UP";
+				if (Event.key.keysym.sym == SDLK_SPACE) {
+					Evento = "SOLTO-SPACE";
 				}
 				if (Event.key.keysym.sym == SDLK_r) {
 
@@ -583,7 +583,7 @@ void Pantalla::IniciarJuego() {
 			int CantEnemigos = stoi(mensajes[Indice]);
 			Indice++;
 			
-		for(int i = 0; i < CantEnemigos; i++)
+			for(int i = 0; i < CantEnemigos; i++)
 			{
 				string nombreEnemigo = mensajes[Indice];
 				Indice++;
@@ -596,7 +596,21 @@ void Pantalla::IniciarJuego() {
 				//Sleep(40); // Que funcion cumplia esto aca? Trababa todo el juego
 				RenderSprite(nombreEnemigo, nombreSprite, Starting_Tick, Renderer, posicionEnemigoX, posicionEnemigoY);
  			}
+			
+			int CantProyectiles = stoi(mensajes[Indice]);
+			Indice++;
 
+			for (int i = 0; i < CantProyectiles; i++) {
+				string IDSprite = mensajes[Indice];
+				Indice++;
+				string EstadoProyectil = mensajes[Indice];
+				Indice++;
+				int xProyectil = stoi(mensajes[Indice]);
+				Indice++;
+				int yProyectil = stoi(mensajes[Indice]);
+				Indice++;
+				RenderSprite(IDSprite, EstadoProyectil, Starting_Tick, Renderer, xProyectil, yProyectil);
+			}
 
 			if (CantidadMensajes > 0) {
 				for(int i = 0; i < CantidadMensajes;i++)

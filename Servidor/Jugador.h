@@ -18,6 +18,7 @@ public:
 	void SetX(int UnX);
 	void SetY(int UnY);
 	std::string GetEstadoAnterior();
+	bool EstaApuntandoALaDerecha();
 	float GetTiempoInicioSaltoY();
 	float GetTiempoInicioSaltoX();
 	int GetPosicionYInicioSalto();
@@ -25,12 +26,13 @@ public:
 	int GetX();
 	int GetY();
 	Arma* GetArma();
-	Proyectil* Disparar();
 	void MoverEnX(int UnX);
 	bool EstaCaminando();
 	bool EstaSaltando();
 	bool EstaDisparando();
 private:
+	bool Saltando;
+	std::string Direccion;
 	std::string Nombre;
 	std::string IDSprite;
 	std::string Estado;

@@ -191,7 +191,7 @@ void MainListenThread(void* arg) {
 		}
 		if (mensaje=="LIST")
 		{
-			if(UnJuego.GetCantJugadores() != 4)
+			if(UnJuego.GetCantJugadores() != 1)
 			{
 				UnServer.EnviarMensajeTamanoVariable("NOLISTO",ClientSocket);
 			}
@@ -203,8 +203,6 @@ void MainListenThread(void* arg) {
 		if (mensaje == "STAT") {
 
 			std::string GranMensaje = "";
-			
-			//std::string mensajeCamaras = "";
 
 			int CantCamaras = UnJuego.GetCantCamaras();
 
@@ -296,6 +294,27 @@ void MainListenThread(void* arg) {
 					GranMensaje.append(";");
 				}
 			}
+
+			Lista<Proyectil *>* Proyectiles = UnJuego.GetProyectiles();
+			Proyectiles->iniciarCursor();
+
+			GranMensaje.append(IntAString(Proyectiles->getTamanio()));
+			GranMensaje.append(";");
+
+			while (Proyectiles->avanzarCursor()) {
+
+				Proyectil* UnProyectil = Proyectiles->obtenerCursor();
+
+				GranMensaje.append(UnProyectil->GetIDSprite());
+				GranMensaje.append(";");
+				GranMensaje.append(UnProyectil->GetEstado());
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnProyectil->GetX()));
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnProyectil->GetY()));
+				GranMensaje.append(";");
+			}
+
 			UnServer.EnviarMensajeTamanoVariable(GranMensaje, ClientSocket);
 			if (CantidadMensajes > 0) {
 				Buzon->iniciarCursor();

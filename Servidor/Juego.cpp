@@ -24,6 +24,8 @@ void FisicaThread(void* arg) {
 		int CantJugadores = UnJuego->GetCantJugadores();
 		int CantEnemigos = UnJuego->GetCantEnemigos();
 
+		// -----------------------------------------------
+		// Proceso jugador (estados y eventos)
 		for (int i = 0; i < CantJugadores; i++) {
 
 			Jugador *UnJugador = UnJuego->GetJugador(i);
@@ -111,7 +113,7 @@ void FisicaThread(void* arg) {
 																				UnJugador->GetY(),
 																				ticks_start);
 
-						// TODO: Agregar a una futura lista de proyectiles
+						UnJuego->GetProyectiles()->agregar(UnProyectil);
 					}
 				}
 
@@ -121,12 +123,12 @@ void FisicaThread(void* arg) {
 				}
 			}
 		}
-
-
 		if (MinPosX <= BordeEnXMinCamara) {
 
 			AvanzaCamara = false;
 		}
+		// -----------------------------------------------
+		// Proceso enemigos
 		for (int i = 0; i < CantEnemigos; i++) {
 
 			UnJuego->GetEnemigo(i)->mover();
@@ -135,6 +137,31 @@ void FisicaThread(void* arg) {
 				UnJuego->GetEnemigo(i)->mover();
 			}
 		}
+		// -----------------------------------------------
+		// Proceso proyectiles (y colisiones de los mismos)
+		Lista<Proyectil *>* Proyectiles = UnJuego->GetProyectiles();
+		int PosicionCursor = 1;
+		Proyectiles->iniciarCursor();
+		while (Proyectiles->avanzarCursor()) {
+
+			Proyectil* UnProyectil = Proyectiles->obtenerCursor();
+
+			UnProyectil->Mover();
+
+			if (AvanzaCamara) {
+
+				// TODO: Mover proyectil para izquierda a velocidad de camara
+			}
+
+			if ((UnProyectil->GetX() > 800) || (UnProyectil->GetX() < 0) ||
+				(UnProyectil->GetY() < 0) || (UnProyectil->GetY() > 600)) {
+
+				Proyectiles->remover(PosicionCursor);
+			}
+			PosicionCursor++;
+		}
+		// -----------------------------------------------
+		// Proceso camara (y avance/retroceso de todos los sprites)
 		if (AvanzaCamara) {
 
 			UnJuego->AvanzarCamara();
@@ -165,6 +192,8 @@ void FisicaThread(void* arg) {
 			}
 		}
 
+		// -----------------------------------------------
+		// Fin procesos
 		float diff_ticks = std::clock() - ticks_start;
 
 		if (diff_ticks >= 50) {
@@ -181,6 +210,7 @@ Juego::Juego()
 {
 	CantJugadores = 0;
 	CantCamaras = 0;
+	Proyectiles = new Lista<Proyectil *>();
 	_beginthread(FisicaThread, 0, this);
 }
 
@@ -192,6 +222,11 @@ void Juego::establecerModo(std::string nuevoModo)
 int Juego::obtenerModo()
 {
 	return modoJuego;
+}
+
+Lista<Proyectil *>* Juego::GetProyectiles() {
+	
+	return Proyectiles;
 }
 
 void Juego::AvanzarCamara() {
@@ -300,7 +335,7 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 
 	int IndiceJugador = GetIndexUsuario(Usuario);
 
-	if ((Tipo == "UP") || (Tipo == "RIGHT") || (Tipo == "DOWN") || (Tipo == "LEFT")) {
+	if ((Tipo == "SPACE") || (Tipo == "RIGHT") || (Tipo == "DOWN") || (Tipo == "LEFT")) {
 
 		Jugadores[IndiceJugador]->Mover(Tipo);
 	}
@@ -312,7 +347,7 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 			Jugadores[IndiceJugador]->SetEstado("QUIETO-DER");
 		}
 		else {			
-			if (Jugadores[IndiceJugador]->EstaSaltando()) {
+			if ((Jugadores[IndiceJugador]->EstaSaltando()) || (Jugadores[IndiceJugador]->EstaDisparando())) {
 
 				Jugadores[IndiceJugador]->SetEstadoAnterior("QUIETO-DER");
 			}
@@ -326,7 +361,7 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 			Jugadores[IndiceJugador]->SetEstado("QUIETO-IZQ");
 		}
 		else {			
-			if (Jugadores[IndiceJugador]->EstaSaltando()) {
+			if ((Jugadores[IndiceJugador]->EstaSaltando()) || (Jugadores[IndiceJugador]->EstaDisparando())) {
 
 				Jugadores[IndiceJugador]->SetEstadoAnterior("QUIETO-IZQ");
 			}
@@ -334,34 +369,27 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 	}
 
 	if (Tipo == "SOLTO-DOWN") {
-		if (Jugadores[IndiceJugador]->GetEstado() == "MUERTO") {
 
-			Jugadores[IndiceJugador]->SetEstado("QUIETO-DER");
-		}
 	}
 
 	if(Tipo == "DISPARA")
 	{
-		if ((Jugadores[IndiceJugador]->GetEstado() == "QUIETO-DER") || (Jugadores[IndiceJugador]->GetEstado() == "SALTANDO-DER")) {
+		Jugadores[IndiceJugador]->SetEstadoAnterior(Jugadores[IndiceJugador]->GetEstado());
+
+		if (Jugadores[IndiceJugador]->EstaApuntandoALaDerecha()) {
 
 			Jugadores[IndiceJugador]->SetEstado("DISPARA-DER");
 		}
 		else
 		{
+
 			Jugadores[IndiceJugador]->SetEstado("DISPARA-IZQ");
 		}
 	}
 
 	if(Tipo == "SOLTO-DISPARA")
 	{
-		if (Jugadores[IndiceJugador]->GetEstado() == "DISPARA-DER") {
-
-			Jugadores[IndiceJugador]->SetEstado("QUIETO-DER");
-		}
-		else
-		{
-			Jugadores[IndiceJugador]->SetEstado("QUIETO-IZQ");
-		}
+		Jugadores[IndiceJugador]->SetEstado(Jugadores[IndiceJugador]->GetEstadoAnterior());
 	}
 }
 

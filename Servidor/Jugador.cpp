@@ -10,12 +10,12 @@ Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 	y = 405;
 	vida = 100;
 	Conectado = true;
-	UnArma = new Arma("Arma_H", "DERECHA", 100);
+	UnArma = new Arma("Arma_H", "DERECHA", 200);
 }
 
-void Jugador::Mover(std::string Direccion) {
+void Jugador::Mover(std::string Tecla) {
 
-	if (Direccion == "UP") {
+	if (Tecla == "SPACE") {
 
 		if (!EstaSaltando()) {
 
@@ -25,14 +25,14 @@ void Jugador::Mover(std::string Direccion) {
 			if (EstaCaminando()) {
 
 				EstadoAnterior = this->Estado;
-				if (this->Estado == "CAMINA-DER") {
-					Direccion = "RIGHT";
+				if (this->EstaApuntandoALaDerecha()) {
+					Tecla = "RIGHT";
 				} else {
-					Direccion = "LEFT";
+					Tecla = "LEFT";
 				}
 			}
 
-			this->Estado = "SALTANDO";
+			this->Estado = "SALTANDO";  // TODO: Fix salta y cambia de direccion
 		}
 		else {
 			if ((this->Estado != "SALTANDO-IZQ") || (this->Estado != "SALTANDO-DER")) {
@@ -40,10 +40,10 @@ void Jugador::Mover(std::string Direccion) {
 				this->Estado = "SALTANDO";
 			}
 		}
-		UnArma->CambiarDireccion("ARRIBA");
+
 	}
 
-	if (Direccion == "RIGHT")  {
+	if (Tecla == "RIGHT")  {
 		
 		if (!EstaSaltando()) {
 
@@ -58,9 +58,11 @@ void Jugador::Mover(std::string Direccion) {
 				PosicionXInicioSalto = x;
 			}
 		}
+
+		UnArma->CambiarDireccion("DERECHA");
 	}
 
-	if (Direccion == "LEFT") {
+	if (Tecla == "LEFT") {
 
 		if (!EstaSaltando()) {
 
@@ -75,22 +77,15 @@ void Jugador::Mover(std::string Direccion) {
 				PosicionXInicioSalto = x;
 			}
 		}
+
+		UnArma->CambiarDireccion("IZQUIERDA");
 	}
 
-	if (Direccion == "DOWN") {
+	if (Tecla == "DOWN") {
 
-		if (!EstaSaltando()) {
-
-			this->Estado = "MUERTO";
-		}
+		UnArma->CambiarDireccion("ABAJO");
 	}
 }
- /*Proyectil* Jugador::Disparar() {
- 
-	 //lean fijate que esta linea le falta el parametro de los ticks
-	 //te la comento para que compile
- 	//return UnArma->Disparar(x,y);
- }*/
 Arma* Jugador::GetArma() 
 {
 
@@ -169,6 +164,12 @@ bool Jugador::EstaSaltando() {
 bool Jugador::EstaCaminando() {
 
 	return ((this->Estado == "CAMINA-DER") || (this->Estado == "CAMINA-IZQ"));
+}
+
+bool Jugador::EstaApuntandoALaDerecha() {
+
+	return ((this->Estado == "CAMINA-DER") || (this->Estado == "SALTANDO-DER") ||
+			(this->Estado == "QUIETO-DER"));
 }
 
 float Jugador::GetTiempoInicioSaltoY() {

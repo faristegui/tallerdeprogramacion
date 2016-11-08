@@ -32,7 +32,7 @@ bool Arma::PuedeDisparar(float tickActual) {
 
 Proyectil* Arma::Disparar(int PosX, int PosY, float tickActual) {
 
-	Proyectil* UnProyectil = new Proyectil("Bala_H", PosX, PosX, 10, Direccion);
+	Proyectil* UnProyectil = new Proyectil("Bala_H", PosX, PosY + 15, 25, Direccion);
 	tick_ultimoDisparo = tickActual;
 
 	return UnProyectil;

@@ -43,12 +43,14 @@ public:
 	void AgregarCamara(int UnAncho);
 	void AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida);
 	Enemigo* GetEnemigo(int posicion);
+	Lista<Proyectil *>* GetProyectiles();
 private:
 	int CantJugadores;
 	int cantidadEnemigos;
 	int modoJuego;
 	int GetIndexUsuario(std::string Usuario);
 	Enemigo* enemigos[10];
+	Lista<Proyectil *>* Proyectiles;
 	Equipo* equipos[4];
 	Jugador *Jugadores[5];
 	Camara *Camaras[6];
