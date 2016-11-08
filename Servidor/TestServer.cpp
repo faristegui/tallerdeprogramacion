@@ -270,8 +270,9 @@ void MainListenThread(void* arg) {
 			{
 				paso = true;
 				//UnJuego.AgregarEnemigo("PulpoEnemigo",800,300,15,100);
-				UnJuego.AgregarEnemigo("HumanoEnemigo", 800, 390,10,100, false);
+				//UnJuego.AgregarEnemigo("HumanoEnemigo", 800, 390,10,100, false);
 				UnJuego.AgregarEnemigo("EnemigoFinal1", 800, 200,10,1000, true);
+				UnJuego.AgregarEnemigo("TanqueEnemigo", -25, 370,-4,1000, false);
 			}
 			
 			//Envio informacion de los enemigos
