@@ -29,9 +29,12 @@ public:
 	void MoverEnX(int UnX);
 	bool EstaCaminando();
 	bool EstaSaltando();
+	bool EstaSaltandoVertical();
 	bool EstaDisparando();
+	void SetEstaSaltando(bool UnEstaSaltando);
 private:
 	bool Saltando;
+	bool SaltandoVertical;
 	std::string Direccion;
 	std::string Nombre;
 	std::string IDSprite;

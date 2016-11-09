@@ -68,39 +68,36 @@ void FisicaThread(void* arg) {
 
 					if (TiempoActual - TiempoInicioSaltoY >= 500) {
 
-						if (UnJugador->GetEstadoAnterior() == "") {
-
-							UnJugador->SetEstadoAnterior("QUIETO-DER");
-						}
-
-						UnJugador->SetEstado(UnJugador->GetEstadoAnterior());
+						UnJugador->SetEstaSaltando(false);
 						UnJugador->SetEstadoAnterior("");
 						UnJugador->SetY(PosicionYInicioSalto);
 					}
 
-					if (UnJugador->GetEstado() == "SALTANDO-DER") {
-
-						Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoX, 0, 120, 600);
-						UnJugador->SetX(PosicionXInicioSalto + Diferencia);
-
-						if (UnJugador->GetX() >= BordeEnXMaxCamara) {
-
-							AvanzaCamara = true;
-							UnJugador->SetEstado("SALTANDO");
-							UnJugador->SetX(BordeEnXMaxCamara);
-						}
-					}
-					else {
-
-						if (UnJugador->GetEstado() == "SALTANDO-IZQ") {
+					if (!UnJugador->EstaSaltandoVertical()) {
+						if (UnJugador->GetEstado() == "SALTANDO-DER") {
 
 							Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoX, 0, 120, 600);
-							UnJugador->SetX(PosicionXInicioSalto - Diferencia);
+							UnJugador->SetX(PosicionXInicioSalto + Diferencia);
 
-							if (UnJugador->GetX() <= BordeEnXMinCamara) {
+							if (UnJugador->GetX() >= BordeEnXMaxCamara) {
 
+								AvanzaCamara = true;
 								UnJugador->SetEstado("SALTANDO");
-								UnJugador->SetX(BordeEnXMinCamara);
+								UnJugador->SetX(BordeEnXMaxCamara);
+							}
+						}
+						else {
+
+							if (UnJugador->GetEstado() == "SALTANDO-IZQ") {
+
+								Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoX, 0, 120, 600);
+								UnJugador->SetX(PosicionXInicioSalto - Diferencia);
+
+								if (UnJugador->GetX() <= BordeEnXMinCamara) {
+
+									UnJugador->SetEstado("SALTANDO");
+									UnJugador->SetX(BordeEnXMinCamara);
+								}
 							}
 						}
 					}
@@ -374,7 +371,9 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 
 	if(Tipo == "DISPARA")
 	{
-		Jugadores[IndiceJugador]->SetEstadoAnterior(Jugadores[IndiceJugador]->GetEstado());
+		if (!Jugadores[IndiceJugador]->EstaSaltando()) {
+			Jugadores[IndiceJugador]->SetEstadoAnterior(Jugadores[IndiceJugador]->GetEstado());
+		}
 
 		if (Jugadores[IndiceJugador]->EstaApuntandoALaDerecha()) {
 
@@ -389,7 +388,11 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 
 	if(Tipo == "SOLTO-DISPARA")
 	{
-		Jugadores[IndiceJugador]->SetEstado(Jugadores[IndiceJugador]->GetEstadoAnterior());
+		if (!Jugadores[IndiceJugador]->EstaSaltando()) {
+			Jugadores[IndiceJugador]->SetEstado(Jugadores[IndiceJugador]->GetEstadoAnterior());
+		} else {
+			Jugadores[IndiceJugador]->SetEstaSaltando(true);
+		}
 	}
 }
 

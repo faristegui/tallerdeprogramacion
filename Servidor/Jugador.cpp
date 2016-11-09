@@ -6,10 +6,14 @@ Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 	Nombre = UnNombre;
 	IDSprite = UnIDSprite;
 	Estado = "QUIETO-DER";
+	EstadoAnterior = Estado;
+	Direccion = "DERECHA";
 	x = 20;
 	y = 405;
 	vida = 100;
 	Conectado = true;
+	Saltando = false;
+	SaltandoVertical = false;
 	UnArma = new Arma("Arma_H", "DERECHA", 200);
 }
 
@@ -17,30 +21,26 @@ void Jugador::Mover(std::string Tecla) {
 
 	if (Tecla == "SPACE") {
 
+		SaltandoVertical = true;
+
 		if (!EstaSaltando()) {
 
 			TiempoInicioSaltoY = clock();
 			PosicionYInicioSalto = y;
 
-			if (EstaCaminando()) {
+			EstadoAnterior = this->Estado;
 
-				EstadoAnterior = this->Estado;
+			if (EstaCaminando()) {
 				if (this->EstaApuntandoALaDerecha()) {
 					Tecla = "RIGHT";
-				} else {
+				}
+				else {
 					Tecla = "LEFT";
 				}
 			}
 
-			this->Estado = "SALTANDO";  // TODO: Fix salta y cambia de direccion
+			SetEstaSaltando(true);
 		}
-		else {
-			if ((this->Estado != "SALTANDO-IZQ") || (this->Estado != "SALTANDO-DER")) {
-
-				this->Estado = "SALTANDO";
-			}
-		}
-
 	}
 
 	if (Tecla == "RIGHT")  {
@@ -50,8 +50,10 @@ void Jugador::Mover(std::string Tecla) {
 			this->Estado = "CAMINA-DER";
 		}
 		else {
-			if (this->Estado != "SALTANDO-DER") {
 
+			if (!((!SaltandoVertical) && (this->Estado == "SALTANDO-DER"))) {
+
+				SaltandoVertical = false;
 				this->Estado = "SALTANDO-DER";
 				SetEstadoAnterior("CAMINA-DER");
 				TiempoInicioSaltoX = clock();
@@ -69,8 +71,9 @@ void Jugador::Mover(std::string Tecla) {
 			this->Estado = "CAMINA-IZQ";
 		}  
 		else {
-			if (this->Estado != "SALTANDO-IZQ") {
+			if (!((!SaltandoVertical) && (this->Estado == "SALTANDO-IZQ"))) {
 
+				SaltandoVertical = false;
 				this->Estado = "SALTANDO-IZQ";
 				SetEstadoAnterior("CAMINA-IZQ");
 				TiempoInicioSaltoX = clock();
@@ -84,6 +87,10 @@ void Jugador::Mover(std::string Tecla) {
 	if (Tecla == "DOWN") {
 
 		UnArma->CambiarDireccion("ABAJO");
+
+		if (EstaSaltando()) {
+			SaltandoVertical = true;
+		}
 	}
 }
 Arma* Jugador::GetArma() 
@@ -109,6 +116,24 @@ void Jugador::SetEstaConectado(bool EstaConectado)
 bool Jugador::EstaDisparando() {
 
 	return ((this->Estado == "DISPARA-DER") || (this->Estado == "DISPARA-IZQ"));
+}
+
+void Jugador::SetEstaSaltando(bool UnEstaSaltando) {
+
+	Saltando = UnEstaSaltando;
+
+	if (Saltando) {
+		if (EstaApuntandoALaDerecha()) {
+
+			this->Estado = "SALTANDO-DER";
+		}
+		else {
+			this->Estado = "SALTANDO-IZQ";		
+		}
+	}
+	else {
+		this->Estado = this->GetEstadoAnterior();
+	}
 }
 
 bool Jugador::GetEstaConectado() {
@@ -158,7 +183,12 @@ int Jugador::GetY() {
 
 bool Jugador::EstaSaltando() {
 
-	return ((this->Estado == "SALTANDO") || (this->Estado == "SALTANDO-DER") || (this->Estado == "SALTANDO-IZQ"));
+	return Saltando;
+}
+
+bool Jugador::EstaSaltandoVertical() {
+
+	return SaltandoVertical;
 }
 
 bool Jugador::EstaCaminando() {
@@ -169,7 +199,7 @@ bool Jugador::EstaCaminando() {
 bool Jugador::EstaApuntandoALaDerecha() {
 
 	return ((this->Estado == "CAMINA-DER") || (this->Estado == "SALTANDO-DER") ||
-			(this->Estado == "QUIETO-DER"));
+			(this->Estado == "QUIETO-DER") || (this->Estado == "DISPARA-DER"));
 }
 
 float Jugador::GetTiempoInicioSaltoY() {
