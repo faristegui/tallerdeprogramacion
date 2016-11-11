@@ -12,17 +12,28 @@ Proyectil::Proyectil(std::string UnIdSprite, int posX, int posY, int vel, std::s
 
 void Proyectil::DeterminarEstado() {
 
+	Estado = "HORIZONTAL";
+
 	if ((Direccion == "DERECHA") || (Direccion == "IZQUIERDA")) {
 
 		Estado = "HORIZONTAL";
 	}
 
-	if ((Direccion == "ARRIBA") || (Direccion == "ABAJO")) {
+	if ((Direccion == "ARRIBA-DER") || (Direccion == "ARRIBA-IZQ") ||
+		(Direccion == "ABAJO-DER") || (Direccion == "ABAJO-IZQ")) {
 
 		Estado = "VERTICAL";
 	}
 
-	// TODO: Completar con estados faltantes (los diagonales)
+	if ((Direccion == "ARRIBA-DER-DIAG") || (Direccion == "ABAJO-IZQ-DIAG")) {
+
+		Estado = "DIAGONAL-DER";
+	}
+
+	if ((Direccion == "ARRIBA-IZQ-DIAG") || (Direccion == "ABAJO-DER-DIAG")) {
+
+		Estado = "DIAGONAL-IZQ";
+	}
 }
 
 void Proyectil::Mover() {
@@ -36,8 +47,44 @@ void Proyectil::Mover() {
 
 			x -= velocidad;
 		} else {
+			if ((Direccion == "ARRIBA-DER") || (Direccion == "ARRIBA-IZQ")) {
 
-			// TODO: Todas las direcciones
+				y -= velocidad;
+			} else {
+				if ((Direccion == "ABAJO-DER") || (Direccion == "ABAJO-IZQ")) {
+
+					y += velocidad;
+				}
+				else {
+					// TODO: if puedeDispararDiagonal
+					if (Direccion == "ARRIBA-DER-DIAG") {
+
+						x += velocidad;
+						y -= velocidad;
+					}
+					else {
+						if (Direccion == "ARRIBA-IZQ-DIAG") {
+
+							x -= velocidad;
+							y -= velocidad;
+						}
+						else {
+							if (Direccion == "ABAJO-IZQ-DIAG") {
+
+								x -= velocidad;
+								y += velocidad;
+							}
+							else {
+								if (Direccion == "ABAJO-DER-DIAG") {
+
+									x += velocidad;
+									y += velocidad;
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }

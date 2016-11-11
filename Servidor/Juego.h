@@ -44,6 +44,8 @@ public:
 	void AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida, bool esFinal);
 	Enemigo* GetEnemigo(int posicion);
 	Lista<Proyectil *>* GetProyectiles();
+	void MutexearListaProyectiles();
+	void DesmutexearListaProyectiles();
 private:
 	int CantJugadores;
 	int cantidadEnemigos;

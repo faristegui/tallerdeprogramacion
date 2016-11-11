@@ -102,15 +102,21 @@ void FisicaThread(void* arg) {
 						}
 					}
 				}
+
 				if (UnJugador->EstaDisparando()) {
 
 					if (UnJugador->GetArma()->PuedeDisparar(ticks_start)) {
 
+						UnJuego->MutexearListaProyectiles();
+
 						Proyectil* UnProyectil = UnJugador->GetArma()->Disparar(UnJugador->GetX(),
 																				UnJugador->GetY(),
-																				ticks_start);
+																				ticks_start, 
+																				UnJugador->GetDireccion());
 
 						UnJuego->GetProyectiles()->agregar(UnProyectil);
+
+						UnJuego->DesmutexearListaProyectiles();
 					}
 				}
 
@@ -136,6 +142,7 @@ void FisicaThread(void* arg) {
 		}
 		// -----------------------------------------------
 		// Proceso proyectiles (y colisiones de los mismos)
+		UnJuego->MutexearListaProyectiles();
 		Lista<Proyectil *>* Proyectiles = UnJuego->GetProyectiles();
 		int PosicionCursor = 1;
 		Proyectiles->iniciarCursor();
@@ -157,6 +164,7 @@ void FisicaThread(void* arg) {
 			}
 			PosicionCursor++;
 		}
+		UnJuego->DesmutexearListaProyectiles();
 		// -----------------------------------------------
 		// Proceso camara (y avance/retroceso de todos los sprites)
 		if (AvanzaCamara) {
@@ -203,8 +211,11 @@ void FisicaThread(void* arg) {
 
 }
 
+HANDLE MutexListaProyectiles;
+
 Juego::Juego()
 {
+	MutexListaProyectiles = CreateMutex(NULL, FALSE, NULL);
 	CantJugadores = 0;
 	CantCamaras = 0;
 	Proyectiles = new Lista<Proyectil *>();
@@ -332,7 +343,7 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 
 	int IndiceJugador = GetIndexUsuario(Usuario);
 
-	if ((Tipo == "SPACE") || (Tipo == "RIGHT") || (Tipo == "DOWN") || (Tipo == "LEFT")) {
+	if ((Tipo == "SPACE") || (Tipo == "RIGHT") || (Tipo == "DOWN") || (Tipo == "LEFT") || (Tipo == "UP")) {
 
 		Jugadores[IndiceJugador]->Mover(Tipo);
 	}
@@ -366,7 +377,11 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 	}
 
 	if (Tipo == "SOLTO-DOWN") {
+		Jugadores[IndiceJugador]->SueltaTeclaDireccion();
+	}
 
+	if (Tipo == "SOLTO-UP") {
+		Jugadores[IndiceJugador]->SueltaTeclaDireccion();
 	}
 
 	if(Tipo == "DISPARA")
@@ -408,6 +423,16 @@ int Juego::GetIndexUsuario(std::string Usuario) {
 	}
 
 	return -1;
+}
+
+void Juego::MutexearListaProyectiles() {
+	
+	WaitForSingleObject(MutexListaProyectiles, INFINITE);
+}
+
+void Juego::DesmutexearListaProyectiles() {
+
+	ReleaseMutex(MutexListaProyectiles);
 }
 
 int Juego::GetCantJugadores() {

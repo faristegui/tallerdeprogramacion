@@ -14,7 +14,12 @@ Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
 	Conectado = true;
 	Saltando = false;
 	SaltandoVertical = false;
-	UnArma = new Arma("Arma_H", "DERECHA", 200);
+	UnArma = new Arma("Arma_H", 200);
+}
+
+std::string Jugador::GetDireccion() {
+
+	return Direccion;
 }
 
 void Jugador::Mover(std::string Tecla) {
@@ -61,7 +66,18 @@ void Jugador::Mover(std::string Tecla) {
 			}
 		}
 
-		UnArma->CambiarDireccion("DERECHA");
+		// TODO: Setear los estados corresp
+		if (this->EstaApuntandoAbajo()) {
+			Direccion = "ABAJO-DER-DIAG";
+		}
+		else {
+			if (this->EstaApuntandoArriba()) {
+				Direccion = "ARRIBA-DER-DIAG";
+			}
+			else {
+				Direccion = "DERECHA";
+			}
+		}
 	}
 
 	if (Tecla == "LEFT") {
@@ -81,18 +97,65 @@ void Jugador::Mover(std::string Tecla) {
 			}
 		}
 
-		UnArma->CambiarDireccion("IZQUIERDA");
+		// TODO: Setear los estados corresp
+		if (this->EstaApuntandoAbajo()) {
+			Direccion = "ABAJO-IZQ-DIAG";
+		}
+		else {
+			if (this->EstaApuntandoArriba()) {
+				Direccion = "ARRIBA-IZQ-DIAG";
+			} else {
+				Direccion = "IZQUIERDA";
+			}
+		}
 	}
 
-	if (Tecla == "DOWN") {
-
-		UnArma->CambiarDireccion("ABAJO");
+	if (Tecla == "UP") {
 
 		if (EstaSaltando()) {
 			SaltandoVertical = true;
 		}
+
+		if (this->EstaApuntandoALaDerecha()) {
+			Direccion = "ARRIBA-DER";	// TODO: this->Estado
+		} else {
+			Direccion = "ARRIBA-IZQ";	// TODO: this->Estado
+		}
+
+		if (this->EstaCaminando()) {
+			Direccion = Direccion + "-DIAG"; // TODO: this->Estado
+		}
+	}
+
+	if (Tecla == "DOWN") {
+		
+		if (EstaSaltando()) {
+			SaltandoVertical = true;
+		}
+
+		if (this->EstaApuntandoALaDerecha()) {
+			Direccion = "ABAJO-DER";	// TODO: this->Estado
+		}
+		else {
+			Direccion = "ABAJO-IZQ";	// TODO: this->Estado
+		}
+
+		if (this->EstaCaminando()) {
+			Direccion = Direccion + "-DIAG"; // TODO: this->Estado
+		}
 	}
 }
+
+bool Jugador::EstaApuntandoAbajo() {
+
+	return ((Direccion == "ABAJO") || (Direccion == "ABAJO-IZQ") || (Direccion == "ABAJO-DER"));
+}
+
+bool Jugador::EstaApuntandoArriba() {
+
+	return ((Direccion == "ARRIBA") || (Direccion == "ARRIBA-IZQ") || (Direccion == "ARRIBA-DER"));
+}
+
 Arma* Jugador::GetArma() 
 {
 
@@ -191,6 +254,34 @@ bool Jugador::EstaSaltandoVertical() {
 	return SaltandoVertical;
 }
 
+void Jugador::SueltaTeclaDireccion() {
+	if (this->EstaCaminando()) {
+		if (this->EstaApuntandoALaDerecha()) {
+
+			this->SetDireccion("DERECHA");
+			this->SetEstado("CAMINA-DER");
+		}
+		else {
+
+			this->SetDireccion("IZQUIERDA");
+			this->SetEstado("CAMINA-IZQ");
+		}
+	}
+	else {
+		if (this->EstaApuntandoALaDerecha()) {
+
+			this->SetDireccion("DERECHA");
+			this->SetEstado("QUIETO-DER");
+		}
+		else {
+
+			this->SetDireccion("IZQUIERDA");
+			this->SetEstado("QUIETO-IZQ");
+		}
+		// TODO: if EstaSaltando then setEstadoANTERIOR
+	}
+}
+
 bool Jugador::EstaCaminando() {
 
 	return ((this->Estado == "CAMINA-DER") || (this->Estado == "CAMINA-IZQ"));
@@ -198,8 +289,9 @@ bool Jugador::EstaCaminando() {
 
 bool Jugador::EstaApuntandoALaDerecha() {
 
-	return ((this->Estado == "CAMINA-DER") || (this->Estado == "SALTANDO-DER") ||
-			(this->Estado == "QUIETO-DER") || (this->Estado == "DISPARA-DER"));
+	return ((this->Direccion == "DERECHA") || (this->Direccion == "ARRIBA-DER") ||
+			(this->Direccion == "ARRIBA-DER-DIAG") || (this->Direccion == "ABAJO-DER") ||
+			(this->Direccion == "ABAJO-DER-DIAG"));
 }
 
 float Jugador::GetTiempoInicioSaltoY() {
@@ -229,6 +321,11 @@ std::string Jugador::GetEstadoAnterior() {
 void Jugador::SetX(int UnX) {
 
 	x = UnX;
+}
+
+void Jugador::SetDireccion(std::string UnaDireccion) {
+
+	Direccion = UnaDireccion;
 }
 
 void Jugador::SetY(int UnY) {

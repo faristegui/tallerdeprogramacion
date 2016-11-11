@@ -11,6 +11,7 @@ public:
 	std::string GetNombre();
 	std::string GetIDSprite();
 	std::string GetEstado();
+	std::string GetDireccion();
 	void SetEstado(std::string nuevoEstado);
 	void SetEstadoAnterior(std::string nuevoEstado);
 	void SetEstaConectado(bool EstaConectado);
@@ -19,6 +20,8 @@ public:
 	void SetY(int UnY);
 	std::string GetEstadoAnterior();
 	bool EstaApuntandoALaDerecha();
+	bool EstaApuntandoAbajo();
+	bool EstaApuntandoArriba();
 	float GetTiempoInicioSaltoY();
 	float GetTiempoInicioSaltoX();
 	int GetPosicionYInicioSalto();
@@ -32,6 +35,8 @@ public:
 	bool EstaSaltandoVertical();
 	bool EstaDisparando();
 	void SetEstaSaltando(bool UnEstaSaltando);
+	void SetDireccion(std::string UnaDireccion);
+	void SueltaTeclaDireccion();
 private:
 	bool Saltando;
 	bool SaltandoVertical;

@@ -297,8 +297,12 @@ void MainListenThread(void* arg) {
 				}
 			}
 
+			UnJuego.MutexearListaProyectiles();
 			Lista<Proyectil *>* Proyectiles = UnJuego.GetProyectiles();
 			Proyectiles->iniciarCursor();
+
+			int tmptam = Proyectiles->getTamanio();
+			int tmpcuent = 0;
 
 			GranMensaje.append(IntAString(Proyectiles->getTamanio()));
 			GranMensaje.append(";");
@@ -315,7 +319,15 @@ void MainListenThread(void* arg) {
 				GranMensaje.append(";");
 				GranMensaje.append(IntAString(UnProyectil->GetY()));
 				GranMensaje.append(";");
+
+				tmpcuent++;
 			}
+
+			if (tmpcuent != tmptam) {
+				GranMensaje.append(";");
+			}
+
+			UnJuego.DesmutexearListaProyectiles();
 
 			UnServer.EnviarMensajeTamanoVariable(GranMensaje, ClientSocket);
 			if (CantidadMensajes > 0) {

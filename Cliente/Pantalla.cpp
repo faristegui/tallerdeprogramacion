@@ -473,6 +473,10 @@ void Pantalla::IniciarJuego() {
 
 					Evento = "DOWN";
 				}
+				if (Event.key.keysym.sym == SDLK_UP) {
+
+					Evento = "UP";
+				}
 				if (Event.key.keysym.sym == SDLK_d) { //Disparar Letra "D"
 
 					Evento = "DISPARA";
@@ -494,6 +498,9 @@ void Pantalla::IniciarJuego() {
 				}
 				if (Event.key.keysym.sym == SDLK_LEFT) {
 					Evento = "SOLTO-LEFT";
+				}
+				if (Event.key.keysym.sym == SDLK_UP) {
+					Evento = "SOLTO-UP";
 				}
 				if (Event.key.keysym.sym == SDLK_DOWN) {
 					Evento = "SOLTO-DOWN";
