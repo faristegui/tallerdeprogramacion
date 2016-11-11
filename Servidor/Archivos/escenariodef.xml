@@ -2,9 +2,9 @@
 <ESCENARIO anchoPX="800" altoPX="600" maxJugadores="4">
 	<FONDO>
 		<CAPAS cantidad="3">
-			<IMAGEN nombre="fondocieloScene1.bmp" zIndex="2" width="2600" height="600"/>
+			<IMAGEN nombre="cieloLevel2.bmp" zIndex="2" width="2000" height="600"/>
 			<IMAGEN nombre="objetosScene1.bmp" zIndex="1" width="1300" height="600"/>
-			<IMAGEN nombre="fondoScene1.bmp" zIndex="3" width="1820" height="600"/>
+			<IMAGEN nombre="pisoLevel2.bmp" zIndex="3" width="1579" height="600"/>
 		</CAPAS>
 	</FONDO>
 	<SPRITES cantidad="9">
