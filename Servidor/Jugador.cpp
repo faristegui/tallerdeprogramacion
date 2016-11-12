@@ -1,15 +1,15 @@
 #include "Jugador.h"
 #include <windows.h>
 
-Jugador::Jugador(std::string UnNombre, std::string UnIDSprite)
+Jugador::Jugador(std::string UnNombre, std::string UnColor)
 {
 	Nombre = UnNombre;
-	IDSprite = UnIDSprite;
+	Color = UnColor;
 	Estado = "QUIETO-DER";
 	EstadoAnterior = Estado;
 	Direccion = "DERECHA";
 	x = 20;
-	y = 405;
+	y = 365;
 	vida = 100;
 	Conectado = true;
 	Saltando = false;
@@ -66,17 +66,12 @@ void Jugador::Mover(std::string Tecla) {
 			}
 		}
 
-		// TODO: Setear los estados corresp
-		if (this->EstaApuntandoAbajo()) {
-			Direccion = "ABAJO-DER-DIAG";
+		if (this->EstaApuntandoArriba()) {
+			Direccion = "ARRIBA-DER-DIAG";
+			this->Estado = "DIAGONAL-DER";
 		}
 		else {
-			if (this->EstaApuntandoArriba()) {
-				Direccion = "ARRIBA-DER-DIAG";
-			}
-			else {
-				Direccion = "DERECHA";
-			}
+			Direccion = "DERECHA";
 		}
 	}
 
@@ -97,33 +92,42 @@ void Jugador::Mover(std::string Tecla) {
 			}
 		}
 
-		// TODO: Setear los estados corresp
-		if (this->EstaApuntandoAbajo()) {
-			Direccion = "ABAJO-IZQ-DIAG";
-		}
-		else {
-			if (this->EstaApuntandoArriba()) {
-				Direccion = "ARRIBA-IZQ-DIAG";
-			} else {
-				Direccion = "IZQUIERDA";
-			}
+		if (this->EstaApuntandoArriba()) {
+			Direccion = "ARRIBA-IZQ-DIAG";
+			this->Estado = "DIAGONAL-IZQ";
+		} else {
+			Direccion = "IZQUIERDA";
 		}
 	}
 
 	if (Tecla == "UP") {
 
+		bool EstabaCaminando = false;
+
 		if (EstaSaltando()) {
 			SaltandoVertical = true;
 		}
 
-		if (this->EstaApuntandoALaDerecha()) {
-			Direccion = "ARRIBA-DER";	// TODO: this->Estado
-		} else {
-			Direccion = "ARRIBA-IZQ";	// TODO: this->Estado
-		}
-
 		if (this->EstaCaminando()) {
-			Direccion = Direccion + "-DIAG"; // TODO: this->Estado
+			EstabaCaminando = true;
+			this->SetEstadoAnterior(this->GetEstado());
+			if (this->EstaApuntandoALaDerecha()) {
+				Direccion = "ARRIBA-DER-DIAG";
+				this->Estado = "DIAGONAL-DER";
+			} else {
+				Direccion = "ARRIBA-IZQ-DIAG";
+				this->Estado = "DIAGONAL-IZQ";
+			}
+		}
+		else {
+			if (this->EstaApuntandoALaDerecha()) {
+				Direccion = "ARRIBA-DER";
+				this->Estado = "ARRIBA-DER";
+			}
+			else {
+				Direccion = "ARRIBA-IZQ";
+				this->Estado = "ARRIBA-IZQ";
+			}
 		}
 	}
 
@@ -131,17 +135,6 @@ void Jugador::Mover(std::string Tecla) {
 		
 		if (EstaSaltando()) {
 			SaltandoVertical = true;
-		}
-
-		if (this->EstaApuntandoALaDerecha()) {
-			Direccion = "ABAJO-DER";	// TODO: this->Estado
-		}
-		else {
-			Direccion = "ABAJO-IZQ";	// TODO: this->Estado
-		}
-
-		if (this->EstaCaminando()) {
-			Direccion = Direccion + "-DIAG"; // TODO: this->Estado
 		}
 	}
 }
@@ -178,7 +171,9 @@ void Jugador::SetEstaConectado(bool EstaConectado)
 
 bool Jugador::EstaDisparando() {
 
-	return ((this->Estado == "DISPARA-DER") || (this->Estado == "DISPARA-IZQ"));
+	return ((this->Estado == "QUIETO-DER-DISPARA") || (this->Estado == "QUIETO-IZQ-DISPARA") ||
+			(this->Estado == "ARRIBA-DER-DISPARA") || (this->Estado == "ARRIBA-IZQ-DISPARA") ||
+			(this->Estado == "DIAGONAL-DER-DISPARA") || (this->Estado == "DIAGONAL-IZQ-DISPARA"));
 }
 
 void Jugador::SetEstaSaltando(bool UnEstaSaltando) {
@@ -226,10 +221,16 @@ std::string Jugador::GetNombre() {
 
 std::string Jugador::GetIDSprite() {
 
-	return IDSprite;
+	return "Player" + Color + "-" + UnArma->GetCodigoArma();
 }
 
 std::string Jugador::GetEstado() {
+
+
+	// Este es un workaround pedorro -> Habria que ver cuando y porque el estado se pone vacio
+	if (Estado == "") {
+		Estado = "QUIETO-DER";
+	}
 
 	return Estado;
 }

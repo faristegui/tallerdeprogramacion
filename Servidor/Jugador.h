@@ -5,7 +5,7 @@
 class Jugador
 {
 public:
-	Jugador(std::string UnNombre, std::string UnIDSprite);
+	Jugador(std::string UnNombre, std::string UnColor);
 	~Jugador();
 	void Mover(std::string Direccion);
 	std::string GetNombre();
@@ -42,7 +42,7 @@ private:
 	bool SaltandoVertical;
 	std::string Direccion;
 	std::string Nombre;
-	std::string IDSprite;
+	std::string Color;
 	std::string Estado;
 	std::string EstadoAnterior;
 	float TiempoInicioSaltoY;

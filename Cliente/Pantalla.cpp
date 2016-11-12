@@ -581,7 +581,7 @@ void Pantalla::IniciarJuego() {
 				Indice++;
 
 				RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
-				EscribirNombreJugador(Nombre, PosX, PosY + 85);
+				EscribirNombreJugador(Nombre, PosX, PosY + 125);
 			}
 
 			int CantidadMensajes = stoi(mensajes[Indice]);

@@ -8,19 +8,24 @@
 		</CAPAS>
 	</FONDO>
 	<SPRITES cantidad="9">
-		<SPRITE id="PlayerRed" frameWidth="37" frameHeight="41">
-				<ESTADOS cantidad="11">
+		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61">
+				<ESTADOS cantidad="16">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
-					<ESTADO id="CAMINA-DER" cantFrames="9"/>
-					<ESTADO id="DESCONECTADO" cantFrames="1"/>
-					<ESTADO id="MUERTO" cantFrames="8"/>
-					<ESTADO id="SALTANDO" cantFrames="3"/>
-					<ESTADO id="CAMINA-IZQ" cantFrames="9"/>
-					<ESTADO id="SALTANDO-DER" cantFrames="3"/>
-					<ESTADO id="SALTANDO-IZQ" cantFrames="3"/>
 					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
-					<ESTADO id="DISPARA-DER" cantFrames="2"/>
-					<ESTADO id="DISPARA-IZQ" cantFrames="2"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
 				</ESTADOS>
 		</SPRITE>
 		<SPRITE id="PlayerYellow" frameWidth="37" frameHeight="41">
@@ -84,7 +89,7 @@
 					<ESTADO id="DISPARA" cantFrames="3"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="Bala_H" frameWidth="10" frameHeight="10">
+		<SPRITE id="Bala-S" frameWidth="15" frameHeight="15">
 				<ESTADOS cantidad="4">
 					<ESTADO id="HORIZONTAL" cantFrames="1"/>
 					<ESTADO id="DIAGONAL-DER" cantFrames="1"/>

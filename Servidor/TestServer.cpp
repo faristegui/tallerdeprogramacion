@@ -106,7 +106,7 @@ void MainListenThread(void* arg) {
 					std::string Mensaje = Usuario + " se conecto";
 					UnServer.enviarATodos(Mensaje, Usuario, UsuariosOnline);
 
-					std::string IDSprite;
+					std::string Color;
 
 					// TODO: Ver como determinar que sprite mandarle a cada player
 					/*if (UnJuego.GetCantJugadores() == 0) {
@@ -125,22 +125,22 @@ void MainListenThread(void* arg) {
 					switch (cantJugadores)
 					{
 						case 0:
-							IDSprite = "PlayerRed";
+							Color = "Red";
 							break;
 						case 1:
-							IDSprite = "PlayerYellow";
+							Color = "Yellow";
 							break;
 						case 2:
-							IDSprite = "PlayerViolet";
+							Color = "Violet";
 							break;
 						case 3: 
-							IDSprite = "PlayerBlue";
+							Color = "Blue";
 							break;
 						default:
-							IDSprite = "PlayerBlue";
+							Color = "Blue";
 					}
 
-					UnJuego.AgregarJugador(Usuario, IDSprite);
+					UnJuego.AgregarJugador(Usuario, Color);
 
 					CodigoRespuesta = "000";
 					MensajeRespuesta = "Player: " + Usuario;

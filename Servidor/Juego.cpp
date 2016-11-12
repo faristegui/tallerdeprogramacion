@@ -288,7 +288,7 @@ void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int veloc
 
 }
 
-void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {
+void Juego::AgregarJugador(std::string UnNombre, std::string UnColor) {
 
 	bool JugadorYaSeHabiaConectado = false;
 
@@ -302,7 +302,7 @@ void Juego::AgregarJugador(std::string UnNombre, std::string UnIDSprite) {
 	}
 
 	if (!JugadorYaSeHabiaConectado) {
-		Jugadores[CantJugadores] = new Jugador(UnNombre, UnIDSprite);
+		Jugadores[CantJugadores] = new Jugador(UnNombre, UnColor);
 		//hay un equipo por jugador
 		if(modoJuego == 1)
 		{
@@ -390,15 +390,17 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 			Jugadores[IndiceJugador]->SetEstadoAnterior(Jugadores[IndiceJugador]->GetEstado());
 		}
 
-		if (Jugadores[IndiceJugador]->EstaApuntandoALaDerecha()) {
-
-			Jugadores[IndiceJugador]->SetEstado("DISPARA-DER");
+		if ((!Jugadores[IndiceJugador]->EstaCaminando()) && (!Jugadores[IndiceJugador]->EstaSaltando())) {
+			Jugadores[IndiceJugador]->SetEstado(Jugadores[IndiceJugador]->GetEstado() + "-DISPARA");
 		}
-		else
-		{
-
-			Jugadores[IndiceJugador]->SetEstado("DISPARA-IZQ");
+		else {
+			if (Jugadores[IndiceJugador]->EstaApuntandoALaDerecha()) {
+				Jugadores[IndiceJugador]->SetEstado("QUIETO-DER-DISPARA");
+			} else {
+				Jugadores[IndiceJugador]->SetEstado("QUIETO-IZQ-DISPARA");
+			}
 		}
+		
 	}
 
 	if(Tipo == "SOLTO-DISPARA")
