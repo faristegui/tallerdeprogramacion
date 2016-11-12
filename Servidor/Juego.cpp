@@ -8,6 +8,31 @@ int FuncionCuadratica(float t, float b, float c, float d) {
 	return -c / 2 * (t*(t - 2) - 1) + b;
 }
 
+bool HayColision(int X1, int Y1, int W1, int H1,
+	int X2, int Y2, int W2, int H2) {
+
+	int X1Inicio = X1;
+	int X1Fin = X1 + W1;
+	int Y1Inicio = Y1;
+	int Y1Fin = Y1 + H1;
+
+	int X2Inicio = X2;
+	int X2Fin = X2 + W2;
+	int Y2Inicio = Y2;
+	int Y2Fin = Y2 + H2;
+
+	if (X1 <= X2 + W2 &&
+		X1 + W1 >= X2 &&
+		Y1 <= Y2 + H2 &&
+		H1 + Y1 >= Y2) {
+
+		return true;
+	}
+
+	return false;
+
+}
+
 void FisicaThread(void* arg) {
 
 	float ticks_start = 0;
@@ -22,7 +47,6 @@ void FisicaThread(void* arg) {
 		int MinPosX = -1;
 		bool AvanzaCamara = false;
 		int CantJugadores = UnJuego->GetCantJugadores();
-		int CantEnemigos = UnJuego->GetCantEnemigos();
 
 		// -----------------------------------------------
 		// Proceso jugador (estados y eventos)
@@ -131,19 +155,53 @@ void FisicaThread(void* arg) {
 		}
 		// -----------------------------------------------
 		// Proceso enemigos
-		for (int i = 0; i < CantEnemigos; i++) {
+		UnJuego->MutexearListaEnemigos();
+		Lista<Enemigo *>* Enemigos = UnJuego->GetEnemigos();
+		int PosicionCursor = 1;
 
-			UnJuego->GetEnemigo(i)->mover();
+		int CantEnemigos = Enemigos->getTamanio();
+		Lista<RectanguloEnemigo>* RectangulosEnemigos = new Lista<RectanguloEnemigo>();
+
+		Enemigos->iniciarCursor();
+		while (Enemigos->avanzarCursor()) {
+
+			Enemigo* UnEnemigo = Enemigos->obtenerCursor();
+
+			UnEnemigo->mover();
 
 			if (AvanzaCamara) {
-				UnJuego->GetEnemigo(i)->mover();
+
+				// TODO: Mover enemigo para izquierda a velocidad de camara
 			}
+
+			if ((UnEnemigo->getX() > 900) || (UnEnemigo->getX() < -100) ||
+				(UnEnemigo->getY() < -100) || (UnEnemigo->getY() > 700)) {
+
+				Enemigos->remover(PosicionCursor);  // TODO: Ver lo de la lista al de remover (que no reinicie el cursor!)
+			} else {
+			
+				RectanguloEnemigo UnRectangulo;
+
+				UnRectangulo.IndexEnLista = PosicionCursor;
+				UnRectangulo.X = UnEnemigo->getX();
+				UnRectangulo.Y = UnEnemigo->getY();
+				UnRectangulo.Width = UnEnemigo->GetWidth();
+				UnRectangulo.Height = UnEnemigo->GetHeight();
+
+				RectangulosEnemigos->agregar(UnRectangulo);
+			}
+
+			PosicionCursor++;
 		}
+		if (Enemigos->getTamanio() == 0) {
+			UnJuego->AgregarEnemigo("PulpoEnemigo", 800, 365, 5, 100, false);
+		}
+		UnJuego->DesmutexearListaEnemigos();
 		// -----------------------------------------------
 		// Proceso proyectiles (y colisiones de los mismos)
 		UnJuego->MutexearListaProyectiles();
 		Lista<Proyectil *>* Proyectiles = UnJuego->GetProyectiles();
-		int PosicionCursor = 1;
+		PosicionCursor = 1;
 		Proyectiles->iniciarCursor();
 		while (Proyectiles->avanzarCursor()) {
 
@@ -156,10 +214,30 @@ void FisicaThread(void* arg) {
 				// TODO: Mover proyectil para izquierda a velocidad de camara
 			}
 
-			if ((UnProyectil->GetX() > 800) || (UnProyectil->GetX() < 0) ||
-				(UnProyectil->GetY() < 0) || (UnProyectil->GetY() > 600)) {
+			if ((UnProyectil->GetX() > 900) || (UnProyectil->GetX() < -100) ||
+				(UnProyectil->GetY() < -100) || (UnProyectil->GetY() > 700)) {
 
-				Proyectiles->remover(PosicionCursor);
+				Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio
+			} else {
+
+				RectangulosEnemigos->iniciarCursor();
+				while (RectangulosEnemigos->avanzarCursor()) {
+
+					RectanguloEnemigo UnRectangulo = RectangulosEnemigos->obtenerCursor();
+					
+					if (HayColision(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(),
+						UnProyectil->GetHeight(), UnRectangulo.X, UnRectangulo.Y,
+						UnRectangulo.Width, UnRectangulo.Height)) {
+
+						UnJuego->MutexearListaEnemigos();
+						UnJuego->GetEnemigos()->remover(UnRectangulo.IndexEnLista);
+						UnJuego->DesmutexearListaEnemigos();
+
+						Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio
+
+						// TODO: Marce aca es donde hay que acumularle los puntos al usuario
+					}
+				}
 			}
 			PosicionCursor++;
 		}
@@ -211,13 +289,16 @@ void FisicaThread(void* arg) {
 }
 
 HANDLE MutexListaProyectiles;
+HANDLE MutexListaEnemigos;
 
 Juego::Juego()
 {
 	MutexListaProyectiles = CreateMutex(NULL, FALSE, NULL);
+	MutexListaEnemigos = CreateMutex(NULL, FALSE, NULL);
 	CantJugadores = 0;
 	CantCamaras = 0;
 	Proyectiles = new Lista<Proyectil *>();
+	Enemigos = new Lista<Enemigo *>();
 	_beginthread(FisicaThread, 0, this);
 }
 
@@ -234,6 +315,11 @@ int Juego::obtenerModo()
 Lista<Proyectil *>* Juego::GetProyectiles() {
 	
 	return Proyectiles;
+}
+
+Lista<Enemigo *>* Juego::GetEnemigos() {
+
+	return Enemigos;
 }
 
 void Juego::AvanzarCamara() {
@@ -273,17 +359,16 @@ void Juego::AgregarCamara(int UnAncho) {
 	CantCamaras++;
 }
 
-Enemigo* Juego::GetEnemigo(int posicion)
-{
-	return enemigos[posicion];
-
-}
-
 void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida, bool esFinal)
 {
-	Enemigo* unEnemigo = new Enemigo(UnIDSprite, posX, posY, velocidad,vida, esFinal);
-	enemigos[cantidadEnemigos] = unEnemigo;
-	cantidadEnemigos++;
+	// TODO: Get width y height de una lista de sprites leida del xml
+	int Width = 35;
+	int Height = 30;
+
+	Enemigo* unEnemigo = new Enemigo(UnIDSprite, posX, posY, velocidad, vida, esFinal, Width, Height);
+	MutexearListaEnemigos();
+	Enemigos->agregar(unEnemigo);
+	DesmutexearListaEnemigos();
 
 }
 
@@ -442,14 +527,19 @@ void Juego::DesmutexearListaProyectiles() {
 	ReleaseMutex(MutexListaProyectiles);
 }
 
+void Juego::MutexearListaEnemigos() {
+
+	WaitForSingleObject(MutexListaEnemigos, INFINITE);
+}
+
+void Juego::DesmutexearListaEnemigos() {
+
+	ReleaseMutex(MutexListaEnemigos);
+}
+
 int Juego::GetCantJugadores() {
 
 	return CantJugadores;
-}
-
-int Juego::GetCantEnemigos() {
-
-	return cantidadEnemigos;
 }
 
 int Juego::GetCantCamaras() {

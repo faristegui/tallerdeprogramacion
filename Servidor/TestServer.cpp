@@ -41,7 +41,7 @@ Juego UnJuego;
 void MostrarListaComandos() {
 	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
 }
-bool paso = false;
+
 void PedirModoDeJuego()
 {
 	std::string opcion = "0";
@@ -260,36 +260,32 @@ void MainListenThread(void* arg) {
 			GranMensaje.append(IntAString(CantidadMensajes));
 
 			GranMensaje.append(";");
-			if(UnJuego.GetCamara(0)->X == 0 && !paso)
-			{
-				paso = true;
-				//UnJuego.AgregarEnemigo("PulpoEnemigo",800,300,15,100);
-				//UnJuego.AgregarEnemigo("HumanoEnemigo", 800, 390,10,100, false);
-				//UnJuego.AgregarEnemigo("EnemigoFinal1", 800, 200,10,1000, true);
-				//UnJuego.AgregarEnemigo("TanqueEnemigo", -25, 370,-4,1000, false);
-			}
 			
 			//Envio informacion de los enemigos
 			//Cantidad de enemigos que aparecen
 
-			GranMensaje.append(IntAString(UnJuego.GetCantEnemigos()));
+			UnJuego.MutexearListaEnemigos();
+			Lista<Enemigo *>* Enemigos = UnJuego.GetEnemigos();
+			Enemigos->iniciarCursor();
+
+			GranMensaje.append(IntAString(Enemigos->getTamanio()));
 			GranMensaje.append(";");
 
-			for(int i = 0; i < UnJuego.GetCantEnemigos(); i++)
-			{
-				GranMensaje.append(UnJuego.GetEnemigo(i)->getID());					// ID del sprite (0)
-				GranMensaje.append(";");
-				GranMensaje.append(IntAString(UnJuego.GetEnemigo(i)->getX()));		// PosX(1)
-				GranMensaje.append(";");
-				GranMensaje.append(IntAString(UnJuego.GetEnemigo(i)->getY()));		// PosY(2)
-				GranMensaje.append(";");
-				GranMensaje.append(UnJuego.GetEnemigo(i)->getEstado());	// Estado(3)
+			while (Enemigos->avanzarCursor()) {
 
-				if (i != UnJuego.GetCantEnemigos()) 
-				{
-					GranMensaje.append(";");
-				}
+				Enemigo* UnEnemigo = Enemigos->obtenerCursor();
+
+				GranMensaje.append(UnEnemigo->getID());					// ID del sprite (0)
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnEnemigo->getX()));		// PosX(1)
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnEnemigo->getY()));		// PosY(2)
+				GranMensaje.append(";");
+				GranMensaje.append(UnEnemigo->getEstado());				// Estado(3)
+				GranMensaje.append(";");
 			}
+
+			UnJuego.DesmutexearListaEnemigos();
 
 			UnJuego.MutexearListaProyectiles();
 			Lista<Proyectil *>* Proyectiles = UnJuego.GetProyectiles();

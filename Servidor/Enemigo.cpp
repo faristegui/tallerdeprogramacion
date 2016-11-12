@@ -1,7 +1,8 @@
 #include "Enemigo.h"
 
 
-Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel, int unaVida, bool esFinal)
+Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel, 
+				int unaVida, bool esFinal, int UnWidth, int UnHeight)
 {
 	IDSprite = unIdSprite;
 	estado = "CAMINA-IZQ";
@@ -10,10 +11,22 @@ Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel, int unaVid
 	vida = unaVida;
 	velocidad = vel;
 	enemigoFinal = esFinal;
+	Width = UnWidth;
+	Height = UnHeight;
 }
 int Enemigo::getX()
 {
 	return x;
+}
+
+int Enemigo::GetWidth() {
+
+	return Width;
+}
+
+int Enemigo::GetHeight() {
+
+	return Height;
 }
 
 std::string Enemigo::getID()
@@ -37,14 +50,7 @@ void Enemigo::mover()
 	}
 	else
 	{
-		if(x > -30) //Para que salga afuera de la pantalla
-		{
-			x-= velocidad;
-		}
-		else
-		{
-			x = 800;
-		}
+		x-= velocidad;
 	}
 }
 

@@ -3,7 +3,7 @@
 class Enemigo
 {
 public:
-	Enemigo(std::string unIdSprite, int posX, int posY, int vel, int unaVida, bool esFinal);
+	Enemigo(std::string unIdSprite, int posX, int posY, int vel, int unaVida, bool esFinal, int UnWidth, int UnHeight);
 	int getX();
 	int getY();
 	void mover();
@@ -13,6 +13,8 @@ public:
 	int getVelocidad();
 	bool esEnemigoFinal();
 	~Enemigo(void);
+	int GetWidth();
+	int GetHeight();
 private:
 	std::string IDSprite;
 	std::string estado;
@@ -21,5 +23,7 @@ private:
 	int velocidad;
 	int x;
 	int y;
+	int Width;
+	int Height;
 };
 

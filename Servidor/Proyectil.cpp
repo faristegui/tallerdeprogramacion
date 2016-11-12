@@ -1,6 +1,7 @@
 #include "Proyectil.h"
 
-Proyectil::Proyectil(std::string UnIdSprite, int posX, int posY, int vel, std::string UnaDireccion)
+Proyectil::Proyectil(std::string UnIdSprite, int posX, int posY, int vel, 
+					std::string UnaDireccion, int UnWidth, int UnHeight)
 {
 	IDSprite = UnIdSprite;
 	x = posX;
@@ -8,6 +9,8 @@ Proyectil::Proyectil(std::string UnIdSprite, int posX, int posY, int vel, std::s
 	velocidad = vel;
 	Direccion = UnaDireccion;
 	DeterminarEstado();
+	Width = UnWidth;
+	Height = UnHeight;
 }
 
 void Proyectil::DeterminarEstado() {
@@ -106,6 +109,16 @@ int Proyectil::GetX() {
 int Proyectil::GetY() {
 
 	return y;
+}
+
+int Proyectil::GetWidth() {
+
+	return Width;
+}
+
+int Proyectil::GetHeight() {
+
+	return Height;
 }
 
 Proyectil::~Proyectil()

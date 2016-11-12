@@ -6,6 +6,14 @@
 #include <process.h>
 
 #pragma once
+struct RectanguloEnemigo {
+	int IndexEnLista;
+	int X;
+	int Y;
+	int Width;
+	int Height;
+};
+
 struct Posicion {
 	int x;
 	int y;
@@ -32,7 +40,6 @@ public:
 	Lista<std::string>* GetNombresJugadoresOnline();
 	int GetIndiceJugador(std::string Usuario);
 	int GetCantJugadores();
-	int GetCantEnemigos();
 	int GetCantCamaras();
 	int obtenerModo();
 	Camara* GetCamara(int NrCamara);
@@ -42,17 +49,18 @@ public:
 	void AvanzarCamara();
 	void AgregarCamara(int UnAncho);
 	void AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida, bool esFinal);
-	Enemigo* GetEnemigo(int posicion);
 	Lista<Proyectil *>* GetProyectiles();
+	Lista<Enemigo *>* GetEnemigos();
 	void MutexearListaProyectiles();
 	void DesmutexearListaProyectiles();
+	void MutexearListaEnemigos();
+	void DesmutexearListaEnemigos();
 private:
 	int CantJugadores;
-	int cantidadEnemigos;
 	int modoJuego;
 	int GetIndexUsuario(std::string Usuario);
-	Enemigo* enemigos[10];
 	Lista<Proyectil *>* Proyectiles;
+	Lista<Enemigo *>* Enemigos;
 	Equipo* equipos[4];
 	Jugador *Jugadores[5];
 	Camara *Camaras[6];
