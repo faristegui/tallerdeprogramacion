@@ -230,7 +230,7 @@ Posicion* Pantalla::obtenerPosicion()
 	return bolaPos;
 }
 
-void Pantalla::AgregarSprite(std::string ID, int FrameWidth, int FrameHeight) {
+void Pantalla::AgregarSprite(std::string ID, int FrameWidth, int FrameHeight, int Velocidad) {
 	SDL_Surface *TmpSurface;
 	SDL_Texture *TmpTexture;
 	Sprite UnSprite;
@@ -238,6 +238,7 @@ void Pantalla::AgregarSprite(std::string ID, int FrameWidth, int FrameHeight) {
 
 	int CantEstados = stoi(cliente->RecibirMensajeTamanoVariable());
 	UnSprite.Estados = new Lista<SpriteEstado>();
+	UnSprite.Velocidad = Velocidad;
 
 	for (int i = 0; i < CantEstados; i++) {
 
@@ -274,8 +275,9 @@ void Pantalla::CargarSprites() {
 		std::string ID = cliente->RecibirMensajeTamanoVariable();
 		int FrameWidth = stoi(cliente->RecibirMensajeTamanoVariable());
 		int FrameHeight = stoi(cliente->RecibirMensajeTamanoVariable());
+		int Velocidad = stoi(cliente->RecibirMensajeTamanoVariable());
 
-		AgregarSprite(ID, FrameWidth, FrameHeight);
+		AgregarSprite(ID, FrameWidth, FrameHeight, Velocidad);
 	}
 }
 
@@ -326,7 +328,7 @@ void Pantalla::RenderSprite(std::string ID, std::string NombreEstado, Uint32 Tic
 			UnSprite = Sprites->obtenerCursor();
 			UnEstado = GetEstado(UnSprite.Estados, NombreEstado);
 
-			OffsetX = (Starting_Tick / 100) % UnEstado.CantFrames;
+			OffsetX = (Starting_Tick / UnSprite.Velocidad) % UnEstado.CantFrames;
 			OffsetY = UnEstado.Numero * UnSprite.FrameHeight;
 
 			Crop_Rect.x = OffsetX * UnSprite.FrameWidth;

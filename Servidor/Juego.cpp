@@ -69,7 +69,6 @@ void FisicaThread(void* arg) {
 					if (TiempoActual - TiempoInicioSaltoY >= 500) {
 
 						UnJugador->SetEstaSaltando(false);
-						UnJugador->SetEstadoAnterior("");
 						UnJugador->SetY(PosicionYInicioSalto);
 					}
 
@@ -352,7 +351,10 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 	{
 		if (Jugadores[IndiceJugador]->EstaCaminando()) {
 
-			Jugadores[IndiceJugador]->SetEstado("QUIETO-DER");
+
+			if (Jugadores[IndiceJugador]->EstaApuntandoALaDerecha()) {
+				Jugadores[IndiceJugador]->SetEstado("QUIETO-DER");
+			}
 		}
 		else {			
 			if ((Jugadores[IndiceJugador]->EstaSaltando()) || (Jugadores[IndiceJugador]->EstaDisparando())) {
@@ -366,7 +368,9 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 	{
 		if (Jugadores[IndiceJugador]->EstaCaminando()) {
 
-			Jugadores[IndiceJugador]->SetEstado("QUIETO-IZQ");
+			if (!Jugadores[IndiceJugador]->EstaApuntandoALaDerecha()) {
+				Jugadores[IndiceJugador]->SetEstado("QUIETO-IZQ");
+			}
 		}
 		else {			
 			if ((Jugadores[IndiceJugador]->EstaSaltando()) || (Jugadores[IndiceJugador]->EstaDisparando())) {
@@ -390,7 +394,8 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 			Jugadores[IndiceJugador]->SetEstadoAnterior(Jugadores[IndiceJugador]->GetEstado());
 		}
 
-		if ((!Jugadores[IndiceJugador]->EstaCaminando()) && (!Jugadores[IndiceJugador]->EstaSaltando())) {
+		if ((!Jugadores[IndiceJugador]->EstaCaminando()) && (!Jugadores[IndiceJugador]->EstaSaltando()) &&
+			(!Jugadores[IndiceJugador]->EstaDisparando())) {
 			Jugadores[IndiceJugador]->SetEstado(Jugadores[IndiceJugador]->GetEstado() + "-DISPARA");
 		}
 		else {

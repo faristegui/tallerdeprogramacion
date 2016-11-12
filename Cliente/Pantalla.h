@@ -22,6 +22,7 @@ struct Sprite {
 	SDL_Texture *Texture;
 	int FrameWidth;
 	int FrameHeight;
+	int Velocidad;
 	Lista<SpriteEstado> *Estados;
 };
 struct MensajeConsola {
@@ -72,7 +73,7 @@ private:
 	void EscribirMensaje(std::string Mensaje, int X, int Y, int Tamano, SDL_Renderer *Renderer);
 	void EscribirNombreJugador(std::string Nombre, int PosX, int PosY);
 	void WaitFPS(Uint32 starting_tick);
-	void AgregarSprite(std::string ID, int FrameWidth, int FrameHeight);
+	void AgregarSprite(std::string ID, int FrameWidth, int FrameHeight, int Velocidad);
 	void CargarSprites();
 	char* VerificarRecurso(std::string path);
 	Lista<Sprite> *Sprites;

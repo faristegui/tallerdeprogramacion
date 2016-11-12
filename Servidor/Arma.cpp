@@ -2,11 +2,11 @@
 
 
 
-Arma::Arma(std::string UnIDSprite, int UnTiempoEntreDisparos)
+Arma::Arma(int UnTiempoEntreDisparos, std::string UnCodigoArma, int UnaVelocidadBala)
 {
-	IDSprite = UnIDSprite;
 	TiempoEntreDisparos = UnTiempoEntreDisparos;
-	CodigoArma = "S";
+	CodigoArma = UnCodigoArma;
+	VelocidadBala = UnaVelocidadBala;
 }
 
 std::string Arma::GetCodigoArma() {
@@ -20,16 +20,16 @@ bool Arma::PuedeDisparar(float tickActual) {
 }
 
 Proyectil* Arma::Disparar(int PosX, int PosY, float tickActual, std::string Direccion) {
-	int OffsetX = DeterminarOffsetX(Direccion);
-	int OffsetY = DeterminarOffsetY(Direccion);
+	int OffsetX = DeterminarOffsetBalaX(Direccion);
+	int OffsetY = DeterminarOffsetBalaY(Direccion);
 
-	Proyectil* UnProyectil = new Proyectil("Bala-S", PosX + OffsetX, PosY + OffsetY, 25, Direccion);
+	Proyectil* UnProyectil = new Proyectil("Bala-" + CodigoArma, PosX + OffsetX, PosY + OffsetY, VelocidadBala, Direccion);
 	tick_ultimoDisparo = tickActual;
 
 	return UnProyectil;
 }
 
-int Arma::DeterminarOffsetX(std::string UnaDireccion) {
+int Arma::DeterminarOffsetBalaX(std::string UnaDireccion) {
 	int Offset = 0;
 
 	if (UnaDireccion == "DERECHA") {
@@ -59,7 +59,7 @@ int Arma::DeterminarOffsetX(std::string UnaDireccion) {
 	return Offset;
 }
 
-int Arma::DeterminarOffsetY(std::string UnaDireccion) {
+int Arma::DeterminarOffsetBalaY(std::string UnaDireccion) {
 	int Offset = 0;
 
 	if (UnaDireccion == "DERECHA") {

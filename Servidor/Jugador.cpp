@@ -14,7 +14,7 @@ Jugador::Jugador(std::string UnNombre, std::string UnColor)
 	Conectado = true;
 	Saltando = false;
 	SaltandoVertical = false;
-	UnArma = new Arma("Arma_H", 200);
+	UnArma = new Arma(400, "S", 25);
 }
 
 std::string Jugador::GetDireccion() {

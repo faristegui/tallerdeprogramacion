@@ -108,18 +108,6 @@ void MainListenThread(void* arg) {
 
 					std::string Color;
 
-					// TODO: Ver como determinar que sprite mandarle a cada player
-					/*if (UnJuego.GetCantJugadores() == 0) {
-						IDSprite = "PlayerRed";
-					} 
-					else {
-						if (UnJuego.GetCantJugadores() == 1) {
-							IDSprite = "PlayerYellow";
-						} else {
-							IDSprite = "PlayerBlue";
-						}
-					}*/
-
 					int cantJugadores = UnJuego.GetCantJugadores();
 
 					switch (cantJugadores)
@@ -247,6 +235,12 @@ void MainListenThread(void* arg) {
 				}
 			}
 			// Renderizo por ultimo mi jugador para asi aparece al frente
+
+			std::cout << MiJugador->GetNombre() << endl;
+			std::cout << MiJugador->GetIDSprite() << endl;
+			std::cout << MiJugador->GetEstado() << endl;
+			std::cout << IntAString(MiJugador->GetX()) << endl;
+			std::cout << IntAString(MiJugador->GetY()) << endl;
 
 			GranMensaje.append(MiJugador->GetNombre().c_str()); // Nombre
 			GranMensaje.append(";");
@@ -455,6 +449,8 @@ void MainListenThread(void* arg) {
 					UnServer.EnviarMensajeTamanoVariable(frameWidthSprite, ClientSocket);			// FRAME WIDTH
 					const char* frameHeightSprite = elementoSprite->Attribute("frameHeight");
 					UnServer.EnviarMensajeTamanoVariable(frameHeightSprite, ClientSocket);			// FRAME HEIGHT
+					const char* velocidadSprite = elementoSprite->Attribute("velocidad");
+					UnServer.EnviarMensajeTamanoVariable(velocidadSprite, ClientSocket);			// FRAME HEIGHT
 
 					tinyxml2::XMLElement* elementoEstados = elementoSprite->FirstChildElement("ESTADOS");
 					const char* cantidadEstados = elementoEstados->Attribute("cantidad");

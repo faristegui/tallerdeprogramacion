@@ -8,7 +8,7 @@
 		</CAPAS>
 	</FONDO>
 	<SPRITES cantidad="9">
-		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61">
+		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="200">
 				<ESTADOS cantidad="16">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
@@ -28,7 +28,7 @@
 					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
 				</ESTADOS>
 		</SPRITE>
-		<SPRITE id="PlayerYellow" frameWidth="37" frameHeight="41">
+		<SPRITE id="PlayerYellow" frameWidth="37" frameHeight="41" velocidad="200">
 				<ESTADOS cantidad="9">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="CAMINA-DER" cantFrames="9"/>
@@ -42,7 +42,7 @@
 				</ESTADOS>
 
 		</SPRITE>
-		<SPRITE id="PlayerBlue" frameWidth="37" frameHeight="41">
+		<SPRITE id="PlayerBlue" frameWidth="37" frameHeight="41" velocidad="200">
 				<ESTADOS cantidad="9">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="CAMINA-DER" cantFrames="9"/>
@@ -56,7 +56,7 @@
 				</ESTADOS>
 
 		</SPRITE>
-		<SPRITE id="PlayerViolet" frameWidth="37" frameHeight="41">
+		<SPRITE id="PlayerViolet" frameWidth="37" frameHeight="41" velocidad="200">
 				<ESTADOS cantidad="9">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="CAMINA-DER" cantFrames="9"/>
@@ -69,12 +69,12 @@
 					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
 				</ESTADOS>
 		</SPRITE>
-		<SPRITE id="PulpoEnemigo" frameWidth="35" frameHeight="30">
+		<SPRITE id="PulpoEnemigo" frameWidth="35" frameHeight="30" velocidad="100">
 			<ESTADOS cantidad="1">
 				<ESTADO id="CAMINA-IZQ" cantFrames="16"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="HumanoEnemigo" frameWidth="33" frameHeight="49">
+		<SPRITE id="HumanoEnemigo" frameWidth="33" frameHeight="49" velocidad="100">
 			<ESTADOS cantidad="5">
 				<ESTADO id="CAMINA-IZQ" cantFrames="10"/>
 				<ESTADO id="DISPARA-IZQ" cantFrames="3"/>
@@ -83,13 +83,13 @@
 				<ESTADO id="MUERTO" cantFrames="10"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="TanqueEnemigo" frameWidth="106" frameHeight="62">
+		<SPRITE id="TanqueEnemigo" frameWidth="106" frameHeight="62" velocidad="100">
 				<ESTADOS cantidad="2">
 					<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
 					<ESTADO id="DISPARA" cantFrames="3"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="Bala-S" frameWidth="15" frameHeight="15">
+		<SPRITE id="Bala-S" frameWidth="15" frameHeight="15" velocidad="100">
 				<ESTADOS cantidad="4">
 					<ESTADO id="HORIZONTAL" cantFrames="1"/>
 					<ESTADO id="DIAGONAL-DER" cantFrames="1"/>
@@ -97,7 +97,7 @@
 					<ESTADO id="DIAGONAL-IZQ" cantFrames="1"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="EnemigoFinal1" frameWidth="179" frameHeight="146">
+		<SPRITE id="EnemigoFinal1" frameWidth="179" frameHeight="146" velocidad="100">
 				<ESTADOS cantidad="3">
 					<ESTADO id="CAMINA-IZQ" cantFrames="5"/>
 					<ESTADO id="DISPARA" cantFrames="4"/>
