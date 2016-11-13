@@ -34,6 +34,8 @@ public:
 	bool EstaSaltando();
 	bool EstaSaltandoVertical();
 	bool EstaDisparando();
+	void herirEnemigo();
+	int getPuntaje();
 	void SetEstaSaltando(bool UnEstaSaltando);
 	void SetDireccion(std::string UnaDireccion);
 	void SueltaTeclaDireccion();
@@ -51,6 +53,7 @@ private:
 	int PosicionXInicioSalto;
 	int x;
 	int y;
+	int puntaje;
 	int vida;
 	bool Conectado;
 	Arma *UnArma;

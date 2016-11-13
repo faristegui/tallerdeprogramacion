@@ -5,7 +5,7 @@ class Arma
 {
 public:
 	Arma(int TiempoEntreDisparos, std::string UnCodigoArma, int UnaVelocidadBala);
-	Proyectil* Disparar(int PosX, int PosY, float tickActual, std::string Direccion);
+	Proyectil* Disparar(std::string idJugador,int PosX, int PosY, float tickActual, std::string Direccion);
 	bool PuedeDisparar(float tickActual);
 	std::string GetCodigoArma();
 	~Arma();

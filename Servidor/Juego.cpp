@@ -132,7 +132,7 @@ void FisicaThread(void* arg) {
 
 						UnJuego->MutexearListaProyectiles();
 
-						Proyectil* UnProyectil = UnJugador->GetArma()->Disparar(UnJugador->GetX(),
+						Proyectil* UnProyectil = UnJugador->GetArma()->Disparar(UnJugador->GetIDSprite(),UnJugador->GetX(),
 																				UnJugador->GetY(),
 																				ticks_start, 
 																				UnJugador->GetDireccion());
@@ -195,6 +195,7 @@ void FisicaThread(void* arg) {
 		}
 		if (Enemigos->getTamanio() == 0) {
 			UnJuego->AgregarEnemigo("PulpoEnemigo", 800, 365, 5, 100, false);
+			UnJuego->AgregarEnemigo("HumanoEnemigo",800,390,5,100,false);
 		}
 		UnJuego->DesmutexearListaEnemigos();
 		// -----------------------------------------------
@@ -230,12 +231,15 @@ void FisicaThread(void* arg) {
 						UnRectangulo.Width, UnRectangulo.Height)) {
 
 						UnJuego->MutexearListaEnemigos();
+						//aca no habria que eliminar al enemigo, solo cuando se queda sin vida
 						UnJuego->GetEnemigos()->remover(UnRectangulo.IndexEnLista);
 						UnJuego->DesmutexearListaEnemigos();
 
 						Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio
 
 						// TODO: Marce aca es donde hay que acumularle los puntos al usuario
+						//falta restarle vida al enemigo
+						UnJuego->obtenerJugador(UnProyectil->GetIDJugador())->herirEnemigo();
 					}
 				}
 			}
@@ -320,6 +324,17 @@ Lista<Proyectil *>* Juego::GetProyectiles() {
 Lista<Enemigo *>* Juego::GetEnemigos() {
 
 	return Enemigos;
+}
+
+Jugador* Juego::obtenerJugador(std::string id)
+{
+	for(int i=0;i < CantJugadores;i++)
+	{
+		if(Jugadores[i]->GetIDSprite().find(id) >= 0)
+		{
+			return Jugadores[i];
+		}
+	}
 }
 
 void Juego::AvanzarCamara() {

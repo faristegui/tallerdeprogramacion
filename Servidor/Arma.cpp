@@ -19,13 +19,13 @@ bool Arma::PuedeDisparar(float tickActual) {
 	return ((tickActual - tick_ultimoDisparo) > TiempoEntreDisparos);
 }
 
-Proyectil* Arma::Disparar(int PosX, int PosY, float tickActual, std::string Direccion) {
+Proyectil* Arma::Disparar(std::string idJugador,int PosX, int PosY, float tickActual, std::string Direccion) {
 	int OffsetX = DeterminarOffsetBalaX(Direccion);
 	int OffsetY = DeterminarOffsetBalaY(Direccion);
 
 
 	// TODO: Ver si el width y el height se pueden leer del xml, si no por cada arma establecer los tamanios
-	Proyectil* UnProyectil = new Proyectil("Bala-" + CodigoArma, PosX + OffsetX, PosY + OffsetY, VelocidadBala, Direccion, 15, 15);
+	Proyectil* UnProyectil = new Proyectil(idJugador,"Bala-" + CodigoArma, PosX + OffsetX, PosY + OffsetY, VelocidadBala, Direccion, 15, 15);
 	tick_ultimoDisparo = tickActual;
 
 	return UnProyectil;

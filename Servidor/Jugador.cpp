@@ -10,6 +10,7 @@ Jugador::Jugador(std::string UnNombre, std::string UnColor)
 	Direccion = "DERECHA";
 	x = 20;
 	y = 365;
+	puntaje=0;
 	vida = 100;
 	Conectado = true;
 	Saltando = false;
@@ -22,6 +23,25 @@ std::string Jugador::GetDireccion() {
 	return Direccion;
 }
 
+int Jugador::getPuntaje()
+{
+	return puntaje;
+}
+void Jugador::herirEnemigo()
+{
+	if(UnArma->GetCodigoArma() == "S")
+	{
+		puntaje+=35;
+	}
+	if(UnArma->GetCodigoArma() == "H")
+	{
+		puntaje+=15;
+	}
+	if(UnArma->GetCodigoArma() == "R")
+	{
+		puntaje+=40;
+	}
+}
 void Jugador::Mover(std::string Tecla) {
 
 	if (Tecla == "SPACE") {

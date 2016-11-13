@@ -1,9 +1,10 @@
 #include "Proyectil.h"
-
-Proyectil::Proyectil(std::string UnIdSprite, int posX, int posY, int vel, 
+#include <string>
+Proyectil::Proyectil(std::string idJugador,std::string UnIdSprite, int posX, int posY, int vel, 
 					std::string UnaDireccion, int UnWidth, int UnHeight)
 {
 	IDSprite = UnIdSprite;
+	IDJugador = idJugador.substr(0,idJugador.find('-'));
 	x = posX;
 	y = posY;
 	velocidad = vel;
@@ -13,6 +14,10 @@ Proyectil::Proyectil(std::string UnIdSprite, int posX, int posY, int vel,
 	Height = UnHeight;
 }
 
+std::string Proyectil::GetIDJugador()
+{
+	return IDJugador;
+}
 void Proyectil::DeterminarEstado() {
 
 	Estado = "HORIZONTAL";
