@@ -621,6 +621,11 @@ void Pantalla::IniciarJuego() {
 				RenderSprite(IDSprite, EstadoProyectil, Starting_Tick, Renderer, xProyectil, yProyectil);
 			}
 
+			EscribirMensaje(mensajes[Indice], 0, 5, 20, Renderer);
+			Indice++;
+			EscribirMensaje(mensajes[Indice], 0, 30, 20, Renderer);
+			Indice++;
+
 			if (CantidadMensajes > 0) {
 				for(int i = 0; i < CantidadMensajes;i++)
 				{
@@ -646,7 +651,7 @@ void Pantalla::IniciarJuego() {
 
 
 void Pantalla::MostrarMensajes(int StartingTick) {
-	int OffsetY = 5;
+	int OffsetY = 55;
 	int i = 0;
 	Mensajes->iniciarCursor();
 

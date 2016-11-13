@@ -132,7 +132,7 @@ void FisicaThread(void* arg) {
 
 						UnJuego->MutexearListaProyectiles();
 
-						Proyectil* UnProyectil = UnJugador->GetArma()->Disparar(UnJugador->GetIDSprite(),UnJugador->GetX(),
+						Proyectil* UnProyectil = UnJugador->GetArma()->Disparar(UnJugador->GetNombre(), UnJugador->GetX(),
 																				UnJugador->GetY(),
 																				ticks_start, 
 																				UnJugador->GetDireccion());
@@ -195,7 +195,7 @@ void FisicaThread(void* arg) {
 		}
 		if (Enemigos->getTamanio() == 0) {
 			UnJuego->AgregarEnemigo("PulpoEnemigo", 800, 365, 5, 100, false);
-			UnJuego->AgregarEnemigo("HumanoEnemigo",800,390,5,100,false);
+			UnJuego->AgregarEnemigo("HumanoEnemigo", 800, 390, 5, 100, false);
 		}
 		UnJuego->DesmutexearListaEnemigos();
 		// -----------------------------------------------
@@ -238,8 +238,8 @@ void FisicaThread(void* arg) {
 						Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio
 
 						// TODO: Marce aca es donde hay que acumularle los puntos al usuario
-						//falta restarle vida al enemigo
-						UnJuego->obtenerJugador(UnProyectil->GetIDJugador())->herirEnemigo();
+						// falta restarle vida al enemigo
+						UnJuego->GetJugador(UnProyectil->GetIDJugador())->herirEnemigo();
 					}
 				}
 			}
@@ -326,17 +326,6 @@ Lista<Enemigo *>* Juego::GetEnemigos() {
 	return Enemigos;
 }
 
-Jugador* Juego::obtenerJugador(std::string id)
-{
-	for(int i=0;i < CantJugadores;i++)
-	{
-		if(Jugadores[i]->GetIDSprite().find(id) >= 0)
-		{
-			return Jugadores[i];
-		}
-	}
-}
-
 void Juego::AvanzarCamara() {
 
 	for (int i = 0; i < CantCamaras; i++) {
@@ -408,15 +397,6 @@ void Juego::AgregarJugador(std::string UnNombre, std::string UnColor) {
 			equipos[CantJugadores] = new Equipo();
 			equipos[CantJugadores]->agregarJugador(Jugadores[CantJugadores]);
 		}
-		//hay un solo equipo para todos los jugadorees
-		if (modoJuego == 2)
-		{
-			if(CantJugadores==0)
-			{
-				equipos[CantJugadores] = new Equipo();
-			}
-			equipos[0]->agregarJugador(Jugadores[CantJugadores]);
-		}
 		//hay 2 equipos de 2 jugadores
 		if(modoJuego == 3)
 		{
@@ -425,16 +405,31 @@ void Juego::AgregarJugador(std::string UnNombre, std::string UnColor) {
 				case 0:
 					equipos[0] = new Equipo();
 					equipos[0]->agregarJugador(Jugadores[CantJugadores]);
+					break;
 				case 1:
 					equipos[0]->agregarJugador(Jugadores[CantJugadores]);
+					break;
 				case 2:
 					equipos[1] = new Equipo();
 					equipos[1]->agregarJugador(Jugadores[CantJugadores]);
+					break;
 				case 3:
 					equipos[1]->agregarJugador(Jugadores[CantJugadores]);
+					break;
 			}
 		}
 		CantJugadores++;
+	}
+}
+
+Equipo* Juego::GetEquipoJugador(std::string NombreJugador) {
+
+	if (equipos[0]->TieneJugador(NombreJugador)) {
+
+		return equipos[0];
+	} else {
+		
+		return equipos[1];
 	}
 }
 

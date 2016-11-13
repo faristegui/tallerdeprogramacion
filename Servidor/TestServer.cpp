@@ -52,6 +52,48 @@ void PedirModoDeJuego()
 	}
 	UnJuego.establecerModo(opcion);
 }
+
+std::string ObtenerTextoPuntaje(int UnModo, int IndiceMiJugador) {
+	std::string TextoPuntaje;
+
+	Jugador* MiJugador;
+	int CantJugadores = UnJuego.GetCantJugadores();
+	TextoPuntaje = "Puntaje";
+	int Puntaje = 0;
+	
+	switch (UnModo) {
+
+		case 1:
+
+			MiJugador = UnJuego.GetJugador(IndiceMiJugador);
+			Puntaje = MiJugador->getPuntaje();
+			break;
+		case 2:
+
+			TextoPuntaje = TextoPuntaje + "(TODOS)";
+
+			for (int i = 0; i < CantJugadores; i++) {
+
+				Jugador* OtroJugador = UnJuego.GetJugador(i);
+				
+				Puntaje += OtroJugador->getPuntaje();
+			}
+			break;
+		case 3:
+
+			MiJugador = UnJuego.GetJugador(IndiceMiJugador);
+			Equipo *UnEquipo = UnJuego.GetEquipoJugador(MiJugador->GetNombre());
+
+			TextoPuntaje = TextoPuntaje + "(" + UnEquipo->GetNombresJugadores() + ")";
+			Puntaje = UnEquipo->obtenerPuntaje();
+			break;
+	}
+
+	TextoPuntaje = TextoPuntaje + ": " + IntAString(Puntaje);	
+
+	return TextoPuntaje;
+}
+
 void CargarEscenariosEnJuego() {
 	tinyxml2::XMLDocument docu;
 
@@ -179,7 +221,7 @@ void MainListenThread(void* arg) {
 		}
 		if (mensaje=="LIST")
 		{
-			if(UnJuego.GetCantJugadores() != 1)
+			if(UnJuego.GetCantJugadores() != 4)
 			{
 				UnServer.EnviarMensajeTamanoVariable("NOLISTO",ClientSocket);
 			}
@@ -235,12 +277,6 @@ void MainListenThread(void* arg) {
 				}
 			}
 			// Renderizo por ultimo mi jugador para asi aparece al frente
-
-			std::cout << MiJugador->GetNombre() << endl;
-			std::cout << MiJugador->GetIDSprite() << endl;
-			std::cout << MiJugador->GetEstado() << endl;
-			std::cout << IntAString(MiJugador->GetX()) << endl;
-			std::cout << IntAString(MiJugador->GetY()) << endl;
 
 			GranMensaje.append(MiJugador->GetNombre().c_str()); // Nombre
 			GranMensaje.append(";");
@@ -318,6 +354,11 @@ void MainListenThread(void* arg) {
 			}
 
 			UnJuego.DesmutexearListaProyectiles();
+
+			GranMensaje.append("Vida: " + IntAString(MiJugador->GetVida()));
+			GranMensaje.append(";");
+			GranMensaje.append(ObtenerTextoPuntaje(UnJuego.obtenerModo(), IndiceMiJugador));
+			GranMensaje.append(";");
 
 			UnServer.EnviarMensajeTamanoVariable(GranMensaje, ClientSocket);
 			if (CantidadMensajes > 0) {

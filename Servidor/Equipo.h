@@ -8,6 +8,8 @@ public:
 	~Equipo(void);
 	void agregarJugador(Jugador* nuevoJugador);
 	int obtenerPuntaje();
+	bool TieneJugador(std::string NombreJugador);
+	std::string GetNombresJugadores();
 private:
 	Jugador* Jugadores[4];
 	int puntaje;

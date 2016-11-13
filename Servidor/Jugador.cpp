@@ -10,7 +10,7 @@ Jugador::Jugador(std::string UnNombre, std::string UnColor)
 	Direccion = "DERECHA";
 	x = 20;
 	y = 365;
-	puntaje=0;
+	puntaje = 0;
 	vida = 100;
 	Conectado = true;
 	Saltando = false;
@@ -27,6 +27,12 @@ int Jugador::getPuntaje()
 {
 	return puntaje;
 }
+
+int Jugador::GetVida()
+{
+	return vida;
+}
+
 void Jugador::herirEnemigo()
 {
 	if(UnArma->GetCodigoArma() == "S")

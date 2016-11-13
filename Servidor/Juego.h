@@ -37,11 +37,11 @@ public:
 	bool UsuarioYaLogueado(std::string Usuario);
 	Jugador* GetJugador(std::string UnNombre);
 	Jugador* GetJugador(int Index);
-	Jugador* obtenerJugador(std::string id);
 	Lista<std::string>* GetNombresJugadoresOnline();
 	int GetIndiceJugador(std::string Usuario);
 	int GetCantJugadores();
 	int GetCantCamaras();
+	Equipo* GetEquipoJugador(std::string NombreJugador);
 	int obtenerModo();
 	Camara* GetCamara(int NrCamara);
 	void establecerModo(std::string modo);

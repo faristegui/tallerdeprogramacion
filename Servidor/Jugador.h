@@ -36,6 +36,7 @@ public:
 	bool EstaDisparando();
 	void herirEnemigo();
 	int getPuntaje();
+	int GetVida();
 	void SetEstaSaltando(bool UnEstaSaltando);
 	void SetDireccion(std::string UnaDireccion);
 	void SueltaTeclaDireccion();
