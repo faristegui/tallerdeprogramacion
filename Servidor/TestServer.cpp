@@ -119,7 +119,6 @@ void CargarEscenariosEnJuego() {
 		}
 	}
 }
-
 void MainListenThread(void* arg) {
 	string Usuario = "";
 	string mensaje = "";
@@ -221,7 +220,12 @@ void MainListenThread(void* arg) {
 		}
 		if (mensaje=="LIST")
 		{
-			if(UnJuego.GetCantJugadores() != 4)
+			tinyxml2::XMLDocument docu;
+			char* pathXML = strdup(ArchivoEscenarios.c_str());
+			docu.LoadFile(pathXML);
+			tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
+			const char* cantMaxJugadores = elementoEscenario->Attribute("maxJugadores");
+			if(UnJuego.GetCantJugadores() != stoi(cantMaxJugadores))
 			{
 				UnServer.EnviarMensajeTamanoVariable("NOLISTO",ClientSocket);
 			}
@@ -511,10 +515,8 @@ void MainListenThread(void* arg) {
 		if (mensaje == "NEWC") {
 
 			tinyxml2::XMLDocument docu;
-
-			char* pathXML =  strdup(ArchivoEscenarios.c_str());
 			const char* cantMaxJugadores;
-
+			char* pathXML =  strdup(ArchivoEscenarios.c_str());
 			if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
 			{
 				tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
