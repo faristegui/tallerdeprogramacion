@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ESCENARIO anchoPX="800" altoPX="600" maxJugadores="4">
+<ESCENARIO anchoPX="800" altoPX="600" maxJugadores="1">
 	<FONDO>
 		<CAPAS cantidad="3">
 			<IMAGEN nombre="cieloLevel2.bmp" zIndex="2" width="2000" height="600"/>
@@ -75,12 +75,12 @@
 					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
 				</ESTADOS>
 		</SPRITE>
-		<SPRITE id="PulpoEnemigo" frameWidth="35" frameHeight="30" velocidad="100">
+		<SPRITE id="PulpoEnemigo" frameWidth="35" frameHeight="30" velocidad="2">
 			<ESTADOS cantidad="1">
 				<ESTADO id="CAMINA-IZQ" cantFrames="16"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="HumanoEnemigo" frameWidth="33" frameHeight="49" velocidad="100">
+		<SPRITE id="HumanoEnemigo" frameWidth="33" frameHeight="49" velocidad="10">
 			<ESTADOS cantidad="5">
 				<ESTADO id="CAMINA-IZQ" cantFrames="10"/>
 				<ESTADO id="DISPARA-IZQ" cantFrames="3"/>
@@ -89,7 +89,7 @@
 				<ESTADO id="MUERTO" cantFrames="10"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="TanqueEnemigo" frameWidth="106" frameHeight="62" velocidad="100">
+		<SPRITE id="TanqueEnemigo" frameWidth="106" frameHeight="62" velocidad="5">
 				<ESTADOS cantidad="2">
 					<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
 					<ESTADO id="DISPARA" cantFrames="3"/>
@@ -103,7 +103,7 @@
 					<ESTADO id="DIAGONAL-IZQ" cantFrames="1"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="EnemigoFinal1" frameWidth="179" frameHeight="146" velocidad="100">
+		<SPRITE id="EnemigoFinal1" frameWidth="179" frameHeight="146" velocidad="2">
 				<ESTADOS cantidad="3">
 					<ESTADO id="CAMINA-IZQ" cantFrames="5"/>
 					<ESTADO id="DISPARA" cantFrames="4"/>
@@ -114,62 +114,62 @@
 	<NIVELES>
 		<NIVEL id="Level_1">
 			<ENEMIGOS cantidad="11">
-				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posY="30" vida="100"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posY="15" vida="100"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posY="70" vida="100"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posY="110" vida="100"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posY="300" vida="100"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posY="530" vida="100"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posY="390" vida="100"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posY="700" vida="100"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posY="470" vida="100"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posY="420" vida="100"/>
-				<ENEMIGO tipo="Final" direccion="DER" posY="420" vida="400"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="650" posY="390" vida="100"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="450" posY="390" vida="100"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="250" posY="390" vida="100"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="530" posY="390" vida="100"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="650" posY="390" vida="100"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="200" posY="390" vida="100"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posX="300" posY="390" vida="100"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="350" posY="390" vida="100"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="550" posY="390" vida="100"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="100" posY="390" vida="100"/>
+				<ENEMIGO tipo="EnemigoFinal1" direccion="IZQ" posX="400" posY="350" vida="100"/>
 			</ENEMIGOS>
 		</NIVEL>
 		<NIVEL id="Level_2">
 			<ENEMIGOS cantidad="16">
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posY="30" vida="100"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posY="15" vida="100"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posY="70" vida="100"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posY="110" vida="100"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posY="300" vida="100"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posY="530" vida="100"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posY="390" vida="100"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posY="700" vida="100"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posY="470" vida="100"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posY="420" vida="100"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posY="300" vida="100"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posY="530" vida="100"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posY="390" vida="100"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posY="700" vida="100"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posY="470" vida="100"/>
-				<ENEMIGO tipo="Final" direccion="IZQ" posY="470" vida="700"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="1200" posY="30" vida="100"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="15" vida="100"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="1200" posY="70" vida="100"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="110" vida="100"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="1200" posY="300" vida="100"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posX="1200" posY="530" vida="100"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="390" vida="100"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="700" vida="100"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="470" vida="100"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posX="1200" posY="420" vida="100"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="300" vida="100"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posX="1200" posY="530" vida="100"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="390" vida="100"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="700" vida="100"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="1200" posY="470" vida="100"/>
+				<ENEMIGO tipo="Final" direccion="IZQ" posX="1200" posY="470" vida="700"/>
 			</ENEMIGOS>
 		</NIVEL>
 		<NIVEL id="Level_3">
 			<ENEMIGOS cantidad="21">
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posY="30" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posY="15" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posY="70" vida="700"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posY="110" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posY="300" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posY="530" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posY="390" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posY="700" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posY="470" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posY="420" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posY="30" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posY="15" vida="700"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posY="70" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posY="110" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posY="300" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posY="530" vida="700"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posY="390" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posY="700" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posY="470" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posY="420" vida="700"/>
-				<ENEMIGO tipo="Final" direccion="DER" posY="420" vida="1000"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="1200" posY="30" vida="700"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="1200" posY="15" vida="700"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="1200" posY="70" vida="700"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posX="1200" posY="110" vida="700"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="300" vida="700"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="530" vida="700"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="390" vida="700"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="700" vida="700"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="470" vida="700"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="420" vida="700"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="30" vida="700"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="1200" posY="15" vida="700"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="1200" posY="70" vida="700"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="110" vida="700"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="300" vida="700"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="530" vida="700"/>
+				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="1200" posY="390" vida="700"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="1200" posY="700" vida="700"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="1200" posY="470" vida="700"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="420" vida="700"/>
+				<ENEMIGO tipo="Final" direccion="DER" posX="1200" posY="420" vida="1000"/>
 			</ENEMIGOS>
 		</NIVEL>
 	</NIVELES>

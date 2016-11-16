@@ -193,10 +193,12 @@ void FisicaThread(void* arg) {
 
 			PosicionCursor++;
 		}
+		/*
 		if (Enemigos->getTamanio() == 0) {
 			UnJuego->AgregarEnemigo("PulpoEnemigo", 800, 365, 5, 100, false);
-			UnJuego->AgregarEnemigo("HumanoEnemigo", 800, 390, 5, 100, false);
+			UnJuego->AgregarEnemigo("HumanoEnemigo", 800, 390, 5,100,false);
 		}
+		*/
 		UnJuego->DesmutexearListaEnemigos();
 		// -----------------------------------------------
 		// Proceso proyectiles (y colisiones de los mismos)
@@ -302,7 +304,7 @@ Juego::Juego()
 	CantJugadores = 0;
 	CantCamaras = 0;
 	Proyectiles = new Lista<Proyectil *>();
-	Enemigos = new Lista<Enemigo *>();
+	Enemigos = new Lista<Enemigo*>();
 	_beginthread(FisicaThread, 0, this);
 }
 
@@ -363,13 +365,9 @@ void Juego::AgregarCamara(int UnAncho) {
 	CantCamaras++;
 }
 
-void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida, bool esFinal)
+void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida, bool esFinal,int width, int height)
 {
-	// TODO: Get width y height de una lista de sprites leida del xml
-	int Width = 35;
-	int Height = 30;
-
-	Enemigo* unEnemigo = new Enemigo(UnIDSprite, posX, posY, velocidad, vida, esFinal, Width, Height);
+	Enemigo* unEnemigo = new Enemigo(UnIDSprite, posX, posY, velocidad, vida, esFinal, width, height);
 	MutexearListaEnemigos();
 	Enemigos->agregar(unEnemigo);
 	DesmutexearListaEnemigos();

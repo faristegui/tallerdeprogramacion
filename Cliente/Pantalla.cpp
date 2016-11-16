@@ -426,9 +426,21 @@ SDL_Rect crearCamara(){
 	return camara;
 }
 
+void Pantalla::CargarEnemigos()
+{
+	cliente->EnviarMensaje("ENEM",4);
+	/*int cantidad = stoi(cliente->RecibirMensajeTamanoVariable());
+	for(int i = 0; i < cantidad;i++)
+	{
+
+	}
+	*/
+}
+
 void Pantalla::IniciarJuego() {
 
 	CargarSprites();
+	CargarEnemigos();
 	CargarCapasFondoEscenario();
 
 	bool sprite = false;

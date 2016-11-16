@@ -75,6 +75,7 @@ private:
 	void WaitFPS(Uint32 starting_tick);
 	void AgregarSprite(std::string ID, int FrameWidth, int FrameHeight, int Velocidad);
 	void CargarSprites();
+	void CargarEnemigos();
 	char* VerificarRecurso(std::string path);
 	Lista<Sprite> *Sprites;
 	Lista<CapaFondoEscenario> *CapasFondoEscenario;

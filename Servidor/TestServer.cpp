@@ -38,6 +38,12 @@ string ArchivoEscenarios = "";
 HANDLE ghMutex;
 Juego UnJuego;
 
+struct DatosSprites
+{
+	int width;
+	int height;
+	int velocidad;
+};
 void MostrarListaComandos() {
 	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
 }
@@ -123,6 +129,7 @@ void MainListenThread(void* arg) {
 	string Usuario = "";
 	string mensaje = "";
 	SOCKET ClientSocket = *(SOCKET*)arg;
+	DatosSprites* sprites[6];
 	bool EsThreadDePing = false;
 
 	while ((mensaje != "EXIT") && (mensaje != "LOST"))
@@ -480,18 +487,33 @@ void MainListenThread(void* arg) {
 				UnServer.EnviarMensajeTamanoVariable(cantidadSrites, ClientSocket);
 
 				//iterando sobre todos los Sprites 
+				int contador = 0;
 				for (tinyxml2::XMLElement* elementoSprite = elementoSprites->FirstChildElement("SPRITE"); elementoSprite != NULL; elementoSprite = elementoSprite->NextSiblingElement("SPRITE"))
 				{
 
 					// Envio info de los sprites a cargar
 					const char* idSprite = elementoSprite->Attribute("id");
 					UnServer.EnviarMensajeTamanoVariable(idSprite, ClientSocket);	// ID
+
 					const char* frameWidthSprite = elementoSprite->Attribute("frameWidth");
 					UnServer.EnviarMensajeTamanoVariable(frameWidthSprite, ClientSocket);			// FRAME WIDTH
+
 					const char* frameHeightSprite = elementoSprite->Attribute("frameHeight");
 					UnServer.EnviarMensajeTamanoVariable(frameHeightSprite, ClientSocket);			// FRAME HEIGHT
+
 					const char* velocidadSprite = elementoSprite->Attribute("velocidad");
-					UnServer.EnviarMensajeTamanoVariable(velocidadSprite, ClientSocket);			// FRAME HEIGHT
+					UnServer.EnviarMensajeTamanoVariable(velocidadSprite, ClientSocket);			// VELOCIDAD
+					
+					if(strstr(idSprite,"Enemigo") != NULL)
+					{
+						DatosSprites* unEnemigo = new DatosSprites(); 
+						unEnemigo->width = stoi(frameWidthSprite);
+						unEnemigo->height = stoi(frameHeightSprite);
+						unEnemigo->velocidad = stoi(velocidadSprite);
+						sprites[contador] = unEnemigo;
+						contador++;
+					}
+
 
 					tinyxml2::XMLElement* elementoEstados = elementoSprite->FirstChildElement("ESTADOS");
 					const char* cantidadEstados = elementoEstados->Attribute("cantidad");
@@ -511,6 +533,59 @@ void MainListenThread(void* arg) {
 
 			}
 			else std::cout << "error al cargar el archivo de configuracion de escenariodef.xml " << std::endl;
+		}
+		if (mensaje=="ENEM")
+		{
+			//solo se cargan para el primer nivel
+			tinyxml2::XMLDocument docu;
+
+			char* pathXML = strdup(ArchivoEscenarios.c_str());
+
+			if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
+			{
+				tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
+
+				//Cargo enemigos de cada nivel
+				tinyxml2::XMLElement* elementosNiveles = elementoEscenario->FirstChildElement("NIVELES");
+
+				//Nivel 1
+				tinyxml2::XMLElement* elementosNivel = elementosNiveles->FirstChildElement("NIVEL");
+				const char* idNivel = elementosNivel->Attribute("id");
+
+				tinyxml2::XMLElement* elementoEnemigos = elementosNivel->FirstChildElement("ENEMIGOS");
+				const char* cantidadEnemigos = elementoEnemigos->Attribute("cantidad");
+				//UnServer.EnviarMensajeTamanoVariable(cantidadEnemigos,ClientSocket);
+				int indice = -1;
+				for (tinyxml2::XMLElement* elementoEnemigo = elementoEnemigos->FirstChildElement("ENEMIGO"); elementoEnemigo != NULL; elementoEnemigo= elementoEnemigo->NextSiblingElement("ENEMIGO"))
+				{
+					const char* tipo = elementoEnemigo->Attribute("tipo");
+
+					const char* direccion = elementoEnemigo->Attribute("direccion"); //por ahora esto no lo estamos usando
+
+					const char* posX = elementoEnemigo->Attribute("posX");
+					
+					const char* posY = elementoEnemigo->Attribute("posY");
+
+					const char* vida = elementoEnemigo->Attribute("vida");
+					if(strstr(tipo,"Pulpo") != NULL)
+					{
+						indice = 0;
+					}
+					if(strstr(tipo,"Humano") != NULL)
+					{
+						indice = 1;
+					}
+					if(strstr(tipo,"Tanque") != NULL)
+					{
+						indice = 2;
+					}
+					if(strstr(tipo,"Final1") != NULL)
+					{
+						indice = 3;
+					}
+					UnJuego.AgregarEnemigo(tipo,stoi(posX),stoi(posY),sprites[indice]->velocidad,stoi(vida),false,sprites[indice]->width,sprites[indice]->height);
+				}
+			}
 		}
 		if (mensaje == "NEWC") {
 
