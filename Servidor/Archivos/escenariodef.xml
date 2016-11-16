@@ -95,7 +95,7 @@
 					<ESTADO id="DISPARA" cantFrames="3"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="Bala-S" frameWidth="15" frameHeight="15" velocidad="100">
+		<SPRITE id="Bala-S" frameWidth="10" frameHeight="10" velocidad="100">
 				<ESTADOS cantidad="4">
 					<ESTADO id="HORIZONTAL" cantFrames="1"/>
 					<ESTADO id="DIAGONAL-DER" cantFrames="1"/>
