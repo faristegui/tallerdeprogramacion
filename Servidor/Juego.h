@@ -51,17 +51,21 @@ public:
 	void AgregarCamara(int UnAncho);
 	void AgregarEnemigo(std::string UnIDSprite, int posX, int posY,int velocidad,int vida, bool esFinal,int width,int height);
 	Lista<Proyectil *>* GetProyectiles();
-	Lista<Enemigo *>* GetEnemigos();
+	Lista<Enemigo *>* GetTodosLosEnemigos();
+	Lista<Enemigo*>* GetEnemigosPantalla();
 	void MutexearListaProyectiles();
 	void DesmutexearListaProyectiles();
 	void MutexearListaEnemigos();
 	void DesmutexearListaEnemigos();
+	bool AvanzaCamara;
 private:
 	int CantJugadores;
 	int modoJuego;
+	bool empezo;
 	int GetIndexUsuario(std::string Usuario);
 	Lista<Proyectil *>* Proyectiles;
-	Lista<Enemigo *>* Enemigos;
+	Lista<Enemigo *>* enemigosPantalla;
+	Lista<Enemigo*>* todosLosEnemigos;
 	Equipo* equipos[4];
 	Jugador *Jugadores[5];
 	Camara *Camaras[6];

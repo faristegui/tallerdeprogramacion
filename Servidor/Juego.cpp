@@ -33,6 +33,11 @@ bool HayColision(int X1, int Y1, int W1, int H1,
 
 }
 
+Lista<Enemigo*>* Juego::GetEnemigosPantalla()
+{
+	return enemigosPantalla;
+}
+
 void FisicaThread(void* arg) {
 
 	float ticks_start = 0;
@@ -156,16 +161,46 @@ void FisicaThread(void* arg) {
 		// -----------------------------------------------
 		// Proceso enemigos
 		UnJuego->MutexearListaEnemigos();
-		Lista<Enemigo *>* Enemigos = UnJuego->GetEnemigos();
+		Lista<Enemigo *>* todosLosEnemigos = UnJuego->GetTodosLosEnemigos();
+		todosLosEnemigos->iniciarCursor();
+		Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
+		//si avanza el juego o recien empieza cargo los enemigos
+		if(AvanzaCamara)
+		{
+			Lista<int>* posiciones = new Lista<int>();
+			int indiceAEliminar = 1;
+			while(todosLosEnemigos->avanzarCursor())
+			{
+				int indice = UnJuego->GetCamara(0)->X;
+				if(todosLosEnemigos->obtenerCursor()->getX() <= (800+indice))
+				{
+					enemigosVivos->agregar(todosLosEnemigos->obtenerCursor());
+					posiciones->agregar(indiceAEliminar);
+				}
+				indiceAEliminar++;
+			}
+
+			posiciones->iniciarCursor();
+			int indiceCantEliminados = 0;
+			while(posiciones->avanzarCursor())
+			{
+				todosLosEnemigos->remover(posiciones->obtenerCursor()-indiceCantEliminados);
+				indiceCantEliminados++;
+			}
+		}
+		//UnJuego->DesmutexearListaEnemigos();
+		
+		//UnJuego->MutexearListaEnemigos();
+		//Lista<Enemigo *>* enemigosVivos= UnJuego->GetEnemigosPantalla();
 		int PosicionCursor = 1;
 
-		int CantEnemigos = Enemigos->getTamanio();
+		int CantEnemigos = todosLosEnemigos->getTamanio();
 		Lista<RectanguloEnemigo>* RectangulosEnemigos = new Lista<RectanguloEnemigo>();
 
-		Enemigos->iniciarCursor();
-		while (Enemigos->avanzarCursor()) {
+		enemigosVivos->iniciarCursor();
+		while (enemigosVivos->avanzarCursor()) {
 
-			Enemigo* UnEnemigo = Enemigos->obtenerCursor();
+			Enemigo* UnEnemigo = enemigosVivos->obtenerCursor();
 
 			UnEnemigo->mover();
 
@@ -177,7 +212,8 @@ void FisicaThread(void* arg) {
 			if ((UnEnemigo->getX() > 900) || (UnEnemigo->getX() < -100) ||
 				(UnEnemigo->getY() < -100) || (UnEnemigo->getY() > 700)) {
 
-				Enemigos->remover(PosicionCursor);  // TODO: Ver lo de la lista al de remover (que no reinicie el cursor!)
+				//UnJuego->eliminarDeListaPrincipal(PosicionCursor);
+				enemigosVivos->remover(PosicionCursor);  // TODO: Ver lo de la lista al de remover (que no reinicie el cursor!)
 			} else {
 			
 				RectanguloEnemigo UnRectangulo;
@@ -193,6 +229,7 @@ void FisicaThread(void* arg) {
 
 			PosicionCursor++;
 		}
+		
 		/*
 		if (Enemigos->getTamanio() == 0) {
 			UnJuego->AgregarEnemigo("PulpoEnemigo", 800, 365, 5, 100, false);
@@ -234,7 +271,8 @@ void FisicaThread(void* arg) {
 
 						UnJuego->MutexearListaEnemigos();
 						//aca no habria que eliminar al enemigo, solo cuando se queda sin vida
-						UnJuego->GetEnemigos()->remover(UnRectangulo.IndexEnLista);
+						//UnJuego->eliminarDeListaPrincipal(UnRectangulo.IndexEnLista);
+						UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);
 						UnJuego->DesmutexearListaEnemigos();
 
 						Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio
@@ -304,7 +342,8 @@ Juego::Juego()
 	CantJugadores = 0;
 	CantCamaras = 0;
 	Proyectiles = new Lista<Proyectil *>();
-	Enemigos = new Lista<Enemigo*>();
+	enemigosPantalla = new Lista<Enemigo*>();
+	todosLosEnemigos = new Lista<Enemigo*>();
 	_beginthread(FisicaThread, 0, this);
 }
 
@@ -323,9 +362,9 @@ Lista<Proyectil *>* Juego::GetProyectiles() {
 	return Proyectiles;
 }
 
-Lista<Enemigo *>* Juego::GetEnemigos() {
+Lista<Enemigo *>* Juego::GetTodosLosEnemigos() {
 
-	return Enemigos;
+	return todosLosEnemigos;
 }
 
 void Juego::AvanzarCamara() {
@@ -368,9 +407,10 @@ void Juego::AgregarCamara(int UnAncho) {
 void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida, bool esFinal,int width, int height)
 {
 	Enemigo* unEnemigo = new Enemigo(UnIDSprite, posX, posY, velocidad, vida, esFinal, width, height);
-	MutexearListaEnemigos();
-	Enemigos->agregar(unEnemigo);
-	DesmutexearListaEnemigos();
+	todosLosEnemigos->agregar(unEnemigo);
+	//MutexearListaEnemigos();
+	//Enemigos->agregar(unEnemigo);
+	//DesmutexearListaEnemigos();
 
 }
 

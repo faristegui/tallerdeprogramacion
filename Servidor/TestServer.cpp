@@ -312,16 +312,14 @@ void MainListenThread(void* arg) {
 			//Cantidad de enemigos que aparecen
 
 			UnJuego.MutexearListaEnemigos();
-			Lista<Enemigo *>* Enemigos = UnJuego.GetEnemigos();
-			Enemigos->iniciarCursor();
+			Lista<Enemigo *>* enemigos = UnJuego.GetEnemigosPantalla();
+			enemigos->iniciarCursor();
 
-			GranMensaje.append(IntAString(Enemigos->getTamanio()));
+			GranMensaje.append(IntAString(enemigos->getTamanio()));
 			GranMensaje.append(";");
 
-			while (Enemigos->avanzarCursor()) {
-
-				Enemigo* UnEnemigo = Enemigos->obtenerCursor();
-
+			while (enemigos->avanzarCursor()) {
+				Enemigo* UnEnemigo = enemigos->obtenerCursor();
 				GranMensaje.append(UnEnemigo->getID());					// ID del sprite (0)
 				GranMensaje.append(";");
 				GranMensaje.append(IntAString(UnEnemigo->getX()));		// PosX(1)
@@ -586,7 +584,30 @@ void MainListenThread(void* arg) {
 					UnJuego.AgregarEnemigo(tipo,stoi(posX),stoi(posY),sprites[indice]->velocidad,stoi(vida),false,sprites[indice]->width,sprites[indice]->height);
 				}
 			}
+			
+		Lista<Enemigo *>* todosLosEnemigos = UnJuego.GetTodosLosEnemigos();
+		todosLosEnemigos->iniciarCursor();
+		Lista<Enemigo*>* enemigosVivos = UnJuego.GetEnemigosPantalla();
+		Lista<int>* posiciones = new Lista<int>();
+		int indiceAEliminar = 1;
+			while(todosLosEnemigos->avanzarCursor())
+			{
+				if(todosLosEnemigos->obtenerCursor()->getX() <= (800+UnJuego.GetCamara(0)->X))
+				{
+					enemigosVivos->agregar(todosLosEnemigos->obtenerCursor());
+					posiciones->agregar(indiceAEliminar);
+				}
+				indiceAEliminar++;
+			}
+			posiciones->iniciarCursor();
+			int indiceCantEliminados = 0;
+			while(posiciones->avanzarCursor())
+			{
+				todosLosEnemigos->remover(posiciones->obtenerCursor()-indiceCantEliminados);
+				indiceCantEliminados++;
+			}
 		}
+		
 		if (mensaje == "NEWC") {
 
 			tinyxml2::XMLDocument docu;
