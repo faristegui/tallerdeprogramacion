@@ -3,8 +3,8 @@
 	<FONDO>
 		<CAPAS cantidad="3">
 			<IMAGEN nombre="cieloLevel1.bmp" zIndex="2" width="1944" height="600"/>
-+			<IMAGEN nombre="plataformasLevel1.bmp" zIndex="1" width="1792" height="600"/>
-+			<IMAGEN nombre="pisoLevel1.bmp" zIndex="3" width="1579" height="600"/>
+			<IMAGEN nombre="plataformasLevel1.bmp" zIndex="1" width="1792" height="600"/>
+			<IMAGEN nombre="pisoLevel1.bmp" zIndex="3" width="1579" height="600"/>
 		</CAPAS>
 	</FONDO>
 	<SPRITES cantidad="9">
