@@ -565,6 +565,9 @@ void MainListenThread(void* arg) {
 					const char* posY = elementoEnemigo->Attribute("posY");
 
 					const char* vida = elementoEnemigo->Attribute("vida");
+
+					const char* velocidadCaminata = elementoEnemigo->Attribute("velocidadCaminata");
+
 					if(strstr(tipo,"Pulpo") != NULL)
 					{
 						indice = 0;
@@ -581,7 +584,7 @@ void MainListenThread(void* arg) {
 					{
 						indice = 3;
 					}
-					UnJuego.AgregarEnemigo(tipo,stoi(posX),stoi(posY),sprites[indice]->velocidad,stoi(vida),false,sprites[indice]->width,sprites[indice]->height);
+					UnJuego.AgregarEnemigo(tipo, stoi(posX), stoi(posY), stoi(velocidadCaminata), stoi(vida), false, sprites[indice]->width, sprites[indice]->height);
 				}
 			}
 			

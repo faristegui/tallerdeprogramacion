@@ -229,13 +229,7 @@ void FisicaThread(void* arg) {
 
 			PosicionCursor++;
 		}
-		
-		/*
-		if (Enemigos->getTamanio() == 0) {
-			UnJuego->AgregarEnemigo("PulpoEnemigo", 800, 365, 5, 100, false);
-			UnJuego->AgregarEnemigo("HumanoEnemigo", 800, 390, 5,100,false);
-		}
-		*/
+
 		UnJuego->DesmutexearListaEnemigos();
 		// -----------------------------------------------
 		// Proceso proyectiles (y colisiones de los mismos)
