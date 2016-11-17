@@ -1,0 +1,24 @@
+Level 1:
+
+Y=406 
+inicio=206 fin=726
+inicio=1024 fin=1198
+inicio=1840 fin=2242
+
+Level 2:
+
+Y=406 
+inicio=148 fin=698
+inicio=1076 fin=1322
+inicio=1480 fin=1695
+inicio=1995 fin=2345
+
+Level 3:
+
+Y=406 
+inicio=146 fin=492
+inicio=635 fin=935
+inicio=1326 fin=1620
+inicio=1990 fin=2286
+inicio=2400 fin=2540
+
