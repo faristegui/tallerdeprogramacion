@@ -38,6 +38,7 @@ public:
 	int getPuntaje();
 	int GetVida();
 	void SetEstaSaltando(bool UnEstaSaltando);
+	void SetEstaSaltandoVertical(bool UnEstaSaltandoVertical);
 	void SetDireccion(std::string UnaDireccion);
 	void SueltaTeclaDireccion();
 private:

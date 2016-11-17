@@ -220,6 +220,11 @@ void Jugador::SetEstaSaltando(bool UnEstaSaltando) {
 	}
 }
 
+void Jugador::SetEstaSaltandoVertical(bool UnEstaSaltandoVertical) {
+
+	SaltandoVertical = UnEstaSaltandoVertical;
+}
+
 bool Jugador::GetEstaConectado() {
 
 	return Conectado;

@@ -110,7 +110,8 @@ void FisicaThread(void* arg) {
 							if (UnJugador->GetX() >= BordeEnXMaxCamara) {
 
 								AvanzaCamara = true;
-								UnJugador->SetEstado("SALTANDO");
+								
+								UnJugador->SetEstaSaltandoVertical(true);
 								UnJugador->SetX(BordeEnXMaxCamara);
 							}
 						}
@@ -123,7 +124,7 @@ void FisicaThread(void* arg) {
 
 								if (UnJugador->GetX() <= BordeEnXMinCamara) {
 
-									UnJugador->SetEstado("SALTANDO");
+									UnJugador->SetEstaSaltandoVertical(true);
 									UnJugador->SetX(BordeEnXMinCamara);
 								}
 							}
