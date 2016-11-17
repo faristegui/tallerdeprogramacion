@@ -18,6 +18,12 @@ std::string Proyectil::GetIDJugador()
 {
 	return IDJugador;
 }
+
+void Proyectil::MoverEnX(int CantX) {
+
+	x += CantX;
+}
+
 void Proyectil::DeterminarEstado() {
 
 	Estado = "HORIZONTAL";

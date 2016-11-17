@@ -14,6 +14,7 @@ public:
 	int GetWidth();
 	int GetHeight();
 	~Proyectil();
+	void MoverEnX(int CantX);
 private:
 	std::string IDJugador;
 	std::string IDSprite;

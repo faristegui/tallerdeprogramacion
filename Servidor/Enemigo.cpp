@@ -34,6 +34,11 @@ std::string Enemigo::getID()
 	return IDSprite;
 }
 
+void Enemigo::MoverEnX(int CantX) {
+
+	x += CantX;
+}
+
 void Enemigo::mover()
 {
 	//Solo enemigos finales

@@ -161,10 +161,14 @@ void FisicaThread(void* arg) {
 		}
 		// -----------------------------------------------
 		// Proceso enemigos
-		UnJuego->MutexearListaEnemigos();
+
+		int VelocidadCamara = 0;
+		if (UnJuego->GetCantCamaras() > 0) {
+			VelocidadCamara = UnJuego->GetCamara(UnJuego->GetCantCamaras() - 1)->Velocidad;
+		}
+
 		Lista<Enemigo *>* todosLosEnemigos = UnJuego->GetTodosLosEnemigos();
 		todosLosEnemigos->iniciarCursor();
-		Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
 		//si avanza el juego o recien empieza cargo los enemigos
 		if(AvanzaCamara)
 		{
@@ -175,7 +179,11 @@ void FisicaThread(void* arg) {
 				int indice = UnJuego->GetCamara(0)->X;
 				if(todosLosEnemigos->obtenerCursor()->getX() <= (800+indice))
 				{
+					UnJuego->MutexearListaEnemigos();
+					Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
 					enemigosVivos->agregar(todosLosEnemigos->obtenerCursor());
+					UnJuego->DesmutexearListaEnemigos();
+
 					posiciones->agregar(indiceAEliminar);
 				}
 				indiceAEliminar++;
@@ -189,15 +197,14 @@ void FisicaThread(void* arg) {
 				indiceCantEliminados++;
 			}
 		}
-		//UnJuego->DesmutexearListaEnemigos();
-		
-		//UnJuego->MutexearListaEnemigos();
-		//Lista<Enemigo *>* enemigosVivos= UnJuego->GetEnemigosPantalla();
+
 		int PosicionCursor = 1;
 
 		int CantEnemigos = todosLosEnemigos->getTamanio();
 		Lista<RectanguloEnemigo>* RectangulosEnemigos = new Lista<RectanguloEnemigo>();
 
+		UnJuego->MutexearListaEnemigos();
+		Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
 		enemigosVivos->iniciarCursor();
 		while (enemigosVivos->avanzarCursor()) {
 
@@ -205,9 +212,11 @@ void FisicaThread(void* arg) {
 
 			UnEnemigo->mover();
 
+			// TODO: if puededisparar -> dispara
+
 			if (AvanzaCamara) {
 
-				// TODO: Mover enemigo para izquierda a velocidad de camara
+				UnEnemigo->MoverEnX(-VelocidadCamara);
 			}
 
 			if ((UnEnemigo->getX() > 1000) || (UnEnemigo->getX() < -100) ||
@@ -246,7 +255,8 @@ void FisicaThread(void* arg) {
 
 			if (AvanzaCamara) {
 
-				// TODO: Mover proyectil para izquierda a velocidad de camara
+
+				UnProyectil->MoverEnX(-VelocidadCamara);
 			}
 
 			if ((UnProyectil->GetX() > 900) || (UnProyectil->GetX() < -100) ||

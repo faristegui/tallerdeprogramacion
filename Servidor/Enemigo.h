@@ -15,6 +15,7 @@ public:
 	~Enemigo(void);
 	int GetWidth();
 	int GetHeight();
+	void MoverEnX(int CantX);
 private:
 	std::string IDSprite;
 	std::string estado;
