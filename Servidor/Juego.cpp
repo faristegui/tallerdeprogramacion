@@ -209,7 +209,7 @@ void FisicaThread(void* arg) {
 				// TODO: Mover enemigo para izquierda a velocidad de camara
 			}
 
-			if ((UnEnemigo->getX() > 900) || (UnEnemigo->getX() < -100) ||
+			if ((UnEnemigo->getX() > 1000) || (UnEnemigo->getX() < -100) ||
 				(UnEnemigo->getY() < -100) || (UnEnemigo->getY() > 700)) {
 
 				//UnJuego->eliminarDeListaPrincipal(PosicionCursor);
