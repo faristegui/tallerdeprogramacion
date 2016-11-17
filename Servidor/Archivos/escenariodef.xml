@@ -2,13 +2,13 @@
 <ESCENARIO anchoPX="800" altoPX="600" maxJugadores="1">
 	<FONDO>
 		<CAPAS cantidad="3">
-			<IMAGEN nombre="cieloLevel1.bmp" zIndex="2" width="1944" height="600"/>
-			<IMAGEN nombre="plataformasLevel1.bmp" zIndex="1" width="1792" height="600"/>
-			<IMAGEN nombre="pisoLevel1.bmp" zIndex="3" width="1579" height="600"/>
+			<IMAGEN nombre="cieloLevel1.bmp" zIndex="2" width="2600" height="600"/>
+			<IMAGEN nombre="plataformasLevel1.bmp" zIndex="1" width="2600" height="600"/>
+			<IMAGEN nombre="pisoLevel1.bmp" zIndex="3" width="2600" height="600"/>
 		</CAPAS>
 	</FONDO>
 	<SPRITES cantidad="9">
-		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="200">
+		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="90">
 				<ESTADOS cantidad="16">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
