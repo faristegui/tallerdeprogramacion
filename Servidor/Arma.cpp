@@ -2,11 +2,12 @@
 
 
 
-Arma::Arma(int UnTiempoEntreDisparos, std::string UnCodigoArma, int UnaVelocidadBala)
+Arma::Arma(int UnTiempoEntreDisparos, std::string UnCodigoArma, int UnaVelocidadBala, std::string UnNombre)
 {
 	TiempoEntreDisparos = UnTiempoEntreDisparos;
 	CodigoArma = UnCodigoArma;
 	VelocidadBala = UnaVelocidadBala;
+	NombreArma = UnNombre;
 }
 
 std::string Arma::GetCodigoArma() {

@@ -134,11 +134,11 @@ void FisicaThread(void* arg) {
 
 				if (UnJugador->EstaDisparando()) {
 
-					if (UnJugador->GetArma()->PuedeDisparar(ticks_start)) {
+					if (UnJugador->GetArmaEnUso()->PuedeDisparar(ticks_start)) {
 
 						UnJuego->MutexearListaProyectiles();
 
-						Proyectil* UnProyectil = UnJugador->GetArma()->Disparar(UnJugador->GetNombre(), UnJugador->GetX(),
+						Proyectil* UnProyectil = UnJugador->GetArmaEnUso()->Disparar(UnJugador->GetNombre(), UnJugador->GetX(),
 																				UnJugador->GetY(),
 																				ticks_start, 
 																				UnJugador->GetDireccion());
@@ -492,6 +492,14 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 	if ((Tipo == "SPACE") || (Tipo == "RIGHT") || (Tipo == "DOWN") || (Tipo == "LEFT") || (Tipo == "UP")) {
 
 		Jugadores[IndiceJugador]->Mover(Tipo);
+	}
+
+	if (Tipo == "ARMA-S") {
+		Jugadores[IndiceJugador]->ArmaSiguiente();
+	}
+
+	if (Tipo == "ARMA-A") {
+		Jugadores[IndiceJugador]->ArmaAnterior();
 	}
 
 	if(Tipo == "SOLTO-RIGHT")

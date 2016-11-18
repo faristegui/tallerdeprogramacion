@@ -53,7 +53,10 @@ void Proyectil::DeterminarEstado() {
 		}
 	}
 	else {
-	
+
+		if (Direccion == "DERECHA") Estado = "HORIZONTAL-DER";
+		if (Direccion == "IZQUIERDA") Estado = "HORIZONTAL-IZQ";
+		if ((Direccion == "ARRIBA-DER") || (Direccion == "ARRIBA-IZQ")) Estado = "VERTICAL";
 	}
 }
 

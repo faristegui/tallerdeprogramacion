@@ -28,7 +28,6 @@ public:
 	int GetPosicionXInicioSalto();
 	int GetX();
 	int GetY();
-	Arma* GetArma();
 	void MoverEnX(int UnX);
 	bool EstaCaminando();
 	bool EstaSaltando();
@@ -41,6 +40,9 @@ public:
 	void SetEstaSaltandoVertical(bool UnEstaSaltandoVertical);
 	void SetDireccion(std::string UnaDireccion);
 	void SueltaTeclaDireccion();
+	void ArmaSiguiente();
+	void ArmaAnterior();
+	Arma* GetArmaEnUso();
 private:
 	bool Saltando;
 	bool SaltandoVertical;
@@ -58,6 +60,7 @@ private:
 	int puntaje;
 	int vida;
 	bool Conectado;
-	Arma *UnArma;
+	Arma* Armas[3];
+	int NumeroArma;
 };
 

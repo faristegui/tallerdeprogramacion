@@ -496,13 +496,13 @@ void Pantalla::IniciarJuego() {
 					Evento = "DISPARA";
 				}
 				//Eventos de selección de armas
-				if (Event.key.keysym.sym == SDLK_h) { //Arma H
+				if (Event.key.keysym.sym == SDLK_s) { // Arma siguiente
 
-					Evento = "ARMA-H";
+					Evento = "ARMA-S";
 				}
-				if (Event.key.keysym.sym == SDLK_r) { //Arma R
+				if (Event.key.keysym.sym == SDLK_a) { // Arma previa
 
-					Evento = "ARMA-R";
+					Evento = "ARMA-A";
 				}
 			}
 			if(Event.type == SDL_KEYUP)
@@ -521,6 +521,12 @@ void Pantalla::IniciarJuego() {
 				}
 				if (Event.key.keysym.sym == SDLK_SPACE) {
 					Evento = "SOLTO-SPACE";
+				}
+				if (Event.key.keysym.sym == SDLK_s) {
+					eventoAnterior = "";
+				}
+				if (Event.key.keysym.sym == SDLK_a) {
+					eventoAnterior = "";
 				}
 				if (Event.key.keysym.sym == SDLK_r) {
 

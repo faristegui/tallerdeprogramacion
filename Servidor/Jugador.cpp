@@ -1,6 +1,7 @@
 #include "Jugador.h"
 #include "ArmaS.h"
 #include "ArmaH.h"
+#include "ArmaR.h"
 #include <windows.h>
 
 Jugador::Jugador(std::string UnNombre, std::string UnColor)
@@ -17,9 +18,28 @@ Jugador::Jugador(std::string UnNombre, std::string UnColor)
 	Conectado = true;
 	Saltando = false;
 	SaltandoVertical = false;
-	UnArma = new ArmaH();
+
+	NumeroArma = 0;
+	Armas[0] = new ArmaS();
+	Armas[1] = new ArmaH();
+	Armas[2] = new ArmaR();
 }
 
+void Jugador::ArmaSiguiente() {
+	NumeroArma++;
+
+	if (NumeroArma > 2) {
+		NumeroArma = 0;
+	}
+}
+
+void Jugador::ArmaAnterior() {
+	NumeroArma--;
+
+	if (NumeroArma < 0) {
+		NumeroArma = 2;
+	}
+}
 std::string Jugador::GetDireccion() {
 
 	return Direccion;
@@ -35,8 +55,15 @@ int Jugador::GetVida()
 	return vida;
 }
 
+Arma* Jugador::GetArmaEnUso() {
+
+	return Armas[NumeroArma];
+}
+
 void Jugador::herirEnemigo()
 {
+	Arma* UnArma = GetArmaEnUso();
+
 	if(UnArma->GetCodigoArma() == "S")
 	{
 		puntaje+=35;
@@ -177,11 +204,6 @@ bool Jugador::EstaApuntandoArriba() {
 	return ((Direccion == "ARRIBA") || (Direccion == "ARRIBA-IZQ") || (Direccion == "ARRIBA-DER"));
 }
 
-Arma* Jugador::GetArma() 
-{
-
-	return UnArma;
-}
 void Jugador::SetEstaConectado(bool EstaConectado)
 {
 	this->Conectado = EstaConectado;
@@ -254,7 +276,7 @@ std::string Jugador::GetNombre() {
 
 std::string Jugador::GetIDSprite() {
 
-	return "Player" + Color + "-" + UnArma->GetCodigoArma();
+	return "Player" + Color + "-" + GetArmaEnUso()->GetCodigoArma();
 }
 
 std::string Jugador::GetEstado() {

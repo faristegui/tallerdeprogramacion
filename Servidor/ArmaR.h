@@ -3,7 +3,7 @@
 
 class ArmaR : public Arma {
 public:
-	ArmaR() : Arma(500, "R", 25) { }
+	ArmaR() : Arma(850, "R", 25, "RocketLauncher") { }
 
 	int ArmaR::DeterminarOffsetBalaX(std::string UnaDireccion) {
 
