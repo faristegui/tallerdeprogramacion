@@ -64,14 +64,19 @@ std::string ObtenerTextoPuntaje(int UnModo, int IndiceMiJugador) {
 
 	Jugador* MiJugador;
 	int CantJugadores = UnJuego.GetCantJugadores();
-	TextoPuntaje = "Puntaje";
+	//TextoPuntaje = "Puntaje";
 	int Puntaje = 0;
-	
+	MiJugador = UnJuego.GetJugador(IndiceMiJugador);
+	TextoPuntaje = MiJugador->GetNombre();
+	Puntaje = MiJugador->getPuntaje();
+	/* Lean, te comento esto porque quizas pueda servir, pero me parece que los
+	puntajes, a lo largo de cada nivel, se muestran por jugador independientemente del modo.
 	switch (UnModo) {
 
 		case 1:
 
 			MiJugador = UnJuego.GetJugador(IndiceMiJugador);
+			TextoPuntaje = MiJugador->GetNombre();
 			Puntaje = MiJugador->getPuntaje();
 			break;
 		case 2:
@@ -94,7 +99,7 @@ std::string ObtenerTextoPuntaje(int UnModo, int IndiceMiJugador) {
 			Puntaje = UnEquipo->obtenerPuntaje();
 			break;
 	}
-
+	*/
 	TextoPuntaje = TextoPuntaje + ": " + IntAString(Puntaje);	
 
 	return TextoPuntaje;
@@ -366,11 +371,15 @@ void MainListenThread(void* arg) {
 
 			GranMensaje.append("Vida: " + IntAString(MiJugador->GetVida()));
 			GranMensaje.append(";");
-			GranMensaje.append(ObtenerTextoPuntaje(UnJuego.obtenerModo(), IndiceMiJugador));
-			GranMensaje.append(";");
+			//GranMensaje.append(ObtenerTextoPuntaje(UnJuego.obtenerModo(), IndiceMiJugador));
+			//GranMensaje.append(";");
 			GranMensaje.append(MiJugador->GetArmaEnUso()->GetNombre() + ": " + IntAString(MiJugador->GetArmaEnUso()->GetBalas()));
 			GranMensaje.append(";");
-
+			for(int i = 0;i< UnJuego.GetCantJugadores();i++)
+			{
+				GranMensaje.append(ObtenerTextoPuntaje(UnJuego.obtenerModo(), i));
+				GranMensaje.append(";");
+			}
 			UnServer.EnviarMensajeTamanoVariable(GranMensaje, ClientSocket);
 			if (CantidadMensajes > 0) {
 				Buzon->iniciarCursor();
