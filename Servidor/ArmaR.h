@@ -3,7 +3,7 @@
 
 class ArmaR : public Arma {
 public:
-	ArmaR() : Arma(850, "R", 25, "RocketLauncher", 5) { }
+	ArmaR() : Arma(750, "R", 25, "RocketLauncher", 30) { }
 
 	int ArmaR::DeterminarOffsetBalaX(std::string UnaDireccion) {
 
@@ -56,6 +56,6 @@ public:
 		int OffsetY = DeterminarOffsetBalaY(Direccion);
 
 		return new Proyectil(NombreJugador, "Bala-" + CodigoArma,
-			PosX + OffsetX, PosY + OffsetY, VelocidadBala, Direccion, 64, 64, 300, true);
+			PosX + OffsetX, PosY + OffsetY, VelocidadBala, Direccion, 64, 64, 80, true);
 	}
 };
