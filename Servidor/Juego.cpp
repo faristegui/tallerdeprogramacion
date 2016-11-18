@@ -92,10 +92,10 @@ void FisicaThread(void* arg) {
 
 					float Diferencia;
 
-					Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoY, 0, 60, 300);
+					Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoY, 0, 120, 400);
 					UnJugador->SetY(PosicionYInicioSalto - Diferencia);
 
-					if (TiempoActual - TiempoInicioSaltoY >= 500) {
+					if (TiempoActual - TiempoInicioSaltoY >= 750) { // TODO: Corregir esto
 
 						UnJugador->SetEstaSaltando(false);
 						UnJugador->SetY(PosicionYInicioSalto);
@@ -104,7 +104,7 @@ void FisicaThread(void* arg) {
 					if (!UnJugador->EstaSaltandoVertical()) {
 						if (UnJugador->GetEstado() == "SALTANDO-DER") {
 
-							Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoX, 0, 120, 600);
+							Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoX, 0, 120, 800);
 							UnJugador->SetX(PosicionXInicioSalto + Diferencia);
 
 							if (UnJugador->GetX() >= BordeEnXMaxCamara) {
@@ -233,6 +233,7 @@ void FisicaThread(void* arg) {
 				UnRectangulo.Y = UnEnemigo->getY();
 				UnRectangulo.Width = UnEnemigo->GetWidth();
 				UnRectangulo.Height = UnEnemigo->GetHeight();
+				UnRectangulo.RefEnemigo = UnEnemigo;
 
 				RectangulosEnemigos->agregar(UnRectangulo);
 			}
@@ -277,7 +278,10 @@ void FisicaThread(void* arg) {
 						UnJuego->MutexearListaEnemigos();
 						//aca no habria que eliminar al enemigo, solo cuando se queda sin vida
 						//UnJuego->eliminarDeListaPrincipal(UnRectangulo.IndexEnLista);
-						UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);
+						UnRectangulo.RefEnemigo->SacarVida(UnProyectil->GetDanio());
+						if (UnRectangulo.RefEnemigo->GetVida() <= 0) {
+							UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);
+						}
 						UnJuego->DesmutexearListaEnemigos();
 
 						Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio

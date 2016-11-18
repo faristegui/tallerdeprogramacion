@@ -14,6 +14,17 @@ Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel,
 	Width = UnWidth;
 	Height = UnHeight;
 }
+
+void Enemigo::SacarVida(int Cantidad) {
+
+	vida -= Cantidad;
+}
+
+int Enemigo::GetVida() {
+	
+	return vida;
+}
+
 int Enemigo::getX()
 {
 	return x;

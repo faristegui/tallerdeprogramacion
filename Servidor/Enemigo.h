@@ -16,6 +16,8 @@ public:
 	int GetWidth();
 	int GetHeight();
 	void MoverEnX(int CantX);
+	void SacarVida(int Cantidad);
+	int GetVida();
 private:
 	std::string IDSprite;
 	std::string estado;

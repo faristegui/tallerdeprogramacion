@@ -12,6 +12,7 @@ struct RectanguloEnemigo {
 	int Y;
 	int Width;
 	int Height;
+	Enemigo* RefEnemigo;
 };
 
 struct Posicion {
