@@ -3,7 +3,7 @@
 
 class ArmaS : public Arma {
 public:
-	ArmaS() : Arma(400, "S", 25, "Shotgun", 30) { }
+	ArmaS() : Arma(400, "S", 25, "Shotgun", 30, true) { }
 
 	int ArmaS::DeterminarOffsetBalaX(std::string UnaDireccion) {
 

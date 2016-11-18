@@ -121,7 +121,7 @@ void Jugador::Mover(std::string Tecla) {
 			}
 		}
 
-		if (this->EstaApuntandoArriba()) {
+		if ((this->EstaApuntandoArriba()) && (this->GetArmaEnUso()->PuedeApuntarEnDiagonal())) {
 			Direccion = "ARRIBA-DER-DIAG";
 			this->Estado = "DIAGONAL-DER";
 		}
@@ -147,7 +147,7 @@ void Jugador::Mover(std::string Tecla) {
 			}
 		}
 
-		if (this->EstaApuntandoArriba()) {
+		if ((this->EstaApuntandoArriba()) && (this->GetArmaEnUso()->PuedeApuntarEnDiagonal())) {
 			Direccion = "ARRIBA-IZQ-DIAG";
 			this->Estado = "DIAGONAL-IZQ";
 		} else {
@@ -163,7 +163,7 @@ void Jugador::Mover(std::string Tecla) {
 			SaltandoVertical = true;
 		}
 
-		if (this->EstaCaminando()) {
+		if ((this->EstaCaminando()) && (this->GetArmaEnUso()->PuedeApuntarEnDiagonal())) {
 			EstabaCaminando = true;
 			this->SetEstadoAnterior(this->GetEstado());
 			if (this->EstaApuntandoALaDerecha()) {

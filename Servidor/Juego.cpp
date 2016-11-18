@@ -104,7 +104,7 @@ void FisicaThread(void* arg) {
 					if (!UnJugador->EstaSaltandoVertical()) {
 						if (UnJugador->GetEstado() == "SALTANDO-DER") {
 
-							Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoX, 0, 120, 800);
+							Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoX, 0, 120, 900);
 							UnJugador->SetX(PosicionXInicioSalto + Diferencia);
 
 							if (UnJugador->GetX() >= BordeEnXMaxCamara) {
@@ -119,7 +119,7 @@ void FisicaThread(void* arg) {
 
 							if (UnJugador->GetEstado() == "SALTANDO-IZQ") {
 
-								Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoX, 0, 120, 600);
+								Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoX, 0, 120, 900);
 								UnJugador->SetX(PosicionXInicioSalto - Diferencia);
 
 								if (UnJugador->GetX() <= BordeEnXMinCamara) {

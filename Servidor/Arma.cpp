@@ -2,13 +2,20 @@
 
 
 
-Arma::Arma(int UnTiempoEntreDisparos, std::string UnCodigoArma, int UnaVelocidadBala, std::string UnNombre, int CantBalasInicial)
+Arma::Arma(int UnTiempoEntreDisparos, std::string UnCodigoArma, int UnaVelocidadBala, 
+			std::string UnNombre, int CantBalasInicial, bool UnApuntaEnDiagonal)
 {
 	TiempoEntreDisparos = UnTiempoEntreDisparos;
 	CodigoArma = UnCodigoArma;
 	VelocidadBala = UnaVelocidadBala;
 	NombreArma = UnNombre;
 	Balas = CantBalasInicial;
+	ApuntaEnDiagonal = UnApuntaEnDiagonal;
+}
+
+bool Arma::PuedeApuntarEnDiagonal() {
+
+	return ApuntaEnDiagonal;
 }
 
 std::string Arma::GetCodigoArma() {

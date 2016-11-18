@@ -8,7 +8,7 @@
 		</CAPAS>
 	</FONDO>
 	<SPRITES cantidad="13">
-		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="150">
+		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="100">
 				<ESTADOS cantidad="16">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
@@ -28,7 +28,7 @@
 					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
 				</ESTADOS>
 		</SPRITE>
-		<SPRITE id="PlayerRed-H" frameWidth="44" frameHeight="61" velocidad="150">
+		<SPRITE id="PlayerRed-H" frameWidth="44" frameHeight="61" velocidad="100">
 				<ESTADOS cantidad="16">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
@@ -48,7 +48,7 @@
 					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
 				</ESTADOS>
 		</SPRITE>
-		<SPRITE id="PlayerRed-R" frameWidth="44" frameHeight="61" velocidad="150">
+		<SPRITE id="PlayerRed-R" frameWidth="44" frameHeight="61" velocidad="100">
 				<ESTADOS cantidad="16">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
