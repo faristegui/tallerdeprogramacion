@@ -532,8 +532,10 @@ void MainListenThread(void* arg) {
 			}
 			else std::cout << "error al cargar el archivo de configuracion de escenariodef.xml " << std::endl;
 		}
-		if (mensaje=="ENEM")
+		if (mensaje=="ENEM" && !UnJuego.enemigosEstanCargados())
 		{
+
+			UnJuego.cargarEnemigos();
 			//solo se cargan para el primer nivel
 			tinyxml2::XMLDocument docu;
 

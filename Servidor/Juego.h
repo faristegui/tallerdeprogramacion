@@ -57,11 +57,13 @@ public:
 	void DesmutexearListaProyectiles();
 	void MutexearListaEnemigos();
 	void DesmutexearListaEnemigos();
-	bool AvanzaCamara;
+	bool enemigosEstanCargados();
+	void cargarEnemigos();
 private:
 	int CantJugadores;
 	int modoJuego;
 	bool empezo;
+	bool enemigosCargados;
 	int GetIndexUsuario(std::string Usuario);
 	Lista<Proyectil *>* Proyectiles;
 	Lista<Enemigo *>* enemigosPantalla;

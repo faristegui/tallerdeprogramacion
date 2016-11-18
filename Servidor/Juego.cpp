@@ -349,6 +349,7 @@ Juego::Juego()
 	Proyectiles = new Lista<Proyectil *>();
 	enemigosPantalla = new Lista<Enemigo*>();
 	todosLosEnemigos = new Lista<Enemigo*>();
+	enemigosCargados = false;
 	_beginthread(FisicaThread, 0, this);
 }
 
@@ -365,6 +366,14 @@ int Juego::obtenerModo()
 Lista<Proyectil *>* Juego::GetProyectiles() {
 	
 	return Proyectiles;
+}
+void Juego::cargarEnemigos()
+{
+	enemigosCargados = true;
+}
+bool Juego::enemigosEstanCargados()
+{
+	return enemigosCargados;
 }
 
 Lista<Enemigo *>* Juego::GetTodosLosEnemigos() {
