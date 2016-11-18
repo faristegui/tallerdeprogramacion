@@ -643,6 +643,8 @@ void Pantalla::IniciarJuego() {
 			Indice++;
 			EscribirMensaje(mensajes[Indice], 0, 30, 20, Renderer);
 			Indice++;
+			EscribirMensaje(mensajes[Indice], 0, 55, 20, Renderer);
+			Indice++;
 
 			if (CantidadMensajes > 0) {
 				for(int i = 0; i < CantidadMensajes;i++)

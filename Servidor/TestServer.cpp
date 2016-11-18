@@ -368,6 +368,8 @@ void MainListenThread(void* arg) {
 			GranMensaje.append(";");
 			GranMensaje.append(ObtenerTextoPuntaje(UnJuego.obtenerModo(), IndiceMiJugador));
 			GranMensaje.append(";");
+			GranMensaje.append(MiJugador->GetArmaEnUso()->GetNombre() + ": " + IntAString(MiJugador->GetArmaEnUso()->GetBalas()));
+			GranMensaje.append(";");
 
 			UnServer.EnviarMensajeTamanoVariable(GranMensaje, ClientSocket);
 			if (CantidadMensajes > 0) {
