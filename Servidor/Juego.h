@@ -60,7 +60,9 @@ public:
 	void DesmutexearListaEnemigos();
 	bool enemigosEstanCargados();
 	void cargarEnemigos();
+	Enemigo* GetEnemigoFinal();
 private:
+	bool YaSeAgregoEnemigoFinal;
 	int CantJugadores;
 	int modoJuego;
 	bool empezo;
@@ -72,6 +74,8 @@ private:
 	Equipo* equipos[4];
 	Jugador *Jugadores[5];
 	Camara *Camaras[6];
+	Enemigo* EnemigoFinal;
 	int CantCamaras;
+	int NumeroNivel;
 };
 

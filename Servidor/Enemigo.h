@@ -6,6 +6,8 @@ public:
 	Enemigo(std::string unIdSprite, int posX, int posY, int vel, int unaVida, bool esFinal, int UnWidth, int UnHeight);
 	int getX();
 	int getY();
+	void SetX(int UnX);
+	void SetY(int UnY);
 	void mover();
 	void disparar();
 	std::string getEstado();

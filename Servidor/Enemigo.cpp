@@ -30,6 +30,16 @@ int Enemigo::getX()
 	return x;
 }
 
+void Enemigo::SetX(int UnX)
+{
+	x = UnX;
+}
+
+void Enemigo::SetY(int UnY)
+{
+	x = UnY;
+}
+
 int Enemigo::GetWidth() {
 
 	return Width;

@@ -158,7 +158,7 @@
 					<ESTADO id="VERTICAL" cantFrames="2"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="EnemigoFinal1" frameWidth="179" frameHeight="146" velocidad="2">
+		<SPRITE id="EnemigoFinal1" frameWidth="179" frameHeight="146" velocidad="100">
 				<ESTADOS cantidad="3">
 					<ESTADO id="CAMINA-IZQ" cantFrames="5"/>
 					<ESTADO id="DISPARA" cantFrames="4"/>
@@ -168,12 +168,13 @@
 	</SPRITES>
 	<NIVELES>
 		<NIVEL id="Level_1">
-			<ENEMIGOS cantidad="5">
+			<ENEMIGOS cantidad="6">
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="600" posY="390" vida="100" velocidadCaminata="5"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="450" posY="390" vida="100" velocidadCaminata="7"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="450" posY="390" vida="100" velocidadCaminata="7"/>
 				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="900" posY="390" vida="100" velocidadCaminata="12"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="530" posY="390" vida="100" velocidadCaminata="2"/>
+				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="530" posY="390" vida="100" velocidadCaminata="2"/>
 				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="950" posY="390" vida="100" velocidadCaminata="3"/>
+				<ENEMIGO tipo="EnemigoFinal1" direccion="IZQ" posX="2580" posY="150" vida="1000" velocidadCaminata="3"/>
 			</ENEMIGOS>
 		</NIVEL>
 		<NIVEL id="Level_2">

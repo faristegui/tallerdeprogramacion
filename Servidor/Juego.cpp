@@ -164,7 +164,34 @@ void FisicaThread(void* arg) {
 
 		int VelocidadCamara = 0;
 		if (UnJuego->GetCantCamaras() > 0) {
-			VelocidadCamara = UnJuego->GetCamara(UnJuego->GetCantCamaras() - 1)->Velocidad;
+
+			// El ultimo fondo determina el ancho total del juego (el fondo de los obstaculos)
+
+			Camara* UnaCamara = UnJuego->GetCamara(UnJuego->GetCantCamaras() - 1);
+			VelocidadCamara = UnaCamara->Velocidad;
+
+			if (UnaCamara->X >= UnaCamara->AnchoImagen) {
+
+				// Aca llega al fin del nivel -> no avanza mas!
+				
+				Enemigo* EnemigoFinal = UnJuego->GetEnemigoFinal();
+				if (EnemigoFinal != NULL) {
+					UnJuego->MutexearListaEnemigos();
+					Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
+
+
+					// if direccion = izq
+					EnemigoFinal->SetX(850);	// Si camina para la izquierda -> lo hago aparecer desde el borde derecho
+					// else if direccion = der
+					// Si camina para la der -> lo hago aparecer desde el borde izq
+					// UnEnemigo->SetX(-50)
+
+					enemigosVivos->agregar(EnemigoFinal);
+					UnJuego->DesmutexearListaEnemigos();
+				}
+
+				AvanzaCamara = false;
+			}
 		}
 
 		Lista<Enemigo *>* todosLosEnemigos = UnJuego->GetTodosLosEnemigos();
@@ -176,12 +203,25 @@ void FisicaThread(void* arg) {
 			int indiceAEliminar = 1;
 			while(todosLosEnemigos->avanzarCursor())
 			{
-				int indice = UnJuego->GetCamara(0)->X;
+				int indice = UnJuego->GetCamara(UnJuego->GetCantCamaras() - 1)->X;
 				if(todosLosEnemigos->obtenerCursor()->getX() <= (800+indice))
 				{
 					UnJuego->MutexearListaEnemigos();
 					Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
-					enemigosVivos->agregar(todosLosEnemigos->obtenerCursor());
+
+					Enemigo* UnEnemigo = todosLosEnemigos->obtenerCursor();
+					UnEnemigo->getEstado();
+
+					if (UnEnemigo->getX() > 850) {
+
+						// if direccion = izq
+						UnEnemigo->SetX(850);	// Si camina para la izquierda -> lo hago aparecer desde el borde derecho
+						// else if direccion = der
+						// Si camina para la der -> lo hago aparecer desde el borde izq
+						// UnEnemigo->SetX(-50)
+					}
+
+					enemigosVivos->agregar(UnEnemigo);
 					UnJuego->DesmutexearListaEnemigos();
 
 					posiciones->agregar(indiceAEliminar);
@@ -350,6 +390,8 @@ Juego::Juego()
 	MutexListaEnemigos = CreateMutex(NULL, FALSE, NULL);
 	CantJugadores = 0;
 	CantCamaras = 0;
+	NumeroNivel = 1;
+	YaSeAgregoEnemigoFinal = false;
 	Proyectiles = new Lista<Proyectil *>();
 	enemigosPantalla = new Lista<Enemigo*>();
 	todosLosEnemigos = new Lista<Enemigo*>();
@@ -422,10 +464,29 @@ void Juego::AgregarCamara(int UnAncho) {
 	CantCamaras++;
 }
 
+Enemigo* Juego::GetEnemigoFinal() {
+	
+	if (YaSeAgregoEnemigoFinal) {
+
+		return NULL;
+	}
+	else {
+
+		YaSeAgregoEnemigoFinal = true;
+		return EnemigoFinal;
+	}
+	
+}
+
 void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida, bool esFinal,int width, int height)
 {
 	Enemigo* unEnemigo = new Enemigo(UnIDSprite, posX, posY, velocidad, vida, esFinal, width, height);
-	todosLosEnemigos->agregar(unEnemigo);
+	if (!esFinal) {
+		todosLosEnemigos->agregar(unEnemigo);
+	}
+	else {
+		EnemigoFinal = new Enemigo(UnIDSprite, posX, posY, velocidad, vida, esFinal, width, height);
+	}
 	//MutexearListaEnemigos();
 	//Enemigos->agregar(unEnemigo);
 	//DesmutexearListaEnemigos();

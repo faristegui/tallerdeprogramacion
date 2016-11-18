@@ -567,6 +567,10 @@ void MainListenThread(void* arg) {
 				const char* cantidadEnemigos = elementoEnemigos->Attribute("cantidad");
 				//UnServer.EnviarMensajeTamanoVariable(cantidadEnemigos,ClientSocket);
 				int indice = -1;
+				
+				int nrEnemigo = 1;
+				int cantTotalEnemigos = stoi(cantidadEnemigos);
+				
 				for (tinyxml2::XMLElement* elementoEnemigo = elementoEnemigos->FirstChildElement("ENEMIGO"); elementoEnemigo != NULL; elementoEnemigo= elementoEnemigo->NextSiblingElement("ENEMIGO"))
 				{
 					const char* tipo = elementoEnemigo->Attribute("tipo");
@@ -597,7 +601,20 @@ void MainListenThread(void* arg) {
 					{
 						indice = 3;
 					}
-					UnJuego.AgregarEnemigo(tipo, stoi(posX), stoi(posY), stoi(velocidadCaminata), stoi(vida), false, sprites[indice]->width, sprites[indice]->height);
+
+					// El ultimo enemigo del nivel es considerado como el enemigo final
+
+					bool EsEnemigoFinal = false;
+
+					if (nrEnemigo == cantTotalEnemigos) {
+
+						EsEnemigoFinal = true;
+					}
+
+					UnJuego.AgregarEnemigo(tipo, stoi(posX), stoi(posY), stoi(velocidadCaminata),
+						stoi(vida), EsEnemigoFinal, sprites[indice]->width, sprites[indice]->height);
+
+					nrEnemigo++;
 				}
 			}
 			
