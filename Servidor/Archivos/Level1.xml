@@ -7,7 +7,7 @@
 			<IMAGEN nombre="pisoLevel1.bmp" zIndex="3" width="2600" height="600"/>
 		</CAPAS>
 	</FONDO>
-	<SPRITES cantidad="9">
+	<SPRITES cantidad="10">
 		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="90">
 				<ESTADOS cantidad="16">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
@@ -89,6 +89,13 @@
 				<ESTADO id="MUERTO" cantFrames="10"/>
 			</ESTADOS>
 		</SPRITE>
+		<SPRITE id="RobotEnemigo" frameWidth="76" frameHeight="66" velocidad="100">
+			<ESTADOS cantidad="3">
+				<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
+				<ESTADO id="DISPARA-IZQ" cantFrames="2"/>
+				<ESTADO id="MUERTO" cantFrames="1"/>
+			</ESTADOS>
+		</SPRITE>
 		<SPRITE id="TanqueEnemigo" frameWidth="106" frameHeight="62" velocidad="200">
 				<ESTADOS cantidad="2">
 					<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
@@ -116,8 +123,8 @@
 			<ENEMIGOS cantidad="5">
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="600" posY="390" vida="100" velocidadCaminata="5"/>
 				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="450" posY="390" vida="100" velocidadCaminata="7"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="900" posY="390" vida="100" velocidadCaminata="12"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="530" posY="390" vida="100" velocidadCaminata="2"/>
+				<ENEMIGO tipo="RobotEnemigo" direccion="IZQ" posX="900" posY="370" vida="300" velocidadCaminata="5"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="1450" posY="390" vida="100" velocidadCaminata="7"/>
 				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="950" posY="390" vida="100" velocidadCaminata="3"/>
 			</ENEMIGOS>
 		</NIVEL>

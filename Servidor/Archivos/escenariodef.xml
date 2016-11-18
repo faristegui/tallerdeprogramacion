@@ -7,7 +7,7 @@
 			<IMAGEN nombre="pisoLevel1.bmp" zIndex="3" width="2600" height="600"/>
 		</CAPAS>
 	</FONDO>
-	<SPRITES cantidad="13">
+	<SPRITES cantidad="14">
 		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="100">
 				<ESTADOS cantidad="16">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
@@ -115,9 +115,9 @@
 					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
 				</ESTADOS>
 		</SPRITE>
-		<SPRITE id="PulpoEnemigo" frameWidth="35" frameHeight="30" velocidad="100">
+		<SPRITE id="OvniEnemigo" frameWidth="50" frameHeight="45" velocidad="150">
 			<ESTADOS cantidad="1">
-				<ESTADO id="CAMINA-IZQ" cantFrames="16"/>
+				<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
 			</ESTADOS>
 		</SPRITE>
 		<SPRITE id="HumanoEnemigo" frameWidth="33" frameHeight="49" velocidad="100">
@@ -159,11 +159,16 @@
 					<ESTADO id="VERTICAL" cantFrames="2"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="EnemigoFinal1" frameWidth="179" frameHeight="146" velocidad="100">
-				<ESTADOS cantidad="3">
-					<ESTADO id="CAMINA-IZQ" cantFrames="5"/>
-					<ESTADO id="DISPARA" cantFrames="4"/>
-					<ESTADO id="MUERTO" cantFrames="1"/>
+		<SPRITE id="RobotEnemigo" frameWidth="76" frameHeight="66" velocidad="100">
+			<ESTADOS cantidad="3">
+				<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
+				<ESTADO id="DISPARA-IZQ" cantFrames="2"/>
+				<ESTADO id="MUERTO" cantFrames="1"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="EnemigoFinal1" frameWidth="158" frameHeight="122" velocidad="100">
+				<ESTADOS cantidad="1">
+					<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
 			</ESTADOS>
 		</SPRITE>
 	</SPRITES>
@@ -172,55 +177,9 @@
 			<ENEMIGOS cantidad="6">
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="600" posY="390" vida="100" velocidadCaminata="5"/>
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="450" posY="390" vida="100" velocidadCaminata="7"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="900" posY="390" vida="100" velocidadCaminata="12"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="530" posY="390" vida="100" velocidadCaminata="2"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="950" posY="390" vida="100" velocidadCaminata="3"/>
-				<ENEMIGO tipo="EnemigoFinal1" direccion="IZQ" posX="2580" posY="150" vida="1000" velocidadCaminata="3"/>
-			</ENEMIGOS>
-		</NIVEL>
-		<NIVEL id="Level_2">
-			<ENEMIGOS cantidad="16">
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="1200" posY="30" vida="100"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="15" vida="100"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="1200" posY="70" vida="100"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="110" vida="100"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="1200" posY="300" vida="100"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posX="1200" posY="530" vida="100"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="390" vida="100"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="700" vida="100"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="470" vida="100"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posX="1200" posY="420" vida="100"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="300" vida="100"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posX="1200" posY="530" vida="100"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="390" vida="100"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="700" vida="100"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="1200" posY="470" vida="100"/>
-				<ENEMIGO tipo="Final" direccion="IZQ" posX="1200" posY="470" vida="700"/>
-			</ENEMIGOS>
-		</NIVEL>
-		<NIVEL id="Level_3">
-			<ENEMIGOS cantidad="21">
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="1200" posY="30" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="1200" posY="15" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="1200" posY="70" vida="700"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="DER" posX="1200" posY="110" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="300" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="530" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="390" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="700" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="470" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="420" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="30" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="1200" posY="15" vida="700"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="1200" posY="70" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="110" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1200" posY="300" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="530" vida="700"/>
-				<ENEMIGO tipo="PulpoEnemigo" direccion="IZQ" posX="1200" posY="390" vida="700"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="1200" posY="700" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="IZQ" posX="1200" posY="470" vida="700"/>
-				<ENEMIGO tipo="TanqueEnemigo" direccion="DER" posX="1200" posY="420" vida="700"/>
-				<ENEMIGO tipo="Final" direccion="DER" posX="1200" posY="420" vida="1000"/>
+				<ENEMIGO tipo="OvniEnemigo" direccion="IZQ" posX="900" posY="150" vida="100" velocidadCaminata="8"/>
+				<ENEMIGO tipo="RobotEnemigo" direccion="IZQ" posX="900" posY="360" vida="300" velocidadCaminata="5"/>
+				<ENEMIGO tipo="EnemigoFinal1" direccion="IZQ" posX="2580" posY="180" vida="1000" velocidadCaminata="3"/>
 			</ENEMIGOS>
 		</NIVEL>
 	</NIVELES>
