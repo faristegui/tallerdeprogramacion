@@ -1,4 +1,6 @@
 #include "Jugador.h"
+#include "ArmaS.h"
+#include "ArmaH.h"
 #include <windows.h>
 
 Jugador::Jugador(std::string UnNombre, std::string UnColor)
@@ -15,7 +17,7 @@ Jugador::Jugador(std::string UnNombre, std::string UnColor)
 	Conectado = true;
 	Saltando = false;
 	SaltandoVertical = false;
-	UnArma = new Arma(400, "S", 25);
+	UnArma = new ArmaH();
 }
 
 std::string Jugador::GetDireccion() {

@@ -9,13 +9,15 @@ public:
 	bool PuedeDisparar(float tickActual);
 	std::string GetCodigoArma();
 	~Arma();
+protected:
+	int VelocidadBala;
+	std::string CodigoArma;
 private:
 	float tick_ultimoDisparo;
 	int TiempoEntreDisparos;
 	int Balas;
-	int VelocidadBala;
-	int DeterminarOffsetBalaX(std::string UnaDireccion);
-	int DeterminarOffsetBalaY(std::string UnaDireccion);
-	std::string CodigoArma;
+	virtual int DeterminarOffsetBalaX(std::string UnaDireccion) = 0;
+	virtual int DeterminarOffsetBalaY(std::string UnaDireccion) = 0;
+	virtual Proyectil* CrearProyectil(std::string NombreJugador, int PosX, int PosY, std::string Direccion) = 0;
 };
 

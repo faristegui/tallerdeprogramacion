@@ -1,7 +1,7 @@
 #include "Proyectil.h"
 #include <string>
 Proyectil::Proyectil(std::string idJugador,std::string UnIdSprite, int posX, int posY, int vel, 
-					std::string UnaDireccion, int UnWidth, int UnHeight)
+					std::string UnaDireccion, int UnWidth, int UnHeight, bool UnTieneDireccion)
 {
 	IDSprite = UnIdSprite;
 	IDJugador = idJugador.substr(0,idJugador.find('-'));
@@ -9,6 +9,7 @@ Proyectil::Proyectil(std::string idJugador,std::string UnIdSprite, int posX, int
 	y = posY;
 	velocidad = vel;
 	Direccion = UnaDireccion;
+	TieneDireccion = UnTieneDireccion;
 	DeterminarEstado();
 	Width = UnWidth;
 	Height = UnHeight;
@@ -28,25 +29,31 @@ void Proyectil::DeterminarEstado() {
 
 	Estado = "HORIZONTAL";
 
-	if ((Direccion == "DERECHA") || (Direccion == "IZQUIERDA")) {
+	if (!TieneDireccion) {
 
-		Estado = "HORIZONTAL";
+		if ((Direccion == "DERECHA") || (Direccion == "IZQUIERDA")) {
+
+			Estado = "HORIZONTAL";
+		}
+
+		if ((Direccion == "ARRIBA-DER") || (Direccion == "ARRIBA-IZQ") ||
+			(Direccion == "ABAJO-DER") || (Direccion == "ABAJO-IZQ")) {
+
+			Estado = "VERTICAL";
+		}
+
+		if ((Direccion == "ARRIBA-DER-DIAG") || (Direccion == "ABAJO-IZQ-DIAG")) {
+
+			Estado = "DIAGONAL-DER";
+		}
+
+		if ((Direccion == "ARRIBA-IZQ-DIAG") || (Direccion == "ABAJO-DER-DIAG")) {
+
+			Estado = "DIAGONAL-IZQ";
+		}
 	}
-
-	if ((Direccion == "ARRIBA-DER") || (Direccion == "ARRIBA-IZQ") ||
-		(Direccion == "ABAJO-DER") || (Direccion == "ABAJO-IZQ")) {
-
-		Estado = "VERTICAL";
-	}
-
-	if ((Direccion == "ARRIBA-DER-DIAG") || (Direccion == "ABAJO-IZQ-DIAG")) {
-
-		Estado = "DIAGONAL-DER";
-	}
-
-	if ((Direccion == "ARRIBA-IZQ-DIAG") || (Direccion == "ABAJO-DER-DIAG")) {
-
-		Estado = "DIAGONAL-IZQ";
+	else {
+	
 	}
 }
 

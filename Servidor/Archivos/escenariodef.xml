@@ -7,8 +7,28 @@
 			<IMAGEN nombre="pisoLevel1.bmp" zIndex="3" width="2600" height="600"/>
 		</CAPAS>
 	</FONDO>
-	<SPRITES cantidad="9">
-		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="90">
+	<SPRITES cantidad="11">
+		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="150">
+				<ESTADOS cantidad="16">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerRed-H" frameWidth="44" frameHeight="61" velocidad="150">
 				<ESTADOS cantidad="16">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
 					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
@@ -96,6 +116,14 @@
 			</ESTADOS>
 		</SPRITE>
 		<SPRITE id="Bala-S" frameWidth="10" frameHeight="10" velocidad="100">
+				<ESTADOS cantidad="4">
+					<ESTADO id="HORIZONTAL" cantFrames="1"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="1"/>
+					<ESTADO id="VERTICAL" cantFrames="1"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="1"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="Bala-H" frameWidth="10" frameHeight="10" velocidad="100">
 				<ESTADOS cantidad="4">
 					<ESTADO id="HORIZONTAL" cantFrames="1"/>
 					<ESTADO id="DIAGONAL-DER" cantFrames="1"/>
