@@ -143,12 +143,13 @@
 					<ESTADO id="DIAGONAL-IZQ" cantFrames="1"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="Bala-H" frameWidth="10" frameHeight="10" velocidad="100">
-				<ESTADOS cantidad="4">
-					<ESTADO id="HORIZONTAL" cantFrames="1"/>
+		<SPRITE id="Bala-H" frameWidth="45" frameHeight="45" velocidad="100">
+				<ESTADOS cantidad="5">
+					<ESTADO id="HORIZONTAL-DER" cantFrames="1"/>
+					<ESTADO id="HORIZONTAL-IZQ" cantFrames="1"/>
 					<ESTADO id="DIAGONAL-DER" cantFrames="1"/>
-					<ESTADO id="VERTICAL" cantFrames="1"/>
 					<ESTADO id="DIAGONAL-IZQ" cantFrames="1"/>
+					<ESTADO id="VERTICAL" cantFrames="1"/>
 			</ESTADOS>
 		</SPRITE>
 		<SPRITE id="Bala-R" frameWidth="64" frameHeight="64" velocidad="100">
