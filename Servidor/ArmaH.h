@@ -14,15 +14,15 @@ public:
 		}
 
 		if (UnaDireccion == "IZQUIERDA") {
-			Offset = 0;
+			Offset = -44;
 		}
 
 		if (UnaDireccion == "ARRIBA-DER") {
-			Offset = 12;
+			Offset = -18;
 		}
 
 		if (UnaDireccion == "ARRIBA-IZQ") {
-			Offset = 40;
+			Offset = 20;
 		}
 
 		if (UnaDireccion == "ARRIBA-DER-DIAG") {
@@ -40,19 +40,19 @@ public:
 		int Offset = 0;
 
 		if (UnaDireccion == "DERECHA") {
-			Offset = 65;
+			Offset = 35;
 		}
 
 		if (UnaDireccion == "IZQUIERDA") {
-			Offset = 65;
+			Offset = 35;
 		}
 
 		if (UnaDireccion == "ARRIBA-DER") {
-			Offset = -8;
+			Offset = -60;
 		}
 
 		if (UnaDireccion == "ARRIBA-IZQ") {
-			Offset = -8;
+			Offset = -60;
 		}
 
 		if (UnaDireccion == "ARRIBA-DER-DIAG") {
@@ -72,6 +72,6 @@ public:
 		int OffsetY = DeterminarOffsetBalaY(Direccion);
 
 		return new Proyectil(NombreJugador, "Bala-" + CodigoArma,
-			PosX + OffsetX, PosY + OffsetY, VelocidadBala, Direccion, 10, 10, 20, false);
+			PosX + OffsetX, PosY + OffsetY, VelocidadBala, Direccion, 10, 10, 20, true);
 	}
 };

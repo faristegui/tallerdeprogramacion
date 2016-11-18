@@ -10,41 +10,43 @@ public:
 		int Offset = 0;
 
 		if (UnaDireccion == "DERECHA") {
-			Offset = 44;
+			Offset = 35;
 		}
 
 		if (UnaDireccion == "IZQUIERDA") {
-			Offset = 0;
+			Offset = -64;
 		}
 
 		if (UnaDireccion == "ARRIBA-DER") {
-			Offset = 12;
+			Offset = -40;
 		}
 
 		if (UnaDireccion == "ARRIBA-IZQ") {
-			Offset = 40;
+			Offset = -5;
 		}
 
+
 		return Offset;
+
 	}
 
 	int ArmaR::DeterminarOffsetBalaY(std::string UnaDireccion) {
 		int Offset = 0;
 
 		if (UnaDireccion == "DERECHA") {
-			Offset = 65;
+			Offset = 25;
 		}
 
 		if (UnaDireccion == "IZQUIERDA") {
-			Offset = 65;
+			Offset = 25;
 		}
 
 		if (UnaDireccion == "ARRIBA-DER") {
-			Offset = -8;
+			Offset = -65;
 		}
 
 		if (UnaDireccion == "ARRIBA-IZQ") {
-			Offset = -8;
+			Offset = -65;
 		}
 
 		return Offset;
