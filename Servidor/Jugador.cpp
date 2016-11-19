@@ -77,6 +77,7 @@ void Jugador::herirEnemigo()
 		puntaje+=40;
 	}
 }
+
 void Jugador::Mover(std::string Tecla) {
 
 	if (Tecla == "SPACE") {
