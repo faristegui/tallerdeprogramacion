@@ -26,11 +26,11 @@ public:
 		}
 
 		if (UnaDireccion == "ARRIBA-DER-DIAG") {
-			Offset = 44;
+			Offset = 10;
 		}
 
 		if (UnaDireccion == "ARRIBA-IZQ-DIAG") {
-			Offset = 10;
+			Offset = -10;
 		}
 
 		return Offset;
@@ -56,11 +56,11 @@ public:
 		}
 
 		if (UnaDireccion == "ARRIBA-DER-DIAG") {
-			Offset = 0;
+			Offset = -40;
 		}
 
 		if (UnaDireccion == "ARRIBA-IZQ-DIAG") {
-			Offset = 0;
+			Offset = -40;
 		}
 
 		return Offset;
