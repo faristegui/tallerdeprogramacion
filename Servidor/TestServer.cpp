@@ -664,7 +664,7 @@ void MainListenThread(void* arg) {
 					DatosSprites* UnSprite = BuscarSpriteEnLista(tipo, ListaSprites);
 
 					UnJuego.AgregarEnemigo(tipo, stoi(posX), stoi(posY), stoi(velocidadCaminata),
-						stoi(vida), EsEnemigoFinal, UnSprite->width, UnSprite->height);
+						stoi(vida), EsEnemigoFinal, UnSprite->width * 2, UnSprite->height * 2);
 
 					nrEnemigo++;
 				}
