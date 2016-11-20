@@ -7,6 +7,13 @@
 			<IMAGEN nombre="pisoLevel1.bmp" zIndex="3" width="2600" height="600"/>
 		</CAPAS>
 	</FONDO>
+	<PLATAFORMAS cantidad="5">
+		<PLATAFORMA posXInicial="200" posXFinal="726" posYInicial="388" posYFinal="418"/>
+		<PLATAFORMA posXInicial="1024" posXFinal="1200" posYInicial="388" posYFinal="418"/>
+		<PLATAFORMA posXInicial="1276" posXFinal="1545" posYInicial="388" posYFinal="418"/>
+		<PLATAFORMA posXInicial="1838" posXFinal="2242" posYInicial="388" posYFinal="418"/>
+		<PLATAFORMA posXInicial="2800" posXFinal="3326" posYInicial="388" posYFinal="418"/>
+	</PLATAFORMAS>
 	<SPRITES cantidad="22">
 		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="100">
 				<ESTADOS cantidad="16">
@@ -304,12 +311,12 @@
 					<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="bonusp" frameWidth="37" frameHeight="41" velocidad="1">
+		<SPRITE id="bonusp" frameWidth="25" frameHeight="28" velocidad="1">
 		<ESTADOS cantidad="1">
 				<ESTADO id="QUIETO" cantFrames="1"/>
 		</ESTADOS>
 		</SPRITE>
-		<SPRITE id="bonuska" frameWidth="37" frameHeight="41" velocidad="1">
+		<SPRITE id="bonuska" frameWidth="25" frameHeight="28" velocidad="1">
 			<ESTADOS cantidad="1">
 				<ESTADO id="QUIETO" cantFrames="1"/>
 			</ESTADOS>
@@ -322,14 +329,8 @@
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="450" posY="390" vida="100" velocidadCaminata="7"/>
 				<ENEMIGO tipo="OvniEnemigo" direccion="IZQ" posX="900" posY="150" vida="100" velocidadCaminata="8"/>
 				<ENEMIGO tipo="RobotEnemigo" direccion="IZQ" posX="900" posY="360" vida="300" velocidadCaminata="5"/>
-				<ENEMIGO tipo="EnemigoFinal1" direccion="IZQ" posX="2580" posY="180" vida="1000" velocidadCaminata="3"/>
+				<ENEMIGO tipo="EnemigoFinal1" direccion="IZQ" posX="2580" posY="100" vida="1000" velocidadCaminata="3"/>
 			</ENEMIGOS>
 		</NIVEL>
 	</NIVELES>
-	<PLATAFORMAS cantidad="4">
-		<PLATAFORMA posXInicial="200" posXFinal="726" posY="388">
-		<PLATAFORMA posXInicial="1024" posXFinal="1200" posY="388">
-		<PLATAFORMA posXInicial="1276" posXFinal="1545" posY="388">
-		<PLATAFORMA posXInicial="1838" posXFinal="2242" posY="">
-	</PLATAFORMAS>
 </ESCENARIO>
