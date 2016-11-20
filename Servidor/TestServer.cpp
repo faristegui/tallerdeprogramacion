@@ -38,13 +38,6 @@ string ArchivoEscenarios = "";
 HANDLE ghMutex;
 Juego UnJuego;
 
-struct DatosSprites
-{
-	std::string id;
-	int width;
-	int height;
-	int velocidad;
-};
 void MostrarListaComandos() {
 	cout << "Ingrese la letra ""q"" si desea apagar el servidor: ";
 }
@@ -104,23 +97,6 @@ std::string ObtenerTextoPuntaje(int UnModo, int IndiceMiJugador) {
 	TextoPuntaje = TextoPuntaje + ": " + IntAString(Puntaje);	
 
 	return TextoPuntaje;
-}
-
-DatosSprites* BuscarSpriteEnLista(std::string tipo, Lista<DatosSprites *>* ListaSprites) {
-	DatosSprites* UnSprite;
-	ListaSprites->iniciarCursor();
-
-	while (ListaSprites->avanzarCursor()) {
-
-		UnSprite = ListaSprites->obtenerCursor();
-
-		if (UnSprite->id == tipo) {
-
-			return UnSprite;
-		}
-	}
-
-	return NULL;
 }
 
 void CargarEscenariosEnJuego() {
@@ -592,7 +568,10 @@ void MainListenThread(void* arg) {
 
 			}
 			else std::cout << "error al cargar el archivo de configuracion de escenariodef.xml " << std::endl;
+
+			UnJuego.SetListaDatosSprites(ListaSprites);
 		}
+
 		if (mensaje=="ENEM" && !UnJuego.enemigosEstanCargados())
 		{
 
@@ -615,8 +594,6 @@ void MainListenThread(void* arg) {
 
 				tinyxml2::XMLElement* elementoEnemigos = elementosNivel->FirstChildElement("ENEMIGOS");
 				const char* cantidadEnemigos = elementoEnemigos->Attribute("cantidad");
-				//UnServer.EnviarMensajeTamanoVariable(cantidadEnemigos,ClientSocket);
-				int indice = -1;
 				
 				int nrEnemigo = 1;
 				int cantTotalEnemigos = stoi(cantidadEnemigos);
@@ -635,23 +612,6 @@ void MainListenThread(void* arg) {
 
 					const char* velocidadCaminata = elementoEnemigo->Attribute("velocidadCaminata");
 
-					if(strstr(tipo,"Pulpo") != NULL)
-					{
-						indice = 0;
-					}
-					if(strstr(tipo,"Humano") != NULL)
-					{
-						indice = 1;
-					}
-					if(strstr(tipo,"Tanque") != NULL)
-					{
-						indice = 2;
-					}
-					if(strstr(tipo,"Final1") != NULL)
-					{
-						indice = 3;
-					}
-
 					// El ultimo enemigo del nivel es considerado como el enemigo final
 
 					bool EsEnemigoFinal = false;
@@ -661,7 +621,7 @@ void MainListenThread(void* arg) {
 						EsEnemigoFinal = true;
 					}
 
-					DatosSprites* UnSprite = BuscarSpriteEnLista(tipo, ListaSprites);
+					DatosSprites* UnSprite = UnJuego.BuscarSpriteEnLista(tipo);
 
 					UnJuego.AgregarEnemigo(tipo, stoi(posX), stoi(posY), stoi(velocidadCaminata),
 						stoi(vida), EsEnemigoFinal, UnSprite->width * 2, UnSprite->height * 2);

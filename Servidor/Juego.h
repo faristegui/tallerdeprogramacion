@@ -7,6 +7,15 @@
 #include <process.h>
 
 #pragma once
+
+struct DatosSprites
+{
+	std::string id;
+	int width;
+	int height;
+	int velocidad;
+};
+
 struct RectanguloEnemigo {
 	int IndexEnLista;
 	int X;
@@ -76,7 +85,11 @@ public:
 	void desaparecerBonusPower();
 	void desaparecerBonusKillAll();
 	Enemigo* GetEnemigoFinal();
+	int GetPisoY();
+	void SetListaDatosSprites(Lista<DatosSprites *>* UnaListaSprites);
+	DatosSprites* BuscarSpriteEnLista(std::string tipo);
 private:
+	Lista<DatosSprites *>* ListaSprites;
 	bool YaSeAgregoEnemigoFinal;
 	int CantJugadores;
 	int modoJuego;
@@ -98,5 +111,7 @@ private:
 	Enemigo* EnemigoFinal;
 	int CantCamaras;
 	int NumeroNivel;
+
+	int PisoY;
 };
 

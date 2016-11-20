@@ -142,12 +142,23 @@ void FisicaThread(void* arg) {
 					float Diferencia;
 
 					Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoY, 0, 120, 400);
+
+					if (Diferencia < 0) {
+						UnJugador->SetEstaCayendo(true);
+					}
+					else {
+						UnJugador->SetEstaCayendo(false);
+					}
+
 					UnJugador->SetY(PosicionYInicioSalto - Diferencia);
+					
+					if (UnJugador->EstaCayendo()) {
+						if (UnJugador->GetY() > UnJuego->GetPisoY()) { // TODO: Corregir esto
 
-					if (TiempoActual - TiempoInicioSaltoY >= 750) { // TODO: Corregir esto
-
-						UnJugador->SetEstaSaltando(false);
-						UnJugador->SetY(PosicionYInicioSalto);
+							UnJugador->SetEstaSaltando(false);
+							UnJugador->SetEstaCayendo(false);
+							UnJugador->SetY(UnJuego->GetPisoY());
+						}
 					}
 
 					if (!UnJugador->EstaSaltandoVertical()) {
@@ -366,8 +377,7 @@ void FisicaThread(void* arg) {
 						UnRectangulo.Width, UnRectangulo.Height)) {
 
 						UnJuego->MutexearListaEnemigos();
-						//aca no habria que eliminar al enemigo, solo cuando se queda sin vida
-						//UnJuego->eliminarDeListaPrincipal(UnRectangulo.IndexEnLista);
+
 						UnRectangulo.RefEnemigo->SacarVida(UnProyectil->GetDanio());
 						if (UnRectangulo.RefEnemigo->GetVida() <= 0) {
 							//chequeos por bonus
@@ -392,8 +402,6 @@ void FisicaThread(void* arg) {
 
 						Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio
 
-						// TODO: Marce aca es donde hay que acumularle los puntos al usuario
-						// falta restarle vida al enemigo
 						UnJuego->GetJugador(UnProyectil->GetIDJugador())->herirEnemigo();
 					}
 					//muchachos el width y el height de la imagen del bonus la hardcodeo, de ultima si hacemos a tiempo lo cambiamos.
@@ -468,6 +476,11 @@ void Juego::desaparecerBonusPower()
 	bonusPower = 0;
 }
 
+int Juego::GetPisoY() {
+
+	return PisoY;
+}
+
 void Juego::aparecerBonusPower(Bonus* unBonus)
 {
 	bonusPower = unBonus;
@@ -503,6 +516,7 @@ Juego::Juego()
 	bonusKillAll = 0;
 	bonus = false;
 	_beginthread(FisicaThread, 0, this);
+	PisoY = 365;
 }
 
 int Juego::obtenerCantEnemigosAparecidos()
@@ -609,6 +623,31 @@ void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int veloc
 
 }
 
+void Juego::SetListaDatosSprites(Lista<DatosSprites *>* UnaListaSprites) {
+
+	ListaSprites = UnaListaSprites;
+}
+
+DatosSprites* Juego::BuscarSpriteEnLista(std::string tipo) {
+	DatosSprites* UnSprite;
+	ListaSprites->iniciarCursor();
+
+	// TODO: Mutexear?
+
+	while (ListaSprites->avanzarCursor()) {
+
+		UnSprite = ListaSprites->obtenerCursor();
+
+		if (UnSprite->id == tipo) {
+
+			return UnSprite;
+		}
+	}
+
+	std::cout << "error: mutexear esta lista";
+	return NULL;
+}
+
 void Juego::AgregarJugador(std::string UnNombre, std::string UnColor) {
 
 	bool JugadorYaSeHabiaConectado = false;
@@ -623,7 +662,23 @@ void Juego::AgregarJugador(std::string UnNombre, std::string UnColor) {
 	}
 
 	if (!JugadorYaSeHabiaConectado) {
-		Jugadores[CantJugadores] = new Jugador(UnNombre, UnColor);
+
+
+		// En nuestro caso, todos los sprites de cada arma tienen mismo ancho y alto (y los estados tambien)
+		// Si esto fuera a cambiar entonces la siguiente linea no serviria para nada
+		// Se podria hacer una lsita de sprites correspondientes a un color en particular y enviarsela como parametro al constructor de Jugador
+		// (que tenga todas las armas y estados)
+
+		//DatosSprites* DatosSprite = BuscarSpriteEnLista("Player" + UnColor + "-S");
+		//int Width = DatosSprite->width;
+		//int Height = DatosSprite->height;
+
+
+		// TODO: fix hardcodeada
+		int Width = 44;
+		int Height = 61;
+
+		Jugadores[CantJugadores] = new Jugador(UnNombre, UnColor, Width, Height);
 		//hay un equipo por jugador
 		if(modoJuego == 1)
 		{

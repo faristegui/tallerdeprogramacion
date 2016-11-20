@@ -4,7 +4,7 @@
 #include "ArmaR.h"
 #include <windows.h>
 
-Jugador::Jugador(std::string UnNombre, std::string UnColor)
+Jugador::Jugador(std::string UnNombre, std::string UnColor, int UnWidth, int UnHeight)
 {
 	Nombre = UnNombre;
 	Color = UnColor;
@@ -18,6 +18,10 @@ Jugador::Jugador(std::string UnNombre, std::string UnColor)
 	Conectado = true;
 	Saltando = false;
 	SaltandoVertical = false;
+	Cayendo = false;
+
+	Width = UnWidth;
+	Height = UnHeight;
 
 	NumeroArma = 0;
 	Armas[0] = new ArmaS();
@@ -63,6 +67,15 @@ int Jugador::GetVida()
 Arma* Jugador::GetArmaEnUso() {
 
 	return Armas[NumeroArma];
+}
+
+bool Jugador::EstaCayendo() {
+
+	return Cayendo;
+}
+void Jugador::SetEstaCayendo(bool UnEstaCayendo) {
+
+	Cayendo = UnEstaCayendo;
 }
 
 void Jugador::herirEnemigo()
@@ -293,6 +306,18 @@ std::string Jugador::GetEstado() {
 	}
 
 	return Estado;
+}
+
+// TODO: Devolver width y height segun arma y estado (si fueran a ser distintos)
+
+int Jugador::GetWidth() {
+
+	return Width;
+}
+
+int Jugador::GetHeight() {
+
+	return Height;
 }
 
 int Jugador::GetX() {

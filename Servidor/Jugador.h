@@ -5,7 +5,7 @@
 class Jugador
 {
 public:
-	Jugador(std::string UnNombre, std::string UnColor);
+	Jugador(std::string UnNombre, std::string UnColor, int Width, int Height);
 	~Jugador();
 	void Mover(std::string Direccion);
 	std::string GetNombre();
@@ -28,6 +28,8 @@ public:
 	int GetPosicionXInicioSalto();
 	int GetX();
 	int GetY();
+	int GetWidth();
+	int GetHeight();
 	void MoverEnX(int UnX);
 	bool EstaCaminando();
 	bool EstaSaltando();
@@ -43,10 +45,13 @@ public:
 	void ArmaSiguiente();
 	void ArmaAnterior();
 	void reestablecerVida();
+	bool EstaCayendo();
+	void SetEstaCayendo(bool UnEstaCayendo);
 	Arma* GetArmaEnUso();
 private:
 	bool Saltando;
 	bool SaltandoVertical;
+	bool Cayendo;
 	std::string Direccion;
 	std::string Nombre;
 	std::string Color;
@@ -58,6 +63,8 @@ private:
 	int PosicionXInicioSalto;
 	int x;
 	int y;
+	int Width;
+	int Height;
 	int puntaje;
 	int vida;
 	bool Conectado;
