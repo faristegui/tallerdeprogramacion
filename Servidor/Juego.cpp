@@ -129,6 +129,16 @@ void FisicaThread(void* arg) {
 							UnJugador->MoverEnX(-VelocidadEnX);
 						}
 					}
+
+					int YDelPiso;
+
+					if (!UnJuego->HayPiso(UnJugador->GetX(), UnJugador->GetY(), UnJugador->GetWidth(), UnJugador->GetHeight(), YDelPiso)) {
+
+						UnJugador->SetParametrosSalto(0, ticks_start, UnJugador->GetX(), UnJugador->GetY());
+						UnJugador->SetEstaSaltando(true);
+						UnJugador->SetEstaCayendo(true);
+						UnJugador->SetY(YDelPiso - UnJugador->GetHeight());
+					}
 				}
 
 				if (UnJugador->EstaSaltando()) {
@@ -140,7 +150,7 @@ void FisicaThread(void* arg) {
 					int PosicionYInicioSalto = UnJugador->GetPosicionYInicioSalto();
 
 					float Diferencia;
-
+					
 					Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoY, 0, 120, 400);
 
 					if ((PosicionYInicioSalto - Diferencia) > UnJugador->GetY()) {

@@ -95,6 +95,15 @@ void Jugador::herirEnemigo()
 		puntaje+=40;
 	}
 }
+
+void Jugador::SetParametrosSalto(int UnTiempoInicioSaltoX, int UnTiempoInicioSaltoY, int UnaPosicionXInicioSalto, int UnaPosicionYInicioSalto) {
+
+	TiempoInicioSaltoX = UnTiempoInicioSaltoX;
+	TiempoInicioSaltoY = UnTiempoInicioSaltoY;
+	PosicionXInicioSalto = UnaPosicionXInicioSalto;
+	PosicionYInicioSalto = UnaPosicionYInicioSalto;
+}
+
 void Jugador::Mover(std::string Tecla) {
 
 	if (Tecla == "SPACE") {

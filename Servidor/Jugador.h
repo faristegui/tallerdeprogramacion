@@ -48,6 +48,7 @@ public:
 	bool EstaCayendo();
 	void SetEstaCayendo(bool UnEstaCayendo);
 	Arma* GetArmaEnUso();
+	void SetParametrosSalto(int UnTiempoInicioSaltoX, int UnTiempoInicioSaltoY, int UnaPosicionXInicioSalto, int PosicionYInicioSalto);
 private:
 	bool Saltando;
 	bool SaltandoVertical;
