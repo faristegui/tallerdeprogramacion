@@ -86,6 +86,8 @@ void Pantalla::EscribirMensaje(std::string Mensaje, int PosX, int PosY, int Tama
 
 	get_text_and_rect(Renderer, PosX, PosY, Mensaje.c_str(), &Message, &Message_Rect, Tamano);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
+
+	SDL_DestroyTexture(Message);
 }
 
 void Pantalla::EscribirNombreJugador(std::string Nombre, int PosX, int PosY) {
