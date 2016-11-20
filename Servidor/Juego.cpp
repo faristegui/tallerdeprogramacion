@@ -137,7 +137,7 @@ void FisicaThread(void* arg) {
 						UnJugador->SetParametrosSalto(0, ticks_start, UnJugador->GetX(), UnJugador->GetY());
 						UnJugador->SetEstaSaltando(true);
 						UnJugador->SetEstaCayendo(true);
-						UnJugador->SetY(YDelPiso - UnJugador->GetHeight());
+						UnJugador->SetEstaSaltandoVertical(true);
 					}
 				}
 
