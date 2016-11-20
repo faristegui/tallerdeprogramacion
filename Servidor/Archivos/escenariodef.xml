@@ -326,4 +326,10 @@
 			</ENEMIGOS>
 		</NIVEL>
 	</NIVELES>
+	<PLATAFORMAS cantidad="4">
+		<PLATAFORMA posXInicial="200" posXFinal="726" posY="388">
+		<PLATAFORMA posXInicial="1024" posXFinal="1200" posY="388">
+		<PLATAFORMA posXInicial="1276" posXFinal="1545" posY="388">
+		<PLATAFORMA posXInicial="1838" posXFinal="2242" posY="">
+	</PLATAFORMAS>
 </ESCENARIO>
