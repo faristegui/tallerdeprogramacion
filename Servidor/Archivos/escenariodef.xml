@@ -311,12 +311,12 @@
 					<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="bonusp" frameWidth="37" frameHeight="41" velocidad="1">
+		<SPRITE id="bonusp" frameWidth="25" frameHeight="28" velocidad="1">
 		<ESTADOS cantidad="1">
 				<ESTADO id="QUIETO" cantFrames="1"/>
 		</ESTADOS>
 		</SPRITE>
-		<SPRITE id="bonuska" frameWidth="37" frameHeight="41" velocidad="1">
+		<SPRITE id="bonuska" frameWidth="25" frameHeight="28" velocidad="1">
 			<ESTADOS cantidad="1">
 				<ESTADO id="QUIETO" cantFrames="1"/>
 			</ESTADOS>
