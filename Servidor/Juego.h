@@ -30,6 +30,13 @@ struct Posicion {
 	int y;
 };
 
+struct Rectangulo {
+	int x;
+	int y;
+	int w;
+	int h;
+};
+
 struct Camara {
 	int X;
 	int Y;
@@ -88,8 +95,10 @@ public:
 	int GetPisoY();
 	void SetListaDatosSprites(Lista<DatosSprites *>* UnaListaSprites);
 	DatosSprites* BuscarSpriteEnLista(std::string tipo);
+	void AgregarPlataforma(int x, int y, int w, int h);
 private:
 	Lista<DatosSprites *>* ListaSprites;
+	Lista<Rectangulo* >* ListaPlataformas;
 	bool YaSeAgregoEnemigoFinal;
 	int CantJugadores;
 	int modoJuego;

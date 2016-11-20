@@ -99,6 +99,30 @@ std::string ObtenerTextoPuntaje(int UnModo, int IndiceMiJugador) {
 	return TextoPuntaje;
 }
 
+void CargarPlataformas() {
+	tinyxml2::XMLDocument docu;
+
+	char* pathXML = strdup(ArchivoEscenarios.c_str());
+
+
+	if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
+	{
+		
+		tinyxml2::XMLElement* Plataformas = docu.FirstChildElement()->FirstChildElement("PLATAFORMAS");
+
+		for (tinyxml2::XMLElement* Plataforma = Plataformas->FirstChildElement("PLATAFORMA");
+			Plataforma != NULL; Plataforma = Plataforma->NextSiblingElement("PLATAFORMA"))
+		{
+			const char* X = Plataforma->Attribute("x");
+			const char* Ancho = Plataforma->Attribute("ancho");
+			const char* Y = Plataforma->Attribute("y");
+			const char* Alto = Plataforma->Attribute("alto");
+
+			UnJuego.AgregarPlataforma(stoi(X), stoi(Y), stoi(Ancho), stoi(Alto));
+		}
+	}
+}
+
 void CargarEscenariosEnJuego() {
 	tinyxml2::XMLDocument docu;
 
@@ -823,6 +847,7 @@ int main()
 	
 	ArchivoEscenarios = "Archivos\\" + pathEscenario;
 
+	CargarPlataformas();
 	CargarEscenariosEnJuego();
 	
 	PedirModoDeJuego();

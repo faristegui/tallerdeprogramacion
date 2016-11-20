@@ -517,6 +517,18 @@ Juego::Juego()
 	bonus = false;
 	_beginthread(FisicaThread, 0, this);
 	PisoY = 365;
+	ListaPlataformas = new Lista<Rectangulo *>();
+}
+
+void Juego::AgregarPlataforma(int x, int y, int w, int h) {
+
+	Rectangulo* UnRectangulo = new Rectangulo();
+	UnRectangulo->x = x;
+	UnRectangulo->y = y;
+	UnRectangulo->w = w;
+	UnRectangulo->h = h;
+
+	ListaPlataformas->agregar(UnRectangulo);
 }
 
 int Juego::obtenerCantEnemigosAparecidos()
