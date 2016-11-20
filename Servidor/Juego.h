@@ -2,6 +2,7 @@
 #include "Enemigo.h"
 #include "Lista.h"
 #include "Equipo.h"
+#include "Bonus.h"
 #include <windows.h>
 #include <process.h>
 
@@ -60,13 +61,33 @@ public:
 	void DesmutexearListaEnemigos();
 	bool enemigosEstanCargados();
 	void cargarEnemigos();
+	void sumarEnemigo();
+	void definirAparicionBonusPower();
+	void definirAparicionBonusKilAll();
+	int obtenerCantEnemigosAparecidos();
+	int getNumeroBonusPower();
+	int getNumeroBonusKillAll();
+	bool hayBonus();
+	Bonus* obtenerBonusPower();
+	Bonus* obtenerBonusKillAll();
+	void aparecerBonusPower(Bonus* unBonus);
+	void aparecerBonusKillAll(Bonus* unBonus);
+	void bonusYaMostrado();
+	void desaparecerBonusPower();
+	void desaparecerBonusKillAll();
 	Enemigo* GetEnemigoFinal();
 private:
 	bool YaSeAgregoEnemigoFinal;
 	int CantJugadores;
 	int modoJuego;
 	bool empezo;
+	bool bonus;
 	bool enemigosCargados;
+	int numeroEnemigoBonusPower;
+	int numeroEnemigoBonusKillAll;
+	int cantEnemigosAparecidos;
+	Bonus* bonusPower;
+	Bonus* bonusKillAll;
 	int GetIndexUsuario(std::string Usuario);
 	Lista<Proyectil *>* Proyectiles;
 	Lista<Enemigo *>* enemigosPantalla;

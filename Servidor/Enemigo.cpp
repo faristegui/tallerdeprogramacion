@@ -100,6 +100,15 @@ std::string Enemigo::getEstado()
 	return estado;
 }
 
+int Enemigo::getIndexEnListaOriginal()
+{
+	return indexEnListaOriginal;
+}
+
+void Enemigo::setIndexEnListaOriginal(int indice)
+{
+	indexEnListaOriginal = indice;
+}
 
 int Enemigo::getY()
 {

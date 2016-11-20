@@ -8,6 +8,25 @@ int FuncionCuadratica(float t, float b, float c, float d) {
 	return -c / 2 * (t*(t - 2) - 1) + b;
 }
 
+void Juego::definirAparicionBonusPower()
+{
+	numeroEnemigoBonusPower = rand()% todosLosEnemigos->getTamanio();
+	//rango entre 1 y 11
+	numeroEnemigoBonusPower++;
+}
+
+void Juego::definirAparicionBonusKilAll()
+{
+	//la idea es que los bonus no los dropee el mismos personaje
+	numeroEnemigoBonusKillAll = rand()% todosLosEnemigos->getTamanio();
+	while(numeroEnemigoBonusKillAll +1 == numeroEnemigoBonusPower)
+	{
+		numeroEnemigoBonusKillAll = rand()% todosLosEnemigos->getTamanio();
+	}
+	//rango entre 1 y 11
+	numeroEnemigoBonusKillAll++;
+}
+
 bool HayColision(int X1, int Y1, int W1, int H1,
 	int X2, int Y2, int W2, int H2) {
 
@@ -36,6 +55,36 @@ bool HayColision(int X1, int Y1, int W1, int H1,
 Lista<Enemigo*>* Juego::GetEnemigosPantalla()
 {
 	return enemigosPantalla;
+}
+
+void Juego::sumarEnemigo()
+{
+	cantEnemigosAparecidos++;
+}
+
+int Juego::getNumeroBonusPower()
+{
+	return numeroEnemigoBonusPower;
+}
+
+int Juego::getNumeroBonusKillAll()
+{
+	return numeroEnemigoBonusKillAll;
+}
+
+Bonus* Juego::obtenerBonusPower()
+{
+	return bonusPower;
+}
+
+Bonus* Juego::obtenerBonusKillAll()
+{
+	return bonusKillAll;
+}
+
+void Juego::desaparecerBonusKillAll()
+{
+	bonusKillAll = 0;
 }
 
 void FisicaThread(void* arg) {
@@ -222,6 +271,8 @@ void FisicaThread(void* arg) {
 					}
 
 					enemigosVivos->agregar(UnEnemigo);
+					UnEnemigo->setIndexEnListaOriginal(UnJuego->obtenerCantEnemigosAparecidos());
+					UnJuego->sumarEnemigo();
 					UnJuego->DesmutexearListaEnemigos();
 
 					posiciones->agregar(indiceAEliminar);
@@ -274,7 +325,6 @@ void FisicaThread(void* arg) {
 				UnRectangulo.Width = UnEnemigo->GetWidth();
 				UnRectangulo.Height = UnEnemigo->GetHeight();
 				UnRectangulo.RefEnemigo = UnEnemigo;
-
 				RectangulosEnemigos->agregar(UnRectangulo);
 			}
 
@@ -320,7 +370,23 @@ void FisicaThread(void* arg) {
 						//UnJuego->eliminarDeListaPrincipal(UnRectangulo.IndexEnLista);
 						UnRectangulo.RefEnemigo->SacarVida(UnProyectil->GetDanio());
 						if (UnRectangulo.RefEnemigo->GetVida() <= 0) {
+							//chequeos por bonus
+							if(UnJuego->getNumeroBonusPower() == UnRectangulo.RefEnemigo->getIndexEnListaOriginal())
+							{
+								Bonus* bonusPower = new Bonus(UnRectangulo.X,UnRectangulo.Y,"p",UnProyectil->GetIDJugador());
+								bonusPower->mostrar();
+								UnJuego->aparecerBonusPower(bonusPower);
+							}		
+							if(UnJuego->getNumeroBonusKillAll() == UnRectangulo.RefEnemigo->getIndexEnListaOriginal())
+							{
+								Bonus* bonusKillAll = new Bonus(UnRectangulo.X,UnRectangulo.Y,"ka",UnProyectil->GetIDJugador());
+								bonusKillAll->mostrar();
+								UnJuego->aparecerBonusKillAll(bonusKillAll);
+							}
+
+							//eliminar enemigo de pantalla
 							UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);
+
 						}
 						UnJuego->DesmutexearListaEnemigos();
 
@@ -330,11 +396,27 @@ void FisicaThread(void* arg) {
 						// falta restarle vida al enemigo
 						UnJuego->GetJugador(UnProyectil->GetIDJugador())->herirEnemigo();
 					}
+					//muchachos el width y el height de la imagen del bonus la hardcodeo, de ultima si hacemos a tiempo lo cambiamos.
+					
 				}
 			}
 			PosicionCursor++;
 		}
 		UnJuego->DesmutexearListaProyectiles();
+		
+		if(UnJuego->obtenerBonusPower() != NULL 
+			&& HayColision(UnJuego->obtenerBonusPower()->getX(),UnJuego->obtenerBonusPower()->getY(),37,41,UnJuego->GetJugador(UnJuego->obtenerBonusPower()->getIdJugador())->GetX(),UnJuego->GetJugador(UnJuego->obtenerBonusPower()->getIdJugador())->GetY(),44,61))
+		{
+			UnJuego->obtenerBonusPower()->encontrar(UnJuego);
+			UnJuego->desaparecerBonusPower();
+		}
+		if(UnJuego->obtenerBonusKillAll() != NULL 
+			&& HayColision(UnJuego->obtenerBonusKillAll()->getX(),UnJuego->obtenerBonusKillAll()->getY(),37,41,UnJuego->GetJugador(UnJuego->obtenerBonusKillAll()->getIdJugador())->GetX(),UnJuego->GetJugador(UnJuego->obtenerBonusKillAll()->getIdJugador())->GetY(),44,61))
+		{
+			UnJuego->obtenerBonusKillAll()->encontrar(UnJuego);
+			UnJuego->desaparecerBonusKillAll();
+		}
+		
 		// -----------------------------------------------
 		// Proceso camara (y avance/retroceso de todos los sprites)
 		if (AvanzaCamara) {
@@ -381,6 +463,26 @@ void FisicaThread(void* arg) {
 
 }
 
+void Juego::desaparecerBonusPower()
+{
+	bonusPower = 0;
+}
+
+void Juego::aparecerBonusPower(Bonus* unBonus)
+{
+	bonusPower = unBonus;
+}
+
+void Juego::aparecerBonusKillAll(Bonus* unBonus)
+{
+	bonusKillAll = unBonus;
+}
+
+bool Juego::hayBonus()
+{
+	return bonus;
+}
+
 HANDLE MutexListaProyectiles;
 HANDLE MutexListaEnemigos;
 
@@ -396,7 +498,21 @@ Juego::Juego()
 	enemigosPantalla = new Lista<Enemigo*>();
 	todosLosEnemigos = new Lista<Enemigo*>();
 	enemigosCargados = false;
+	cantEnemigosAparecidos = 1;
+	bonusPower = 0;
+	bonusKillAll = 0;
+	bonus = false;
 	_beginthread(FisicaThread, 0, this);
+}
+
+int Juego::obtenerCantEnemigosAparecidos()
+{
+	return cantEnemigosAparecidos;
+}
+
+void Juego::bonusYaMostrado()
+{
+	bonus = false;
 }
 
 void Juego::establecerModo(std::string nuevoModo)

@@ -380,6 +380,42 @@ void MainListenThread(void* arg) {
 				GranMensaje.append(ObtenerTextoPuntaje(UnJuego.obtenerModo(), i));
 				GranMensaje.append(";");
 			}
+			//enviar bonus power
+			if(UnJuego.obtenerBonusPower() != 0 && UnJuego.obtenerBonusPower()->getEstado())
+			{
+				GranMensaje.append("SBP"); //Si Bonus Power
+				GranMensaje.append(";");
+				GranMensaje.append(UnJuego.obtenerBonusPower()->getInicial());
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.obtenerBonusPower()->getX()));
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.obtenerBonusPower()->getY()));
+				GranMensaje.append(";");
+				//UnJuego.bonusYaMostrado();
+			}
+			else
+			{
+				GranMensaje.append("NB"); //No Bonus
+				GranMensaje.append(";");
+			}
+			//envio bonus kill all
+			if(UnJuego.obtenerBonusKillAll() != 0 && UnJuego.obtenerBonusKillAll()->getEstado())
+			{
+				GranMensaje.append("SBKA"); //Si Bonus KillAll
+				GranMensaje.append(";");
+				GranMensaje.append(UnJuego.obtenerBonusKillAll()->getInicial());
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.obtenerBonusKillAll()->getX()));
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.obtenerBonusKillAll()->getY()));
+				GranMensaje.append(";");
+				//UnJuego.bonusYaMostrado();
+			}
+			else
+			{
+				GranMensaje.append("NB"); //No Bonus
+				GranMensaje.append(";");
+			}
 			UnServer.EnviarMensajeTamanoVariable(GranMensaje, ClientSocket);
 			if (CantidadMensajes > 0) {
 				Buzon->iniciarCursor();
@@ -616,6 +652,8 @@ void MainListenThread(void* arg) {
 
 					nrEnemigo++;
 				}
+				UnJuego.definirAparicionBonusPower();
+				UnJuego.definirAparicionBonusKilAll();
 			}
 			
 		Lista<Enemigo *>* todosLosEnemigos = UnJuego.GetTodosLosEnemigos();
@@ -628,7 +666,9 @@ void MainListenThread(void* arg) {
 				if(todosLosEnemigos->obtenerCursor()->getX() <= (800+UnJuego.GetCamara(0)->X))
 				{
 					enemigosVivos->agregar(todosLosEnemigos->obtenerCursor());
+					todosLosEnemigos->obtenerCursor()->setIndexEnListaOriginal(UnJuego.obtenerCantEnemigosAparecidos());
 					posiciones->agregar(indiceAEliminar);
+					UnJuego.sumarEnemigo();
 				}
 				indiceAEliminar++;
 			}

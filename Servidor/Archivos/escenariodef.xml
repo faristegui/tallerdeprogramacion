@@ -7,7 +7,7 @@
 			<IMAGEN nombre="pisoLevel1.bmp" zIndex="3" width="2600" height="600"/>
 		</CAPAS>
 	</FONDO>
-	<SPRITES cantidad="20">
+	<SPRITES cantidad="22">
 		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="100">
 				<ESTADOS cantidad="16">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
@@ -302,6 +302,16 @@
 		<SPRITE id="EnemigoFinal1" frameWidth="158" frameHeight="122" velocidad="100">
 				<ESTADOS cantidad="1">
 					<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="bonusp" frameWidth="37" frameHeight="41" velocidad="1">
+		<ESTADOS cantidad="1">
+				<ESTADO id="QUIETO" cantFrames="1"/>
+		</ESTADOS>
+		</SPRITE>
+		<SPRITE id="bonuska" frameWidth="37" frameHeight="41" velocidad="1">
+			<ESTADOS cantidad="1">
+				<ESTADO id="QUIETO" cantFrames="1"/>
 			</ESTADOS>
 		</SPRITE>
 	</SPRITES>

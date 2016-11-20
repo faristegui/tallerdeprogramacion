@@ -20,6 +20,8 @@ public:
 	void MoverEnX(int CantX);
 	void SacarVida(int Cantidad);
 	int GetVida();
+	int getIndexEnListaOriginal();
+	void setIndexEnListaOriginal(int indice);
 private:
 	std::string IDSprite;
 	std::string estado;
@@ -29,6 +31,7 @@ private:
 	int x;
 	int y;
 	int Width;
+	int indexEnListaOriginal;
 	int Height;
 };
 

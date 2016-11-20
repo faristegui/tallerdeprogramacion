@@ -25,6 +25,11 @@ Jugador::Jugador(std::string UnNombre, std::string UnColor)
 	Armas[2] = new ArmaR();
 }
 
+void Jugador::reestablecerVida()
+{
+	vida = 100;
+}
+
 void Jugador::ArmaSiguiente() {
 	NumeroArma++;
 
@@ -77,7 +82,6 @@ void Jugador::herirEnemigo()
 		puntaje+=40;
 	}
 }
-
 void Jugador::Mover(std::string Tecla) {
 
 	if (Tecla == "SPACE") {

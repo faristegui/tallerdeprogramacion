@@ -42,6 +42,7 @@ public:
 	void SueltaTeclaDireccion();
 	void ArmaSiguiente();
 	void ArmaAnterior();
+	void reestablecerVida();
 	Arma* GetArmaEnUso();
 private:
 	bool Saltando;

@@ -60,7 +60,7 @@ void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::stri
 	char* font = VerificarRecurso("start.ttf");
 
 	TTF_Font* Fuente = NULL;
-	
+
 	while (Fuente == NULL) {
 		Fuente = TTF_OpenFont(font, fontSize); //this opens a font style and sets a size
 	}
@@ -586,7 +586,7 @@ void Pantalla::IniciarJuego() {
 
 			int PosX = 0;
 			int PosY = 0;
-		
+	
 			for (int i = 0; i < CantJugadores; i++) {
 
 				string Nombre = mensajes[Indice];
@@ -651,6 +651,39 @@ void Pantalla::IniciarJuego() {
 				EscribirMensaje(mensajes[Indice],540,posY,20,Renderer);
 				posY+=25;
 				Indice++;
+			}
+			//si hay bonus
+			if(mensajes[Indice] == "SBP")
+			{
+				Indice++;
+				//leo inicial del bonus
+				std::string inicialBonus = mensajes[Indice];
+				Indice++;
+				//leo posX del bonus
+				int posXBonus = stoi(mensajes[Indice]);
+				Indice++;
+				int posYBonus = stoi(mensajes[Indice]);
+				Indice++;
+				RenderSprite("bonus"+inicialBonus,"QUIETO",Starting_Tick,Renderer,posXBonus,posYBonus+20);
+
+			}
+			else
+			{
+				Indice++;
+			}
+			if(mensajes[Indice] == "SBKA")
+			{
+				Indice++;
+				//leo inicial del bonus
+				std::string inicialBonus = mensajes[Indice];
+				Indice++;
+				//leo posX del bonus
+				int posXBonus = stoi(mensajes[Indice]);
+				Indice++;
+				int posYBonus = stoi(mensajes[Indice]);
+				Indice++;
+				RenderSprite("bonus"+inicialBonus,"QUIETO",Starting_Tick,Renderer,posXBonus,posYBonus+20);
+
 			}
 
 			if (CantidadMensajes > 0) {
