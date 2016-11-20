@@ -40,6 +40,7 @@ Juego UnJuego;
 
 struct DatosSprites
 {
+	std::string id;
 	int width;
 	int height;
 	int velocidad;
@@ -105,6 +106,23 @@ std::string ObtenerTextoPuntaje(int UnModo, int IndiceMiJugador) {
 	return TextoPuntaje;
 }
 
+DatosSprites* BuscarSpriteEnLista(std::string tipo, Lista<DatosSprites *>* ListaSprites) {
+	DatosSprites* UnSprite;
+	ListaSprites->iniciarCursor();
+
+	while (ListaSprites->avanzarCursor()) {
+
+		UnSprite = ListaSprites->obtenerCursor();
+
+		if (UnSprite->id == tipo) {
+
+			return UnSprite;
+		}
+	}
+
+	return NULL;
+}
+
 void CargarEscenariosEnJuego() {
 	tinyxml2::XMLDocument docu;
 
@@ -134,7 +152,7 @@ void MainListenThread(void* arg) {
 	string Usuario = "";
 	string mensaje = "";
 	SOCKET ClientSocket = *(SOCKET*)arg;
-	DatosSprites* sprites[6];
+	Lista<DatosSprites *>* ListaSprites = new Lista<DatosSprites *>();
 	bool EsThreadDePing = false;
 
 	while ((mensaje != "EXIT") && (mensaje != "LOST"))
@@ -548,17 +566,13 @@ void MainListenThread(void* arg) {
 
 					const char* velocidadSprite = elementoSprite->Attribute("velocidad");
 					UnServer.EnviarMensajeTamanoVariable(velocidadSprite, ClientSocket);			// VELOCIDAD
-					
-					if(strstr(idSprite,"Enemigo") != NULL)
-					{
-						DatosSprites* unEnemigo = new DatosSprites(); 
-						unEnemigo->width = stoi(frameWidthSprite);
-						unEnemigo->height = stoi(frameHeightSprite);
-						unEnemigo->velocidad = stoi(velocidadSprite);
-						sprites[contador] = unEnemigo;
-						contador++;
-					}
 
+					DatosSprites* UnSprite = new DatosSprites();
+					UnSprite->id = idSprite;
+					UnSprite->width = stoi(frameWidthSprite);
+					UnSprite->height = stoi(frameHeightSprite);
+					UnSprite->velocidad = stoi(velocidadSprite);
+					ListaSprites->agregar(UnSprite);
 
 					tinyxml2::XMLElement* elementoEstados = elementoSprite->FirstChildElement("ESTADOS");
 					const char* cantidadEstados = elementoEstados->Attribute("cantidad");
@@ -647,8 +661,10 @@ void MainListenThread(void* arg) {
 						EsEnemigoFinal = true;
 					}
 
+					DatosSprites* UnSprite = BuscarSpriteEnLista(tipo, ListaSprites);
+
 					UnJuego.AgregarEnemigo(tipo, stoi(posX), stoi(posY), stoi(velocidadCaminata),
-						stoi(vida), EsEnemigoFinal, sprites[indice]->width, sprites[indice]->height);
+						stoi(vida), EsEnemigoFinal, UnSprite->width, UnSprite->height);
 
 					nrEnemigo++;
 				}
