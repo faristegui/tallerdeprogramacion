@@ -143,7 +143,7 @@ void FisicaThread(void* arg) {
 
 					Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoY, 0, 120, 400);
 
-					if (Diferencia < 0) {
+					if ((PosicionYInicioSalto - Diferencia) > UnJugador->GetY()) {
 						UnJugador->SetEstaCayendo(true);
 					}
 					else {
@@ -153,11 +153,14 @@ void FisicaThread(void* arg) {
 					UnJugador->SetY(PosicionYInicioSalto - Diferencia);
 					
 					if (UnJugador->EstaCayendo()) {
-						if (UnJugador->GetY() > UnJuego->GetPisoY()) { // TODO: Corregir esto
+
+						int YDelPiso;
+
+						if (UnJuego->HayPiso(UnJugador->GetX(), UnJugador->GetY(), UnJugador->GetWidth(), UnJugador->GetHeight(), YDelPiso)) {
 
 							UnJugador->SetEstaSaltando(false);
 							UnJugador->SetEstaCayendo(false);
-							UnJugador->SetY(UnJuego->GetPisoY());
+							UnJugador->SetY(YDelPiso - UnJugador->GetHeight());
 						}
 					}
 
@@ -227,7 +230,7 @@ void FisicaThread(void* arg) {
 
 			// El ultimo fondo determina el ancho total del juego (el fondo de los obstaculos)
 
-			Camara* UnaCamara = UnJuego->GetCamara(UnJuego->GetCantCamaras() - 1);
+			Camara* UnaCamara = UnJuego->GetCamaraObstaculos();
 			VelocidadCamara = UnaCamara->Velocidad;
 
 			if (UnaCamara->X >= UnaCamara->AnchoImagen) {
@@ -263,7 +266,7 @@ void FisicaThread(void* arg) {
 			int indiceAEliminar = 1;
 			while(todosLosEnemigos->avanzarCursor())
 			{
-				int indice = UnJuego->GetCamara(UnJuego->GetCantCamaras() - 1)->X;
+				int indice = UnJuego->GetCamaraObstaculos()->X;
 				if(todosLosEnemigos->obtenerCursor()->getX() <= (800+indice))
 				{
 					UnJuego->MutexearListaEnemigos();
@@ -516,7 +519,7 @@ Juego::Juego()
 	bonusKillAll = 0;
 	bonus = false;
 	_beginthread(FisicaThread, 0, this);
-	PisoY = 365;
+	PisoY = 486;
 	ListaPlataformas = new Lista<Rectangulo *>();
 }
 
@@ -635,6 +638,44 @@ void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int veloc
 
 }
 
+Camara* Juego::GetCamaraObstaculos() {
+
+	if (CantCamaras > 0) {
+
+		return Camaras[CantCamaras - 1];
+	} else {
+	
+		std::cout << "CHEQUEAR PRIMERO Q NO ESTE VACIO EL ARRAY DE CAMARAS";
+		return NULL;
+	}
+}
+
+bool Juego::HayPiso(int X, int Y, int W, int H, int &YDelPiso) {
+
+	YDelPiso = 0;
+
+	if (Y + H >= PisoY) {
+
+		YDelPiso = PisoY;
+		return true;
+	}
+
+	ListaPlataformas->iniciarCursor();
+
+	while (ListaPlataformas->avanzarCursor()) {
+
+		Rectangulo* UnRectangulo = ListaPlataformas->obtenerCursor();
+
+		if (HayColision(X, Y, W, H, UnRectangulo->x, UnRectangulo->y, UnRectangulo->w, UnRectangulo->h)) {
+
+			YDelPiso = UnRectangulo->y;
+			return true;
+		}
+	}
+
+	return  false;
+}
+
 void Juego::SetListaDatosSprites(Lista<DatosSprites *>* UnaListaSprites) {
 
 	ListaSprites = UnaListaSprites;
@@ -687,8 +728,8 @@ void Juego::AgregarJugador(std::string UnNombre, std::string UnColor) {
 
 
 		// TODO: fix hardcodeada
-		int Width = 44;
-		int Height = 61;
+		int Width = 88;
+		int Height = 122;
 
 		Jugadores[CantJugadores] = new Jugador(UnNombre, UnColor, Width, Height);
 		//hay un equipo por jugador

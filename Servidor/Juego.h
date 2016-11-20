@@ -62,6 +62,7 @@ public:
 	Equipo* GetEquipoJugador(std::string NombreJugador);
 	int obtenerModo();
 	Camara* GetCamara(int NrCamara);
+	Camara* GetCamaraObstaculos();
 	void establecerModo(std::string modo);
 	void SetAnchoCamara(int NrCamara, int UnAncho);
 	void BorrarCamaras();
@@ -96,6 +97,7 @@ public:
 	void SetListaDatosSprites(Lista<DatosSprites *>* UnaListaSprites);
 	DatosSprites* BuscarSpriteEnLista(std::string tipo);
 	void AgregarPlataforma(int x, int y, int w, int h);
+	bool HayPiso(int X, int Y, int W, int H, int &YPiso);
 private:
 	Lista<DatosSprites *>* ListaSprites;
 	Lista<Rectangulo* >* ListaPlataformas;
