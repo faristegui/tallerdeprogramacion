@@ -662,11 +662,13 @@ bool Juego::HayPiso(int X, int Y, int W, int H, int &YDelPiso) {
 
 	ListaPlataformas->iniciarCursor();
 
+	Camara* CamaraObstaculos = GetCamaraObstaculos();
+
 	while (ListaPlataformas->avanzarCursor()) {
 
 		Rectangulo* UnRectangulo = ListaPlataformas->obtenerCursor();
 
-		if (HayColision(X, Y, W, H, UnRectangulo->x, UnRectangulo->y, UnRectangulo->w, UnRectangulo->h)) {
+		if (HayColision(X, Y, W, H, UnRectangulo->x - CamaraObstaculos->X, UnRectangulo->y, UnRectangulo->w, UnRectangulo->h)) {
 
 			YDelPiso = UnRectangulo->y;
 			return true;
