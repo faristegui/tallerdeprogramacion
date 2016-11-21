@@ -312,8 +312,17 @@
 			</ESTADOS>
 		</SPRITE>
 		<SPRITE id="EnemigoFinal1" frameWidth="158" frameHeight="122" velocidad="100">
-				<ESTADOS cantidad="1">
+				<ESTADOS cantidad="10">
 					<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
+					<ESTADO id="CAMINA-DER" cantFrames="2"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="2"/>
+					<ESTADO id="QUIETO-DER" cantFrames="2"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="2"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="HERIDO-IZQ" cantFrames="2"/>
+					<ESTADO id="HERIDO-DER" cantFrames="2"/>
+					<ESTADO id="MUERTO-DER" cantFrames="2"/>				
+					<ESTADO id="MUERTO-IZQ" cantFrames="2"/>	
 			</ESTADOS>
 		</SPRITE>
 		<SPRITE id="bonusp" frameWidth="25" frameHeight="28" velocidad="1">
