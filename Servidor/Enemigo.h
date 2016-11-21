@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <time.h>
 class Enemigo
 {
 public:
@@ -20,6 +21,12 @@ public:
 	void MoverEnX(int CantX);
 	void SacarVida(int Cantidad);
 	int GetVida();
+	time_t GetTiempoDeVida();
+	void setTiempoDeVida(time_t valor);
+	time_t getTiempoActual();
+	void muereEnemigo();
+	bool estaListoParaMorir();
+	void setListoParaMorir(bool valor);
 	int getIndexEnListaOriginal();
 	void setIndexEnListaOriginal(int indice);
 private:
@@ -33,5 +40,8 @@ private:
 	int Width;
 	int indexEnListaOriginal;
 	int Height;
+	time_t tiempoDeVida;
+	time_t tiempoTranscurrido;
+	bool listoParaMorir;
 };
 

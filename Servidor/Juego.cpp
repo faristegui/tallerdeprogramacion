@@ -335,7 +335,7 @@ void FisicaThread(void* arg) {
 			}
 
 			if ((UnEnemigo->getX() > 1000) || (UnEnemigo->getX() < -100) ||
-				(UnEnemigo->getY() < -100) || (UnEnemigo->getY() > 700)) {
+				(UnEnemigo->getY() < -100) || (UnEnemigo->getY() > 700) ||  UnEnemigo->estaListoParaMorir()) {
 
 				//UnJuego->eliminarDeListaPrincipal(PosicionCursor);
 				enemigosVivos->remover(PosicionCursor);  // TODO: Ver lo de la lista al de remover (que no reinicie el cursor!)
@@ -407,8 +407,19 @@ void FisicaThread(void* arg) {
 								UnJuego->aparecerBonusKillAll(bonusKillAll);
 							}
 
+							
+							/**/
+							UnRectangulo.RefEnemigo->muereEnemigo();
+
+							/*si al tratar de mover al enemigo se encuentra con un estado de muerte, y transcurrio n segundos, entonces internamente
+							se setea el atributo listoParaMorir en true*/
+
+							if (UnRectangulo.RefEnemigo->estaListoParaMorir())
+							{
+								UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);
+							}
 							//eliminar enemigo de pantalla
-							UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);
+							/*UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);*/
 
 						}
 						UnJuego->DesmutexearListaEnemigos();
