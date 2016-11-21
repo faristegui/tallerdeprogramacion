@@ -255,11 +255,6 @@
 					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
 				</ESTADOS>
 		</SPRITE>
-		<SPRITE id="OvniEnemigo" frameWidth="50" frameHeight="45" velocidad="150">
-			<ESTADOS cantidad="1">
-				<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
-			</ESTADOS>
-		</SPRITE>
 		<SPRITE id="HumanoEnemigo" frameWidth="38" frameHeight="49" velocidad="100">
 			<ESTADOS cantidad="10">
 				<ESTADO id="CAMINA-IZQ" cantFrames="12"/>
@@ -311,18 +306,32 @@
 				<ESTADO id="MUERTO" cantFrames="1"/>
 			</ESTADOS>
 		</SPRITE>
+		<SPRITE id="OvniEnemigo" frameWidth="48" frameHeight="45" velocidad="100">
+			<ESTADOS cantidad="10">
+				<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
+				<ESTADO id="CAMINA-DER" cantFrames="2"/>
+				<ESTADO id="QUIETO-IZQ" cantFrames="2"/>
+				<ESTADO id="QUIETO-DER" cantFrames="2"/>
+				<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="2"/>
+				<ESTADO id="QUIETO-DER-DISPARA" cantFrames="2"/>
+				<ESTADO id="HERIDO-IZQ" cantFrames="2"/>
+				<ESTADO id="HERIDO-DER" cantFrames="2"/>
+				<ESTADO id="MUERTO-DER" cantFrames="2"/>				
+				<ESTADO id="MUERTO-IZQ" cantFrames="2"/>	
+			</ESTADOS>
+		</SPRITE>
 		<SPRITE id="EnemigoFinal1" frameWidth="158" frameHeight="122" velocidad="100">
-				<ESTADOS cantidad="10">
-					<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
-					<ESTADO id="CAMINA-DER" cantFrames="2"/>
-					<ESTADO id="QUIETO-IZQ" cantFrames="2"/>
-					<ESTADO id="QUIETO-DER" cantFrames="2"/>
-					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="2"/>
-					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="2"/>
-					<ESTADO id="HERIDO-IZQ" cantFrames="2"/>
-					<ESTADO id="HERIDO-DER" cantFrames="2"/>
-					<ESTADO id="MUERTO-DER" cantFrames="2"/>				
-					<ESTADO id="MUERTO-IZQ" cantFrames="2"/>	
+			<ESTADOS cantidad="10">
+				<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
+				<ESTADO id="CAMINA-DER" cantFrames="2"/>
+				<ESTADO id="QUIETO-IZQ" cantFrames="2"/>
+				<ESTADO id="QUIETO-DER" cantFrames="2"/>
+				<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="2"/>
+				<ESTADO id="QUIETO-DER-DISPARA" cantFrames="2"/>
+				<ESTADO id="HERIDO-IZQ" cantFrames="2"/>
+				<ESTADO id="HERIDO-DER" cantFrames="2"/>
+				<ESTADO id="MUERTO-DER" cantFrames="2"/>				
+				<ESTADO id="MUERTO-IZQ" cantFrames="2"/>	
 			</ESTADOS>
 		</SPRITE>
 		<SPRITE id="bonusp" frameWidth="25" frameHeight="28" velocidad="1">
@@ -338,9 +347,10 @@
 	</SPRITES>
 	<NIVELES>
 		<NIVEL id="Level_1">
-			<ENEMIGOS cantidad="4">
+			<ENEMIGOS cantidad="5">
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="600" posY="390" vida="100" velocidadCaminata="4"/>
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="850" posY="390" vida="100" velocidadCaminata="6"/>
+				<ENEMIGO tipo="OvniEnemigo" direccion="IZQ" posX="1050" posY="390" vida="100" velocidadCaminata="6"/>
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="500" posY="390" vida="100" velocidadCaminata="3"/>
 				<ENEMIGO tipo="EnemigoFinal1" direccion="IZQ" posX="2580" posY="100" vida="1000" velocidadCaminata="3"/>
 			</ENEMIGOS>
