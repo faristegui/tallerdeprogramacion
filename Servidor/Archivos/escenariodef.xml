@@ -3,7 +3,7 @@
 	<FONDO>
 		<CAPAS cantidad="3">
 			<IMAGEN nombre="cieloLevel1.bmp" zIndex="2" width="2600" height="600"/>
-			<IMAGEN nombre="plataformasLevel.bmp" zIndex="1" width="2600" height="600"/>
+			<IMAGEN nombre="plataformasLevel1.bmp" zIndex="1" width="2600" height="600"/>
 			<IMAGEN nombre="pisoLevel1.bmp" zIndex="3" width="2600" height="600"/>
 		</CAPAS>
 	</FONDO>
