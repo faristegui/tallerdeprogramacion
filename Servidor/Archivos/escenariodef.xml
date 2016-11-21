@@ -8,11 +8,11 @@
 		</CAPAS>
 	</FONDO>
 	<PLATAFORMAS cantidad="5">
-		<PLATAFORMA x="200" ancho="526" y="388" alto="30"/>
-		<PLATAFORMA x="1024" ancho="176" y="388" alto="30"/>
-		<PLATAFORMA x="1276" ancho="269" y="388" alto="30"/>
-		<PLATAFORMA x="1838" ancho="404" y="388" alto="30"/>
-		<PLATAFORMA x="2800" ancho="526" y="388" alto="30"/>
+		<PLATAFORMA x="200" ancho="526" y="367" alto="30"/>
+		<PLATAFORMA x="1024" ancho="176" y="367" alto="30"/>
+		<PLATAFORMA x="1364" ancho="269" y="367" alto="30"/>
+		<PLATAFORMA x="1840" ancho="404" y="367" alto="30"/>
+		<PLATAFORMA x="2800" ancho="526" y="367" alto="30"/>
 	</PLATAFORMAS>
 	<SPRITES cantidad="22">
 		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="100">
