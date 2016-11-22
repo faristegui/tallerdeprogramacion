@@ -5,7 +5,7 @@ class Proyectil
 {
 public:
 	Proyectil(std::string idJugador,std::string UnIdSprite, int posX, int posY, int vel, 
-		std::string UnaDireccion, int UnWidth, int UnHeight, int Danio, bool TieneDireccion);
+		std::string UnaDireccion, int UnWidth, int UnHeight, int Danio, bool TieneDireccion, bool esDePersonaje);
 	void Mover();
 	std::string GetIDJugador();
 	std::string GetIDSprite();
@@ -17,6 +17,7 @@ public:
 	~Proyectil();
 	void MoverEnX(int CantX);
 	int GetDanio();
+	bool EsDePersonaje();
 private:
 	std::string IDJugador;
 	std::string IDSprite;
@@ -30,5 +31,6 @@ private:
 	int Height;
 	bool TieneDireccion;
 	int Danio;
+	bool esDePersonaje;
 };
 

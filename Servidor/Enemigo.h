@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <time.h>
+#include "Arma.h"
 class Enemigo
 {
 public:
@@ -29,6 +30,10 @@ public:
 	void setListoParaMorir(bool valor);
 	int getIndexEnListaOriginal();
 	void setIndexEnListaOriginal(int indice);
+	bool EstaDisparando();
+	Arma* getArmaEnUso();
+	std::string  getNombre();
+	std::string getDireccion();
 private:
 	std::string IDSprite;
 	std::string estado;
@@ -43,5 +48,9 @@ private:
 	time_t tiempoDeVida;
 	time_t tiempoTranscurrido;
 	bool listoParaMorir;
+	Arma* arma;
+	std::string Nombre;
+	std::string Direccion;
+	bool estaDisparando;
 };
 

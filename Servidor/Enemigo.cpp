@@ -1,5 +1,6 @@
 #include "Enemigo.h"
 
+#include "ArmaEnemigoHumano.h"
 
 Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel, 
 				int unaVida, bool esFinal, int UnWidth, int UnHeight)
@@ -17,6 +18,10 @@ Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel,
 	time_t* pTiempoDeVida = &t;
 	tiempoDeVida = (time(pTiempoDeVida));
 	listoParaMorir = false; /*me indica si en el proximo tick ya puedo eliminar al enemigo dandome tiempo para mostrar el sprite de muerte*/
+	arma = new ArmaEnemigoHumano();
+	Nombre = "EnemigoHumano";
+	Direccion = "IZQUIERDA";
+	this->estaDisparando = false;
 }
 
 void Enemigo::SacarVida(int Cantidad) {
@@ -101,12 +106,14 @@ void Enemigo::mover()
 			this->estado = "QUIETO-IZQ-DISPARA";
 			this->tiempoDeVida = getTiempoActual();
 			tiempoTranscurrido = 0;
+			this->estaDisparando = true;
 		}
-		if (this->estado == "QUIETO-IZQ-DISPARA" && tiempoTranscurrido > 1)
+		if (this->estado == "QUIETO-IZQ-DISPARA" && tiempoTranscurrido > 0.8)
 		{
 			this->estado = "CAMINA-IZQ";
 			this->tiempoDeVida = getTiempoActual();
 			tiempoTranscurrido = 0;
+			this->estaDisparando = false;
 		}
 
 		if ((this->estado == "CAMINA-IZQ" || this->estado == "CAMINA-DER"))
@@ -211,4 +218,27 @@ bool Enemigo::estaListoParaMorir()
 {
 	return this->listoParaMorir;
 
+}
+bool Enemigo::EstaDisparando()
+{
+
+	return this->estaDisparando;
+}
+
+Arma* Enemigo::getArmaEnUso()
+{
+
+	return arma;
+
+}
+std::string  Enemigo::getNombre()
+{
+
+	return this->Nombre;
+}
+
+
+std::string Enemigo::getDireccion()
+{
+	return this->Direccion;
 }

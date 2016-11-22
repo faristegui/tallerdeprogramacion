@@ -14,7 +14,7 @@
 		<PLATAFORMA x="1840" ancho="404" y="367" alto="30"/>
 		<PLATAFORMA x="2800" ancho="526" y="367" alto="30"/>
 	</PLATAFORMAS>
-	<SPRITES cantidad="22">
+	<SPRITES cantidad="23">
 		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="100">
 				<ESTADOS cantidad="16">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
@@ -261,8 +261,8 @@
 				<ESTADO id="CAMINA-DER" cantFrames="12"/>
 				<ESTADO id="QUIETO-IZQ" cantFrames="5"/>
 				<ESTADO id="QUIETO-DER" cantFrames="5"/>
-				<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="6"/>
-				<ESTADO id="QUIETO-DER-DISPARA" cantFrames="6"/>
+				<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="8"/>
+				<ESTADO id="QUIETO-DER-DISPARA" cantFrames="8"/>
 				<ESTADO id="HERIDO-IZQ" cantFrames="12"/>
 				<ESTADO id="HERIDO-DER" cantFrames="12"/>
 				<ESTADO id="MUERTO-DER" cantFrames="13"/>				
@@ -297,6 +297,14 @@
 					<ESTADO id="HORIZONTAL-DER" cantFrames="2"/>
 					<ESTADO id="HORIZONTAL-IZQ" cantFrames="2"/>
 					<ESTADO id="VERTICAL" cantFrames="2"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="Bala-SEH" frameWidth="10" frameHeight="10" velocidad="60">
+				<ESTADOS cantidad="4">
+					<ESTADO id="HORIZONTAL" cantFrames="1"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="1"/>
+					<ESTADO id="VERTICAL" cantFrames="1"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="1"/>
 			</ESTADOS>
 		</SPRITE>
 		<SPRITE id="RobotEnemigo" frameWidth="76" frameHeight="66" velocidad="100">

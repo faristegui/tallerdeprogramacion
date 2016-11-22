@@ -1,11 +1,11 @@
 #pragma once
 #include "Arma.h"
 
-class ArmaH : public Arma {
+class ArmaEnemigoHumano : public Arma {
 public:
-	ArmaH() : Arma(150, "H", 25, "Heavy Machinegun", 200, true) { }
+	ArmaEnemigoHumano() : Arma(900, "SEH", 25, "ShotgunEnemigoHumano", 10, true) { }
 
-	int ArmaH::DeterminarOffsetBalaX(std::string UnaDireccion) {
+	int ArmaEnemigoHumano::DeterminarOffsetBalaX(std::string UnaDireccion) {
 
 		int Offset = 0;
 
@@ -14,33 +14,33 @@ public:
 		}
 
 		if (UnaDireccion == "IZQUIERDA") {
-			Offset = -44;
-		}
-
-		if (UnaDireccion == "ARRIBA-DER") {
-			Offset = -18;
-		}
-
-		if (UnaDireccion == "ARRIBA-IZQ") {
-			Offset = 20;
-		}
-
-		if (UnaDireccion == "ARRIBA-DER-DIAG") {
 			Offset = 10;
 		}
 
+		if (UnaDireccion == "ARRIBA-DER") {
+			Offset = 12;
+		}
+
+		if (UnaDireccion == "ARRIBA-IZQ") {
+			Offset = 40;
+		}
+
+		if (UnaDireccion == "ARRIBA-DER-DIAG") {
+			Offset = 44;
+		}
+
 		if (UnaDireccion == "ARRIBA-IZQ-DIAG") {
-			Offset = -10;
+			Offset = 10;
 		}
 
 		return Offset;
 	}
 
-	int ArmaH::DeterminarOffsetBalaY(std::string UnaDireccion) {
+	int ArmaEnemigoHumano::DeterminarOffsetBalaY(std::string UnaDireccion) {
 		int Offset = 0;
 
 		if (UnaDireccion == "DERECHA") {
-			Offset = 35;
+			Offset = 55;
 		}
 
 		if (UnaDireccion == "IZQUIERDA") {
@@ -48,30 +48,30 @@ public:
 		}
 
 		if (UnaDireccion == "ARRIBA-DER") {
-			Offset = -60;
+			Offset = -8;
 		}
 
 		if (UnaDireccion == "ARRIBA-IZQ") {
-			Offset = -60;
+			Offset = -8;
 		}
 
 		if (UnaDireccion == "ARRIBA-DER-DIAG") {
-			Offset = -40;
+			Offset = 0;
 		}
 
 		if (UnaDireccion == "ARRIBA-IZQ-DIAG") {
-			Offset = -40;
+			Offset = 0;
 		}
 
 		return Offset;
 	}
-	
-	Proyectil* ArmaH::CrearProyectil(std::string NombreJugador, int PosX, int PosY, std::string Direccion) {
+
+	Proyectil* ArmaEnemigoHumano::CrearProyectil(std::string NombreJugador, int PosX, int PosY, std::string Direccion) {
 
 		int OffsetX = DeterminarOffsetBalaX(Direccion);
 		int OffsetY = DeterminarOffsetBalaY(Direccion);
 
 		return new Proyectil(NombreJugador, "Bala-" + CodigoArma,
-			PosX + OffsetX, PosY + OffsetY, VelocidadBala, Direccion, 10, 10, 20, true,true);
+			PosX + OffsetX, PosY + OffsetY, VelocidadBala, Direccion, 10, 10, 70, false, false);
 	}
 };

@@ -58,6 +58,6 @@ public:
 		int OffsetY = DeterminarOffsetBalaY(Direccion);
 
 		return new Proyectil(NombreJugador, "Bala-" + CodigoArma,
-			PosX + OffsetX, PosY + OffsetY, VelocidadBala, Direccion, 64, 64, 80, true);
+			PosX + OffsetX, PosY + OffsetY, VelocidadBala, Direccion, 64, 64, 80, true,true);
 	}
 };

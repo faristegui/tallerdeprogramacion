@@ -1,7 +1,7 @@
 #include "Proyectil.h"
 #include <string>
 Proyectil::Proyectil(std::string idJugador,std::string UnIdSprite, int posX, int posY, int vel, 
-					std::string UnaDireccion, int UnWidth, int UnHeight, int UnDanio, bool UnTieneDireccion)
+					std::string UnaDireccion, int UnWidth, int UnHeight, int UnDanio, bool UnTieneDireccion, bool esDePersonaje)
 {
 	IDSprite = UnIdSprite;
 	IDJugador = idJugador.substr(0,idJugador.find('-'));
@@ -14,6 +14,7 @@ Proyectil::Proyectil(std::string idJugador,std::string UnIdSprite, int posX, int
 	Width = UnWidth;
 	Height = UnHeight;
 	Danio = UnDanio;
+	this->esDePersonaje = esDePersonaje;
 }
 
 int Proyectil::GetDanio() {
@@ -152,4 +153,9 @@ int Proyectil::GetHeight() {
 
 Proyectil::~Proyectil()
 {
+}
+
+bool Proyectil::EsDePersonaje()
+{
+	return this->esDePersonaje;
 }
