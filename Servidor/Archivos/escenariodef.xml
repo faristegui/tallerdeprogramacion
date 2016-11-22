@@ -334,7 +334,7 @@
 				<ESTADO id="CAMINA-DER" cantFrames="2"/>
 				<ESTADO id="QUIETO-IZQ" cantFrames="2"/>
 				<ESTADO id="QUIETO-DER" cantFrames="2"/>
-				<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="2"/>
+				<ESTADO id="DISPARA" cantFrames="2"/>
 				<ESTADO id="QUIETO-DER-DISPARA" cantFrames="2"/>
 				<ESTADO id="HERIDO-IZQ" cantFrames="2"/>
 				<ESTADO id="HERIDO-DER" cantFrames="2"/>
