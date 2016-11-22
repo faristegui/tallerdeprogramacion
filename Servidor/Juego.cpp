@@ -417,25 +417,25 @@ void FisicaThread(void* arg) {
 
 				UnJugador->UpdatePos();
 
-				int YDelPiso;
-				int HDelPiso;
+				int YDelObstaculo;
+				int HDelObstaculo;
 
-				if (UnJuego->HayPiso(UnJugador->GetX(), UnJugador->GetY(), UnJugador->GetWidth(), UnJugador->GetHeight(), YDelPiso, HDelPiso)) {
+				if (UnJuego->HayObstaculo(UnJugador->GetX(), UnJugador->GetY(), UnJugador->GetWidth(), UnJugador->GetHeight(), YDelObstaculo, HDelObstaculo)) {
 
 					if (UnJugador->EstaSaltando()) {
 						if ((UnJugador->EstaCayendo())) {
 
-							if (UnJugador->GetY() + UnJugador->GetHeight() >= YDelPiso) {
+							if (UnJugador->GetY() + UnJugador->GetHeight() >= YDelObstaculo) {
 
 								UnJugador->SetEstaEnPiso(true);
 								UnJugador->SetEstaSaltando(false);
 								UnJugador->SetVelocidadY(0);
-								UnJugador->SetY(YDelPiso - UnJugador->GetHeight());
+								UnJugador->SetY(YDelObstaculo - UnJugador->GetHeight());
 							}
 						} else {
 
 							UnJugador->SetVelocidadY(0);
-							UnJugador->SetY(YDelPiso + 1);
+							UnJugador->SetY(YDelObstaculo + 1);
 						}
 					}
 				} else {
@@ -634,14 +634,14 @@ Camara* Juego::GetCamaraObstaculos() {
 	}
 }
 
-bool Juego::HayPiso(int X, int Y, int W, int H, int &YDelPiso, int &HDelPiso) {
+bool Juego::HayObstaculo(int X, int Y, int W, int H, int &YDelObstaculo, int &HDelObstaculo) {
 
-	YDelPiso = 0;
-	HDelPiso = 0;
+	YDelObstaculo = 0;
+	HDelObstaculo = 0;
 
 	if (Y + H >= PisoY) {
 
-		YDelPiso = PisoY;
+		YDelObstaculo = PisoY;
 		return true;
 	}
 
@@ -655,8 +655,8 @@ bool Juego::HayPiso(int X, int Y, int W, int H, int &YDelPiso, int &HDelPiso) {
 
 		if (HayColision(X, Y, W, H, UnRectangulo->x - CamaraObstaculos->X, UnRectangulo->y, UnRectangulo->w, UnRectangulo->h)) {
 
-			YDelPiso = UnRectangulo->y;
-			HDelPiso = UnRectangulo->h;
+			YDelObstaculo = UnRectangulo->y;
+			HDelObstaculo = UnRectangulo->h;
 			return true;
 		}
 	}

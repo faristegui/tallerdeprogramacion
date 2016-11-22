@@ -97,7 +97,7 @@ public:
 	void SetListaDatosSprites(Lista<DatosSprites *>* UnaListaSprites);
 	DatosSprites* BuscarSpriteEnLista(std::string tipo);
 	void AgregarPlataforma(int x, int y, int w, int h);
-	bool HayPiso(int X, int Y, int W, int H, int &YPiso, int &HDelPiso);
+	bool HayObstaculo(int X, int Y, int W, int H, int &YDelObstaculo, int &HDelObstaculo);
 private:
 	Lista<DatosSprites *>* ListaSprites;
 	Lista<Rectangulo* >* ListaPlataformas;
