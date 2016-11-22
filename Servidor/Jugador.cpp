@@ -13,6 +13,8 @@ Jugador::Jugador(std::string UnNombre, std::string UnColor, int UnWidth, int UnH
 	Direccion = "DERECHA";
 	x = 20;
 	y = 365;
+	VelocidadY = 0;
+	VelocidadX = 0;
 	puntaje = 0;
 	vida = 100;
 	Conectado = true;
@@ -104,11 +106,49 @@ void Jugador::SetParametrosSalto(int UnTiempoInicioSaltoX, int UnTiempoInicioSal
 	PosicionYInicioSalto = UnaPosicionYInicioSalto;
 }
 
+float Jugador::GetVelocidadX() {
+
+	return VelocidadX;
+}
+
+float Jugador::GetVelocidadY() {
+
+	return VelocidadY;
+}
+
+void Jugador::UpdatePos() {
+
+	if (!EstaEnPiso) {
+		VelocidadY += 1.8;	// Gravedad
+		y += VelocidadY;
+	}
+
+	if (!EstaDisparando()) {
+		x += VelocidadX;
+	}
+}
+
+void Jugador::SetVelocidadX(float UnaVelocidad) {
+
+	VelocidadX = UnaVelocidad;
+}
+
+void Jugador::SetVelocidadY(float UnaVelocidad) {
+
+	VelocidadY = UnaVelocidad;
+}
+
+void Jugador::SetEstaEnPiso(bool UnEstaEnPiso) {
+
+	EstaEnPiso = UnEstaEnPiso;
+}
+
 void Jugador::Mover(std::string Tecla) {
 
 	if (Tecla == "SPACE") {
 
 		SaltandoVertical = true;
+		EstaEnPiso = false;
 
 		if (!EstaSaltando()) {
 
@@ -127,6 +167,9 @@ void Jugador::Mover(std::string Tecla) {
 			}
 
 			SetEstaSaltando(true);
+
+			int ImpulsoSalto = -25;
+			SetVelocidadY(ImpulsoSalto);
 		}
 	}
 

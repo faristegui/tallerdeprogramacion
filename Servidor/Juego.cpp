@@ -116,7 +116,7 @@ void FisicaThread(void* arg) {
 
 						if (UnJugador->GetX() <= BordeEnXMaxCamara) {
 
-							UnJugador->MoverEnX(VelocidadEnX);
+							//UnJugador->SetVelocidadX(VelocidadEnX);
 						} else {
 							
 							AvanzaCamara = true;
@@ -126,81 +126,7 @@ void FisicaThread(void* arg) {
 
 						if (UnJugador->GetX() >= BordeEnXMinCamara) {
 
-							UnJugador->MoverEnX(-VelocidadEnX);
-						}
-					}
-
-					int YDelPiso;
-
-					if (!UnJuego->HayPiso(UnJugador->GetX(), UnJugador->GetY(), UnJugador->GetWidth(), UnJugador->GetHeight(), YDelPiso)) {
-
-						UnJugador->SetParametrosSalto(0, ticks_start, UnJugador->GetX(), UnJugador->GetY());
-						UnJugador->SetEstaSaltando(true);
-						UnJugador->SetEstaCayendo(true);
-						UnJugador->SetEstaSaltandoVertical(true);
-					}
-				}
-
-				if (UnJugador->EstaSaltando()) {
-
-					float TiempoActual = clock();
-					float TiempoInicioSaltoX = UnJugador->GetTiempoInicioSaltoX();
-					float TiempoInicioSaltoY = UnJugador->GetTiempoInicioSaltoY();
-					int PosicionXInicioSalto = UnJugador->GetPosicionXInicioSalto();
-					int PosicionYInicioSalto = UnJugador->GetPosicionYInicioSalto();
-
-					float Diferencia;
-					
-					Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoY, 0, 120, 400);
-
-					if ((PosicionYInicioSalto - Diferencia) > UnJugador->GetY()) {
-						UnJugador->SetEstaCayendo(true);
-					}
-					else {
-						UnJugador->SetEstaCayendo(false);
-					}
-
-					UnJugador->SetY(PosicionYInicioSalto - Diferencia);
-					
-					if (UnJugador->EstaCayendo()) {
-
-						int YDelPiso;
-
-						if (UnJuego->HayPiso(UnJugador->GetX(), UnJugador->GetY(), UnJugador->GetWidth(), UnJugador->GetHeight(), YDelPiso)) {
-
-							UnJugador->SetEstaSaltando(false);
-							UnJugador->SetEstaCayendo(false);
-							UnJugador->SetY(YDelPiso - UnJugador->GetHeight());
-						}
-					}
-
-					if (!UnJugador->EstaSaltandoVertical()) {
-						if (UnJugador->GetEstado() == "SALTANDO-DER") {
-
-							Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoX, 0, 120, 900);
-							UnJugador->SetX(PosicionXInicioSalto + Diferencia);
-
-							if (UnJugador->GetX() >= BordeEnXMaxCamara) {
-
-								AvanzaCamara = true;
-								
-								UnJugador->SetEstaSaltandoVertical(true);
-								UnJugador->SetX(BordeEnXMaxCamara);
-							}
-						}
-						else {
-
-							if (UnJugador->GetEstado() == "SALTANDO-IZQ") {
-
-								Diferencia = FuncionCuadratica(TiempoActual - TiempoInicioSaltoX, 0, 120, 900);
-								UnJugador->SetX(PosicionXInicioSalto - Diferencia);
-
-								if (UnJugador->GetX() <= BordeEnXMinCamara) {
-
-									UnJugador->SetEstaSaltandoVertical(true);
-									UnJugador->SetX(BordeEnXMinCamara);
-								}
-							}
+							//UnJugador->SetVelocidadX(-VelocidadEnX);
 						}
 					}
 				}
@@ -475,8 +401,33 @@ void FisicaThread(void* arg) {
 
 					if (MoverParaAtras) {
 
-						UnJugador->MoverEnX(-VelocidadEnX);
+						UnJugador->SetVelocidadX(UnJugador->GetVelocidadX() - VelocidadEnX);
 					}
+				}
+			}
+		}
+		for (int i = 0; i < CantJugadores; i++) {
+
+			Jugador *UnJugador = UnJuego->GetJugador(i);
+
+			if (UnJugador->GetEstaConectado()) {
+
+				UnJugador->UpdatePos();
+
+				int YDelPiso;
+
+				if (UnJuego->HayPiso(UnJugador->GetX(), UnJugador->GetY(), UnJugador->GetWidth(), UnJugador->GetHeight(), YDelPiso)) {
+
+					if (UnJugador->EstaSaltando()) {
+						UnJugador->SetEstaEnPiso(true);
+						UnJugador->SetEstaSaltando(false);
+						UnJugador->SetVelocidadY(0);
+						UnJugador->SetY(YDelPiso);
+					}
+				} else {
+
+					UnJugador->SetEstaEnPiso(false);
+					UnJugador->SetEstaSaltando(true);
 				}
 			}
 		}
@@ -491,8 +442,6 @@ void FisicaThread(void* arg) {
 
 		Sleep(50 - diff_ticks);
 	}
-
-
 }
 
 void Juego::desaparecerBonusPower()
@@ -677,7 +626,7 @@ bool Juego::HayPiso(int X, int Y, int W, int H, int &YDelPiso) {
 
 	if (Y + H >= PisoY) {
 
-		YDelPiso = PisoY;
+		YDelPiso = PisoY - H;
 		return true;
 	}
 
@@ -691,7 +640,7 @@ bool Juego::HayPiso(int X, int Y, int W, int H, int &YDelPiso) {
 
 		if (HayColision(X, Y, W, H, UnRectangulo->x - CamaraObstaculos->X, UnRectangulo->y, UnRectangulo->w, UnRectangulo->h)) {
 
-			YDelPiso = UnRectangulo->y;
+			YDelPiso = UnRectangulo->y - H;
 			return true;
 		}
 	}
@@ -804,6 +753,14 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 	if ((Tipo == "SPACE") || (Tipo == "RIGHT") || (Tipo == "DOWN") || (Tipo == "LEFT") || (Tipo == "UP")) {
 
 		Jugadores[IndiceJugador]->Mover(Tipo);
+
+		if (Tipo == "RIGHT") {
+			Jugadores[IndiceJugador]->SetVelocidadX(10);
+		}
+
+		if (Tipo == "LEFT") {
+			Jugadores[IndiceJugador]->SetVelocidadX(-10);
+		}
 	}
 
 	if (Tipo == "ARMA-S") {
@@ -816,6 +773,9 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 
 	if(Tipo == "SOLTO-RIGHT")
 	{
+
+		Jugadores[IndiceJugador]->SetVelocidadX(0);
+
 		if (Jugadores[IndiceJugador]->EstaCaminando()) {
 
 
@@ -833,6 +793,9 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 
 	if(Tipo == "SOLTO-LEFT")
 	{
+
+		Jugadores[IndiceJugador]->SetVelocidadX(0);
+
 		if (Jugadores[IndiceJugador]->EstaCaminando()) {
 
 			if (!Jugadores[IndiceJugador]->EstaApuntandoALaDerecha()) {

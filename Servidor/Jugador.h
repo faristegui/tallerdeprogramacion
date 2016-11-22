@@ -49,7 +49,14 @@ public:
 	void SetEstaCayendo(bool UnEstaCayendo);
 	Arma* GetArmaEnUso();
 	void SetParametrosSalto(int UnTiempoInicioSaltoX, int UnTiempoInicioSaltoY, int UnaPosicionXInicioSalto, int PosicionYInicioSalto);
+	float GetVelocidadX();
+	float GetVelocidadY();
+	void SetVelocidadX(float UnaVelocidad);
+	void SetVelocidadY(float UnaVelocidad);
+	void UpdatePos();
+	void SetEstaEnPiso(bool UnEstaEnPiso);
 private:
+	bool EstaEnPiso;
 	bool Saltando;
 	bool SaltandoVertical;
 	bool Cayendo;
@@ -64,6 +71,8 @@ private:
 	int PosicionXInicioSalto;
 	int x;
 	int y;
+	float VelocidadX;
+	float VelocidadY;
 	int Width;
 	int Height;
 	int puntaje;
