@@ -30,16 +30,6 @@ void Juego::definirAparicionBonusKilAll()
 bool HayColision(int X1, int Y1, int W1, int H1,
 	int X2, int Y2, int W2, int H2) {
 
-	int X1Inicio = X1;
-	int X1Fin = X1 + W1;
-	int Y1Inicio = Y1;
-	int Y1Fin = Y1 + H1;
-
-	int X2Inicio = X2;
-	int X2Fin = X2 + W2;
-	int Y2Inicio = Y2;
-	int Y2Fin = Y2 + H2;
-
 	if (X1 <= X2 + W2 &&
 		X1 + W1 >= X2 &&
 		Y1 <= Y2 + H2 &&
@@ -91,7 +81,7 @@ void FisicaThread(void* arg) {
 
 	float ticks_start = 0;
 	int BordeEnXMinCamara = 20;
-	int BordeEnXMaxCamara = 710;
+	int BordeEnXMaxCamara = 700;
 	int VelocidadEnX = 10;
 
 	Juego *UnJuego = (Juego*)arg;
@@ -114,19 +104,9 @@ void FisicaThread(void* arg) {
 
 					if (UnJugador->GetEstado() == "CAMINA-DER") {
 
-						if (UnJugador->GetX() <= BordeEnXMaxCamara) {
+						if (UnJugador->GetX() > BordeEnXMaxCamara) {
 
-							//UnJugador->SetVelocidadX(VelocidadEnX);
-						} else {
-							
 							AvanzaCamara = true;
-						}
-					}
-					else {
-
-						if (UnJugador->GetX() >= BordeEnXMinCamara) {
-
-							//UnJugador->SetVelocidadX(-VelocidadEnX);
 						}
 					}
 				}
@@ -438,14 +418,25 @@ void FisicaThread(void* arg) {
 				UnJugador->UpdatePos();
 
 				int YDelPiso;
+				int HDelPiso;
 
-				if (UnJuego->HayPiso(UnJugador->GetX(), UnJugador->GetY(), UnJugador->GetWidth(), UnJugador->GetHeight(), YDelPiso)) {
+				if (UnJuego->HayPiso(UnJugador->GetX(), UnJugador->GetY(), UnJugador->GetWidth(), UnJugador->GetHeight(), YDelPiso, HDelPiso)) {
 
 					if (UnJugador->EstaSaltando()) {
-						UnJugador->SetEstaEnPiso(true);
-						UnJugador->SetEstaSaltando(false);
-						UnJugador->SetVelocidadY(0);
-						UnJugador->SetY(YDelPiso);
+						if ((UnJugador->EstaCayendo())) {
+
+							if (UnJugador->GetY() + UnJugador->GetHeight() >= YDelPiso) {
+
+								UnJugador->SetEstaEnPiso(true);
+								UnJugador->SetEstaSaltando(false);
+								UnJugador->SetVelocidadY(0);
+								UnJugador->SetY(YDelPiso - UnJugador->GetHeight());
+							}
+						} else {
+
+							UnJugador->SetVelocidadY(0);
+							UnJugador->SetY(YDelPiso + 1);
+						}
 					}
 				} else {
 
@@ -643,13 +634,14 @@ Camara* Juego::GetCamaraObstaculos() {
 	}
 }
 
-bool Juego::HayPiso(int X, int Y, int W, int H, int &YDelPiso) {
+bool Juego::HayPiso(int X, int Y, int W, int H, int &YDelPiso, int &HDelPiso) {
 
 	YDelPiso = 0;
+	HDelPiso = 0;
 
 	if (Y + H >= PisoY) {
 
-		YDelPiso = PisoY - H;
+		YDelPiso = PisoY;
 		return true;
 	}
 
@@ -663,7 +655,8 @@ bool Juego::HayPiso(int X, int Y, int W, int H, int &YDelPiso) {
 
 		if (HayColision(X, Y, W, H, UnRectangulo->x - CamaraObstaculos->X, UnRectangulo->y, UnRectangulo->w, UnRectangulo->h)) {
 
-			YDelPiso = UnRectangulo->y - H;
+			YDelPiso = UnRectangulo->y;
+			HDelPiso = UnRectangulo->h;
 			return true;
 		}
 	}

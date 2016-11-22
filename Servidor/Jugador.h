@@ -46,7 +46,6 @@ public:
 	void ArmaAnterior();
 	void reestablecerVida();
 	bool EstaCayendo();
-	void SetEstaCayendo(bool UnEstaCayendo);
 	Arma* GetArmaEnUso();
 	void SetParametrosSalto(int UnTiempoInicioSaltoX, int UnTiempoInicioSaltoY, int UnaPosicionXInicioSalto, int PosicionYInicioSalto);
 	float GetVelocidadX();
@@ -59,7 +58,6 @@ private:
 	bool EstaEnPiso;
 	bool Saltando;
 	bool SaltandoVertical;
-	bool Cayendo;
 	std::string Direccion;
 	std::string Nombre;
 	std::string Color;

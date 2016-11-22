@@ -20,7 +20,6 @@ Jugador::Jugador(std::string UnNombre, std::string UnColor, int UnWidth, int UnH
 	Conectado = true;
 	Saltando = false;
 	SaltandoVertical = false;
-	Cayendo = false;
 
 	Width = UnWidth;
 	Height = UnHeight;
@@ -73,11 +72,7 @@ Arma* Jugador::GetArmaEnUso() {
 
 bool Jugador::EstaCayendo() {
 
-	return Cayendo;
-}
-void Jugador::SetEstaCayendo(bool UnEstaCayendo) {
-
-	Cayendo = UnEstaCayendo;
+	return VelocidadY > 0;
 }
 
 void Jugador::herirEnemigo()
@@ -123,7 +118,29 @@ void Jugador::UpdatePos() {
 		y += VelocidadY;
 	}
 
-	if (!EstaDisparando()) {
+	bool PuedeMoverse = true;
+
+	if (EstaDisparando()) {
+
+		PuedeMoverse = false;
+	}
+
+	if (Direccion.substr(0, 6) == "ARRIBA") {
+
+		PuedeMoverse = false;
+	}
+
+	if ((VelocidadX > 0) && (x > 710)) {
+
+		PuedeMoverse = false;
+	}
+
+	if ((VelocidadX < 0) && (x < 10)) {
+
+		PuedeMoverse = false;
+	}
+
+	if (PuedeMoverse) {
 		x += VelocidadX;
 	}
 }
