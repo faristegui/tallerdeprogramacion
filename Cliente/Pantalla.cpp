@@ -687,7 +687,24 @@ void Pantalla::IniciarJuego() {
 				RenderSprite("bonus"+inicialBonus,"QUIETO",Starting_Tick,Renderer,posXBonus,posYBonus+20);
 
 			}
-
+			else
+			{
+				Indice++;
+			}
+			int cantidadRepuestosArma = stoi(mensajes[Indice]);
+			Indice++;
+			for(int i = 0; i < cantidadRepuestosArma;i++)
+			{			
+				//leo inicial del bonus
+				std::string inicialBonus = mensajes[Indice];
+				Indice++;
+				//leo posX del bonus
+				int posXBonus = stoi(mensajes[Indice]);
+				Indice++;
+				int posYBonus = stoi(mensajes[Indice]);
+				Indice++;
+				RenderSprite("bonus"+inicialBonus,"QUIETO",Starting_Tick,Renderer,posXBonus,posYBonus+20);
+			}
 			if (CantidadMensajes > 0) {
 				for(int i = 0; i < CantidadMensajes;i++)
 				{

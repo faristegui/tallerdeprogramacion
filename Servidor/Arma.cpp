@@ -47,6 +47,22 @@ int Arma::GetBalas() {
 	return Balas;
 }
 
+void Arma::agregarBalas()
+{
+	if(CodigoArma == "S")
+	{
+		Balas+=10;
+	}
+	if(CodigoArma == "H")
+	{
+		Balas+=150;
+	}
+	if(CodigoArma == "R")
+	{
+		Balas+=15;
+	}
+}
+
 Arma::~Arma()
 {
 }

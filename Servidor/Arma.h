@@ -11,6 +11,7 @@ public:
 	std::string GetCodigoArma();
 	std::string GetNombre();
 	int GetBalas();
+	void agregarBalas();
 	bool PuedeApuntarEnDiagonal();
 	~Arma();
 protected:

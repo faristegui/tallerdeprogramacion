@@ -434,6 +434,18 @@ void MainListenThread(void* arg) {
 				GranMensaje.append("NB"); //No Bonus
 				GranMensaje.append(";");
 			}
+			GranMensaje.append(IntAString(UnJuego.getRepuestosArma()->getTamanio()));
+			GranMensaje.append(";");
+			UnJuego.getRepuestosArma()->iniciarCursor();
+			while(UnJuego.getRepuestosArma()->avanzarCursor())
+			{
+				GranMensaje.append(UnJuego.getRepuestosArma()->obtenerCursor()->getInicial());
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.getRepuestosArma()->obtenerCursor()->getX()));
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.getRepuestosArma()->obtenerCursor()->getY()));
+				GranMensaje.append(";");
+			}
 			UnServer.EnviarMensajeTamanoVariable(GranMensaje, ClientSocket);
 			if (CantidadMensajes > 0) {
 				Buzon->iniciarCursor();
@@ -595,25 +607,23 @@ void MainListenThread(void* arg) {
 
 			UnJuego.SetListaDatosSprites(ListaSprites);
 		}
-
+		//carga de enemigos y de repuestos de balas
 		if (mensaje=="ENEM" && !UnJuego.enemigosEstanCargados())
 		{
-
+			tinyxml2::XMLDocument docu;
 			UnJuego.cargarEnemigos();
 			//solo se cargan para el primer nivel
-			tinyxml2::XMLDocument docu;
 
 			char* pathXML = strdup(ArchivoEscenarios.c_str());
 
 			if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
 			{
-				tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
 
 				//Cargo enemigos de cada nivel
+				tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
 				tinyxml2::XMLElement* elementosNiveles = elementoEscenario->FirstChildElement("NIVELES");
-
-				//Nivel 1
 				tinyxml2::XMLElement* elementosNivel = elementosNiveles->FirstChildElement("NIVEL");
+				//Nivel 1
 				const char* idNivel = elementosNivel->Attribute("id");
 
 				tinyxml2::XMLElement* elementoEnemigos = elementosNivel->FirstChildElement("ENEMIGOS");
@@ -654,6 +664,15 @@ void MainListenThread(void* arg) {
 				}
 				UnJuego.definirAparicionBonusPower();
 				UnJuego.definirAparicionBonusKilAll();
+				//carga de respuestos de balas
+				
+				tinyxml2::XMLElement* elementoRepuestos = elementoEnemigos->NextSiblingElement("REPUESTOS");
+				for (tinyxml2::XMLElement* elementoRepuesto = elementoRepuestos->FirstChildElement("REPUESTO"); elementoRepuesto != NULL; elementoRepuesto= elementoRepuesto->NextSiblingElement("REPUESTO"))
+				{
+					const char* posX = elementoRepuesto->Attribute("posX");
+					const char* posY = elementoRepuesto->Attribute("posY");
+					UnJuego.agregarRepuestoArma(stoi(posX),stoi(posY));
+				}
 			}
 			
 		Lista<Enemigo *>* todosLosEnemigos = UnJuego.GetTodosLosEnemigos();
