@@ -1,13 +1,6 @@
 #include "Juego.h"
 #include "Globales.h"
 
-int FuncionCuadratica(float t, float b, float c, float d) {
-	t /= d / 2;
-	if (t < 1) return c / 2 * t*t + b;
-	t--;
-	return -c / 2 * (t*(t - 2) - 1) + b;
-}
-
 void Juego::definirAparicionBonusPower()
 {
 	numeroEnemigoBonusPower = rand()% todosLosEnemigos->getTamanio();
@@ -158,7 +151,6 @@ void FisicaThread(void* arg) {
 					UnJuego->MutexearListaEnemigos();
 					Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
 
-
 					// if direccion = izq
 					EnemigoFinal->SetX(850);	// Si camina para la izquierda -> lo hago aparecer desde el borde derecho
 					// else if direccion = der
@@ -192,12 +184,17 @@ void FisicaThread(void* arg) {
 					UnEnemigo->getEstado();
 
 					if (UnEnemigo->getX() > 850) {
-
-						// if direccion = izq
-						UnEnemigo->SetX(850);	// Si camina para la izquierda -> lo hago aparecer desde el borde derecho
-						// else if direccion = der
-						// Si camina para la der -> lo hago aparecer desde el borde izq
-						// UnEnemigo->SetX(-50)
+						
+						if (UnEnemigo->GetDireccionAparicion() == "DER") {
+							UnEnemigo->SetX(850);
+						} else {
+							UnEnemigo->SetX(-20);
+						}
+					}
+					else {
+						if (UnEnemigo->getX() < 0) {
+							UnEnemigo->SetX(-20);
+						}
 					}
 
 					enemigosVivos->agregar(UnEnemigo);
@@ -358,7 +355,13 @@ void FisicaThread(void* arg) {
 						}
 					}
 					//muchachos el width y el height de la imagen del bonus la hardcodeo, de ultima si hacemos a tiempo lo cambiamos.
-					
+				}
+
+				int TmpY, TmpX;
+
+				if (UnJuego->HayObstaculo(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(), UnProyectil->GetHeight(), TmpY, TmpX)) {
+
+					Proyectiles->remover(PosicionCursor);
 				}
 			}
 			PosicionCursor++;
@@ -404,7 +407,7 @@ void FisicaThread(void* arg) {
 
 					if (MoverParaAtras) {
 
-						UnJugador->SetVelocidadX(UnJugador->GetVelocidadX() - VelocidadEnX);
+						UnJugador->MoverEnX(VelocidadEnX);
 					}
 				}
 			}
@@ -414,6 +417,9 @@ void FisicaThread(void* arg) {
 			Jugador *UnJugador = UnJuego->GetJugador(i);
 
 			if (UnJugador->GetEstaConectado()) {
+
+				int XAnterior = UnJugador->GetX();
+				int YAnterior = UnJugador->GetY();
 
 				UnJugador->UpdatePos();
 
@@ -435,7 +441,17 @@ void FisicaThread(void* arg) {
 						} else {
 
 							UnJugador->SetVelocidadY(0);
-							UnJugador->SetY(YDelObstaculo + 1);
+							UnJugador->SetY(YAnterior);
+							UnJugador->SetVelocidadX(0);
+							UnJugador->SetX(XAnterior);
+						}
+					} else {
+						if (UnJugador->EstaCaminando()) {
+							if (UnJugador->EstaApuntandoALaDerecha()) {
+								UnJugador->SetVelocidadX(VelocidadEnX);
+							} else {
+								UnJugador->SetVelocidadX(-VelocidadEnX);
+							}
 						}
 					}
 				} else {
@@ -607,14 +623,15 @@ Enemigo* Juego::GetEnemigoFinal() {
 	
 }
 
-void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida, bool esFinal,int width, int height)
+void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida, bool esFinal,int width, int height,
+						   std::string UnaDireccion)
 {
-	Enemigo* unEnemigo = new Enemigo(UnIDSprite, posX, posY, velocidad, vida, esFinal, width, height);
+	Enemigo* unEnemigo = new Enemigo(UnIDSprite, posX, posY, velocidad, vida, esFinal, width, height, UnaDireccion);
 	if (!esFinal) {
 		todosLosEnemigos->agregar(unEnemigo);
 	}
 	else {
-		EnemigoFinal = new Enemigo(UnIDSprite, posX, posY, velocidad, vida, esFinal, width, height);
+		EnemigoFinal = new Enemigo(UnIDSprite, posX, posY, velocidad, vida, esFinal, width, height, UnaDireccion);
 	}
 	//MutexearListaEnemigos();
 	//Enemigos->agregar(unEnemigo);
@@ -657,6 +674,7 @@ bool Juego::HayObstaculo(int X, int Y, int W, int H, int &YDelObstaculo, int &HD
 
 			YDelObstaculo = UnRectangulo->y;
 			HDelObstaculo = UnRectangulo->h;
+
 			return true;
 		}
 	}

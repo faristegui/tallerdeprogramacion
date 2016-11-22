@@ -68,7 +68,8 @@ public:
 	void BorrarCamaras();
 	void AvanzarCamara();
 	void AgregarCamara(int UnAncho);
-	void AgregarEnemigo(std::string UnIDSprite, int posX, int posY,int velocidad,int vida, bool esFinal,int width,int height);
+	void AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad, int vida, bool esFinal, int width, 
+						int height, std::string UnaDireccion);
 	Lista<Proyectil *>* GetProyectiles();
 	Lista<Enemigo *>* GetTodosLosEnemigos();
 	Lista<Enemigo*>* GetEnemigosPantalla();

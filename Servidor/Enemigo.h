@@ -5,7 +5,8 @@
 class Enemigo
 {
 public:
-	Enemigo(std::string unIdSprite, int posX, int posY, int vel, int unaVida, bool esFinal, int UnWidth, int UnHeight);
+	Enemigo(std::string unIdSprite, int posX, int posY, int vel, int unaVida, bool esFinal, 
+			int UnWidth, int UnHeight, std::string UnaDireccion);
 	int getX();
 	int getY();
 	void SetX(int UnX);
@@ -34,6 +35,7 @@ public:
 	Arma* getArmaEnUso();
 	std::string  getNombre();
 	std::string getDireccion();
+	std::string GetDireccionAparicion();
 private:
 	std::string IDSprite;
 	std::string estado;
@@ -50,6 +52,7 @@ private:
 	bool listoParaMorir;
 	Arma* arma;
 	std::string Nombre;
+	std::string DireccionAparicion;
 	std::string Direccion;
 	bool estaDisparando;
 };
