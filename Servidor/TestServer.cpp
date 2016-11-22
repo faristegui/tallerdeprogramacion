@@ -436,6 +436,7 @@ void MainListenThread(void* arg) {
 			}
 			GranMensaje.append(IntAString(UnJuego.getRepuestosArma()->getTamanio()));
 			GranMensaje.append(";");
+			UnJuego.MutexearListaRepuestos();
 			UnJuego.getRepuestosArma()->iniciarCursor();
 			while(UnJuego.getRepuestosArma()->avanzarCursor())
 			{
@@ -446,6 +447,7 @@ void MainListenThread(void* arg) {
 				GranMensaje.append(IntAString(UnJuego.getRepuestosArma()->obtenerCursor()->getY()));
 				GranMensaje.append(";");
 			}
+			UnJuego.DesmutexearListaRepuestos();
 			UnServer.EnviarMensajeTamanoVariable(GranMensaje, ClientSocket);
 			if (CantidadMensajes > 0) {
 				Buzon->iniciarCursor();

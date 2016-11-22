@@ -77,6 +77,8 @@ public:
 	void DesmutexearListaProyectiles();
 	void MutexearListaEnemigos();
 	void DesmutexearListaEnemigos();
+	void MutexearListaRepuestos();
+	void DesmutexearListaRepuestos();
 	bool enemigosEstanCargados();
 	void cargarEnemigos();
 	void sumarEnemigo();

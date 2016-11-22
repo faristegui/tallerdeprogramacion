@@ -77,7 +77,9 @@ void Juego::agregarRepuestoArma(int posX, int posY)
 {
 	Bonus* unBonus = new Bonus(posX,posY,"b","NC");
 	unBonus->mostrar();
+	MutexearListaRepuestos();
 	repuestosArma->agregar(unBonus);
+	DesmutexearListaRepuestos();
 }
 
 void FisicaThread(void* arg) {
@@ -283,6 +285,7 @@ void FisicaThread(void* arg) {
 				RectangulosEnemigos->agregar(UnRectangulo);
 			}
 			//hacer aparecer bonus
+			UnJuego->MutexearListaRepuestos();
 			UnJuego->getRepuestosArma()->iniciarCursor();
 			while(UnJuego->getRepuestosArma()->avanzarCursor())
 			{
@@ -294,6 +297,7 @@ void FisicaThread(void* arg) {
 					}
 				}
 			}
+			UnJuego->DesmutexearListaRepuestos();
 			PosicionCursor++;
 		}
 
@@ -423,6 +427,7 @@ void FisicaThread(void* arg) {
 		for(int j = 0;j < cantRepuestosEliminados;j++)
 		{
 			pos = 1;
+			UnJuego->MutexearListaRepuestos();
 			UnJuego->getRepuestosArma()->iniciarCursor();
 			while(UnJuego->getRepuestosArma()->avanzarCursor())
 			{
@@ -433,6 +438,7 @@ void FisicaThread(void* arg) {
 				}
 			}
 			pos++;
+			UnJuego->DesmutexearListaRepuestos();
 		}
 		
 		// -----------------------------------------------
@@ -555,11 +561,12 @@ bool Juego::hayBonus()
 
 HANDLE MutexListaProyectiles;
 HANDLE MutexListaEnemigos;
-
+HANDLE MutexListaRepuestos;
 Juego::Juego()
 {
 	MutexListaProyectiles = CreateMutex(NULL, FALSE, NULL);
 	MutexListaEnemigos = CreateMutex(NULL, FALSE, NULL);
+	MutexListaRepuestos = CreateMutex(NULL,FALSE,NULL);
 	CantJugadores = 0;
 	CantCamaras = 0;
 	NumeroNivel = 1;
@@ -954,6 +961,16 @@ int Juego::GetIndexUsuario(std::string Usuario) {
 void Juego::MutexearListaProyectiles() {
 	
 	WaitForSingleObject(MutexListaProyectiles, INFINITE);
+}
+
+void Juego::MutexearListaRepuestos()
+{
+	WaitForSingleObject(MutexListaRepuestos, INFINITE);
+}
+
+void Juego::DesmutexearListaRepuestos()
+{
+	ReleaseMutex(MutexListaRepuestos);
 }
 
 void Juego::DesmutexearListaProyectiles() {
