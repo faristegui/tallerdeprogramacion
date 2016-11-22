@@ -69,6 +69,16 @@ void Juego::desaparecerBonusKillAll()
 {
 	bonusKillAll = 0;
 }
+Lista<Bonus*>* Juego::getRepuestosArma()
+{
+	return repuestosArma;
+}
+void Juego::agregarRepuestoArma(int posX, int posY)
+{
+	Bonus* unBonus = new Bonus(posX,posY,"b","NC");
+	unBonus->mostrar();
+	repuestosArma->agregar(unBonus);
+}
 
 void FisicaThread(void* arg) {
 
@@ -272,7 +282,18 @@ void FisicaThread(void* arg) {
 				UnRectangulo.RefEnemigo = UnEnemigo;
 				RectangulosEnemigos->agregar(UnRectangulo);
 			}
-
+			//hacer aparecer bonus
+			UnJuego->getRepuestosArma()->iniciarCursor();
+			while(UnJuego->getRepuestosArma()->avanzarCursor())
+			{
+				if(UnJuego->getRepuestosArma()->obtenerCursor()->getX() <= 1000+UnJuego->GetCamaraObstaculos()->X)
+				{
+					if(UnJuego->getRepuestosArma()->obtenerCursor()->getX() > 850)
+					{
+						UnJuego->getRepuestosArma()->obtenerCursor()->setX(700);
+					}
+				}
+			}
 			PosicionCursor++;
 		}
 
@@ -368,17 +389,50 @@ void FisicaThread(void* arg) {
 		}
 		UnJuego->DesmutexearListaProyectiles();
 		
-		if(UnJuego->obtenerBonusPower() != NULL 
-			&& HayColision(UnJuego->obtenerBonusPower()->getX(),UnJuego->obtenerBonusPower()->getY(),37,41,UnJuego->GetJugador(UnJuego->obtenerBonusPower()->getIdJugador())->GetX(),UnJuego->GetJugador(UnJuego->obtenerBonusPower()->getIdJugador())->GetY(),44,61))
+	int cantRepuestosEliminados = 0;
+		//chequeo si algun jugador tomo algun bonus o repuesto de arma
+		for(int i =0; i < UnJuego->GetCantJugadores();i++)
 		{
-			UnJuego->obtenerBonusPower()->encontrar(UnJuego);
-			UnJuego->desaparecerBonusPower();
+			if(UnJuego->obtenerBonusPower() != NULL 
+				&& HayColision(UnJuego->obtenerBonusPower()->getX(),UnJuego->obtenerBonusPower()->getY(),25,28,UnJuego->GetJugador(i)->GetX(),UnJuego->GetJugador(i)->GetY(),44,61))
+			{
+				UnJuego->obtenerBonusPower()->encontrar(UnJuego);
+				UnJuego->desaparecerBonusPower();
+			}
+			if(UnJuego->obtenerBonusKillAll() != NULL 
+				&& HayColision(UnJuego->obtenerBonusKillAll()->getX(),UnJuego->obtenerBonusKillAll()->getY(),25,28,UnJuego->GetJugador(i)->GetX(),UnJuego->GetJugador(i)->GetY(),44,61))
+			{
+				UnJuego->obtenerBonusKillAll()->encontrar(UnJuego);
+				UnJuego->desaparecerBonusKillAll();
+			}
+			UnJuego->getRepuestosArma()->iniciarCursor();
+			while(UnJuego->getRepuestosArma()->avanzarCursor())
+			{
+				Bonus* unRepuestoArma = UnJuego->getRepuestosArma()->obtenerCursor();
+				if(HayColision(unRepuestoArma->getX(),unRepuestoArma->getY(),25,28,UnJuego->GetJugador(i)->GetX(),UnJuego->GetJugador(i)->GetY(),44,61))
+				{
+					UnJuego->GetJugador(i)->sumarBalas();
+					unRepuestoArma->marcarParaEliminar(unRepuestoArma);
+					cantRepuestosEliminados++;
+
+				}
+			}
 		}
-		if(UnJuego->obtenerBonusKillAll() != NULL 
-			&& HayColision(UnJuego->obtenerBonusKillAll()->getX(),UnJuego->obtenerBonusKillAll()->getY(),37,41,UnJuego->GetJugador(UnJuego->obtenerBonusKillAll()->getIdJugador())->GetX(),UnJuego->GetJugador(UnJuego->obtenerBonusKillAll()->getIdJugador())->GetY(),44,61))
+		//eliminar repuestos marcados
+		int pos;
+		for(int j = 0;j < cantRepuestosEliminados;j++)
 		{
-			UnJuego->obtenerBonusKillAll()->encontrar(UnJuego);
-			UnJuego->desaparecerBonusKillAll();
+			pos = 1;
+			UnJuego->getRepuestosArma()->iniciarCursor();
+			while(UnJuego->getRepuestosArma()->avanzarCursor())
+			{
+				if(UnJuego->getRepuestosArma()->obtenerCursor()->getDireccion() == UnJuego->getRepuestosArma()->obtenerCursor())
+				{
+					UnJuego->getRepuestosArma()->remover(pos);
+					break;
+				}
+			}
+			pos++;
 		}
 		
 		// -----------------------------------------------
@@ -521,6 +575,7 @@ Juego::Juego()
 	_beginthread(FisicaThread, 0, this);
 	PisoY = 486;
 	ListaPlataformas = new Lista<Rectangulo *>();
+	repuestosArma = new Lista<Bonus*>();
 }
 
 void Juego::AgregarPlataforma(int x, int y, int w, int h) {

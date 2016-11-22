@@ -19,6 +19,20 @@ int Bonus::getX()
 {
 	return posX;
 }
+void Bonus::setX(int numero)
+{
+	posX = numero;
+}
+
+Bonus* Bonus::getDireccion()
+{
+	return bonusDireccion;
+}
+
+void Bonus::marcarParaEliminar(Bonus* unaDireccion)
+{
+	bonusDireccion = unaDireccion;
+}
 
 void Bonus::mostrar()
 {

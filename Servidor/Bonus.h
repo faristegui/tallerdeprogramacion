@@ -10,7 +10,11 @@ public:
 	std::string getIdJugador();
 	bool getEstado();
 	void mostrar();
+	void marcarParaEliminar(Bonus* unaDireccion);
 	void encontrar(Juego* unJuego);
+	bool debeSerEliminado();
+	void setX(int numero);
+	Bonus* getDireccion();
 	std::string getInicial();
 	~Bonus(void);
 private:
@@ -18,6 +22,7 @@ private:
 	int posY;
 	std::string IDJugador;
 	bool enPantalla;
+	Bonus* bonusDireccion;
 	std::string inicial;
 
 };

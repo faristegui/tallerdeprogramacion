@@ -35,6 +35,12 @@ void Jugador::reestablecerVida()
 	vida = 100;
 }
 
+void Jugador::sumarBalas()
+{
+	GetArmaEnUso()->agregarBalas();
+}
+
+
 void Jugador::ArmaSiguiente() {
 	NumeroArma++;
 

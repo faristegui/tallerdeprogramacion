@@ -53,6 +53,7 @@ public:
 	void SetVelocidadX(float UnaVelocidad);
 	void SetVelocidadY(float UnaVelocidad);
 	void UpdatePos();
+	void sumarBalas();
 	void SetEstaEnPiso(bool UnEstaEnPiso);
 private:
 	bool EstaEnPiso;

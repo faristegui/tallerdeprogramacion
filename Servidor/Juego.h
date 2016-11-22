@@ -99,6 +99,8 @@ public:
 	DatosSprites* BuscarSpriteEnLista(std::string tipo);
 	void AgregarPlataforma(int x, int y, int w, int h);
 	bool HayObstaculo(int X, int Y, int W, int H, int &YDelObstaculo, int &HDelObstaculo);
+	Lista<Bonus*>* getRepuestosArma();
+	void agregarRepuestoArma(int posX, int posY);
 private:
 	Lista<DatosSprites *>* ListaSprites;
 	Lista<Rectangulo* >* ListaPlataformas;
@@ -113,6 +115,7 @@ private:
 	int cantEnemigosAparecidos;
 	Bonus* bonusPower;
 	Bonus* bonusKillAll;
+	Lista<Bonus*>* repuestosArma;
 	int GetIndexUsuario(std::string Usuario);
 	Lista<Proyectil *>* Proyectiles;
 	Lista<Enemigo *>* enemigosPantalla;
@@ -123,7 +126,6 @@ private:
 	Enemigo* EnemigoFinal;
 	int CantCamaras;
 	int NumeroNivel;
-
 	int PisoY;
 };
 
