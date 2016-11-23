@@ -191,7 +191,7 @@ void Jugador::Mover(std::string Tecla) {
 
 			SetEstaSaltando(true);
 
-			int ImpulsoSalto = -25;
+			int ImpulsoSalto = -27;
 			SetVelocidadY(ImpulsoSalto);
 		}
 	}

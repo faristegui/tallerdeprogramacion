@@ -409,6 +409,7 @@ void FisicaThread(void* arg) {
 				UnJuego->obtenerBonusKillAll()->encontrar(UnJuego);
 				UnJuego->desaparecerBonusKillAll();
 			}
+			UnJuego->MutexearListaRepuestos();
 			UnJuego->getRepuestosArma()->iniciarCursor();
 			while(UnJuego->getRepuestosArma()->avanzarCursor())
 			{
@@ -421,6 +422,7 @@ void FisicaThread(void* arg) {
 
 				}
 			}
+			UnJuego->DesmutexearListaRepuestos();
 		}
 		//eliminar repuestos marcados
 		int pos;
