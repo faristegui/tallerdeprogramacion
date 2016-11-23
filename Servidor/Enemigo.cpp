@@ -139,12 +139,27 @@ void Enemigo::mover()
 				tiempoTranscurrido = 0;
 			}
 
+			if ((this->estado == "CAMINA-DER" || this->estado == "HERIDO-DER") && tiempoTranscurrido > 0.5)
+			{
+				this->estado = "QUIETO-DER";
+
+				this->tiempoDeVida = getTiempoActual();
+				tiempoTranscurrido = 0;
+			}
+
 			if (this->estado == "QUIETO-IZQ" && tiempoTranscurrido > 0.2)
 			{
 				this->estado = "QUIETO-IZQ-DISPARA";
 				this->tiempoDeVida = getTiempoActual();
 				tiempoTranscurrido = 0;
 				this->estaDisparando = true;
+			}
+
+			if (this->estado == "QUIETO-DER" && tiempoTranscurrido > 0.2)
+			{
+				this->estado = "CAMINA-DER";
+				this->tiempoDeVida = getTiempoActual();
+				tiempoTranscurrido = 0;
 			}
 
 			if (this->estado == "QUIETO-IZQ-DISPARA" && tiempoTranscurrido > 0.8)
@@ -165,7 +180,7 @@ void Enemigo::mover()
 				}
 			}
 
-			if (this->estado == "MUERTO-IZQ" && tiempoTranscurrido > 0.8)
+			if ((this->estado == "MUERTO-IZQ" || (this->estado == "MUERTO-DER") && tiempoTranscurrido > 0.8))
 			{
 				this->tiempoDeVida = getTiempoActual();
 				tiempoTranscurrido = 0;
@@ -249,6 +264,11 @@ void Enemigo::muereEnemigo()
 	if (this->estado == "CAMINA-IZQ" || this->estado == "QUIETO-IZQ" || this->estado == "QUIETO-IZQ-DISPARA" || this->estado == "HERIDO-IZQ" )
 	{
 		this->estado = "MUERTO-IZQ";
+		this->tiempoDeVida = getTiempoActual();
+		tiempoTranscurrido = 0;
+	}
+	else {
+		this->estado = "MUERTO-DER";
 		this->tiempoDeVida = getTiempoActual();
 		tiempoTranscurrido = 0;
 	}

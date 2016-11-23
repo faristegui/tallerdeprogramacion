@@ -360,10 +360,11 @@
 	</SPRITES>
 	<NIVELES>
 		<NIVEL id="Level_1">
-			<ENEMIGOS cantidad="5">
+			<ENEMIGOS cantidad="6">
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="750" posY="390" vida="100" velocidadCaminata="4"/>
 				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="860" posY="390" vida="100" velocidadCaminata="9"/>
-				<ENEMIGO tipo="OvniEnemigo" direccion="IZQ" posX="1050" posY="40" vida="30" velocidadCaminata="6"/>
+				<ENEMIGO tipo="OvniEnemigo" direccion="IZQ" posX="1950" posY="40" vida="30" velocidadCaminata="6"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1650" posY="390" vida="100" velocidadCaminata="5"/>
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1100" posY="223" vida="175" velocidadCaminata="0"/>
 				<ENEMIGO tipo="EnemigoFinal1" direccion="IZQ" posX="2580" posY="100" vida="300" velocidadCaminata="3"/>
 			</ENEMIGOS>

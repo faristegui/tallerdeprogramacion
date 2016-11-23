@@ -283,45 +283,6 @@ void MainListenThread(void* arg) {
 			GranMensaje.append(StrCantJugadores);
 			GranMensaje.append(";");
 
-			int IndiceMiJugador = UnJuego.GetIndiceJugador(Usuario);
-			Jugador* MiJugador = UnJuego.GetJugador(IndiceMiJugador);
-			
-			for (int i = 0; i < CantJugadores; i++) {
-
-				if (i != IndiceMiJugador) {
-
-					Jugador* OtroJugador = UnJuego.GetJugador(i);
-
-					string Nombre = OtroJugador->GetNombre();
-					string IDSprite = OtroJugador->GetIDSprite();
-					string Estado = OtroJugador->GetEstado();
-					string PosX = IntAString(OtroJugador->GetX());
-					string PosY = IntAString(OtroJugador->GetY());
-
-					GranMensaje.append(Nombre);
-					GranMensaje.append(";");
-					GranMensaje.append(IDSprite);
-					GranMensaje.append(";");
-					GranMensaje.append(Estado);
-					GranMensaje.append(";");
-					GranMensaje.append(PosX);
-					GranMensaje.append(";");
-					GranMensaje.append(PosY);
-					GranMensaje.append(";");
-				}
-			}
-			// Renderizo por ultimo mi jugador para asi aparece al frente
-
-			GranMensaje.append(MiJugador->GetNombre().c_str()); // Nombre
-			GranMensaje.append(";");
-			GranMensaje.append(MiJugador->GetIDSprite().c_str()); // Sprite
-			GranMensaje.append(";");
-			GranMensaje.append(MiJugador->GetEstado().c_str()); // Estado
-			GranMensaje.append(";");
-			GranMensaje.append(IntAString(MiJugador->GetX())); // PosX
-			GranMensaje.append(";");
-			GranMensaje.append(IntAString(MiJugador->GetY())); // PosY
-			GranMensaje.append(";");
 			
 			// Si hay mensajes para el usuario -> le envio
 			Lista<Mensaje*>* Buzon = UnServer.obtenerMensajesPara(Usuario);
@@ -333,6 +294,56 @@ void MainListenThread(void* arg) {
 			
 			//Envio informacion de los enemigos
 			//Cantidad de enemigos que aparecen
+			//enviar bonus power
+			if (UnJuego.obtenerBonusPower() != 0 && UnJuego.obtenerBonusPower()->getEstado())
+			{
+				GranMensaje.append("SBP"); //Si Bonus Power
+				GranMensaje.append(";");
+				GranMensaje.append(UnJuego.obtenerBonusPower()->getInicial());
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.obtenerBonusPower()->getX()));
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.obtenerBonusPower()->getY()));
+				GranMensaje.append(";");
+				//UnJuego.bonusYaMostrado();
+			}
+			else
+			{
+				GranMensaje.append("NB"); //No Bonus
+				GranMensaje.append(";");
+			}
+			//envio bonus kill all
+			if (UnJuego.obtenerBonusKillAll() != 0 && UnJuego.obtenerBonusKillAll()->getEstado())
+			{
+				GranMensaje.append("SBKA"); //Si Bonus KillAll
+				GranMensaje.append(";");
+				GranMensaje.append(UnJuego.obtenerBonusKillAll()->getInicial());
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.obtenerBonusKillAll()->getX()));
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.obtenerBonusKillAll()->getY()));
+				GranMensaje.append(";");
+				//UnJuego.bonusYaMostrado();
+			}
+			else
+			{
+				GranMensaje.append("NB"); //No Bonus
+				GranMensaje.append(";");
+			}
+			GranMensaje.append(IntAString(UnJuego.getRepuestosArma()->getTamanio()));
+			GranMensaje.append(";");
+			UnJuego.MutexearListaRepuestos();
+			UnJuego.getRepuestosArma()->iniciarCursor();
+			while (UnJuego.getRepuestosArma()->avanzarCursor())
+			{
+				GranMensaje.append(UnJuego.getRepuestosArma()->obtenerCursor()->getInicial());
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.getRepuestosArma()->obtenerCursor()->getX()));
+				GranMensaje.append(";");
+				GranMensaje.append(IntAString(UnJuego.getRepuestosArma()->obtenerCursor()->getY()));
+				GranMensaje.append(";");
+			}
+			UnJuego.DesmutexearListaRepuestos();
 
 			UnJuego.MutexearListaEnemigos();
 			Lista<Enemigo *>* enemigos = UnJuego.GetEnemigosPantalla();
@@ -387,67 +398,58 @@ void MainListenThread(void* arg) {
 
 			UnJuego.DesmutexearListaProyectiles();
 
-			GranMensaje.append("Vida: " + IntAString(MiJugador->GetVida()));
-			GranMensaje.append(";");
-			//GranMensaje.append(ObtenerTextoPuntaje(UnJuego.obtenerModo(), IndiceMiJugador));
-			//GranMensaje.append(";");
-			GranMensaje.append(MiJugador->GetArmaEnUso()->GetNombre() + ": " + IntAString(MiJugador->GetArmaEnUso()->GetBalas()));
-			GranMensaje.append(";");
 			for(int i = 0;i< UnJuego.GetCantJugadores();i++)
 			{
 				GranMensaje.append(ObtenerTextoPuntaje(UnJuego.obtenerModo(), i));
 				GranMensaje.append(";");
 			}
-			//enviar bonus power
-			if(UnJuego.obtenerBonusPower() != 0 && UnJuego.obtenerBonusPower()->getEstado())
-			{
-				GranMensaje.append("SBP"); //Si Bonus Power
-				GranMensaje.append(";");
-				GranMensaje.append(UnJuego.obtenerBonusPower()->getInicial());
-				GranMensaje.append(";");
-				GranMensaje.append(IntAString(UnJuego.obtenerBonusPower()->getX()));
-				GranMensaje.append(";");
-				GranMensaje.append(IntAString(UnJuego.obtenerBonusPower()->getY()));
-				GranMensaje.append(";");
-				//UnJuego.bonusYaMostrado();
+
+
+			int IndiceMiJugador = UnJuego.GetIndiceJugador(Usuario);
+			Jugador* MiJugador = UnJuego.GetJugador(IndiceMiJugador);
+
+			for (int i = 0; i < CantJugadores; i++) {
+
+				if (i != IndiceMiJugador) {
+
+					Jugador* OtroJugador = UnJuego.GetJugador(i);
+
+					string Nombre = OtroJugador->GetNombre();
+					string IDSprite = OtroJugador->GetIDSprite();
+					string Estado = OtroJugador->GetEstado();
+					string PosX = IntAString(OtroJugador->GetX());
+					string PosY = IntAString(OtroJugador->GetY());
+
+					GranMensaje.append(Nombre);
+					GranMensaje.append(";");
+					GranMensaje.append(IDSprite);
+					GranMensaje.append(";");
+					GranMensaje.append(Estado);
+					GranMensaje.append(";");
+					GranMensaje.append(PosX);
+					GranMensaje.append(";");
+					GranMensaje.append(PosY);
+					GranMensaje.append(";");
+				}
 			}
-			else
-			{
-				GranMensaje.append("NB"); //No Bonus
-				GranMensaje.append(";");
-			}
-			//envio bonus kill all
-			if(UnJuego.obtenerBonusKillAll() != 0 && UnJuego.obtenerBonusKillAll()->getEstado())
-			{
-				GranMensaje.append("SBKA"); //Si Bonus KillAll
-				GranMensaje.append(";");
-				GranMensaje.append(UnJuego.obtenerBonusKillAll()->getInicial());
-				GranMensaje.append(";");
-				GranMensaje.append(IntAString(UnJuego.obtenerBonusKillAll()->getX()));
-				GranMensaje.append(";");
-				GranMensaje.append(IntAString(UnJuego.obtenerBonusKillAll()->getY()));
-				GranMensaje.append(";");
-				//UnJuego.bonusYaMostrado();
-			}
-			else
-			{
-				GranMensaje.append("NB"); //No Bonus
-				GranMensaje.append(";");
-			}
-			GranMensaje.append(IntAString(UnJuego.getRepuestosArma()->getTamanio()));
+			// Renderizo por ultimo mi jugador para asi aparece al frente
+
+			GranMensaje.append(MiJugador->GetNombre().c_str()); // Nombre
 			GranMensaje.append(";");
-			UnJuego.MutexearListaRepuestos();
-			UnJuego.getRepuestosArma()->iniciarCursor();
-			while(UnJuego.getRepuestosArma()->avanzarCursor())
-			{
-				GranMensaje.append(UnJuego.getRepuestosArma()->obtenerCursor()->getInicial());
-				GranMensaje.append(";");
-				GranMensaje.append(IntAString(UnJuego.getRepuestosArma()->obtenerCursor()->getX()));
-				GranMensaje.append(";");
-				GranMensaje.append(IntAString(UnJuego.getRepuestosArma()->obtenerCursor()->getY()));
-				GranMensaje.append(";");
-			}
-			UnJuego.DesmutexearListaRepuestos();
+			GranMensaje.append(MiJugador->GetIDSprite().c_str()); // Sprite
+			GranMensaje.append(";");
+			GranMensaje.append(MiJugador->GetEstado().c_str()); // Estado
+			GranMensaje.append(";");
+			GranMensaje.append(IntAString(MiJugador->GetX())); // PosX
+			GranMensaje.append(";");
+			GranMensaje.append(IntAString(MiJugador->GetY())); // PosY
+			GranMensaje.append(";");
+
+			GranMensaje.append("Vida: " + IntAString(MiJugador->GetVida()));
+			GranMensaje.append(";");
+			GranMensaje.append(MiJugador->GetArmaEnUso()->GetNombre() + ": " + IntAString(MiJugador->GetArmaEnUso()->GetBalas()));
+			GranMensaje.append(";");
+
 			UnServer.EnviarMensajeTamanoVariable(GranMensaje, ClientSocket);
 			if (CantidadMensajes > 0) {
 				Buzon->iniciarCursor();

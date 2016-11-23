@@ -586,28 +586,68 @@ void Pantalla::IniciarJuego() {
 			int CantJugadores = stoi(mensajes[Indice]);
 			Indice++;
 
-			int PosX = 0;
-			int PosY = 0;
-	
-			for (int i = 0; i < CantJugadores; i++) {
-
-				string Nombre = mensajes[Indice];
-				Indice++;
-				string IDSprite = mensajes[Indice];
-				Indice++;
-				string Estado = mensajes[Indice];
-				Indice++;
-				PosX = stoi(mensajes[Indice]);
-				Indice++;
-				PosY = stoi(mensajes[Indice]);
-				Indice++;
-
-				RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
-				EscribirNombreJugador(Nombre, PosX, PosY + 125);
-			}
-
 			int CantidadMensajes = stoi(mensajes[Indice]);
 			Indice++;
+
+
+			//si hay bonus
+			if (mensajes[Indice] == "SBP")
+			{
+				Indice++;
+				//leo inicial del bonus
+				std::string inicialBonus = mensajes[Indice];
+				Indice++;
+				//leo posX del bonus
+				int posXBonus = stoi(mensajes[Indice]);
+				Indice++;
+				int posYBonus = stoi(mensajes[Indice]);
+				Indice++;
+				RenderSprite("bonus" + inicialBonus, "QUIETO", Starting_Tick, Renderer, posXBonus, posYBonus + 20);
+
+			}
+			else
+			{
+				Indice++;
+			}
+			if (mensajes[Indice] == "SBKA")
+			{
+				Indice++;
+				//leo inicial del bonus
+				std::string inicialBonus = mensajes[Indice];
+				Indice++;
+				//leo posX del bonus
+				int posXBonus = stoi(mensajes[Indice]);
+				Indice++;
+				int posYBonus = stoi(mensajes[Indice]);
+				Indice++;
+				RenderSprite("bonus" + inicialBonus, "QUIETO", Starting_Tick, Renderer, posXBonus, posYBonus + 20);
+
+			}
+			else
+			{
+				Indice++;
+			}
+			int cantidadRepuestosArma = stoi(mensajes[Indice]);
+			Indice++;
+			for (int i = 0; i < cantidadRepuestosArma; i++)
+			{
+				//leo inicial del bonus
+				std::string inicialBonus = mensajes[Indice];
+				Indice++;
+				//leo posX del bonus
+				int posXBonus = stoi(mensajes[Indice]);
+				Indice++;
+				int posYBonus = stoi(mensajes[Indice]);
+				Indice++;
+				RenderSprite("bonus" + inicialBonus, "QUIETO", Starting_Tick, Renderer, posXBonus, posYBonus + 20);
+			}
+			if (CantidadMensajes > 0) {
+				for (int i = 0; i < CantidadMensajes; i++)
+				{
+					string Mensaje = cliente->RecibirMensajeTamanoVariable();
+					AgregarMensaje(Mensaje, 5, Starting_Tick);
+				}
+			}
 
 			int CantEnemigos = stoi(mensajes[Indice]);
 			Indice++;
@@ -641,12 +681,6 @@ void Pantalla::IniciarJuego() {
 				RenderSprite(IDSprite, EstadoProyectil, Starting_Tick, Renderer, xProyectil, yProyectil);
 			}
 
-			EscribirMensaje(mensajes[Indice], 0, 5, 20, Renderer);
-			Indice++;
-			//EscribirMensaje(mensajes[Indice],540,5,20,Renderer);
-			//Indice++;
-			EscribirMensaje(mensajes[Indice], 0, 30, 20, Renderer);
-			Indice++;
 			int posY = 5;
 			for(int i = 0; i < CantJugadores;i++)
 			{
@@ -654,64 +688,32 @@ void Pantalla::IniciarJuego() {
 				posY+=25;
 				Indice++;
 			}
-			//si hay bonus
-			if(mensajes[Indice] == "SBP")
-			{
-				Indice++;
-				//leo inicial del bonus
-				std::string inicialBonus = mensajes[Indice];
-				Indice++;
-				//leo posX del bonus
-				int posXBonus = stoi(mensajes[Indice]);
-				Indice++;
-				int posYBonus = stoi(mensajes[Indice]);
-				Indice++;
-				RenderSprite("bonus"+inicialBonus,"QUIETO",Starting_Tick,Renderer,posXBonus,posYBonus+20);
 
-			}
-			else
-			{
-				Indice++;
-			}
-			if(mensajes[Indice] == "SBKA")
-			{
-				Indice++;
-				//leo inicial del bonus
-				std::string inicialBonus = mensajes[Indice];
-				Indice++;
-				//leo posX del bonus
-				int posXBonus = stoi(mensajes[Indice]);
-				Indice++;
-				int posYBonus = stoi(mensajes[Indice]);
-				Indice++;
-				RenderSprite("bonus"+inicialBonus,"QUIETO",Starting_Tick,Renderer,posXBonus,posYBonus+20);
+			int PosX = 0;
+			int PosY = 0;
 
-			}
-			else
-			{
+			for (int i = 0; i < CantJugadores; i++) {
+
+				string Nombre = mensajes[Indice];
 				Indice++;
+				string IDSprite = mensajes[Indice];
+				Indice++;
+				string Estado = mensajes[Indice];
+				Indice++;
+				PosX = stoi(mensajes[Indice]);
+				Indice++;
+				PosY = stoi(mensajes[Indice]);
+				Indice++;
+
+				RenderSprite(IDSprite, Estado, Starting_Tick, Renderer, PosX, PosY);
+				EscribirNombreJugador(Nombre, PosX, PosY + 125);
 			}
-			int cantidadRepuestosArma = stoi(mensajes[Indice]);
+
+			EscribirMensaje(mensajes[Indice], 0, 5, 20, Renderer);
 			Indice++;
-			for(int i = 0; i < cantidadRepuestosArma;i++)
-			{			
-				//leo inicial del bonus
-				std::string inicialBonus = mensajes[Indice];
-				Indice++;
-				//leo posX del bonus
-				int posXBonus = stoi(mensajes[Indice]);
-				Indice++;
-				int posYBonus = stoi(mensajes[Indice]);
-				Indice++;
-				RenderSprite("bonus"+inicialBonus,"QUIETO",Starting_Tick,Renderer,posXBonus,posYBonus+20);
-			}
-			if (CantidadMensajes > 0) {
-				for(int i = 0; i < CantidadMensajes;i++)
-				{
-					string Mensaje = cliente->RecibirMensajeTamanoVariable();
-					AgregarMensaje(Mensaje, 5, Starting_Tick);
-				}
-			}
+			EscribirMensaje(mensajes[Indice], 0, 30, 20, Renderer);
+			Indice++;
+
 
 			MostrarMensajes(Starting_Tick);
 
