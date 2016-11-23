@@ -3,6 +3,7 @@
 #include "ArmaEnemigoHumano.h"
 #include "ArmaEnemigoFinal1.h"
 #include "ArmaEnemigoFinal2.h"
+#include "ArmaEnemigoFinal3.h"
 
 Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel, 
 				int unaVida, bool esFinal, int UnWidth, int UnHeight,
@@ -58,6 +59,10 @@ void Enemigo::DeterminarArma() {
 	if (Nombre == "EnemigoFinal2") {
 
 		arma = new ArmaEnemigoFinal2();
+	}
+	if (Nombre == "EnemigoFinal3") {
+
+		arma = new ArmaEnemigoFinal3();
 	}
 }
 
@@ -195,20 +200,42 @@ void Enemigo::mover()
 	}
 	if (Nombre == "EnemigoFinal3") 
 	{
+		//this->estaDisparando = true;
+
 		if(this->estado == "CAMINA-IZQ")
 		{
 			x-=velocidad;
 		}
-		if (x < 10)
+		if (x < 10 && (this->estado != "QUIETO-DER"))
+		{
+			this->estado = "QUIETO-DER";
+			this->tiempoDeVida = getTiempoActual();
+			tiempoTranscurrido = 0;
+		}
+		
+		if ((this->estado == "QUIETO-DER") && tiempoTranscurrido > 10)
 		{
 			this->estado = "CAMINA-DER";
+			this->tiempoDeVida = getTiempoActual();
+			tiempoTranscurrido = 0;
 		}
+
+		if ((this->estado == "QUIETO-IZQ") && tiempoTranscurrido > 10)
+		{
+			this->estado = "CAMINA-IZQ";
+			this->tiempoDeVida = getTiempoActual();
+			tiempoTranscurrido = 0;
+		}
+
+
 		if(this->estado=="CAMINA-DER")
 		{
 			x+=velocidad;
 			if(x >= 500)
 			{
-				this->estado="CAMINA-IZQ";
+				this->estado = "QUIETO-IZQ";
+				this->tiempoDeVida = getTiempoActual();
+				tiempoTranscurrido = 0;
 			}
 		}
 

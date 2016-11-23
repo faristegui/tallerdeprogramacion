@@ -14,7 +14,7 @@
 		<PLATAFORMA x="1950" ancho="300" y="322" alto="10"/>
 		<PLATAFORMA x="2418" ancho="142" y="322" alto="10"/>
 	</PLATAFORMAS>
-	<SPRITES cantidad="26">
+	<SPRITES cantidad="28">
 		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="100">
 				<ESTADOS cantidad="17">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
@@ -322,6 +322,16 @@
 		<SPRITE id="Bala-SE1" frameWidth="42" frameHeight="20" velocidad="100">
 				<ESTADOS cantidad="1">
 					<ESTADO id="HORIZONTAL" cantFrames="3"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="Bala-SE2" frameWidth="32" frameHeight="62" velocidad="100">
+			<ESTADOS cantidad="1">
+					<ESTADO id="VERTICAL" cantFrames="5"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="Bala-SE3" frameWidth="32" frameHeight="62" velocidad="100">
+			<ESTADOS cantidad="1">
+					<ESTADO id="VERTICAL" cantFrames="5"/>
 			</ESTADOS>
 		</SPRITE>
 		<SPRITE id="OvniEnemigo" frameWidth="48" frameHeight="45" velocidad="100">
