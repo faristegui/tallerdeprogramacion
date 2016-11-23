@@ -328,9 +328,12 @@
 					<ESTADO id="VERTICAL" cantFrames="5"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="Bala-SE3" frameWidth="32" frameHeight="62" velocidad="100">
-			<ESTADOS cantidad="1">
-					<ESTADO id="VERTICAL" cantFrames="5"/>
+		<SPRITE id="Bala-SE3" frameWidth="27" frameHeight="21" velocidad="60">
+			<ESTADOS cantidad="4">
+				<ESTADO id="HORIZONTAL-IZQ" cantFrames="3"/>
+				<ESTADO id="HORIZONTAL-DER" cantFrames="3"/>
+				<ESTADO id="DIAGONAL-IZQ" cantFrames="3"/>
+				<ESTADO id="DIAGONAL-DER" cantFrames="3"/>
 			</ESTADOS>
 		</SPRITE>
 		<SPRITE id="OvniEnemigo" frameWidth="48" frameHeight="45" velocidad="100">

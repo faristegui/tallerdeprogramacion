@@ -205,25 +205,25 @@ void Enemigo::mover()
 		if(this->estado == "CAMINA-IZQ")
 		{
 			x-=velocidad;
-			Direccion = "ARRIBA-IZQ";
+			Direccion = "ARRIBA-IZQ-DIAG";
 		}
-		if (x < 10 && (this->estado != "QUIETO-DER"))
+		if (x < 10 && (this->estado != "QUIETO-DER-DISPARA"))
 		{
-			this->estado = "QUIETO-DER";
+			this->estado = "QUIETO-DER-DISPARA";
 			this->tiempoDeVida = getTiempoActual();
 			tiempoTranscurrido = 0;
 			Direccion = "DERECHA";
 		}
 		
-		if ((this->estado == "QUIETO-DER") && tiempoTranscurrido > 10)
+		if ((this->estado == "QUIETO-DER-DISPARA") && tiempoTranscurrido > 10)
 		{
 			this->estado = "CAMINA-DER";
 			this->tiempoDeVida = getTiempoActual();
 			tiempoTranscurrido = 0;
-			Direccion = "ARRIBA-DER";
+			Direccion = "ARRIBA-DER-DIAG";
 		}
 
-		if ((this->estado == "QUIETO-IZQ") && tiempoTranscurrido > 10)
+		if ((this->estado == "QUIETO-IZQ-DISPARA") && tiempoTranscurrido > 10)
 		{
 			this->estado = "CAMINA-IZQ";
 			this->tiempoDeVida = getTiempoActual();
@@ -236,7 +236,7 @@ void Enemigo::mover()
 			x+=velocidad;
 			if(x >= 500)
 			{
-				this->estado = "QUIETO-IZQ";
+				this->estado = "DISPARA";
 				this->tiempoDeVida = getTiempoActual();
 				tiempoTranscurrido = 0;
 				Direccion = "IZQUIERDA";

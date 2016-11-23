@@ -8,13 +8,24 @@ public:
 
 		int Offset = 0;
 
-		if (UnaDireccion == "ABAJO-DER")
+		if (UnaDireccion == "DERECHA")
 		{
-			Offset = 120;
+			Offset = 230;
 		}
 
-		if (UnaDireccion == "ABAJO-IZQ") {
-			Offset = 80;
+		if (UnaDireccion == "ARRIBA-DER-DIAG")
+		{
+			Offset = 190;
+		}
+
+		if (UnaDireccion == "ARRIBA-IZQ-DIAG")
+		{
+			Offset = 20;
+		}
+
+		if (UnaDireccion == "IZQUIERDA")
+		{
+			Offset = 0;
 		}
 
 		return Offset;
@@ -23,9 +34,25 @@ public:
 	int ArmaEnemigoFinal3::DeterminarOffsetBalaY(std::string UnaDireccion) {
 		int Offset = 0;
 
-		if (UnaDireccion == "ABAJO-DER" || UnaDireccion == "ABAJO-IZQ" || UnaDireccion == "ABAJO")
+
+		if (UnaDireccion == "DERECHA")
 		{
-			Offset = 140;
+			Offset = 45;
+		}
+
+		if (UnaDireccion == "ARRIBA-DER-DIAG")
+		{
+			Offset = 10;
+		}
+
+		if (UnaDireccion == "ARRIBA-IZQ-DIAG")
+		{
+			Offset = 10;
+		}
+
+		if (UnaDireccion == "IZQUIERDA")
+		{
+			Offset = 45;
 		}
 
 		return Offset;
