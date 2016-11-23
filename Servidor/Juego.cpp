@@ -79,6 +79,7 @@ void Juego::agregarRepuestoArma(int posX, int posY)
 	unBonus->mostrar();
 	MutexearListaRepuestos();
 	repuestosArma->agregar(unBonus);
+	todosLosBonus->agregar(unBonus);
 	DesmutexearListaRepuestos();
 }
 
@@ -350,12 +351,14 @@ void FisicaThread(void* arg) {
 									Bonus* bonusPower = new Bonus(UnRectangulo.X,UnRectangulo.Y,"p",UnProyectil->GetIDJugador());
 									bonusPower->mostrar();
 									UnJuego->aparecerBonusPower(bonusPower);
+									UnJuego->getTodosLosBonus()->agregar(bonusPower);
 								}		
 								if(UnJuego->getNumeroBonusKillAll() == UnRectangulo.RefEnemigo->getIndexEnListaOriginal())
 								{
 									Bonus* bonusKillAll = new Bonus(UnRectangulo.X,UnRectangulo.Y,"ka",UnProyectil->GetIDJugador());
 									bonusKillAll->mostrar();
 									UnJuego->aparecerBonusKillAll(bonusKillAll);
+									UnJuego->getTodosLosBonus()->agregar(bonusKillAll);
 								}
 
 							
@@ -438,8 +441,8 @@ void FisicaThread(void* arg) {
 					UnJuego->getRepuestosArma()->remover(pos);
 					break;
 				}
+				pos++;
 			}
-			pos++;
 			UnJuego->DesmutexearListaRepuestos();
 		}
 		
@@ -561,6 +564,11 @@ bool Juego::hayBonus()
 	return bonus;
 }
 
+Lista<Bonus*>* Juego::getTodosLosBonus()
+{
+	return todosLosBonus;
+}
+
 HANDLE MutexListaProyectiles;
 HANDLE MutexListaEnemigos;
 HANDLE MutexListaRepuestos;
@@ -585,6 +593,7 @@ Juego::Juego()
 	PisoY = 486;
 	ListaPlataformas = new Lista<Rectangulo *>();
 	repuestosArma = new Lista<Bonus*>();
+	todosLosBonus = new Lista<Bonus*>();
 }
 
 void Juego::AgregarPlataforma(int x, int y, int w, int h) {
