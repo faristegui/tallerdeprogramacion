@@ -387,7 +387,10 @@ void FisicaThread(void* arg) {
 								if (UnRectangulo.RefEnemigo->esEnemigoFinal()) {
 
 									UnJuego->SetEnemigoFinalMurio(true);
-									// TODO: Cambiar de nivel!
+									if(UnJuego->GetNivel() == 3) {
+
+										UnJuego->SetFinJuego(true);
+									}
 								}
 							}
 							UnJuego->DesmutexearListaEnemigos();
@@ -654,6 +657,7 @@ Juego::Juego()
 	todosLosBonus = new Lista<Bonus*>();
 	RectangulosPersonajes = new Lista<RectanguloPersonaje>();
 	EmpezoElJuego = false;
+	FinJuego = false;
 }
 
 void Juego::EmpezarElJuego() {
@@ -731,6 +735,16 @@ void Juego::SetAnchoCamara(int NrCamara, int UnAncho) {
 	Camaras[NrCamara]->Velocidad = ObtenerVelocidadParaAncho(UnAncho);
 }
 
+int Juego::GetNivel() {
+
+	return NumeroNivel;
+}
+
+bool Juego::GetFinJuego() {
+
+	return FinJuego;
+}
+
 Camara* Juego::GetCamara(int NrCamara)
 {
 	return Camaras[NrCamara];
@@ -744,6 +758,11 @@ void Juego::AgregarCamara(int UnAncho) {
 	SetAnchoCamara(CantCamaras, UnAncho);
 
 	CantCamaras++;
+}
+
+void Juego::SetFinJuego(bool UnBool) {
+
+	FinJuego = UnBool;
 }
 
 Enemigo* Juego::GetEnemigoFinal() {
@@ -985,6 +1004,7 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 				delete Proyectiles;
 				Proyectiles = new Lista<Proyectil *>();
 			}
+			NumeroNivel += 1;
 		}
 
 		EnemigoFinalMurio = false;

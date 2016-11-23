@@ -669,6 +669,15 @@ void MainListenThread(void* arg) {
 				GranMensaje.append("SI");
 				GranMensaje.append(";");
 
+				if (UnJuego.GetFinJuego()) {
+					GranMensaje.append("SI");
+					GranMensaje.append(";");
+				}
+				else {
+					GranMensaje.append("NO");
+					GranMensaje.append(";");
+				}
+
 				Lista<std::string>* Textos = GetTextosFinNivel(UnJuego.obtenerModo());
 
 				GranMensaje.append(IntAString(Textos->getTamanio()));

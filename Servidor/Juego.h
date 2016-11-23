@@ -125,7 +125,11 @@ public:
 	void removerJugador(int indice);
 	void EmpezarElJuego();
 	bool GetEmpezoElJuego();
+	void SetFinJuego(bool UnBool);
+	int GetNivel();
+	bool GetFinJuego();
 private:
+	bool FinJuego;
 	bool EmpezoElJuego;
 	Lista<DatosSprites *>* ListaSprites;
 	Lista<Rectangulo* >* ListaPlataformas;

@@ -729,6 +729,9 @@ void Pantalla::IniciarJuego() {
 			Indice++;
 			
 			if (MurioFinal == "SI") {
+
+				std::string FinJuego = mensajes[Indice];
+				Indice++;
 				
 				EscribirMensaje("Nivel superado", 300, 200 , 20, Renderer);
 
@@ -742,7 +745,11 @@ void Pantalla::IniciarJuego() {
 					Indice++;
 				}
 
-				PedirRecarga = true;
+				if (FinJuego == "SI") {
+					EscribirMensaje("GANASTE!", 300, 250 + (CantTextos * 20) + 20, 20, Renderer);
+				} else {
+					PedirRecarga = true;
+				}
 			}
 
 			std::string MurioPlayer = mensajes[Indice];
