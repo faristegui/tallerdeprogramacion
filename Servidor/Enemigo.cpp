@@ -174,10 +174,12 @@ void Enemigo::mover()
 		{
 			this->estaDisparando = true;
 			x-=velocidad;
+			Direccion = "ABAJO-IZQ";
 		}
 		if (x < 10)
 		{
 			this->estado = "CAMINA-DER";
+			Direccion = "ABAJO-DER";
 		}
 		if(this->estado=="CAMINA-DER")
 		{
@@ -186,6 +188,7 @@ void Enemigo::mover()
 			{
 				this->estaDisparando = true;
 				this->estado="CAMINA-IZQ";
+				Direccion = "ABAJO-IZQ";
 			}
 		}
 

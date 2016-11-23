@@ -13,7 +13,7 @@
 		<PLATAFORMA x="1364" ancho="269" y="322" alto="10"/>
 		<PLATAFORMA x="1962" ancho="404" y="322" alto="10"/>
 	</PLATAFORMAS>
-	<SPRITES cantidad="26">
+	<SPRITES cantidad="27">
 		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="100">
 				<ESTADOS cantidad="17">
 					<ESTADO id="QUIETO-DER" cantFrames="3"/>
@@ -323,6 +323,11 @@
 					<ESTADO id="HORIZONTAL" cantFrames="3"/>
 			</ESTADOS>
 		</SPRITE>
+		<SPRITE id="Bala-SE2" frameWidth="32" frameHeight="62" velocidad="100">
+			<ESTADOS cantidad="1">
+					<ESTADO id="VERTICAL" cantFrames="5"/>
+			</ESTADOS>
+		</SPRITE>
 		<SPRITE id="OvniEnemigo" frameWidth="48" frameHeight="45" velocidad="100">
 			<ESTADOS cantidad="10">
 				<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
@@ -403,7 +408,7 @@
 				<ENEMIGO tipo="OvniEnemigo" direccion="IZQ" posX="1950" posY="40" vida="30" velocidadCaminata="6"/>
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1650" posY="390" vida="100" velocidadCaminata="5"/>
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1100" posY="223" vida="175" velocidadCaminata="0"/>
-				<ENEMIGO tipo="EnemigoFinal2" direccion="IZQ" posX="2580" posY="80" vida="900" velocidadCaminata="3"/>
+				<ENEMIGO tipo="EnemigoFinal2" direccion="IZQ" posX="2580" posY="5" vida="900" velocidadCaminata="7"/>
 			</ENEMIGOS>
 			<REPUESTOS cantidad="3">
 				<REPUESTO tipo="bonusb" posX="350" posY="390"/>
