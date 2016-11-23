@@ -163,6 +163,26 @@ void Enemigo::mover()
 			}
 		}
 	}
+	if (Nombre == "EnemigoFinal2") 
+	{
+		if(this->estado == "CAMINA-IZQ")
+		{
+			x-=velocidad;
+		}
+		if (x < 10)
+		{
+			this->estado = "CAMINA-DER";
+		}
+		if(this->estado=="CAMINA-DER")
+		{
+			x+=velocidad;
+			if(x >= 500)
+			{
+				this->estado="CAMINA-IZQ";
+			}
+		}
+
+	}
 
 	if (Nombre == "HumanoEnemigo") {
 
