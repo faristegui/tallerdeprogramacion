@@ -60,7 +60,7 @@ class Juego
 public:
 	Juego();
 	~Juego();
-	void AgregarJugador(std::string UnNombre, std::string UnIDSprite);
+	void AgregarJugador(std::string UnNombre, std::string UnIDSprite, bool EsDios);
 	void RecibirEvento(std::string Usuario, std::string Tipo);
 	bool UsuarioYaLogueado(std::string Usuario);
 	Jugador* GetJugador(std::string UnNombre);

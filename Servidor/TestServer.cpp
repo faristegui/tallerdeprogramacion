@@ -359,7 +359,9 @@ void MainListenThread(void* arg) {
 							Color = "Blue";
 					}
 
-					UnJuego.AgregarJugador(Usuario, Color);
+					bool EsDios = ControlUsuarios.EsDios(UsuarioMsj);
+
+					UnJuego.AgregarJugador(Usuario, Color, EsDios);
 
 					CodigoRespuesta = "000";
 					MensajeRespuesta = "Player: " + Usuario;

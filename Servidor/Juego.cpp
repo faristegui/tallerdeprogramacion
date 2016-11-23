@@ -847,7 +847,7 @@ DatosSprites* Juego::BuscarSpriteEnLista(std::string tipo) {
 	return NULL;
 }
 
-void Juego::AgregarJugador(std::string UnNombre, std::string UnColor) {
+void Juego::AgregarJugador(std::string UnNombre, std::string UnColor, bool EsDios) {
 
 	bool JugadorYaSeHabiaConectado = false;
 
@@ -877,7 +877,7 @@ void Juego::AgregarJugador(std::string UnNombre, std::string UnColor) {
 		int Width = 88;
 		int Height = 122;
 
-		Jugador* UnJugador = new Jugador(UnNombre, UnColor, Width, Height);
+		Jugador* UnJugador = new Jugador(UnNombre, UnColor, Width, Height, EsDios);
 		Jugadores[CantJugadores] = UnJugador;
 
 		RectanguloPersonaje unRectanguloPersonaje;

@@ -5,7 +5,7 @@
 class Jugador
 {
 public:
-	Jugador(std::string UnNombre, std::string UnColor, int Width, int Height);
+	Jugador(std::string UnNombre, std::string UnColor, int Width, int Height, bool UnEsDios);
 	~Jugador();
 	void Mover(std::string Direccion);
 	std::string GetNombre();
@@ -58,6 +58,7 @@ public:
 	void SacarVida(int Cantidad);
 	void muereJugador();
 private:
+	bool EsDios;
 	bool EstaEnPiso;
 	bool Saltando;
 	bool SaltandoVertical;

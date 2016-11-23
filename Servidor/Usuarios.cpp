@@ -28,6 +28,34 @@ bool Usuarios::ContrasenaValida(std::string NombreUsuario, std::string Contrasen
 	return EsValida;
 }
 
+bool Usuarios::EsDios(std::string NombreUsuario) {
+
+	bool UnEsDios = false;
+	Usuario UnUsuario;
+	std::string TmpNombreUsuario;
+
+	AbrirArchivo();
+
+	// Convierte nombre de usuario a LowerCase
+	transform(NombreUsuario.begin(), NombreUsuario.end(), NombreUsuario.begin(), (int(*)(int))tolower);
+
+	while (hayUsuarios()) {
+		UnUsuario = getProximoUsuario();
+
+		// Convierte nombre de usuario a LowerCase
+		TmpNombreUsuario = UnUsuario.nombre;
+		transform(TmpNombreUsuario.begin(), TmpNombreUsuario.end(), TmpNombreUsuario.begin(), (int(*)(int))tolower);
+
+		if (TmpNombreUsuario == NombreUsuario) {
+			UnEsDios = (UnUsuario.esDios == "si");
+			break;
+		}
+	}
+
+	CerrarArchivo();
+	return UnEsDios;
+}
+
 Lista<std::string>* Usuarios::obtenerTodos()
 {
 	Lista<std::string>* todosLosUsuarios = new Lista<std::string>;
@@ -117,6 +145,7 @@ Usuario Usuarios::getProximoUsuario()
 		esFinDeArchivo = true;
 		unUsuario.nombre = "";
 		unUsuario.contrasena = "";
+		unUsuario.esDios = "";
 	}
 	else
 	{

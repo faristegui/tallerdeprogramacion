@@ -13,6 +13,7 @@
 struct Usuario {
 	std::string nombre;
 	std::string contrasena;
+	std::string esDios;
 };
 
 class Usuarios
@@ -24,6 +25,7 @@ public:
 	std::string obtenerTodosEnString(std::string separador);
 	bool destinatarioValido(std::string destinatario);
 	bool SetNombreArchivo(std::string UnNombreArchivo);
+	bool EsDios(std::string NombreUsuario);
 private:
 	Usuario getProximoUsuario();
 	bool hayUsuarios();

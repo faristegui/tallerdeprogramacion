@@ -4,7 +4,7 @@
 #include "ArmaR.h"
 #include <windows.h>
 
-Jugador::Jugador(std::string UnNombre, std::string UnColor, int UnWidth, int UnHeight)
+Jugador::Jugador(std::string UnNombre, std::string UnColor, int UnWidth, int UnHeight, bool UnEsDios)
 {
 	Nombre = UnNombre;
 	Color = UnColor;
@@ -28,6 +28,8 @@ Jugador::Jugador(std::string UnNombre, std::string UnColor, int UnWidth, int UnH
 	Armas[0] = new ArmaS();
 	Armas[1] = new ArmaH();
 	Armas[2] = new ArmaR();
+
+	EsDios = UnEsDios;
 }
 
 void Jugador::reestablecerVida()
@@ -511,7 +513,9 @@ void Jugador::SacarVida(int Cantidad) {
 	this->Estado = "HERIDO-DER";
 	}*/
 
-	vida -= Cantidad;
+	if (!EsDios) {
+		vida -= Cantidad;
+	}
 
 }
 void Jugador::muereJugador()
