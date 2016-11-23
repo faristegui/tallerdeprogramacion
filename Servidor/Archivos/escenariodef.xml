@@ -328,7 +328,7 @@
 				<ESTADO id="MUERTO-IZQ" cantFrames="2"/>	
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="EnemigoFinal1" frameWidth="158" frameHeight="122" velocidad="100">
+		<SPRITE id="EnemigoFinal" frameWidth="131" frameHeight="122" velocidad="100">
 			<ESTADOS cantidad="10">
 				<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
 				<ESTADO id="CAMINA-DER" cantFrames="2"/>
