@@ -7,12 +7,11 @@
 			<IMAGEN nombre="pisoLevel3.bmp" zIndex="3" width="2800" height="600"/>
 		</CAPAS>
 	</FONDO>
-	<PLATAFORMAS cantidad="5">
+	<PLATAFORMAS cantidad="4">
 		<PLATAFORMA x="143" ancho="349" y="322" alto="10"/>
 		<PLATAFORMA x="635" ancho="300" y="322" alto="10"/>
 		<PLATAFORMA x="1348" ancho="300" y="322" alto="10"/>
 		<PLATAFORMA x="1950" ancho="300" y="322" alto="10"/>
-		<PLATAFORMA x="2418" ancho="142" y="322" alto="10"/>
 	</PLATAFORMAS>
 	<SPRITES cantidad="28">
 		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="100">

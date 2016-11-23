@@ -343,7 +343,7 @@ void FisicaThread(void* arg) {
 					
 					if (HayColision(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(),
 						UnProyectil->GetHeight(), UnRectangulo.X, UnRectangulo.Y,
-						UnRectangulo.Width, UnRectangulo.Height)) 
+						UnRectangulo.Width, UnRectangulo.Height - 15)) 
 					{
 
 						if (UnProyectil->EsDePersonaje()) //si el proyectil que impacta en enemigo es disparado por un pesonaje y no por otro enemigo entonces hiero al enemigo sino no!!
