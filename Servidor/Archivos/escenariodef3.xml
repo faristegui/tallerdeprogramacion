@@ -397,12 +397,19 @@
 	</SPRITES>
 	<NIVELES>
 		<NIVEL id="Level_1">
-			<ENEMIGOS cantidad="6">
+			<ENEMIGOS cantidad="13">
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="750" posY="390" vida="100" velocidadCaminata="4"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="860" posY="390" vida="100" velocidadCaminata="9"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="860" posY="390" vida="160" velocidadCaminata="9"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="750" posY="223" vida="175" velocidadCaminata="0"/>
+				<ENEMIGO tipo="OvniEnemigo" direccion="IZQ" posX="1950" posY="40" vida="30" velocidadCaminata="6"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1050" posY="390" vida="140" velocidadCaminata="4"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="1260" posY="390" vida="140" velocidadCaminata="9"/>
 				<ENEMIGO tipo="OvniEnemigo" direccion="IZQ" posX="1950" posY="40" vida="30" velocidadCaminata="6"/>
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1650" posY="390" vida="100" velocidadCaminata="5"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1100" posY="223" vida="175" velocidadCaminata="0"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1450" posY="223" vida="175" velocidadCaminata="0"/>
+				<ENEMIGO tipo="OvniEnemigo" direccion="DER" posX="1150" posY="40" vida="30" velocidadCaminata="6"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="2050" posY="223" vida="175" velocidadCaminata="0"/>
+				<ENEMIGO tipo="OvniEnemigo" direccion="IZQ" posX="2350" posY="40" vida="30" velocidadCaminata="6"/>
 				<ENEMIGO tipo="EnemigoFinal3" direccion="IZQ" posX="2580" posY="80" vida="900" velocidadCaminata="3"/>
 			</ENEMIGOS>
 			<REPUESTOS cantidad="3">
