@@ -296,7 +296,7 @@ void FisicaThread(void* arg) {
 		while(UnJuego->getTodosLosBonus()->avanzarCursor())
 			{
 
-				if(AvanzaCamara)
+				if(UnJuego->getTodosLosBonus()->obtenerCursor()!= NULL && AvanzaCamara)
 				{
 					UnJuego->getTodosLosBonus()->obtenerCursor()->moverEnX(-VelocidadCamara);
 				}
