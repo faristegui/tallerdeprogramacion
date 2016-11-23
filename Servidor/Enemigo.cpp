@@ -39,7 +39,11 @@ Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel,
 void Enemigo::SacarVida(int Cantidad) {
 
 	if (Nombre == "HumanoEnemigo") {
-		this->estado = "HERIDO-IZQ";
+		if (Direccion == "IZQUIERDA") {
+			this->estado = "HERIDO-IZQ";
+		} else {
+			this->estado = "HERIDO-DER";
+		}
 	}
 
 	if (Nombre == "OvniEnemigo") {
@@ -115,6 +119,18 @@ void Enemigo::mover()
 
 		if (Nombre == "HumanoEnemigo") {
 
+			if (velocidad == 0) {
+				if (this->estado == "CAMINA-IZQ") {
+
+					this->estado = "QUIETO-IZQ";
+				} else {
+					if (this->estado == "CAMINA-DER") {
+
+						this->estado = "QUIETO-DER";
+					}
+				}
+			}
+
 			if ((this->estado == "CAMINA-IZQ" || this->estado == "HERIDO-IZQ") && tiempoTranscurrido > 0.5)
 			{
 				this->estado = "QUIETO-IZQ";
@@ -123,7 +139,7 @@ void Enemigo::mover()
 				tiempoTranscurrido = 0;
 			}
 
-			if (this->estado == "QUIETO-IZQ" && tiempoTranscurrido > 1)
+			if (this->estado == "QUIETO-IZQ" && tiempoTranscurrido > 0.2)
 			{
 				this->estado = "QUIETO-IZQ-DISPARA";
 				this->tiempoDeVida = getTiempoActual();

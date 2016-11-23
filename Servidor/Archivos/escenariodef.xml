@@ -8,11 +8,11 @@
 		</CAPAS>
 	</FONDO>
 	<PLATAFORMAS cantidad="5">
-		<PLATAFORMA x="200" ancho="526" y="322" alto="5"/>
-		<PLATAFORMA x="1024" ancho="176" y="322" alto="5"/>
-		<PLATAFORMA x="1364" ancho="269" y="322" alto="5"/>
-		<PLATAFORMA x="1840" ancho="404" y="322" alto="5"/>
-		<PLATAFORMA x="2800" ancho="526" y="322" alto="5"/>
+		<PLATAFORMA x="200" ancho="526" y="322" alto="10"/>
+		<PLATAFORMA x="1024" ancho="176" y="322" alto="10"/>
+		<PLATAFORMA x="1364" ancho="269" y="322" alto="10"/>
+		<PLATAFORMA x="1840" ancho="404" y="322" alto="10"/>
+		<PLATAFORMA x="2800" ancho="526" y="322" alto="10"/>
 	</PLATAFORMAS>
 	<SPRITES cantidad="24">
 		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="100">
@@ -328,7 +328,7 @@
 				<ESTADO id="MUERTO-IZQ" cantFrames="2"/>	
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="EnemigoFinal" frameWidth="131" frameHeight="122" velocidad="100">
+		<SPRITE id="EnemigoFinal1" frameWidth="131" frameHeight="122" velocidad="100">
 			<ESTADOS cantidad="10">
 				<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
 				<ESTADO id="CAMINA-DER" cantFrames="2"/>
@@ -360,12 +360,11 @@
 	</SPRITES>
 	<NIVELES>
 		<NIVEL id="Level_1">
-			<ENEMIGOS cantidad="6">
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="600" posY="390" vida="100" velocidadCaminata="4"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="850" posY="390" vida="100" velocidadCaminata="6"/>
-				<ENEMIGO tipo="OvniEnemigo" direccion="DER" posX="100" posY="40" vida="100" velocidadCaminata="8"/>
-				<ENEMIGO tipo="OvniEnemigo" direccion="IZQ" posX="1050" posY="40" vida="100" velocidadCaminata="6"/>
-				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="500" posY="390" vida="100" velocidadCaminata="3"/>
+			<ENEMIGOS cantidad="5">
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="750" posY="390" vida="100" velocidadCaminata="4"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="860" posY="390" vida="100" velocidadCaminata="9"/>
+				<ENEMIGO tipo="OvniEnemigo" direccion="IZQ" posX="1050" posY="40" vida="30" velocidadCaminata="6"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1100" posY="223" vida="175" velocidadCaminata="0"/>
 				<ENEMIGO tipo="EnemigoFinal1" direccion="IZQ" posX="2580" posY="100" vida="300" velocidadCaminata="3"/>
 			</ENEMIGOS>
 			<REPUESTOS cantidad="3">
