@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ESCENARIO anchoPX="800" altoPX="600" maxJugadores="1">
+	<FONDO>
+		<CAPAS cantidad="3">
+			<IMAGEN nombre="cieloLevel1.bmp" zIndex="2" width="2600" height="600"/>
+			<IMAGEN nombre="plataformasLevel1.bmp" zIndex="1" width="2600" height="600"/>
+			<IMAGEN nombre="pisoLevel1.bmp" zIndex="3" width="2600" height="600"/>
+		</CAPAS>
+	</FONDO>
+	<PLATAFORMAS cantidad="4">
+		<PLATAFORMA x="200" ancho="526" y="322" alto="10"/>
+		<PLATAFORMA x="1024" ancho="176" y="322" alto="10"/>
+		<PLATAFORMA x="1364" ancho="269" y="322" alto="10"/>
+		<PLATAFORMA x="1962" ancho="404" y="322" alto="10"/>
+	</PLATAFORMAS>
+	<SPRITES cantidad="25">
+		<SPRITE id="PlayerRed-S" frameWidth="44" frameHeight="61" velocidad="100">
+				<ESTADOS cantidad="16">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerRed-H" frameWidth="44" frameHeight="61" velocidad="100">
+				<ESTADOS cantidad="16">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerRed-R" frameWidth="44" frameHeight="61" velocidad="100">
+				<ESTADOS cantidad="16">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerYellow-S" frameWidth="44" frameHeight="61" velocidad="100">
+				<ESTADOS cantidad="16">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerYellow-H" frameWidth="44" frameHeight="61" velocidad="100">
+				<ESTADOS cantidad="16">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerYellow-R" frameWidth="44" frameHeight="61" velocidad="100">
+				<ESTADOS cantidad="16">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerBlue-S" frameWidth="44" frameHeight="61" velocidad="100">
+				<ESTADOS cantidad="16">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerBlue-H" frameWidth="44" frameHeight="61" velocidad="100">
+				<ESTADOS cantidad="16">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerBlue-R" frameWidth="44" frameHeight="61" velocidad="100">
+				<ESTADOS cantidad="16">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerViolet-S" frameWidth="44" frameHeight="61" velocidad="100">
+				<ESTADOS cantidad="16">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerViolet-H" frameWidth="44" frameHeight="61" velocidad="100">
+				<ESTADOS cantidad="16">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="PlayerViolet-R" frameWidth="44" frameHeight="61" velocidad="100">
+				<ESTADOS cantidad="16">
+					<ESTADO id="QUIETO-DER" cantFrames="3"/>
+					<ESTADO id="QUIETO-IZQ" cantFrames="3"/>
+					<ESTADO id="CAMINA-DER" cantFrames="7"/>
+					<ESTADO id="CAMINA-IZQ" cantFrames="7"/>
+					<ESTADO id="SALTANDO-DER" cantFrames="4"/>
+					<ESTADO id="SALTANDO-IZQ" cantFrames="4"/>
+					<ESTADO id="QUIETO-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="4"/>
+					<ESTADO id="ARRIBA-DER" cantFrames="2"/>
+					<ESTADO id="ARRIBA-IZQ" cantFrames="2"/>
+					<ESTADO id="ARRIBA-DER-DISPARA" cantFrames="4"/>
+					<ESTADO id="ARRIBA-IZQ-DISPARA" cantFrames="4"/>
+					<ESTADO id="DIAGONAL-DER-DISPARA" cantFrames="2"/>
+					<ESTADO id="DIAGONAL-IZQ-DISPARA" cantFrames="2"/>
+				</ESTADOS>
+		</SPRITE>
+		<SPRITE id="HumanoEnemigo" frameWidth="38" frameHeight="49" velocidad="100">
+			<ESTADOS cantidad="10">
+				<ESTADO id="CAMINA-IZQ" cantFrames="12"/>
+				<ESTADO id="CAMINA-DER" cantFrames="12"/>
+				<ESTADO id="QUIETO-IZQ" cantFrames="5"/>
+				<ESTADO id="QUIETO-DER" cantFrames="5"/>
+				<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="8"/>
+				<ESTADO id="QUIETO-DER-DISPARA" cantFrames="8"/>
+				<ESTADO id="HERIDO-IZQ" cantFrames="12"/>
+				<ESTADO id="HERIDO-DER" cantFrames="12"/>
+				<ESTADO id="MUERTO-DER" cantFrames="13"/>				
+				<ESTADO id="MUERTO-IZQ" cantFrames="13"/>	
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="TanqueEnemigo" frameWidth="106" frameHeight="62" velocidad="200">
+				<ESTADOS cantidad="2">
+					<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
+					<ESTADO id="DISPARA" cantFrames="3"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="Bala-S" frameWidth="10" frameHeight="10" velocidad="100">
+				<ESTADOS cantidad="4">
+					<ESTADO id="HORIZONTAL" cantFrames="1"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="1"/>
+					<ESTADO id="VERTICAL" cantFrames="1"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="1"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="Bala-H" frameWidth="45" frameHeight="45" velocidad="100">
+				<ESTADOS cantidad="5">
+					<ESTADO id="HORIZONTAL-DER" cantFrames="1"/>
+					<ESTADO id="HORIZONTAL-IZQ" cantFrames="1"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="1"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="1"/>
+					<ESTADO id="VERTICAL" cantFrames="1"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="Bala-R" frameWidth="64" frameHeight="64" velocidad="100">
+				<ESTADOS cantidad="3">
+					<ESTADO id="HORIZONTAL-DER" cantFrames="2"/>
+					<ESTADO id="HORIZONTAL-IZQ" cantFrames="2"/>
+					<ESTADO id="VERTICAL" cantFrames="2"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="Bala-SEH" frameWidth="10" frameHeight="10" velocidad="60">
+				<ESTADOS cantidad="4">
+					<ESTADO id="HORIZONTAL" cantFrames="1"/>
+					<ESTADO id="DIAGONAL-DER" cantFrames="1"/>
+					<ESTADO id="VERTICAL" cantFrames="1"/>
+					<ESTADO id="DIAGONAL-IZQ" cantFrames="1"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="Bala-SE1" frameWidth="42" frameHeight="20" velocidad="100">
+				<ESTADOS cantidad="1">
+					<ESTADO id="HORIZONTAL" cantFrames="3"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="RobotEnemigo" frameWidth="76" frameHeight="66" velocidad="100">
+			<ESTADOS cantidad="3">
+				<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
+				<ESTADO id="DISPARA-IZQ" cantFrames="2"/>
+				<ESTADO id="MUERTO" cantFrames="1"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="OvniEnemigo" frameWidth="48" frameHeight="45" velocidad="100">
+			<ESTADOS cantidad="10">
+				<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
+				<ESTADO id="CAMINA-DER" cantFrames="2"/>
+				<ESTADO id="QUIETO-IZQ" cantFrames="2"/>
+				<ESTADO id="QUIETO-DER" cantFrames="2"/>
+				<ESTADO id="QUIETO-IZQ-DISPARA" cantFrames="2"/>
+				<ESTADO id="QUIETO-DER-DISPARA" cantFrames="2"/>
+				<ESTADO id="HERIDO-ABA" cantFrames="2"/>
+				<ESTADO id="HERIDO-DER" cantFrames="2"/>
+				<ESTADO id="MUERTO-DER" cantFrames="2"/>				
+				<ESTADO id="MUERTO-IZQ" cantFrames="2"/>	
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="EnemigoFinal1" frameWidth="131" frameHeight="122" velocidad="100">
+			<ESTADOS cantidad="10">
+				<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
+				<ESTADO id="CAMINA-DER" cantFrames="2"/>
+				<ESTADO id="QUIETO-IZQ" cantFrames="2"/>
+				<ESTADO id="QUIETO-DER" cantFrames="2"/>
+				<ESTADO id="DISPARA" cantFrames="2"/>
+				<ESTADO id="QUIETO-DER-DISPARA" cantFrames="2"/>
+				<ESTADO id="HERIDO-IZQ" cantFrames="2"/>
+				<ESTADO id="HERIDO-DER" cantFrames="2"/>
+				<ESTADO id="MUERTO-DER" cantFrames="2"/>				
+				<ESTADO id="MUERTO-IZQ" cantFrames="2"/>	
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="bonusp" frameWidth="25" frameHeight="28" velocidad="1">
+		<ESTADOS cantidad="1">
+				<ESTADO id="QUIETO" cantFrames="1"/>
+		</ESTADOS>
+		</SPRITE>
+		<SPRITE id="bonuska" frameWidth="25" frameHeight="28" velocidad="1">
+			<ESTADOS cantidad="1">
+				<ESTADO id="QUIETO" cantFrames="1"/>
+			</ESTADOS>
+		</SPRITE>
+		<SPRITE id="bonusb" frameWidth="25" frameHeight="28" velocidad="1">
+			<ESTADOS cantidad="1">
+				<ESTADO id="QUIETO" cantFrames="1"/>
+			</ESTADOS>
+		</SPRITE>
+	</SPRITES>
+	<NIVELES>
+		<NIVEL id="Level_1">
+			<ENEMIGOS cantidad="6">
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="750" posY="390" vida="100" velocidadCaminata="4"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="DER" posX="860" posY="390" vida="100" velocidadCaminata="9"/>
+				<ENEMIGO tipo="OvniEnemigo" direccion="IZQ" posX="1950" posY="40" vida="30" velocidadCaminata="6"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1650" posY="390" vida="100" velocidadCaminata="5"/>
+				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1100" posY="223" vida="175" velocidadCaminata="0"/>
+				<ENEMIGO tipo="EnemigoFinal1" direccion="IZQ" posX="2580" posY="80" vida="900" velocidadCaminata="3"/>
+			</ENEMIGOS>
+			<REPUESTOS cantidad="3">
+				<REPUESTO tipo="bonusb" posX="350" posY="390"/>
+				<REPUESTO tipo="bonusb" posX="1000" posY="390"/>
+				<REPUESTO tipo="bonusb" posX="1400" posY="390"/>
+			</REPUESTOS>
+		</NIVEL>
+	</NIVELES>
+</ESCENARIO>

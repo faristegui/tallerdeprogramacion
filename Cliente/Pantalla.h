@@ -57,6 +57,7 @@ public:
 	void IniciarJuego();
 	Posicion* obtenerPosicion();
 private:
+	bool PedirRecarga;
 	int ParamsPedidos;
 	Uint32  Starting_Tick;
 	SDL_Renderer *Renderer;

@@ -104,11 +104,16 @@ public:
 	bool HayObstaculo(int X, int Y, int W, int H, int &YDelObstaculo, int &HDelObstaculo);
 	Lista<Bonus*>* getRepuestosArma();
 	void agregarRepuestoArma(int posX, int posY);
+	void BorrarEnemigos();
+	void BorrarPlataformas();
+	void SetEnemigoFinalMurio(bool UnMurio);
+	bool GetEnemigoFinalMurio();
 private:
 	Lista<DatosSprites *>* ListaSprites;
 	Lista<Rectangulo* >* ListaPlataformas;
 	Lista<Bonus*>* todosLosBonus;
 	bool YaSeAgregoEnemigoFinal;
+	bool EnemigoFinalMurio;
 	int CantJugadores;
 	int modoJuego;
 	bool empezo;

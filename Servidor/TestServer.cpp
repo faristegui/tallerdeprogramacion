@@ -33,6 +33,8 @@ Usuarios ControlUsuarios;
 #define MAX_CLIENTES 6
 int CantidadClientes = 0;
 
+int Nivel = 1;
+
 string ArchivoEscenarios = "";
 
 HANDLE ghMutex;
@@ -99,11 +101,71 @@ std::string ObtenerTextoPuntaje(int UnModo, int IndiceMiJugador) {
 	return TextoPuntaje;
 }
 
+void CargarSprites() {
+
+	Lista<DatosSprites *>* ListaSprites = new Lista<DatosSprites *>();
+
+	tinyxml2::XMLDocument docu;
+
+	std::string path = "Archivos\\escenariodef" + IntAString(Nivel) + ".xml";
+
+	char* pathXML = strdup(path.c_str());
+
+	if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
+	{
+
+		tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
+
+		tinyxml2::XMLElement* elementoSprites = elementoEscenario->FirstChildElement("SPRITES");
+
+		const char* cantidadSrites = elementoSprites->Attribute("cantidad");
+		//iterando sobre todos los Sprites 
+		int contador = 0;
+		for (tinyxml2::XMLElement* elementoSprite = elementoSprites->FirstChildElement("SPRITE"); elementoSprite != NULL; elementoSprite = elementoSprite->NextSiblingElement("SPRITE"))
+		{
+
+			// Envio info de los sprites a cargar
+			const char* idSprite = elementoSprite->Attribute("id");
+
+			const char* frameWidthSprite = elementoSprite->Attribute("frameWidth");
+
+			const char* frameHeightSprite = elementoSprite->Attribute("frameHeight");
+
+			const char* velocidadSprite = elementoSprite->Attribute("velocidad");
+
+			DatosSprites* UnSprite = new DatosSprites();
+			UnSprite->id = idSprite;
+			UnSprite->width = stoi(frameWidthSprite);
+			UnSprite->height = stoi(frameHeightSprite);
+			UnSprite->velocidad = stoi(velocidadSprite);
+			ListaSprites->agregar(UnSprite);
+
+			tinyxml2::XMLElement* elementoEstados = elementoSprite->FirstChildElement("ESTADOS");
+			const char* cantidadEstados = elementoEstados->Attribute("cantidad");
+
+																							//iterando sobre todos los estados de un Sprite
+			for (tinyxml2::XMLElement* elementoEstado = elementoEstados->FirstChildElement("ESTADO"); elementoEstado != NULL; elementoEstado = elementoEstado->NextSiblingElement("ESTADO"))
+			{
+
+				const char* idEstado = elementoEstado->Attribute("id");
+				const char* cantFramesEstado = elementoEstado->Attribute("cantFrames");
+			}
+
+		}
+
+	}
+
+	UnJuego.SetListaDatosSprites(ListaSprites);
+}
+
 void CargarPlataformas() {
 	tinyxml2::XMLDocument docu;
 
-	char* pathXML = strdup(ArchivoEscenarios.c_str());
+	UnJuego.BorrarPlataformas();
 
+	std::string path = "Archivos\\escenariodef" + IntAString(Nivel) + ".xml";
+
+	char* pathXML = strdup(path.c_str());
 
 	if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
 	{
@@ -123,12 +185,109 @@ void CargarPlataformas() {
 	}
 }
 
+void CargarEnemigos() {
+	tinyxml2::XMLDocument docu;
+	UnJuego.cargarEnemigos();
+	//solo se cargan para el primer nivel
+
+	UnJuego.BorrarEnemigos();
+
+	std::string path = "Archivos\\escenariodef" + IntAString(Nivel) + ".xml";
+
+	char* pathXML = strdup(path.c_str());
+
+	if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
+	{
+
+		//Cargo enemigos de cada nivel
+		tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
+		tinyxml2::XMLElement* elementosNiveles = elementoEscenario->FirstChildElement("NIVELES");
+		tinyxml2::XMLElement* elementosNivel = elementosNiveles->FirstChildElement("NIVEL");
+		//Nivel 1
+		const char* idNivel = elementosNivel->Attribute("id");
+
+		tinyxml2::XMLElement* elementoEnemigos = elementosNivel->FirstChildElement("ENEMIGOS");
+		const char* cantidadEnemigos = elementoEnemigos->Attribute("cantidad");
+
+		int nrEnemigo = 1;
+		int cantTotalEnemigos = stoi(cantidadEnemigos);
+
+		for (tinyxml2::XMLElement* elementoEnemigo = elementoEnemigos->FirstChildElement("ENEMIGO"); elementoEnemigo != NULL; elementoEnemigo = elementoEnemigo->NextSiblingElement("ENEMIGO"))
+		{
+			const char* tipo = elementoEnemigo->Attribute("tipo");
+
+			const char* direccion = elementoEnemigo->Attribute("direccion");
+
+			const char* posX = elementoEnemigo->Attribute("posX");
+
+			const char* posY = elementoEnemigo->Attribute("posY");
+
+			const char* vida = elementoEnemigo->Attribute("vida");
+
+			const char* velocidadCaminata = elementoEnemigo->Attribute("velocidadCaminata");
+
+			// El ultimo enemigo del nivel es considerado como el enemigo final
+
+			bool EsEnemigoFinal = false;
+
+			if (nrEnemigo == cantTotalEnemigos) {
+
+				EsEnemigoFinal = true;
+			}
+
+			DatosSprites* UnSprite = UnJuego.BuscarSpriteEnLista(tipo);
+
+			UnJuego.AgregarEnemigo(tipo, stoi(posX), stoi(posY), stoi(velocidadCaminata),
+				stoi(vida), EsEnemigoFinal, UnSprite->width * 2, UnSprite->height * 2, direccion);
+
+			nrEnemigo++;
+		}
+		UnJuego.definirAparicionBonusPower();
+		UnJuego.definirAparicionBonusKilAll();
+		//carga de respuestos de balas
+
+		tinyxml2::XMLElement* elementoRepuestos = elementoEnemigos->NextSiblingElement("REPUESTOS");
+		for (tinyxml2::XMLElement* elementoRepuesto = elementoRepuestos->FirstChildElement("REPUESTO"); elementoRepuesto != NULL; elementoRepuesto = elementoRepuesto->NextSiblingElement("REPUESTO"))
+		{
+			const char* posX = elementoRepuesto->Attribute("posX");
+			const char* posY = elementoRepuesto->Attribute("posY");
+			UnJuego.agregarRepuestoArma(stoi(posX), stoi(posY));
+		}
+	}
+
+	Lista<Enemigo *>* todosLosEnemigos = UnJuego.GetTodosLosEnemigos();
+	todosLosEnemigos->iniciarCursor();
+	Lista<Enemigo*>* enemigosVivos = UnJuego.GetEnemigosPantalla();
+	Lista<int>* posiciones = new Lista<int>();
+	int indiceAEliminar = 1;
+	while (todosLosEnemigos->avanzarCursor())
+	{
+		if (todosLosEnemigos->obtenerCursor()->getX() <= (800 + UnJuego.GetCamara(0)->X))
+		{
+			enemigosVivos->agregar(todosLosEnemigos->obtenerCursor());
+			todosLosEnemigos->obtenerCursor()->setIndexEnListaOriginal(UnJuego.obtenerCantEnemigosAparecidos());
+			posiciones->agregar(indiceAEliminar);
+			UnJuego.sumarEnemigo();
+		}
+		indiceAEliminar++;
+	}
+	posiciones->iniciarCursor();
+	int indiceCantEliminados = 0;
+	while (posiciones->avanzarCursor())
+	{
+		todosLosEnemigos->remover(posiciones->obtenerCursor() - indiceCantEliminados);
+		indiceCantEliminados++;
+	}
+}
+
 void CargarEscenariosEnJuego() {
 	tinyxml2::XMLDocument docu;
 
 	UnJuego.BorrarCamaras();
 
-	char* pathXML = strdup(ArchivoEscenarios.c_str());
+	std::string path = "Archivos\\escenariodef" + IntAString(Nivel) + ".xml";
+
+	char* pathXML = strdup(path.c_str());
 
 	if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
 	{
@@ -148,6 +307,7 @@ void CargarEscenariosEnJuego() {
 		}
 	}
 }
+
 void MainListenThread(void* arg) {
 	string Usuario = "";
 	string mensaje = "";
@@ -227,10 +387,20 @@ void MainListenThread(void* arg) {
 		if (mensaje == "EVEN") {
 
 			string Tipo = UnServer.RecibirMensajeTamanoVariable(ClientSocket);
-			UnJuego.RecibirEvento(Usuario, Tipo);
+			
 			if (Tipo == "RECARGA") {
-				CargarEscenariosEnJuego();
+
+				if (UnJuego.GetEnemigoFinalMurio()) {
+
+					Nivel++;
+					CargarPlataformas();
+					CargarEscenariosEnJuego();
+					CargarSprites();
+					CargarEnemigos();
+				}
 			}
+
+			UnJuego.RecibirEvento(Usuario, Tipo);
 		}
 		if(mensaje=="MODO")
 		{
@@ -450,6 +620,23 @@ void MainListenThread(void* arg) {
 			GranMensaje.append(MiJugador->GetArmaEnUso()->GetNombre() + ": " + IntAString(MiJugador->GetArmaEnUso()->GetBalas()));
 			GranMensaje.append(";");
 
+			if (UnJuego.GetEnemigoFinalMurio()) {
+
+				GranMensaje.append("SI");
+				GranMensaje.append(";");
+
+				for (int i = 0; i< UnJuego.GetCantJugadores(); i++)
+				{
+					GranMensaje.append(ObtenerTextoPuntaje(UnJuego.obtenerModo(), i));
+					GranMensaje.append(";");
+				}
+			}
+			else {
+
+				GranMensaje.append("NO");
+				GranMensaje.append(";");
+			}
+
 			UnServer.EnviarMensajeTamanoVariable(GranMensaje, ClientSocket);
 			if (CantidadMensajes > 0) {
 				Buzon->iniciarCursor();
@@ -548,8 +735,6 @@ void MainListenThread(void* arg) {
 		// Carga de Sprites
 		if (mensaje == "SPRI")
 		{
-			
-
 			tinyxml2::XMLDocument docu;
 
 			char* pathXML = strdup(ArchivoEscenarios.c_str());
@@ -611,98 +796,6 @@ void MainListenThread(void* arg) {
 
 			UnJuego.SetListaDatosSprites(ListaSprites);
 		}
-		//carga de enemigos y de repuestos de balas
-		if (mensaje=="ENEM" && !UnJuego.enemigosEstanCargados())
-		{
-			tinyxml2::XMLDocument docu;
-			UnJuego.cargarEnemigos();
-			//solo se cargan para el primer nivel
-
-			char* pathXML = strdup(ArchivoEscenarios.c_str());
-
-			if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
-			{
-
-				//Cargo enemigos de cada nivel
-				tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
-				tinyxml2::XMLElement* elementosNiveles = elementoEscenario->FirstChildElement("NIVELES");
-				tinyxml2::XMLElement* elementosNivel = elementosNiveles->FirstChildElement("NIVEL");
-				//Nivel 1
-				const char* idNivel = elementosNivel->Attribute("id");
-
-				tinyxml2::XMLElement* elementoEnemigos = elementosNivel->FirstChildElement("ENEMIGOS");
-				const char* cantidadEnemigos = elementoEnemigos->Attribute("cantidad");
-				
-				int nrEnemigo = 1;
-				int cantTotalEnemigos = stoi(cantidadEnemigos);
-				
-				for (tinyxml2::XMLElement* elementoEnemigo = elementoEnemigos->FirstChildElement("ENEMIGO"); elementoEnemigo != NULL; elementoEnemigo= elementoEnemigo->NextSiblingElement("ENEMIGO"))
-				{
-					const char* tipo = elementoEnemigo->Attribute("tipo");
-
-					const char* direccion = elementoEnemigo->Attribute("direccion");
-
-					const char* posX = elementoEnemigo->Attribute("posX");
-					
-					const char* posY = elementoEnemigo->Attribute("posY");
-
-					const char* vida = elementoEnemigo->Attribute("vida");
-
-					const char* velocidadCaminata = elementoEnemigo->Attribute("velocidadCaminata");
-
-					// El ultimo enemigo del nivel es considerado como el enemigo final
-
-					bool EsEnemigoFinal = false;
-
-					if (nrEnemigo == cantTotalEnemigos) {
-
-						EsEnemigoFinal = true;
-					}
-
-					DatosSprites* UnSprite = UnJuego.BuscarSpriteEnLista(tipo);
-
-					UnJuego.AgregarEnemigo(tipo, stoi(posX), stoi(posY), stoi(velocidadCaminata),
-						stoi(vida), EsEnemigoFinal, UnSprite->width * 2, UnSprite->height * 2, direccion);
-
-					nrEnemigo++;
-				}
-				UnJuego.definirAparicionBonusPower();
-				UnJuego.definirAparicionBonusKilAll();
-				//carga de respuestos de balas
-				
-				tinyxml2::XMLElement* elementoRepuestos = elementoEnemigos->NextSiblingElement("REPUESTOS");
-				for (tinyxml2::XMLElement* elementoRepuesto = elementoRepuestos->FirstChildElement("REPUESTO"); elementoRepuesto != NULL; elementoRepuesto= elementoRepuesto->NextSiblingElement("REPUESTO"))
-				{
-					const char* posX = elementoRepuesto->Attribute("posX");
-					const char* posY = elementoRepuesto->Attribute("posY");
-					UnJuego.agregarRepuestoArma(stoi(posX),stoi(posY));
-				}
-			}
-			
-		Lista<Enemigo *>* todosLosEnemigos = UnJuego.GetTodosLosEnemigos();
-		todosLosEnemigos->iniciarCursor();
-		Lista<Enemigo*>* enemigosVivos = UnJuego.GetEnemigosPantalla();
-		Lista<int>* posiciones = new Lista<int>();
-		int indiceAEliminar = 1;
-			while(todosLosEnemigos->avanzarCursor())
-			{
-				if(todosLosEnemigos->obtenerCursor()->getX() <= (800+UnJuego.GetCamara(0)->X))
-				{
-					enemigosVivos->agregar(todosLosEnemigos->obtenerCursor());
-					todosLosEnemigos->obtenerCursor()->setIndexEnListaOriginal(UnJuego.obtenerCantEnemigosAparecidos());
-					posiciones->agregar(indiceAEliminar);
-					UnJuego.sumarEnemigo();
-				}
-				indiceAEliminar++;
-			}
-			posiciones->iniciarCursor();
-			int indiceCantEliminados = 0;
-			while(posiciones->avanzarCursor())
-			{
-				todosLosEnemigos->remover(posiciones->obtenerCursor()-indiceCantEliminados);
-				indiceCantEliminados++;
-			}
-		}
 		
 		if (mensaje == "NEWC") {
 
@@ -735,9 +828,9 @@ void MainListenThread(void* arg) {
 		{
 			tinyxml2::XMLDocument docu;
 
-			char* pathXML =  strdup(ArchivoEscenarios.c_str());
+			std::string path = "Archivos\\escenariodef" + IntAString(Nivel) + ".xml";
 
-			if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
+			if (docu.LoadFile(path.c_str()) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
 			{
 
 				tinyxml2::XMLElement* elementoEscenario = docu.FirstChildElement();
@@ -863,8 +956,8 @@ int main()
 
 		if (pathEscenario.empty())
 		{
-			pathEscenario = "escenariodef.xml";
-			cout << "Se usara el archivo por default: escenariodef.xml" << endl;
+			pathEscenario = "escenariodef" + IntAString(Nivel) + ".xml";
+			cout << "Se usara el archivo por default: escenariodef1.xml" << endl;
 		}
 	}
 	
@@ -872,6 +965,8 @@ int main()
 
 	CargarPlataformas();
 	CargarEscenariosEnJuego();
+	CargarSprites();
+	CargarEnemigos();
 	
 	PedirModoDeJuego();
 

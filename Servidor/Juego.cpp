@@ -381,6 +381,12 @@ void FisicaThread(void* arg) {
 								}
 								//eliminar enemigo de pantalla
 								/*UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);*/
+
+								if (UnRectangulo.RefEnemigo->esEnemigoFinal()) {
+
+									UnJuego->SetEnemigoFinalMurio(true);
+									// TODO: Cambiar de nivel!
+								}
 							}
 							UnJuego->DesmutexearListaEnemigos();
 
@@ -703,6 +709,18 @@ Enemigo* Juego::GetEnemigoFinal() {
 	
 }
 
+void Juego::BorrarEnemigos() {
+	delete todosLosEnemigos;
+	todosLosEnemigos = new Lista<Enemigo *>();
+	delete enemigosPantalla;
+	enemigosPantalla = new Lista<Enemigo *>();
+}
+
+void Juego::BorrarPlataformas() {
+	delete ListaPlataformas;
+	ListaPlataformas = new Lista<Rectangulo *>();
+}
+
 void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int velocidad,int vida, bool esFinal,int width, int height,
 						   std::string UnaDireccion)
 {
@@ -877,6 +895,19 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 		Jugadores[IndiceJugador]->ArmaSiguiente();
 	}
 
+	if (Tipo == "RECARGA") {
+
+		if (EnemigoFinalMurio) {
+			for (int i = 0; i < CantJugadores; i++) {
+				Jugadores[i]->SetX(20);
+				Jugadores[i]->SetY(365);
+			}
+		}
+
+		EnemigoFinalMurio = false;
+		YaSeAgregoEnemigoFinal = false;
+	}
+
 	if (Tipo == "ARMA-A") {
 		Jugadores[IndiceJugador]->ArmaAnterior();
 	}
@@ -970,6 +1001,16 @@ int Juego::GetIndexUsuario(std::string Usuario) {
 	}
 
 	return -1;
+}
+
+void Juego::SetEnemigoFinalMurio(bool UnMurio) {
+
+	EnemigoFinalMurio = UnMurio;
+}
+
+bool Juego::GetEnemigoFinalMurio() {
+
+	return EnemigoFinalMurio;
 }
 
 void Juego::MutexearListaProyectiles() {

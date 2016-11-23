@@ -10,6 +10,7 @@ using namespace std;
 
 Pantalla::Pantalla(Client* unCliente)
 {
+	PedirRecarga = false;
 	ParamsPedidos = 0;
 	COLOR_WHITE.r = 255;
 	COLOR_WHITE.g = 255;
@@ -532,19 +533,29 @@ void Pantalla::IniciarJuego() {
 				}
 				if (Event.key.keysym.sym == SDLK_r) {
 
-					CargarSprites();
 					Evento = "RECARGA";
-					CargarCapasFondoEscenario();
 				}
 				if (Event.key.keysym.sym == SDLK_d) {
 					Evento = "SOLTO-DISPARA";
 				}
 			}
 
+			if (PedirRecarga) {
+				PedirRecarga = false;
+				Evento = "RECARGA";
+				eventoAnterior = "";
+			}
+
 			if ((Evento != "") && (eventoAnterior != Evento)) {
 				cliente->EnviarMensaje("EVEN", 4);
 				cliente->EnviarMensajeTamanoVariable(Evento);
 				eventoAnterior = Evento;
+
+				if (eventoAnterior == "RECARGA") {
+
+					CargarSprites();
+					CargarCapasFondoEscenario();
+				}
 			}
 		}
 
@@ -713,12 +724,32 @@ void Pantalla::IniciarJuego() {
 			Indice++;
 			EscribirMensaje(mensajes[Indice], 0, 30, 20, Renderer);
 			Indice++;
+			
+			std::string MurioFinal = mensajes[Indice];
+			Indice++;
+			
+			if (MurioFinal == "SI") {
+				
+				EscribirMensaje("Nivel superado", 300, 200 , 20, Renderer);
 
+				for (int i = 0; i< CantJugadores; i++)
+				{
+					std::string Puntaje = mensajes[Indice];
+					EscribirMensaje(Puntaje, 300, 250 + (i*15), 20, Renderer);
+					Indice++;
+				}
+
+				PedirRecarga = true;
+			}
 
 			MostrarMensajes(Starting_Tick);
 
 			WaitFPS(Starting_Tick);
 			SDL_RenderPresent(Renderer);
+
+			if (PedirRecarga) {
+				Sleep(10000);
+			}
 		}
 	}
 
