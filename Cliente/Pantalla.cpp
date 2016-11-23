@@ -748,7 +748,7 @@ void Pantalla::IniciarJuego() {
 			SDL_RenderPresent(Renderer);
 
 			if (PedirRecarga) {
-				Sleep(10000);
+				Sleep(5000);
 			}
 		}
 	}

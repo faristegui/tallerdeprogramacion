@@ -98,6 +98,8 @@ void FisicaThread(void* arg) {
 		bool AvanzaCamara = false;
 		int CantJugadores = UnJuego->GetCantJugadores();
 
+		if (!UnJuego->GetEnemigoFinalMurio()) {
+
 		// -----------------------------------------------
 		// Proceso jugador (estados y eventos)
 		for (int i = 0; i < CantJugadores; i++) {
@@ -581,6 +583,8 @@ void FisicaThread(void* arg) {
 
 		// -----------------------------------------------
 		// Fin procesos
+
+		}
 		float diff_ticks = std::clock() - ticks_start;
 
 		if (diff_ticks >= 50) {
@@ -959,6 +963,11 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 			for (int i = 0; i < CantJugadores; i++) {
 				Jugadores[i]->SetX(20);
 				Jugadores[i]->SetY(365);
+				Jugadores[i]->SetEstado("QUIETO-DER");
+				Jugadores[i]->SetVelocidadX(0);
+				Jugadores[i]->SetVelocidadY(0);
+				delete Proyectiles;
+				Proyectiles = new Lista<Proyectil *>();
 			}
 		}
 
