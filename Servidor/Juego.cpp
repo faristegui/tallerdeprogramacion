@@ -903,7 +903,7 @@ void Juego::AgregarJugador(std::string UnNombre, std::string UnColor, bool EsDio
 
 
 		// TODO: fix hardcodeada
-		int Width = 88;
+		int Width = 68;
 		int Height = 122;
 
 		Jugador* UnJugador = new Jugador(UnNombre, UnColor, Width, Height, EsDios);
