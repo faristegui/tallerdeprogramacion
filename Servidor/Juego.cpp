@@ -935,6 +935,12 @@ void Juego::AgregarJugador(std::string UnNombre, std::string UnColor, bool EsDio
 	}
 }
 
+
+Equipo* Juego::GetEquipo(int NumeroEquipo) {
+
+	return equipos[NumeroEquipo];
+}
+
 Equipo* Juego::GetEquipoJugador(std::string NombreJugador) {
 
 	if (equipos[0]->TieneJugador(NombreJugador)) {

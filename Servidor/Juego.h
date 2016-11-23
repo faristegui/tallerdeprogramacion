@@ -69,6 +69,7 @@ public:
 	int GetIndiceJugador(std::string Usuario);
 	int GetCantJugadores();
 	int GetCantCamaras();
+	Equipo* GetEquipo(int NumeroEquipo);
 	Equipo* GetEquipoJugador(std::string NombreJugador);
 	int obtenerModo();
 	Camara* GetCamara(int NrCamara);

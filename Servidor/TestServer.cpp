@@ -280,6 +280,47 @@ void CargarEnemigos() {
 	}
 }
 
+Lista<std::string>* GetTextosFinNivel(int UnModo) {
+
+	Lista<std::string>* Textos = new Lista<std::string>();
+	int CantJugadores = UnJuego.GetCantJugadores();
+
+	if (UnModo == 1) {
+		for (int i = 0; i < CantJugadores; i++) {
+
+			Jugador* UnJugador = UnJuego.GetJugador(i);
+			Textos->agregar(UnJugador->GetNombre() + ": " + IntAString(UnJugador->getPuntaje()));
+		}
+	}
+
+	if (UnModo == 2) {
+		int Total = 0;
+
+		for (int i = 0; i < CantJugadores; i++) {
+
+			Jugador* UnJugador = UnJuego.GetJugador(i);
+			Total += UnJugador->getPuntaje();
+		}
+
+		Textos->agregar("Todos: " + IntAString(Total));
+	}
+
+	if (UnModo == 3) {
+		
+		Equipo* UnEquipo;
+
+		UnEquipo = UnJuego.GetEquipo(0);
+		Textos->agregar("Equipo 1:");
+		Textos->agregar(UnEquipo->GetNombresJugadores() + ": " + IntAString(UnEquipo->obtenerPuntaje()));
+
+		UnEquipo = UnJuego.GetEquipo(1);
+		Textos->agregar("Equipo 2:");
+		Textos->agregar(UnEquipo->GetNombresJugadores() + ": " + IntAString(UnEquipo->obtenerPuntaje()));
+	}
+
+	return Textos;
+}
+
 void CargarEscenariosEnJuego() {
 	tinyxml2::XMLDocument docu;
 
@@ -628,9 +669,15 @@ void MainListenThread(void* arg) {
 				GranMensaje.append("SI");
 				GranMensaje.append(";");
 
-				for (int i = 0; i< UnJuego.GetCantJugadores(); i++)
-				{
-					GranMensaje.append(ObtenerTextoPuntaje(UnJuego.obtenerModo(), i));
+				Lista<std::string>* Textos = GetTextosFinNivel(UnJuego.obtenerModo());
+
+				GranMensaje.append(IntAString(Textos->getTamanio()));
+				GranMensaje.append(";");
+
+				Textos->iniciarCursor();
+				while (Textos->avanzarCursor()) {
+
+					GranMensaje.append(Textos->obtenerCursor());
 					GranMensaje.append(";");
 				}
 			}

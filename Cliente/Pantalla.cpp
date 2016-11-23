@@ -732,10 +732,13 @@ void Pantalla::IniciarJuego() {
 				
 				EscribirMensaje("Nivel superado", 300, 200 , 20, Renderer);
 
-				for (int i = 0; i< CantJugadores; i++)
+				int CantTextos = stoi(mensajes[Indice]);
+				Indice++;
+
+				for (int i = 0; i < CantTextos; i++)
 				{
-					std::string Puntaje = mensajes[Indice];
-					EscribirMensaje(Puntaje, 300, 250 + (i*20), 20, Renderer);
+					std::string Texto = mensajes[Indice];
+					EscribirMensaje(Texto, 300, 250 + (i*20), 20, Renderer);
 					Indice++;
 				}
 
