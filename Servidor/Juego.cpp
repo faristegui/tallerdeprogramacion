@@ -479,7 +479,7 @@ void FisicaThread(void* arg) {
 
 					if (MoverParaAtras) {
 
-						UnJugador->MoverEnX(VelocidadEnX);
+						UnJugador->MoverEnX(-VelocidadCamara);
 					}
 				}
 			}
