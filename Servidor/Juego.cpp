@@ -287,9 +287,20 @@ void FisicaThread(void* arg) {
 			}
 			//hacer aparecer bonus
 			UnJuego->MutexearListaRepuestos();
-			UnJuego->getRepuestosArma()->iniciarCursor();
-			while(UnJuego->getRepuestosArma()->avanzarCursor())
+			UnJuego->getTodosLosBonus()->iniciarCursor();
+			UnJuego->DesmutexearListaRepuestos();
+			PosicionCursor++;
+		}
+
+		UnJuego->DesmutexearListaEnemigos();
+		while(UnJuego->getTodosLosBonus()->avanzarCursor())
 			{
+
+				if(AvanzaCamara)
+				{
+					UnJuego->getTodosLosBonus()->obtenerCursor()->moverEnX(-VelocidadCamara);
+				}
+				/*
 				if(UnJuego->getRepuestosArma()->obtenerCursor()->getX() <= 1000+UnJuego->GetCamaraObstaculos()->X)
 				{
 					if(UnJuego->getRepuestosArma()->obtenerCursor()->getX() > 850)
@@ -297,12 +308,8 @@ void FisicaThread(void* arg) {
 						UnJuego->getRepuestosArma()->obtenerCursor()->setX(700);
 					}
 				}
+				*/
 			}
-			UnJuego->DesmutexearListaRepuestos();
-			PosicionCursor++;
-		}
-
-		UnJuego->DesmutexearListaEnemigos();
 		// -----------------------------------------------
 		// Proceso proyectiles (y colisiones de los mismos)
 		UnJuego->MutexearListaProyectiles();
