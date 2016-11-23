@@ -1,6 +1,7 @@
 #include "Enemigo.h"
 
 #include "ArmaEnemigoHumano.h"
+#include "ArmaEnemigoFinal1.h"
 
 Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel, 
 				int unaVida, bool esFinal, int UnWidth, int UnHeight,
@@ -18,9 +19,10 @@ Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel,
 	time_t* pTiempoDeVida = &t;
 	tiempoDeVida = (time(pTiempoDeVida));
 	listoParaMorir = false; /*me indica si en el proximo tick ya puedo eliminar al enemigo dandome tiempo para mostrar el sprite de muerte*/
-	arma = new ArmaEnemigoHumano();
 	Nombre = unIdSprite;
 	this->estaDisparando = false;
+
+	DeterminarArma();
 
 	if (UnaDireccion == "IZQ") {
 
@@ -33,6 +35,24 @@ Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel,
 		DireccionAparicion = "IZQ";
 		estado = "CAMINA-DER";
 		Direccion = "DERECHA";
+	}
+}
+
+void Enemigo::DeterminarArma() {
+
+	if (Nombre == "HumanoEnemigo") {
+
+		arma = new ArmaEnemigoHumano();
+	}
+
+	if (Nombre == "OvniEnemigo") {
+
+		arma = new ArmaEnemigoHumano();
+	}
+
+	if (Nombre == "EnemigoFinal1") {
+
+		arma = new ArmaEnemigoFinal1();
 	}
 }
 
@@ -99,105 +119,140 @@ void Enemigo::MoverEnX(int CantX) {
 
 void Enemigo::mover()
 {
-	//Solo enemigos finales
-	if(this->esEnemigoFinal())
-	{
-		if(x > 500) //Se posiciona para disparar. No se mueve
+	tiempoTranscurrido = getTiempoActual() - tiempoDeVida;
+
+	// Como no usamos herencia para los enemigos entonces en esta rutina definimos 
+	// el comportamiento de cada uno, segun su nombre
+
+	if (Nombre == "EnemigoFinal1") {
+		if (x > 480)
 		{
-			x-= velocidad;
+			x -= velocidad;
 		}
 		else
 		{
-			this->estado = "DISPARA";
-		}
-	}
-	else
-	{
-
-		tiempoTranscurrido = getTiempoActual() - tiempoDeVida;
-
-
-		if (Nombre == "HumanoEnemigo") {
-
-			if (velocidad == 0) {
-				if (this->estado == "CAMINA-IZQ") {
-
-					this->estado = "QUIETO-IZQ";
-				} else {
-					if (this->estado == "CAMINA-DER") {
-
-						this->estado = "QUIETO-DER";
-					}
-				}
+			if ((this->estado == "CAMINA-IZQ") || (this->estado == "HERIDO-IZQ"))
+			{
+				this->estado = "DISPARA";
+				this->estaDisparando = true;
+				this->tiempoDeVida = getTiempoActual();
+				tiempoTranscurrido = 0;
 			}
 
-			if ((this->estado == "CAMINA-IZQ" || this->estado == "HERIDO-IZQ") && tiempoTranscurrido > 0.5)
+			if (this->estado == "DISPARA" && tiempoTranscurrido > 0.8)
 			{
 				this->estado = "QUIETO-IZQ";
-
-				this->tiempoDeVida = getTiempoActual();
-				tiempoTranscurrido = 0;
-			}
-
-			if ((this->estado == "CAMINA-DER" || this->estado == "HERIDO-DER") && tiempoTranscurrido > 0.5)
-			{
-				this->estado = "QUIETO-DER";
-
-				this->tiempoDeVida = getTiempoActual();
-				tiempoTranscurrido = 0;
-			}
-
-			if (this->estado == "QUIETO-IZQ" && tiempoTranscurrido > 0.2)
-			{
-				this->estado = "QUIETO-IZQ-DISPARA";
-				this->tiempoDeVida = getTiempoActual();
-				tiempoTranscurrido = 0;
-				this->estaDisparando = true;
-			}
-
-			if (this->estado == "QUIETO-DER" && tiempoTranscurrido > 0.2)
-			{
-				this->estado = "CAMINA-DER";
-				this->tiempoDeVida = getTiempoActual();
-				tiempoTranscurrido = 0;
-			}
-
-			if (this->estado == "QUIETO-IZQ-DISPARA" && tiempoTranscurrido > 0.8)
-			{
-				this->estado = "CAMINA-IZQ";
-				this->tiempoDeVida = getTiempoActual();
-				tiempoTranscurrido = 0;
 				this->estaDisparando = false;
+				this->tiempoDeVida = getTiempoActual();
+				tiempoTranscurrido = 0;
 			}
 
-			if (this->estado == "CAMINA-IZQ")
+			if (this->estado == "QUIETO-IZQ" && tiempoTranscurrido > 0.3)
 			{
-				x -= velocidad;
-			}
-			else {
-				if (this->estado == "CAMINA-DER") {
-					x += velocidad;
-				}
+				this->estado = "DISPARA";
+				this->estaDisparando = true;
+				this->tiempoDeVida = getTiempoActual();
+				tiempoTranscurrido = 0;	
 			}
 
-			if ((this->estado == "MUERTO-IZQ" || (this->estado == "MUERTO-DER") && tiempoTranscurrido > 0.8))
+			if (((this->estado == "MUERTO-DER") && tiempoTranscurrido > 0.8))
 			{
 				this->tiempoDeVida = getTiempoActual();
 				tiempoTranscurrido = 0;
 				this->listoParaMorir = true;
 			}
 		}
+	}
 
-		if (Nombre == "OvniEnemigo") {
+	if (Nombre == "HumanoEnemigo") {
 
-			this->estaDisparando = true;
-			this->estado = "QUIETO-IZQ-DISPARA";
-			Direccion = "ABAJO-DER";
-			if (DireccionAparicion == "DER") {
-				x -= velocidad;
+		if (velocidad == 0) {
+			if (this->estado == "CAMINA-IZQ") {
+
+				this->estado = "QUIETO-IZQ";
 			} else {
+				if (this->estado == "CAMINA-DER") {
+
+					this->estado = "QUIETO-DER";
+				}
+			}
+		}
+
+		if ((this->estado == "CAMINA-IZQ" || this->estado == "HERIDO-IZQ") && tiempoTranscurrido > 0.5)
+		{
+			this->estado = "QUIETO-IZQ";
+
+			this->tiempoDeVida = getTiempoActual();
+			tiempoTranscurrido = 0;
+		}
+
+		if (this->estado == "HERIDO-DER" && tiempoTranscurrido > 0.5)
+		{
+			this->estado = "CAMINA-DER";
+
+			this->tiempoDeVida = getTiempoActual();
+			tiempoTranscurrido = 0;
+		}
+
+		if (this->estado == "QUIETO-IZQ" && tiempoTranscurrido > 0.2)
+		{
+			this->estado = "QUIETO-IZQ-DISPARA";
+			this->tiempoDeVida = getTiempoActual();
+			tiempoTranscurrido = 0;
+			this->estaDisparando = true;
+		}
+
+		if (this->estado == "QUIETO-DER" && tiempoTranscurrido > 0.2)
+		{
+			this->estado = "CAMINA-DER";
+			this->tiempoDeVida = getTiempoActual();
+			tiempoTranscurrido = 0;
+		}
+
+		if (this->estado == "QUIETO-IZQ-DISPARA" && tiempoTranscurrido > 0.8)
+		{
+			this->estado = "CAMINA-IZQ";
+			this->tiempoDeVida = getTiempoActual();
+			tiempoTranscurrido = 0;
+			this->estaDisparando = false;
+		}
+
+		if (this->estado == "CAMINA-IZQ")
+		{
+			x -= velocidad;
+		}
+		else {
+			if (this->estado == "CAMINA-DER") {
 				x += velocidad;
 			}
+		}
+
+		if ((this->estado == "MUERTO-IZQ" || (this->estado == "MUERTO-DER") && tiempoTranscurrido > 0.8))
+		{
+			this->tiempoDeVida = getTiempoActual();
+			tiempoTranscurrido = 0;
+			this->listoParaMorir = true;
+		}
+	}
+
+	if (Nombre == "OvniEnemigo") {
+
+		this->estaDisparando = true;
+		this->estado = "QUIETO-IZQ-DISPARA";
+
+		Direccion = "ABAJO-DER";
+
+		if (DireccionAparicion == "DER") {
+			x -= velocidad;
+		} else {
+			x += velocidad;
+		}
+
+		if (((this->estado == "MUERTO-DER" || this->estado == "MUERTO-IZQ") && tiempoTranscurrido > 0.8))
+		{
+			this->tiempoDeVida = getTiempoActual();
+			tiempoTranscurrido = 0;
+			this->listoParaMorir = true;
 		}
 	}
 }
@@ -272,9 +327,6 @@ void Enemigo::muereEnemigo()
 		this->tiempoDeVida = getTiempoActual();
 		tiempoTranscurrido = 0;
 	}
-
-
-
 }
 
 void Enemigo::setListoParaMorir(bool valor)

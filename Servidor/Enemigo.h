@@ -36,6 +36,7 @@ public:
 	std::string getDireccion();
 	std::string GetDireccionAparicion();
 private:
+	void DeterminarArma();
 	std::string IDSprite;
 	std::string estado;
 	bool enemigoFinal;

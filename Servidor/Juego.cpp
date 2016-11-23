@@ -154,7 +154,7 @@ void FisicaThread(void* arg) {
 			Camara* UnaCamara = UnJuego->GetCamaraObstaculos();
 			VelocidadCamara = UnaCamara->Velocidad;
 
-			if (UnaCamara->X >= UnaCamara->AnchoImagen) {
+			if (UnaCamara->X + 800 >= UnaCamara->AnchoImagen) {
 
 				// Aca llega al fin del nivel -> no avanza mas!
 				
