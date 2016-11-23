@@ -55,6 +55,8 @@ public:
 	void UpdatePos();
 	void sumarBalas();
 	void SetEstaEnPiso(bool UnEstaEnPiso);
+	void SacarVida(int Cantidad);
+	void muereJugador();
 private:
 	bool EstaEnPiso;
 	bool Saltando;

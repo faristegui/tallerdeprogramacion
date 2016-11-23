@@ -305,7 +305,7 @@ void Jugador::SetEstaConectado(bool EstaConectado)
 	{
 		this->Estado = "DESCONECTADO";
 		this->x = 20;
-		this->y = 405;
+		this->y = 900;
 	}
 	else {
 		this->Estado = "QUIETO-DER";
@@ -496,4 +496,36 @@ void Jugador::SetY(int UnY) {
 
 Jugador::~Jugador()
 {
+}
+
+void Jugador::SacarVida(int Cantidad) {
+
+
+	/*	if (this->Estado == "CAMINA-IZQ" || this->Estado == "QUIETO-IZQ" || this->Estado == "QUIETO-IZQ-DISPARA" || this->Estado == "HERIDO-IZQ" || this->Estado == "SALTANDO-IZQ" || this->Estado == "DIAGONAL-IZQ" || this->Estado == "ARRIBA-IZQ" || this->Estado == "DIAGONAL-IZQ-DISPARA" || this->Estado == "ARRIBA-IZQ-DISPARA")
+	{
+	this->Estado = "HERIDO-IZQ";
+
+	}
+	else
+	{
+	this->Estado = "HERIDO-DER";
+	}*/
+
+	vida -= Cantidad;
+
+}
+void Jugador::muereJugador()
+
+{
+
+	/*if (this->Estado == "CAMINA-IZQ" || this->Estado == "QUIETO-IZQ" || this->Estado == "QUIETO-IZQ-DISPARA" || this->Estado == "HERIDO-IZQ" || this->Estado == "SALTANDO-IZQ" || this->Estado == "DIAGONAL-IZQ" || this->Estado == "ARRIBA-IZQ" || this->Estado == "DIAGONAL-IZQ-DISPARA" || this->Estado ==  "ARRIBA-IZQ-DISPARA")
+	{
+	this->Estado = "MUERTO-IZQ";
+
+	}
+	else
+	{
+	this->Estado = "MUERTO-DER";
+	}*/
+
 }

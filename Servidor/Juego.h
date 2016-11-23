@@ -25,6 +25,16 @@ struct RectanguloEnemigo {
 	Enemigo* RefEnemigo;
 };
 
+/**/
+struct RectanguloPersonaje {
+int IndexEnLista;
+int X;
+int Y;
+int Width;
+int Height;
+Jugador* RefJugador;
+};
+/**/
 struct Posicion {
 	int x;
 	int y;
@@ -108,6 +118,10 @@ public:
 	void BorrarPlataformas();
 	void SetEnemigoFinalMurio(bool UnMurio);
 	bool GetEnemigoFinalMurio();
+	void MutexearListaJugadores();
+	void DesmutexearListaJugadores();
+	Lista<RectanguloPersonaje>* getRectangulosPersonajes();
+	void removerJugador(int indice);
 private:
 	Lista<DatosSprites *>* ListaSprites;
 	Lista<Rectangulo* >* ListaPlataformas;
@@ -136,5 +150,6 @@ private:
 	int CantCamaras;
 	int NumeroNivel;
 	int PisoY;
+	Lista<RectanguloPersonaje>* RectangulosPersonajes;
 };
 

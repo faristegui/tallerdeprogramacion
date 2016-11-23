@@ -399,10 +399,49 @@ void FisicaThread(void* arg) {
 				}
 
 				int TmpY, TmpX;
-
 				if (UnJuego->HayObstaculo(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(), UnProyectil->GetHeight(), TmpY, TmpX)) {
-
 					Proyectiles->remover(PosicionCursor);
+				}
+				/*avanzo sobre los rectangulos de los personajes y chequeo sus colisiones contra el proyectil*/
+				
+				UnJuego->getRectangulosPersonajes()->iniciarCursor();
+				while (UnJuego->getRectangulosPersonajes()->avanzarCursor()) {
+
+					RectanguloPersonaje UnRectanguloPersonaje = UnJuego->getRectangulosPersonajes()->obtenerCursor();
+
+					if (HayColision(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(),
+						UnProyectil->GetHeight(), UnRectanguloPersonaje.RefJugador->GetX(), UnRectanguloPersonaje.RefJugador->GetY(),
+						UnRectanguloPersonaje.RefJugador->GetWidth(), UnRectanguloPersonaje.RefJugador->GetHeight()))
+					{
+
+  						if (!UnProyectil->EsDePersonaje()) //si el proyectil que impacta sobre el  personaje es disparado por un enemigo y no por otro personaje entonces hiero al personaje!!
+						{
+							UnJuego->MutexearListaJugadores();
+
+							UnRectanguloPersonaje.RefJugador->SacarVida(UnProyectil->GetDanio());
+							if (UnRectanguloPersonaje.RefJugador->GetVida() <= 0)
+							{
+
+								UnRectanguloPersonaje.RefJugador->muereJugador();
+								int indiceJugador = UnRectanguloPersonaje.IndexEnLista;
+
+								UnJuego->getRectangulosPersonajes()->remover(indiceJugador);
+								UnJuego->removerJugador(indiceJugador-1);
+
+								
+
+							}
+
+
+
+							UnJuego->DesmutexearListaJugadores();
+
+							Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio
+
+
+						}
+
+					}
 				}
 			}
 			PosicionCursor++;
@@ -550,6 +589,7 @@ void FisicaThread(void* arg) {
 
 		Sleep(50 - diff_ticks);
 	}
+	delete UnJuego->getRectangulosPersonajes();
 }
 
 void Juego::desaparecerBonusPower()
@@ -585,6 +625,7 @@ Lista<Bonus*>* Juego::getTodosLosBonus()
 HANDLE MutexListaProyectiles;
 HANDLE MutexListaEnemigos;
 HANDLE MutexListaRepuestos;
+HANDLE MutexListaJugadores;
 Juego::Juego()
 {
 	MutexListaProyectiles = CreateMutex(NULL, FALSE, NULL);
@@ -607,6 +648,7 @@ Juego::Juego()
 	ListaPlataformas = new Lista<Rectangulo *>();
 	repuestosArma = new Lista<Bonus*>();
 	todosLosBonus = new Lista<Bonus*>();
+	RectangulosPersonajes = new Lista<RectanguloPersonaje>();
 }
 
 void Juego::AgregarPlataforma(int x, int y, int w, int h) {
@@ -831,7 +873,23 @@ void Juego::AgregarJugador(std::string UnNombre, std::string UnColor) {
 		int Width = 88;
 		int Height = 122;
 
-		Jugadores[CantJugadores] = new Jugador(UnNombre, UnColor, Width, Height);
+		Jugador* UnJugador = new Jugador(UnNombre, UnColor, Width, Height);
+		Jugadores[CantJugadores] = UnJugador;
+
+		RectanguloPersonaje unRectanguloPersonaje;
+
+		unRectanguloPersonaje.IndexEnLista = CantJugadores+1;
+		unRectanguloPersonaje.X = UnJugador->GetX();
+		unRectanguloPersonaje.Y = UnJugador->GetY();
+		unRectanguloPersonaje.Width = UnJugador->GetWidth();
+		unRectanguloPersonaje.Height = UnJugador->GetHeight();
+		unRectanguloPersonaje.RefJugador = UnJugador;
+		this->RectangulosPersonajes->agregar(unRectanguloPersonaje);
+		
+		
+		
+		
+		
 		//hay un equipo por jugador
 		if(modoJuego == 1)
 		{
@@ -1043,6 +1101,16 @@ void Juego::DesmutexearListaEnemigos() {
 	ReleaseMutex(MutexListaEnemigos);
 }
 
+void Juego::MutexearListaJugadores(){
+	
+	WaitForSingleObject(MutexListaJugadores, INFINITE);
+
+}
+
+void Juego::DesmutexearListaJugadores() {
+
+	ReleaseMutex(MutexListaJugadores);
+}
 int Juego::GetCantJugadores() {
 
 	return CantJugadores;
@@ -1099,6 +1167,18 @@ void Juego::BorrarCamaras() {
 	CantCamaras = 0;
 }
 
+Lista<RectanguloPersonaje>* Juego::getRectangulosPersonajes(){
+
+	return RectangulosPersonajes;
+}
+
+void Juego::removerJugador(int indice){
+
+	/*delete Jugadores[indice];*/
+	Jugadores[indice]->SetEstaConectado(false);
+	/*CantJugadores--;*/
+
+}
 Juego::~Juego()
 {
 }
