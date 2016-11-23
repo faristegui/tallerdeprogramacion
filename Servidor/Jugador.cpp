@@ -483,7 +483,9 @@ std::string Jugador::GetEstadoAnterior() {
 
 void Jugador::SetX(int UnX) {
 
-	x = UnX;
+	if (vida > 0) {
+		x = UnX;
+	}
 }
 
 void Jugador::SetDireccion(std::string UnaDireccion) {
@@ -493,7 +495,9 @@ void Jugador::SetDireccion(std::string UnaDireccion) {
 
 void Jugador::SetY(int UnY) {
 
-	y = UnY;
+	if (vida > 0) {
+		y = UnY;
+	}
 }
 
 Jugador::~Jugador()
@@ -515,6 +519,10 @@ void Jugador::SacarVida(int Cantidad) {
 
 	if (!EsDios) {
 		vida -= Cantidad;
+	}
+
+	if (vida < 0) {
+		vida = 0;
 	}
 
 }

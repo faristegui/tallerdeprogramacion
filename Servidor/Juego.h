@@ -122,7 +122,10 @@ public:
 	void DesmutexearListaJugadores();
 	Lista<RectanguloPersonaje>* getRectangulosPersonajes();
 	void removerJugador(int indice);
+	void EmpezarElJuego();
+	bool GetEmpezoElJuego();
 private:
+	bool EmpezoElJuego;
 	Lista<DatosSprites *>* ListaSprites;
 	Lista<Rectangulo* >* ListaPlataformas;
 	Lista<Bonus*>* todosLosBonus;

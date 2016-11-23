@@ -98,7 +98,7 @@ void FisicaThread(void* arg) {
 		bool AvanzaCamara = false;
 		int CantJugadores = UnJuego->GetCantJugadores();
 
-		if (!UnJuego->GetEnemigoFinalMurio()) {
+		if (!UnJuego->GetEnemigoFinalMurio() && UnJuego->GetEmpezoElJuego()) {
 
 		// -----------------------------------------------
 		// Proceso jugador (estados y eventos)
@@ -653,6 +653,11 @@ Juego::Juego()
 	repuestosArma = new Lista<Bonus*>();
 	todosLosBonus = new Lista<Bonus*>();
 	RectangulosPersonajes = new Lista<RectanguloPersonaje>();
+	EmpezoElJuego = false;
+}
+
+void Juego::EmpezarElJuego() {
+	EmpezoElJuego = true;
 }
 
 void Juego::AgregarPlataforma(int x, int y, int w, int h) {
@@ -753,6 +758,11 @@ Enemigo* Juego::GetEnemigoFinal() {
 		return EnemigoFinal;
 	}
 	
+}
+
+bool Juego::GetEmpezoElJuego() {
+
+	return EmpezoElJuego;
 }
 
 void Juego::BorrarEnemigos() {

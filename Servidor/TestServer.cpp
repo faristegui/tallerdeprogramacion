@@ -434,6 +434,7 @@ void MainListenThread(void* arg) {
 			else
 			{
 				UnServer.EnviarMensajeTamanoVariable("OK",ClientSocket);
+				UnJuego.EmpezarElJuego();
 			}
 		}
 		if (mensaje == "STAT") {
@@ -632,6 +633,17 @@ void MainListenThread(void* arg) {
 					GranMensaje.append(ObtenerTextoPuntaje(UnJuego.obtenerModo(), i));
 					GranMensaje.append(";");
 				}
+			}
+			else {
+
+				GranMensaje.append("NO");
+				GranMensaje.append(";");
+			}
+
+			if (MiJugador->GetVida() <= 0) {
+
+				GranMensaje.append("SI");
+				GranMensaje.append(";");
 			}
 			else {
 

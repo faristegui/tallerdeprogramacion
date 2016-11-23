@@ -735,11 +735,19 @@ void Pantalla::IniciarJuego() {
 				for (int i = 0; i< CantJugadores; i++)
 				{
 					std::string Puntaje = mensajes[Indice];
-					EscribirMensaje(Puntaje, 300, 250 + (i*15), 20, Renderer);
+					EscribirMensaje(Puntaje, 300, 250 + (i*20), 20, Renderer);
 					Indice++;
 				}
 
 				PedirRecarga = true;
+			}
+
+			std::string MurioPlayer = mensajes[Indice];
+			Indice++;
+
+			if (MurioPlayer == "SI") {
+
+				EscribirMensaje("GAME OVER", 300, 250, 28, Renderer);
 			}
 
 			MostrarMensajes(Starting_Tick);
