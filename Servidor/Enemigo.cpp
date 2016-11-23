@@ -2,6 +2,7 @@
 
 #include "ArmaEnemigoHumano.h"
 #include "ArmaEnemigoFinal1.h"
+#include "ArmaEnemigoFinal2.h"
 
 Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel, 
 				int unaVida, bool esFinal, int UnWidth, int UnHeight,
@@ -53,6 +54,10 @@ void Enemigo::DeterminarArma() {
 	if (Nombre == "EnemigoFinal1") {
 
 		arma = new ArmaEnemigoFinal1();
+	}
+	if (Nombre == "EnemigoFinal2") {
+
+		arma = new ArmaEnemigoFinal2();
 	}
 }
 
@@ -167,6 +172,7 @@ void Enemigo::mover()
 	{
 		if(this->estado == "CAMINA-IZQ")
 		{
+			this->estaDisparando = true;
 			x-=velocidad;
 		}
 		if (x < 10)
@@ -178,6 +184,7 @@ void Enemigo::mover()
 			x+=velocidad;
 			if(x >= 500)
 			{
+				this->estaDisparando = true;
 				this->estado="CAMINA-IZQ";
 			}
 		}
