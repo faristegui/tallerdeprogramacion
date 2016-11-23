@@ -98,35 +98,164 @@ void FisicaThread(void* arg) {
 		bool AvanzaCamara = false;
 		int CantJugadores = UnJuego->GetCantJugadores();
 
-		// -----------------------------------------------
-		// Proceso jugador (estados y eventos)
-		for (int i = 0; i < CantJugadores; i++) {
+		if (!UnJuego->GetEnemigoFinalMurio()) {
 
-			Jugador *UnJugador = UnJuego->GetJugador(i);
+			// -----------------------------------------------
+			// Proceso jugador (estados y eventos)
+			for (int i = 0; i < CantJugadores; i++) {
 
-			if (UnJugador->GetEstaConectado()) {
+				Jugador *UnJugador = UnJuego->GetJugador(i);
 
-				if (UnJugador->EstaCaminando()) {
+				if (UnJugador->GetEstaConectado()) {
 
-					if (UnJugador->GetEstado() == "CAMINA-DER") {
+					if (UnJugador->EstaCaminando()) {
 
-						if (UnJugador->GetX() > BordeEnXMaxCamara) {
+						if (UnJugador->GetEstado() == "CAMINA-DER") {
 
-							AvanzaCamara = true;
+							if (UnJugador->GetX() > BordeEnXMaxCamara) {
+
+								AvanzaCamara = true;
+							}
 						}
 					}
+
+					if (UnJugador->EstaDisparando()) {
+
+						if (UnJugador->GetArmaEnUso()->PuedeDisparar(ticks_start)) {
+
+							UnJuego->MutexearListaProyectiles();
+
+							Proyectil* UnProyectil = UnJugador->GetArmaEnUso()->Disparar(UnJugador->GetNombre(), UnJugador->GetX(),
+																					UnJugador->GetY(),
+																					ticks_start, 
+																					UnJugador->GetDireccion());
+
+							UnJuego->GetProyectiles()->agregar(UnProyectil);
+
+							UnJuego->DesmutexearListaProyectiles();
+						}
+					}
+
+					if ((MinPosX == -1) || (UnJugador->GetX() < MinPosX)) {
+
+						MinPosX = UnJugador->GetX();
+					}
+				}
+			}
+			if (MinPosX <= BordeEnXMinCamara) {
+
+				AvanzaCamara = false;
+			}
+			// -----------------------------------------------
+			// Proceso enemigos
+
+			int VelocidadCamara = 0;
+			if (UnJuego->GetCantCamaras() > 0) {
+
+				// El ultimo fondo determina el ancho total del juego (el fondo de los obstaculos)
+
+				Camara* UnaCamara = UnJuego->GetCamaraObstaculos();
+				VelocidadCamara = UnaCamara->Velocidad;
+
+				if (UnaCamara->X + 800 >= UnaCamara->AnchoImagen) {
+
+					// Aca llega al fin del nivel -> no avanza mas!
+				
+					Enemigo* EnemigoFinal = UnJuego->GetEnemigoFinal();
+					if (EnemigoFinal != NULL) {
+						UnJuego->MutexearListaEnemigos();
+						Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
+
+						// if direccion = izq
+						EnemigoFinal->SetX(850);	// Si camina para la izquierda -> lo hago aparecer desde el borde derecho
+						// else if direccion = der
+						// Si camina para la der -> lo hago aparecer desde el borde izq
+						// UnEnemigo->SetX(-50)
+
+						enemigosVivos->agregar(EnemigoFinal);
+						UnJuego->DesmutexearListaEnemigos();
+					}
+
+					AvanzaCamara = false;
+				}
+			}
+
+			Lista<Enemigo *>* todosLosEnemigos = UnJuego->GetTodosLosEnemigos();
+			todosLosEnemigos->iniciarCursor();
+			//si avanza el juego o recien empieza cargo los enemigos
+			if(AvanzaCamara)
+			{
+				Lista<int>* posiciones = new Lista<int>();
+				int indiceAEliminar = 1;
+				while(todosLosEnemigos->avanzarCursor())
+				{
+					int indice = UnJuego->GetCamaraObstaculos()->X;
+					if(todosLosEnemigos->obtenerCursor()->getX() <= (800+indice))
+					{
+						UnJuego->MutexearListaEnemigos();
+						Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
+
+						Enemigo* UnEnemigo = todosLosEnemigos->obtenerCursor();
+						UnEnemigo->getEstado();
+
+						if (UnEnemigo->getX() > 850) {
+						
+							if (UnEnemigo->GetDireccionAparicion() == "DER") {
+								UnEnemigo->SetX(850);
+							} else {
+								UnEnemigo->SetX(-20);
+							}
+						}
+						else {
+							if (UnEnemigo->getX() < 0) {
+								UnEnemigo->SetX(-20);
+							}
+						}
+
+						enemigosVivos->agregar(UnEnemigo);
+						UnEnemigo->setIndexEnListaOriginal(UnJuego->obtenerCantEnemigosAparecidos());
+						UnJuego->sumarEnemigo();
+						UnJuego->DesmutexearListaEnemigos();
+
+						posiciones->agregar(indiceAEliminar);
+					}
+					indiceAEliminar++;
 				}
 
-				if (UnJugador->EstaDisparando()) {
+				posiciones->iniciarCursor();
+				int indiceCantEliminados = 0;
+				while(posiciones->avanzarCursor())
+				{
+					todosLosEnemigos->remover(posiciones->obtenerCursor()-indiceCantEliminados);
+					indiceCantEliminados++;
+				}
+			}
 
-					if (UnJugador->GetArmaEnUso()->PuedeDisparar(ticks_start)) {
+			int PosicionCursor = 1;
+
+			int CantEnemigos = todosLosEnemigos->getTamanio();
+			Lista<RectanguloEnemigo>* RectangulosEnemigos = new Lista<RectanguloEnemigo>();
+
+			UnJuego->MutexearListaEnemigos();
+			Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
+			enemigosVivos->iniciarCursor();
+			while (enemigosVivos->avanzarCursor()) {
+
+				Enemigo* UnEnemigo = enemigosVivos->obtenerCursor();
+
+				UnEnemigo->mover();
+
+				// TODO: if puededisparar -> dispara
+				if (UnEnemigo->EstaDisparando()) {
+
+					if (UnEnemigo->getArmaEnUso()->PuedeDisparar(ticks_start)) {
 
 						UnJuego->MutexearListaProyectiles();
 
-						Proyectil* UnProyectil = UnJugador->GetArmaEnUso()->Disparar(UnJugador->GetNombre(), UnJugador->GetX(),
-																				UnJugador->GetY(),
-																				ticks_start, 
-																				UnJugador->GetDireccion());
+						Proyectil* UnProyectil = UnEnemigo->getArmaEnUso()->Disparar(UnEnemigo->getNombre(), UnEnemigo->getX(),
+							UnEnemigo->getY(),
+							ticks_start,
+							UnEnemigo->getDireccion());
 
 						UnJuego->GetProyectiles()->agregar(UnProyectil);
 
@@ -134,414 +263,289 @@ void FisicaThread(void* arg) {
 					}
 				}
 
-				if ((MinPosX == -1) || (UnJugador->GetX() < MinPosX)) {
+				/****************************************************************************************************/
 
-					MinPosX = UnJugador->GetX();
-				}
-			}
-		}
-		if (MinPosX <= BordeEnXMinCamara) {
+				if (AvanzaCamara) {
 
-			AvanzaCamara = false;
-		}
-		// -----------------------------------------------
-		// Proceso enemigos
-
-		int VelocidadCamara = 0;
-		if (UnJuego->GetCantCamaras() > 0) {
-
-			// El ultimo fondo determina el ancho total del juego (el fondo de los obstaculos)
-
-			Camara* UnaCamara = UnJuego->GetCamaraObstaculos();
-			VelocidadCamara = UnaCamara->Velocidad;
-
-			if (UnaCamara->X + 800 >= UnaCamara->AnchoImagen) {
-
-				// Aca llega al fin del nivel -> no avanza mas!
-				
-				Enemigo* EnemigoFinal = UnJuego->GetEnemigoFinal();
-				if (EnemigoFinal != NULL) {
-					UnJuego->MutexearListaEnemigos();
-					Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
-
-					// if direccion = izq
-					EnemigoFinal->SetX(850);	// Si camina para la izquierda -> lo hago aparecer desde el borde derecho
-					// else if direccion = der
-					// Si camina para la der -> lo hago aparecer desde el borde izq
-					// UnEnemigo->SetX(-50)
-
-					enemigosVivos->agregar(EnemigoFinal);
-					UnJuego->DesmutexearListaEnemigos();
+					UnEnemigo->MoverEnX(-VelocidadCamara);
 				}
 
-				AvanzaCamara = false;
-			}
-		}
+				if ((UnEnemigo->getX() > 1000) || (UnEnemigo->getX() < -100) ||
+					(UnEnemigo->getY() < -100) || (UnEnemigo->getY() > 700) ||  UnEnemigo->estaListoParaMorir()) {
 
-		Lista<Enemigo *>* todosLosEnemigos = UnJuego->GetTodosLosEnemigos();
-		todosLosEnemigos->iniciarCursor();
-		//si avanza el juego o recien empieza cargo los enemigos
-		if(AvanzaCamara)
-		{
-			Lista<int>* posiciones = new Lista<int>();
-			int indiceAEliminar = 1;
-			while(todosLosEnemigos->avanzarCursor())
-			{
-				int indice = UnJuego->GetCamaraObstaculos()->X;
-				if(todosLosEnemigos->obtenerCursor()->getX() <= (800+indice))
-				{
-					UnJuego->MutexearListaEnemigos();
-					Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
-
-					Enemigo* UnEnemigo = todosLosEnemigos->obtenerCursor();
-					UnEnemigo->getEstado();
-
-					if (UnEnemigo->getX() > 850) {
-						
-						if (UnEnemigo->GetDireccionAparicion() == "DER") {
-							UnEnemigo->SetX(850);
-						} else {
-							UnEnemigo->SetX(-20);
-						}
-					}
-					else {
-						if (UnEnemigo->getX() < 0) {
-							UnEnemigo->SetX(-20);
-						}
-					}
-
-					enemigosVivos->agregar(UnEnemigo);
-					UnEnemigo->setIndexEnListaOriginal(UnJuego->obtenerCantEnemigosAparecidos());
-					UnJuego->sumarEnemigo();
-					UnJuego->DesmutexearListaEnemigos();
-
-					posiciones->agregar(indiceAEliminar);
-				}
-				indiceAEliminar++;
-			}
-
-			posiciones->iniciarCursor();
-			int indiceCantEliminados = 0;
-			while(posiciones->avanzarCursor())
-			{
-				todosLosEnemigos->remover(posiciones->obtenerCursor()-indiceCantEliminados);
-				indiceCantEliminados++;
-			}
-		}
-
-		int PosicionCursor = 1;
-
-		int CantEnemigos = todosLosEnemigos->getTamanio();
-		Lista<RectanguloEnemigo>* RectangulosEnemigos = new Lista<RectanguloEnemigo>();
-
-		UnJuego->MutexearListaEnemigos();
-		Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
-		enemigosVivos->iniciarCursor();
-		while (enemigosVivos->avanzarCursor()) {
-
-			Enemigo* UnEnemigo = enemigosVivos->obtenerCursor();
-
-			UnEnemigo->mover();
-
-			// TODO: if puededisparar -> dispara
-			if (UnEnemigo->EstaDisparando()) {
-
-				if (UnEnemigo->getArmaEnUso()->PuedeDisparar(ticks_start)) {
-
-					UnJuego->MutexearListaProyectiles();
-
-					Proyectil* UnProyectil = UnEnemigo->getArmaEnUso()->Disparar(UnEnemigo->getNombre(), UnEnemigo->getX(),
-						UnEnemigo->getY(),
-						ticks_start,
-						UnEnemigo->getDireccion());
-
-					UnJuego->GetProyectiles()->agregar(UnProyectil);
-
-					UnJuego->DesmutexearListaProyectiles();
-				}
-			}
-
-			/****************************************************************************************************/
-
-			if (AvanzaCamara) {
-
-				UnEnemigo->MoverEnX(-VelocidadCamara);
-			}
-
-			if ((UnEnemigo->getX() > 1000) || (UnEnemigo->getX() < -100) ||
-				(UnEnemigo->getY() < -100) || (UnEnemigo->getY() > 700) ||  UnEnemigo->estaListoParaMorir()) {
-
-				//UnJuego->eliminarDeListaPrincipal(PosicionCursor);
-				enemigosVivos->remover(PosicionCursor);  // TODO: Ver lo de la lista al de remover (que no reinicie el cursor!)
-			} else {
+					//UnJuego->eliminarDeListaPrincipal(PosicionCursor);
+					enemigosVivos->remover(PosicionCursor);  // TODO: Ver lo de la lista al de remover (que no reinicie el cursor!)
+				} else {
 			
-				RectanguloEnemigo UnRectangulo;
+					RectanguloEnemigo UnRectangulo;
 
-				UnRectangulo.IndexEnLista = PosicionCursor;
-				UnRectangulo.X = UnEnemigo->getX();
-				UnRectangulo.Y = UnEnemigo->getY();
-				UnRectangulo.Width = UnEnemigo->GetWidth();
-				UnRectangulo.Height = UnEnemigo->GetHeight();
-				UnRectangulo.RefEnemigo = UnEnemigo;
-				RectangulosEnemigos->agregar(UnRectangulo);
-			}
-			//hacer aparecer bonus
-			UnJuego->MutexearListaRepuestos();
-			UnJuego->getTodosLosBonus()->iniciarCursor();
-			UnJuego->DesmutexearListaRepuestos();
-			PosicionCursor++;
-		}
-
-		UnJuego->DesmutexearListaEnemigos();
-		while(UnJuego->getTodosLosBonus()->avanzarCursor())
-			{
-
-				if(UnJuego->getTodosLosBonus()->obtenerCursor()!= NULL && AvanzaCamara)
-				{
-					UnJuego->getTodosLosBonus()->obtenerCursor()->moverEnX(-VelocidadCamara);
+					UnRectangulo.IndexEnLista = PosicionCursor;
+					UnRectangulo.X = UnEnemigo->getX();
+					UnRectangulo.Y = UnEnemigo->getY();
+					UnRectangulo.Width = UnEnemigo->GetWidth();
+					UnRectangulo.Height = UnEnemigo->GetHeight();
+					UnRectangulo.RefEnemigo = UnEnemigo;
+					RectangulosEnemigos->agregar(UnRectangulo);
 				}
-				/*
-				if(UnJuego->getRepuestosArma()->obtenerCursor()->getX() <= 1000+UnJuego->GetCamaraObstaculos()->X)
+				//hacer aparecer bonus
+				UnJuego->MutexearListaRepuestos();
+				UnJuego->getTodosLosBonus()->iniciarCursor();
+				UnJuego->DesmutexearListaRepuestos();
+				PosicionCursor++;
+			}
+
+			UnJuego->DesmutexearListaEnemigos();
+			while(UnJuego->getTodosLosBonus()->avanzarCursor())
 				{
-					if(UnJuego->getRepuestosArma()->obtenerCursor()->getX() > 850)
+
+					if(UnJuego->getTodosLosBonus()->obtenerCursor()!= NULL && AvanzaCamara)
 					{
-						UnJuego->getRepuestosArma()->obtenerCursor()->setX(700);
+						UnJuego->getTodosLosBonus()->obtenerCursor()->moverEnX(-VelocidadCamara);
 					}
-				}
-				*/
-			}
-		// -----------------------------------------------
-		// Proceso proyectiles (y colisiones de los mismos)
-		UnJuego->MutexearListaProyectiles();
-		Lista<Proyectil *>* Proyectiles = UnJuego->GetProyectiles();
-		PosicionCursor = 1;
-		Proyectiles->iniciarCursor();
-		while (Proyectiles->avanzarCursor()) {
-
-			Proyectil* UnProyectil = Proyectiles->obtenerCursor();
-
-			UnProyectil->Mover();
-
-			if (AvanzaCamara) {
-
-
-				UnProyectil->MoverEnX(-VelocidadCamara);
-			}
-
-			if ((UnProyectil->GetX() > 900) || (UnProyectil->GetX() < -100) ||
-				(UnProyectil->GetY() < -100) || (UnProyectil->GetY() > 700)) {
-
-				Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio
-			} else {
-
-				RectangulosEnemigos->iniciarCursor();
-				while (RectangulosEnemigos->avanzarCursor()) {
-
-					RectanguloEnemigo UnRectangulo = RectangulosEnemigos->obtenerCursor();
-					
-					if (HayColision(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(),
-						UnProyectil->GetHeight(), UnRectangulo.X, UnRectangulo.Y,
-						UnRectangulo.Width, UnRectangulo.Height)) 
+					/*
+					if(UnJuego->getRepuestosArma()->obtenerCursor()->getX() <= 1000+UnJuego->GetCamaraObstaculos()->X)
 					{
-
-						if (UnProyectil->EsDePersonaje()) //si el proyectil que impacta en enemigo es disparado por un pesonaje y no por otro enemigo entonces hiero al enemigo sino no!!
+						if(UnJuego->getRepuestosArma()->obtenerCursor()->getX() > 850)
 						{
-						
-							UnJuego->MutexearListaEnemigos();
+							UnJuego->getRepuestosArma()->obtenerCursor()->setX(700);
+						}
+					}
+					*/
+				}
+			// -----------------------------------------------
+			// Proceso proyectiles (y colisiones de los mismos)
+			UnJuego->MutexearListaProyectiles();
+			Lista<Proyectil *>* Proyectiles = UnJuego->GetProyectiles();
+			PosicionCursor = 1;
+			Proyectiles->iniciarCursor();
+			while (Proyectiles->avanzarCursor()) {
 
-							UnRectangulo.RefEnemigo->SacarVida(UnProyectil->GetDanio());
-							if (UnRectangulo.RefEnemigo->GetVida() <= 0) 
+				Proyectil* UnProyectil = Proyectiles->obtenerCursor();
+
+				UnProyectil->Mover();
+
+				if (AvanzaCamara) {
+
+
+					UnProyectil->MoverEnX(-VelocidadCamara);
+				}
+
+				if ((UnProyectil->GetX() > 900) || (UnProyectil->GetX() < -100) ||
+					(UnProyectil->GetY() < -100) || (UnProyectil->GetY() > 700)) {
+
+					Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio
+				} else {
+
+					RectangulosEnemigos->iniciarCursor();
+					while (RectangulosEnemigos->avanzarCursor()) {
+
+						RectanguloEnemigo UnRectangulo = RectangulosEnemigos->obtenerCursor();
+					
+						if (HayColision(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(),
+							UnProyectil->GetHeight(), UnRectangulo.X, UnRectangulo.Y,
+							UnRectangulo.Width, UnRectangulo.Height)) 
+						{
+
+							if (UnProyectil->EsDePersonaje()) //si el proyectil que impacta en enemigo es disparado por un pesonaje y no por otro enemigo entonces hiero al enemigo sino no!!
 							{
-							//chequeos por bonus
-								if(UnJuego->getNumeroBonusPower() == UnRectangulo.RefEnemigo->getIndexEnListaOriginal())
+						
+								UnJuego->MutexearListaEnemigos();
+
+								UnRectangulo.RefEnemigo->SacarVida(UnProyectil->GetDanio());
+								if (UnRectangulo.RefEnemigo->GetVida() <= 0) 
 								{
-									Bonus* bonusPower = new Bonus(UnRectangulo.X,UnRectangulo.Y,"p",UnProyectil->GetIDJugador());
-									bonusPower->mostrar();
-									UnJuego->aparecerBonusPower(bonusPower);
-									UnJuego->getTodosLosBonus()->agregar(bonusPower);
-								}		
-								if(UnJuego->getNumeroBonusKillAll() == UnRectangulo.RefEnemigo->getIndexEnListaOriginal())
-								{
-									Bonus* bonusKillAll = new Bonus(UnRectangulo.X,UnRectangulo.Y,"ka",UnProyectil->GetIDJugador());
-									bonusKillAll->mostrar();
-									UnJuego->aparecerBonusKillAll(bonusKillAll);
-									UnJuego->getTodosLosBonus()->agregar(bonusKillAll);
-								}
+								//chequeos por bonus
+									if(UnJuego->getNumeroBonusPower() == UnRectangulo.RefEnemigo->getIndexEnListaOriginal())
+									{
+										Bonus* bonusPower = new Bonus(UnRectangulo.X,UnRectangulo.Y,"p",UnProyectil->GetIDJugador());
+										bonusPower->mostrar();
+										UnJuego->aparecerBonusPower(bonusPower);
+										UnJuego->getTodosLosBonus()->agregar(bonusPower);
+									}		
+									if(UnJuego->getNumeroBonusKillAll() == UnRectangulo.RefEnemigo->getIndexEnListaOriginal())
+									{
+										Bonus* bonusKillAll = new Bonus(UnRectangulo.X,UnRectangulo.Y,"ka",UnProyectil->GetIDJugador());
+										bonusKillAll->mostrar();
+										UnJuego->aparecerBonusKillAll(bonusKillAll);
+										UnJuego->getTodosLosBonus()->agregar(bonusKillAll);
+									}
 
 							
-								/**/
-								UnRectangulo.RefEnemigo->muereEnemigo();
+									/**/
+									UnRectangulo.RefEnemigo->muereEnemigo();
 
-								/*si al tratar de mover al enemigo se encuentra con un estado de muerte, y transcurrio n segundos, entonces internamente
-								se setea el atributo listoParaMorir en true*/
+									/*si al tratar de mover al enemigo se encuentra con un estado de muerte, y transcurrio n segundos, entonces internamente
+									se setea el atributo listoParaMorir en true*/
 
-								if (UnRectangulo.RefEnemigo->estaListoParaMorir())
-								{
-									UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);
+									if (UnRectangulo.RefEnemigo->estaListoParaMorir())
+									{
+										UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);
+									}
+									//eliminar enemigo de pantalla
+									/*UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);*/
+
+									if (UnRectangulo.RefEnemigo->esEnemigoFinal()) {
+
+										UnJuego->SetEnemigoFinalMurio(true);
+										// TODO: Cambiar de nivel!
+									}
 								}
-								//eliminar enemigo de pantalla
-								/*UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);*/
+								UnJuego->DesmutexearListaEnemigos();
 
-								if (UnRectangulo.RefEnemigo->esEnemigoFinal()) {
+								Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio
 
-									UnJuego->SetEnemigoFinalMurio(true);
-									// TODO: Cambiar de nivel!
-								}
+								UnJuego->GetJugador(UnProyectil->GetIDJugador())->herirEnemigo();
 							}
-							UnJuego->DesmutexearListaEnemigos();
-
-							Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio
-
-							UnJuego->GetJugador(UnProyectil->GetIDJugador())->herirEnemigo();
 						}
+						//muchachos el width y el height de la imagen del bonus la hardcodeo, de ultima si hacemos a tiempo lo cambiamos.
 					}
-					//muchachos el width y el height de la imagen del bonus la hardcodeo, de ultima si hacemos a tiempo lo cambiamos.
-				}
 
-				int TmpY, TmpX;
+					int TmpY, TmpX;
 
-				if (UnJuego->HayObstaculo(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(), UnProyectil->GetHeight(), TmpY, TmpX)) {
+					if (UnJuego->HayObstaculo(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(), UnProyectil->GetHeight(), TmpY, TmpX)) {
 
-					Proyectiles->remover(PosicionCursor);
-				}
-			}
-			PosicionCursor++;
-		}
-		UnJuego->DesmutexearListaProyectiles();
-		
-	int cantRepuestosEliminados = 0;
-		//chequeo si algun jugador tomo algun bonus o repuesto de arma
-		for(int i =0; i < UnJuego->GetCantJugadores();i++)
-		{
-			if(UnJuego->obtenerBonusPower() != NULL 
-				&& HayColision(UnJuego->obtenerBonusPower()->getX(),UnJuego->obtenerBonusPower()->getY(),25,28,UnJuego->GetJugador(i)->GetX(),UnJuego->GetJugador(i)->GetY(),44,61))
-			{
-				UnJuego->obtenerBonusPower()->encontrar(UnJuego);
-				UnJuego->desaparecerBonusPower();
-			}
-			if(UnJuego->obtenerBonusKillAll() != NULL 
-				&& HayColision(UnJuego->obtenerBonusKillAll()->getX(),UnJuego->obtenerBonusKillAll()->getY(),25,28,UnJuego->GetJugador(i)->GetX(),UnJuego->GetJugador(i)->GetY(),44,61))
-			{
-				UnJuego->obtenerBonusKillAll()->encontrar(UnJuego);
-				UnJuego->desaparecerBonusKillAll();
-			}
-			UnJuego->MutexearListaRepuestos();
-			UnJuego->getRepuestosArma()->iniciarCursor();
-			while(UnJuego->getRepuestosArma()->avanzarCursor())
-			{
-				Bonus* unRepuestoArma = UnJuego->getRepuestosArma()->obtenerCursor();
-				if(HayColision(unRepuestoArma->getX(),unRepuestoArma->getY(),25,28,UnJuego->GetJugador(i)->GetX(),UnJuego->GetJugador(i)->GetY(),44,61))
-				{
-					UnJuego->GetJugador(i)->sumarBalas();
-					unRepuestoArma->marcarParaEliminar(unRepuestoArma);
-					cantRepuestosEliminados++;
-
-				}
-			}
-			UnJuego->DesmutexearListaRepuestos();
-		}
-		//eliminar repuestos marcados
-		int pos;
-		for(int j = 0;j < cantRepuestosEliminados;j++)
-		{
-			pos = 1;
-			UnJuego->MutexearListaRepuestos();
-			UnJuego->getRepuestosArma()->iniciarCursor();
-			while(UnJuego->getRepuestosArma()->avanzarCursor())
-			{
-				if(UnJuego->getRepuestosArma()->obtenerCursor()->getDireccion() == UnJuego->getRepuestosArma()->obtenerCursor())
-				{
-					UnJuego->getRepuestosArma()->remover(pos);
-					break;
-				}
-				pos++;
-			}
-			UnJuego->DesmutexearListaRepuestos();
-		}
-		
-		// -----------------------------------------------
-		// Proceso camara (y avance/retroceso de todos los sprites)
-		if (AvanzaCamara) {
-
-			UnJuego->AvanzarCamara();
-
-			for (int i = 0; i < CantJugadores; i++) {
-
-				bool MoverParaAtras = false;
-				Jugador *UnJugador = UnJuego->GetJugador(i);
-
-				if (UnJugador->GetEstaConectado()) {
-					if (UnJugador->GetEstado() != "CAMINA-DER") {
-
-						MoverParaAtras = true;
+						Proyectiles->remover(PosicionCursor);
 					}
-					else {
+				}
+				PosicionCursor++;
+			}
+			UnJuego->DesmutexearListaProyectiles();
+		
+		int cantRepuestosEliminados = 0;
+			//chequeo si algun jugador tomo algun bonus o repuesto de arma
+			for(int i =0; i < UnJuego->GetCantJugadores();i++)
+			{
+				if(UnJuego->obtenerBonusPower() != NULL 
+					&& HayColision(UnJuego->obtenerBonusPower()->getX(),UnJuego->obtenerBonusPower()->getY(),25,28,UnJuego->GetJugador(i)->GetX(),UnJuego->GetJugador(i)->GetY(),44,61))
+				{
+					UnJuego->obtenerBonusPower()->encontrar(UnJuego);
+					UnJuego->desaparecerBonusPower();
+				}
+				if(UnJuego->obtenerBonusKillAll() != NULL 
+					&& HayColision(UnJuego->obtenerBonusKillAll()->getX(),UnJuego->obtenerBonusKillAll()->getY(),25,28,UnJuego->GetJugador(i)->GetX(),UnJuego->GetJugador(i)->GetY(),44,61))
+				{
+					UnJuego->obtenerBonusKillAll()->encontrar(UnJuego);
+					UnJuego->desaparecerBonusKillAll();
+				}
+				UnJuego->MutexearListaRepuestos();
+				UnJuego->getRepuestosArma()->iniciarCursor();
+				while(UnJuego->getRepuestosArma()->avanzarCursor())
+				{
+					Bonus* unRepuestoArma = UnJuego->getRepuestosArma()->obtenerCursor();
+					if(HayColision(unRepuestoArma->getX(),unRepuestoArma->getY(),25,28,UnJuego->GetJugador(i)->GetX(),UnJuego->GetJugador(i)->GetY(),44,61))
+					{
+						UnJuego->GetJugador(i)->sumarBalas();
+						unRepuestoArma->marcarParaEliminar(unRepuestoArma);
+						cantRepuestosEliminados++;
 
-						if (UnJugador->GetX() < BordeEnXMaxCamara) {
+					}
+				}
+				UnJuego->DesmutexearListaRepuestos();
+			}
+			//eliminar repuestos marcados
+			int pos;
+			for(int j = 0;j < cantRepuestosEliminados;j++)
+			{
+				pos = 1;
+				UnJuego->MutexearListaRepuestos();
+				UnJuego->getRepuestosArma()->iniciarCursor();
+				while(UnJuego->getRepuestosArma()->avanzarCursor())
+				{
+					if(UnJuego->getRepuestosArma()->obtenerCursor()->getDireccion() == UnJuego->getRepuestosArma()->obtenerCursor())
+					{
+						UnJuego->getRepuestosArma()->remover(pos);
+						break;
+					}
+					pos++;
+				}
+				UnJuego->DesmutexearListaRepuestos();
+			}
+		
+			// -----------------------------------------------
+			// Proceso camara (y avance/retroceso de todos los sprites)
+			if (AvanzaCamara) {
+
+				UnJuego->AvanzarCamara();
+
+				for (int i = 0; i < CantJugadores; i++) {
+
+					bool MoverParaAtras = false;
+					Jugador *UnJugador = UnJuego->GetJugador(i);
+
+					if (UnJugador->GetEstaConectado()) {
+						if (UnJugador->GetEstado() != "CAMINA-DER") {
 
 							MoverParaAtras = true;
 						}
-					}
+						else {
 
-					if (MoverParaAtras) {
+							if (UnJugador->GetX() < BordeEnXMaxCamara) {
 
-						UnJugador->MoverEnX(-VelocidadCamara);
+								MoverParaAtras = true;
+							}
+						}
+
+						if (MoverParaAtras) {
+
+							UnJugador->MoverEnX(-VelocidadCamara);
+						}
 					}
 				}
 			}
-		}
-		for (int i = 0; i < CantJugadores; i++) {
+			for (int i = 0; i < CantJugadores; i++) {
 
-			Jugador *UnJugador = UnJuego->GetJugador(i);
+				Jugador *UnJugador = UnJuego->GetJugador(i);
 
-			if (UnJugador->GetEstaConectado()) {
+				if (UnJugador->GetEstaConectado()) {
 
-				int XAnterior = UnJugador->GetX();
-				int YAnterior = UnJugador->GetY();
+					int XAnterior = UnJugador->GetX();
+					int YAnterior = UnJugador->GetY();
 
-				UnJugador->UpdatePos();
+					UnJugador->UpdatePos();
 
-				int YDelObstaculo;
-				int HDelObstaculo;
+					int YDelObstaculo;
+					int HDelObstaculo;
 
-				if (UnJuego->HayObstaculo(UnJugador->GetX(), UnJugador->GetY(), UnJugador->GetWidth(), UnJugador->GetHeight(), YDelObstaculo, HDelObstaculo)) {
+					if (UnJuego->HayObstaculo(UnJugador->GetX(), UnJugador->GetY(), UnJugador->GetWidth(), UnJugador->GetHeight(), YDelObstaculo, HDelObstaculo)) {
 
-					if (UnJugador->EstaSaltando()) {
-						if ((UnJugador->EstaCayendo())) {
+						if (UnJugador->EstaSaltando()) {
+							if ((UnJugador->EstaCayendo())) {
 
-							if (UnJugador->GetY() + UnJugador->GetHeight() >= YDelObstaculo) {
+								if (UnJugador->GetY() + UnJugador->GetHeight() >= YDelObstaculo) {
 
-								UnJugador->SetEstaEnPiso(true);
-								UnJugador->SetEstaSaltando(false);
+									UnJugador->SetEstaEnPiso(true);
+									UnJugador->SetEstaSaltando(false);
+									UnJugador->SetVelocidadY(0);
+									UnJugador->SetY(YDelObstaculo - UnJugador->GetHeight());
+								}
+							} else {
+
 								UnJugador->SetVelocidadY(0);
-								UnJugador->SetY(YDelObstaculo - UnJugador->GetHeight());
+								UnJugador->SetY(YAnterior);
+								UnJugador->SetVelocidadX(0);
+								UnJugador->SetX(XAnterior);
 							}
 						} else {
-
-							UnJugador->SetVelocidadY(0);
-							UnJugador->SetY(YAnterior);
-							UnJugador->SetVelocidadX(0);
-							UnJugador->SetX(XAnterior);
-						}
-					} else {
-						if (UnJugador->EstaCaminando()) {
-							if (UnJugador->EstaApuntandoALaDerecha()) {
-								UnJugador->SetVelocidadX(VelocidadEnX);
-							} else {
-								UnJugador->SetVelocidadX(-VelocidadEnX);
+							if (UnJugador->EstaCaminando()) {
+								if (UnJugador->EstaApuntandoALaDerecha()) {
+									UnJugador->SetVelocidadX(VelocidadEnX);
+								} else {
+									UnJugador->SetVelocidadX(-VelocidadEnX);
+								}
 							}
 						}
-					}
-				} else {
+					} else {
 
-					UnJugador->SetEstaEnPiso(false);
-					UnJugador->SetEstaSaltando(true);
+						UnJugador->SetEstaEnPiso(false);
+						UnJugador->SetEstaSaltando(true);
+					}
 				}
 			}
-		}
 
-		// -----------------------------------------------
-		// Fin procesos
+			// -----------------------------------------------
+			// Fin procesos
+
+		}
 		float diff_ticks = std::clock() - ticks_start;
 
 		if (diff_ticks >= 50) {
@@ -901,11 +905,16 @@ void Juego::RecibirEvento(std::string Usuario, std::string Tipo) {
 			for (int i = 0; i < CantJugadores; i++) {
 				Jugadores[i]->SetX(20);
 				Jugadores[i]->SetY(365);
+				Jugadores[i]->SetEstado("QUIETO-DER");
+				Jugadores[i]->SetVelocidadX(0);
+				Jugadores[i]->SetVelocidadY(0);
+				delete Proyectiles;
+				Proyectiles = new Lista<Proyectil *>();
 			}
-		}
 
-		EnemigoFinalMurio = false;
-		YaSeAgregoEnemigoFinal = false;
+			EnemigoFinalMurio = false;
+			YaSeAgregoEnemigoFinal = false;
+		}
 	}
 
 	if (Tipo == "ARMA-A") {
