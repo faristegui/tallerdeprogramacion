@@ -19,9 +19,9 @@ int Bonus::getX()
 {
 	return posX;
 }
-void Bonus::setX(int numero)
+void Bonus::moverEnX(int numero)
 {
-	posX = numero;
+	posX +=numero;
 }
 
 Bonus* Bonus::getDireccion()
