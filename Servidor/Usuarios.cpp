@@ -156,6 +156,7 @@ Usuario Usuarios::getProximoUsuario()
 
 		unUsuario.nombre = result[0];
 		unUsuario.contrasena = result[1];
+		unUsuario.esDios = result[2];
 	}
 	return unUsuario;
 }
