@@ -697,10 +697,6 @@ void Juego::AgregarEnemigo(std::string UnIDSprite, int posX, int posY, int veloc
 	else {
 		EnemigoFinal = new Enemigo(UnIDSprite, posX, posY, velocidad, vida, esFinal, width, height, UnaDireccion);
 	}
-	//MutexearListaEnemigos();
-	//Enemigos->agregar(unEnemigo);
-	//DesmutexearListaEnemigos();
-
 }
 
 Camara* Juego::GetCamaraObstaculos() {

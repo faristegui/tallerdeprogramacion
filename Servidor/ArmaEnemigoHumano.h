@@ -3,7 +3,7 @@
 
 class ArmaEnemigoHumano : public Arma {
 public:
-	ArmaEnemigoHumano() : Arma(900, "SEH", 25, "ShotgunEnemigoHumano", 10, true) { }
+	ArmaEnemigoHumano() : Arma(500, "SEH", 25, "ShotgunEnemigoHumano", 100, true) { }
 
 	int ArmaEnemigoHumano::DeterminarOffsetBalaX(std::string UnaDireccion) {
 
@@ -33,11 +33,19 @@ public:
 			Offset = 10;
 		}
 
+		if (UnaDireccion == "ABAJO-DER") {
+			Offset = 40;
+		}
+
 		return Offset;
 	}
 
 	int ArmaEnemigoHumano::DeterminarOffsetBalaY(std::string UnaDireccion) {
 		int Offset = 0;
+
+		if (UnaDireccion == "ABAJO-DER") {
+			Offset = 60;
+		}
 
 		if (UnaDireccion == "DERECHA") {
 			Offset = 55;

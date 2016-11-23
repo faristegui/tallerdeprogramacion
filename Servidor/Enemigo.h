@@ -15,7 +15,6 @@ public:
 	void disparar();
 	std::string getEstado();
 	std::string getID();
-	int getVelocidad();
 	bool esEnemigoFinal();
 	~Enemigo(void);
 	int GetWidth();

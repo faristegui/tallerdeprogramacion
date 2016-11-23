@@ -89,7 +89,7 @@ void Proyectil::Mover() {
 					y += velocidad;
 				}
 				else {
-					// TODO: if puedeDispararDiagonal
+
 					if (Direccion == "ARRIBA-DER-DIAG") {
 
 						x += velocidad;
