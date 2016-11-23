@@ -13,7 +13,7 @@ public:
 	void marcarParaEliminar(Bonus* unaDireccion);
 	void encontrar(Juego* unJuego);
 	bool debeSerEliminado();
-	void setX(int numero);
+	void moverEnX(int numero);
 	Bonus* getDireccion();
 	std::string getInicial();
 	~Bonus(void);

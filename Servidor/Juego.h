@@ -73,6 +73,7 @@ public:
 	Lista<Proyectil *>* GetProyectiles();
 	Lista<Enemigo *>* GetTodosLosEnemigos();
 	Lista<Enemigo*>* GetEnemigosPantalla();
+	Lista<Bonus*>* getTodosLosBonus();
 	void MutexearListaProyectiles();
 	void DesmutexearListaProyectiles();
 	void MutexearListaEnemigos();
@@ -106,6 +107,7 @@ public:
 private:
 	Lista<DatosSprites *>* ListaSprites;
 	Lista<Rectangulo* >* ListaPlataformas;
+	Lista<Bonus*>* todosLosBonus;
 	bool YaSeAgregoEnemigoFinal;
 	int CantJugadores;
 	int modoJuego;
