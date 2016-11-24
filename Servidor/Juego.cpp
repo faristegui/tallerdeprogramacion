@@ -192,9 +192,9 @@ void FisicaThread(void* arg) {
 			while(todosLosEnemigos->avanzarCursor())
 			{
 				int indice = UnJuego->GetCamaraObstaculos()->X;
+				UnJuego->MutexearListaEnemigos();
 				if(todosLosEnemigos->obtenerCursor()->getX() <= (800+indice))
 				{
-					UnJuego->MutexearListaEnemigos();
 					Lista<Enemigo*>* enemigosVivos = UnJuego->GetEnemigosPantalla();
 
 					Enemigo* UnEnemigo = todosLosEnemigos->obtenerCursor();
