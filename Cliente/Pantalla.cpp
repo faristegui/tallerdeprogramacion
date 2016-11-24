@@ -265,6 +265,7 @@ void Pantalla::AgregarSprite(std::string ID, int FrameWidth, int FrameHeight, in
 	UnSprite.Texture = TmpTexture;
 
 	Sprites->agregar(UnSprite);
+	SDL_FreeSurface(TmpSurface);
 }
 void Pantalla::CargarSprites() {
 
@@ -388,6 +389,7 @@ void Pantalla::AgregarCapaFondoEscenario(std::string nombreImagen, int zIndex,in
 
 	UnaCapa.Texture = TmpTexture;
 	CapasFondoEscenario->agregar(UnaCapa);
+	SDL_FreeSurface(TmpSurface);
 }
 
 CapaFondoEscenario Pantalla::getCapaFondoEscenario(Lista<CapaFondoEscenario> *CapasFondoEscenario, int zindex)
@@ -552,8 +554,17 @@ void Pantalla::IniciarJuego() {
 				eventoAnterior = Evento;
 
 				if (eventoAnterior == "RECARGA") {
-
+					Sprites->iniciarCursor();
+					while(Sprites->avanzarCursor())
+					{
+						SDL_DestroyTexture(Sprites->obtenerCursor().Texture);
+					}
 					CargarSprites();
+					CapasFondoEscenario->iniciarCursor();
+					while(CapasFondoEscenario->avanzarCursor())
+					{
+						SDL_DestroyTexture(CapasFondoEscenario->obtenerCursor().Texture);
+					}
 					CargarCapasFondoEscenario();
 				}
 			}
