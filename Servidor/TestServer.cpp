@@ -544,9 +544,9 @@ void MainListenThread(void* arg) {
 				GranMensaje.append("NB"); //No Bonus
 				GranMensaje.append(";");
 			}
+			UnJuego.MutexearListaRepuestos();
 			GranMensaje.append(IntAString(UnJuego.getRepuestosArma()->getTamanio()));
 			GranMensaje.append(";");
-			UnJuego.MutexearListaRepuestos();
 			UnJuego.getRepuestosArma()->iniciarCursor();
 			while (UnJuego.getRepuestosArma()->avanzarCursor())
 			{

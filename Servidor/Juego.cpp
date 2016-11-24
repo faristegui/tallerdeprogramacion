@@ -79,8 +79,10 @@ void Juego::agregarRepuestoArma(int posX, int posY)
 	unBonus->mostrar();
 	MutexearListaRepuestos();
 	repuestosArma->agregar(unBonus);
-	todosLosBonus->agregar(unBonus);
 	DesmutexearListaRepuestos();
+	MutexearListaTodosBonus();
+	todosLosBonus->agregar(unBonus);
+	DesmutexearListaTodosBonus();
 }
 
 void FisicaThread(void* arg) {
@@ -288,13 +290,14 @@ void FisicaThread(void* arg) {
 				RectangulosEnemigos->agregar(UnRectangulo);
 			}
 			//hacer aparecer bonus
-			UnJuego->MutexearListaRepuestos();
+			UnJuego->MutexearListaTodosBonus();
 			UnJuego->getTodosLosBonus()->iniciarCursor();
-			UnJuego->DesmutexearListaRepuestos();
+			UnJuego->DesmutexearListaTodosBonus();
 			PosicionCursor++;
 		}
 
 		UnJuego->DesmutexearListaEnemigos();
+		UnJuego->MutexearListaTodosBonus();
 		while(UnJuego->getTodosLosBonus()->avanzarCursor())
 			{
 
@@ -312,6 +315,7 @@ void FisicaThread(void* arg) {
 				}
 				*/
 			}
+		UnJuego->DesmutexearListaTodosBonus();
 		// -----------------------------------------------
 		// Proceso proyectiles (y colisiones de los mismos)
 		UnJuego->MutexearListaProyectiles();
@@ -360,14 +364,18 @@ void FisicaThread(void* arg) {
 									Bonus* bonusPower = new Bonus(UnRectangulo.X,UnRectangulo.Y,"p",UnProyectil->GetIDJugador());
 									bonusPower->mostrar();
 									UnJuego->aparecerBonusPower(bonusPower);
+									UnJuego->MutexearListaTodosBonus();
 									UnJuego->getTodosLosBonus()->agregar(bonusPower);
+									UnJuego->DesmutexearListaTodosBonus();
 								}		
 								if(UnJuego->getNumeroBonusKillAll() == UnRectangulo.RefEnemigo->getIndexEnListaOriginal())
 								{
 									Bonus* bonusKillAll = new Bonus(UnRectangulo.X,UnRectangulo.Y,"ka",UnProyectil->GetIDJugador());
 									bonusKillAll->mostrar();
 									UnJuego->aparecerBonusKillAll(bonusKillAll);
+									UnJuego->MutexearListaTodosBonus();
 									UnJuego->getTodosLosBonus()->agregar(bonusKillAll);
+									UnJuego->DesmutexearListaTodosBonus();
 								}
 
 							
@@ -633,6 +641,7 @@ HANDLE MutexListaProyectiles;
 HANDLE MutexListaEnemigos;
 HANDLE MutexListaRepuestos;
 HANDLE MutexListaJugadores;
+HANDLE MutexListaTodosBonus;
 Juego::Juego()
 {
 	MutexListaProyectiles = CreateMutex(NULL, FALSE, NULL);
@@ -663,6 +672,7 @@ Juego::Juego()
 void Juego::EmpezarElJuego() {
 	EmpezoElJuego = true;
 }
+
 
 void Juego::AgregarPlataforma(int x, int y, int w, int h) {
 
@@ -1156,6 +1166,17 @@ void Juego::DesmutexearListaJugadores() {
 
 	ReleaseMutex(MutexListaJugadores);
 }
+
+void Juego::MutexearListaTodosBonus()
+{
+	WaitForSingleObject(MutexListaTodosBonus,INFINITE);
+}
+
+void Juego::DesmutexearListaTodosBonus()
+{
+	ReleaseMutex(MutexListaTodosBonus);
+}
+
 int Juego::GetCantJugadores() {
 
 	return CantJugadores;

@@ -91,6 +91,8 @@ public:
 	void DesmutexearListaEnemigos();
 	void MutexearListaRepuestos();
 	void DesmutexearListaRepuestos();
+	void MutexearListaTodosBonus();
+	void DesmutexearListaTodosBonus();
 	bool enemigosEstanCargados();
 	void cargarEnemigos();
 	void sumarEnemigo();
