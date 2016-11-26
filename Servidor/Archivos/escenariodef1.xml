@@ -318,9 +318,9 @@
 					<ESTADO id="DIAGONAL-IZQ" cantFrames="1"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="Bala-SE1" frameWidth="42" frameHeight="20" velocidad="100">
+		<SPRITE id="Bala-SE1" frameWidth="38" frameHeight="49" velocidad="100">
 			<ESTADOS cantidad="1">
-					<ESTADO id="HORIZONTAL" cantFrames="3"/>
+					<ESTADO id="VERTICAL" cantFrames="5"/>
 			</ESTADOS>
 		</SPRITE>
 		<SPRITE id="Bala-SE2" frameWidth="32" frameHeight="62" velocidad="100">
@@ -350,18 +350,18 @@
 				<ESTADO id="MUERTO-IZQ" cantFrames="2"/>	
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="EnemigoFinal1" frameWidth="131" frameHeight="122" velocidad="100">
+		<SPRITE id="EnemigoFinal1" frameWidth="175" frameHeight="128" velocidad="30">
 			<ESTADOS cantidad="10">
-				<ESTADO id="CAMINA-IZQ" cantFrames="2"/>
-				<ESTADO id="CAMINA-DER" cantFrames="2"/>
-				<ESTADO id="QUIETO-IZQ" cantFrames="2"/>
-				<ESTADO id="QUIETO-DER" cantFrames="2"/>
-				<ESTADO id="DISPARA" cantFrames="2"/>
-				<ESTADO id="QUIETO-DER-DISPARA" cantFrames="2"/>
-				<ESTADO id="HERIDO-IZQ" cantFrames="2"/>
-				<ESTADO id="HERIDO-DER" cantFrames="2"/>
-				<ESTADO id="MUERTO-DER" cantFrames="2"/>				
-				<ESTADO id="MUERTO-IZQ" cantFrames="2"/>	
+				<ESTADO id="CAMINA-IZQ" cantFrames="6"/>
+				<ESTADO id="CAMINA-DER" cantFrames="6"/>
+				<ESTADO id="QUIETO-IZQ" cantFrames="6"/>
+				<ESTADO id="QUIETO-DER" cantFrames="6"/>
+				<ESTADO id="DISPARA" cantFrames="6"/>
+				<ESTADO id="QUIETO-DER-DISPARA" cantFrames="6"/>
+				<ESTADO id="HERIDO-IZQ" cantFrames="6"/>
+				<ESTADO id="HERIDO-DER" cantFrames="6"/>
+				<ESTADO id="MUERTO-DER" cantFrames="6"/>				
+				<ESTADO id="MUERTO-IZQ" cantFrames="6"/>	
 			</ESTADOS>
 		</SPRITE>
 		<SPRITE id="EnemigoFinal2" frameWidth="161" frameHeight="89" velocidad="100">
@@ -416,7 +416,7 @@
 				<ENEMIGO tipo="OvniEnemigo" direccion="IZQ" posX="1950" posY="40" vida="30" velocidadCaminata="6"/>
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1650" posY="390" vida="100" velocidadCaminata="5"/>
 				<ENEMIGO tipo="HumanoEnemigo" direccion="IZQ" posX="1100" posY="223" vida="175" velocidadCaminata="0"/>
-				<ENEMIGO tipo="EnemigoFinal1" direccion="IZQ" posX="2580" posY="80" vida="900" velocidadCaminata="3"/>
+				<ENEMIGO tipo="EnemigoFinal1" direccion="IZQ" posX="2580" posY="40" vida="900" velocidadCaminata="3"/>
 			</ENEMIGOS>
 			<REPUESTOS cantidad="3">
 				<REPUESTO tipo="bonusb" posX="350" posY="390"/>
