@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ESCENARIO anchoPX="800" altoPX="600" maxJugadores="1">
+<ESCENARIO anchoPX="800" altoPX="600" maxJugadores="2">
 	<FONDO>
 		<CAPAS cantidad="3">
 			<IMAGEN nombre="cieloLevel1.bmp" zIndex="2" width="2600" height="600"/>

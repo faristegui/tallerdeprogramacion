@@ -155,8 +155,9 @@ void FisicaThread(void* arg) {
 		if (UnJuego->GetCantCamaras() > 0) {
 
 			// El ultimo fondo determina el ancho total del juego (el fondo de los obstaculos)
-
+			UnJuego->MutexearListaCamaras();
 			Camara* UnaCamara = UnJuego->GetCamaraObstaculos();
+			UnJuego->DesmutexearListaCamaras();
 			VelocidadCamara = UnaCamara->Velocidad;
 
 			if (UnaCamara->X + 800 >= UnaCamara->AnchoImagen) {
@@ -191,7 +192,9 @@ void FisicaThread(void* arg) {
 			int indiceAEliminar = 1;
 			while(todosLosEnemigos->avanzarCursor())
 			{
+				UnJuego->MutexearListaCamaras();
 				int indice = UnJuego->GetCamaraObstaculos()->X;
+				UnJuego->DesmutexearListaCamaras();
 				if(todosLosEnemigos->obtenerCursor()->getX() <= (800+indice))
 				{
 					UnJuego->MutexearListaEnemigos();
@@ -642,6 +645,7 @@ HANDLE MutexListaEnemigos;
 HANDLE MutexListaRepuestos;
 HANDLE MutexListaJugadores;
 HANDLE MutexListaTodosBonus;
+HANDLE MutexListaCamaras;
 Juego::Juego()
 {
 	MutexListaProyectiles = CreateMutex(NULL, FALSE, NULL);
@@ -842,9 +846,9 @@ bool Juego::HayObstaculo(int X, int Y, int W, int H, int &YDelObstaculo, int &HD
 	}
 
 	ListaPlataformas->iniciarCursor();
-
+	MutexearListaCamaras();
 	Camara* CamaraObstaculos = GetCamaraObstaculos();
-
+	DesmutexearListaCamaras();
 	while (ListaPlataformas->avanzarCursor()) {
 
 		Rectangulo* UnRectangulo = ListaPlataformas->obtenerCursor();
@@ -1131,6 +1135,15 @@ void Juego::MutexearListaProyectiles() {
 	WaitForSingleObject(MutexListaProyectiles, INFINITE);
 }
 
+void Juego::MutexearListaCamaras() {
+	
+	WaitForSingleObject(MutexListaCamaras, INFINITE);
+}
+void Juego::DesmutexearListaCamaras() {
+	
+	ReleaseMutex(MutexListaCamaras);
+}
+
 void Juego::MutexearListaRepuestos()
 {
 	WaitForSingleObject(MutexListaRepuestos, INFINITE);
@@ -1148,7 +1161,7 @@ void Juego::DesmutexearListaProyectiles() {
 
 void Juego::MutexearListaEnemigos() {
 
-	WaitForSingleObject(MutexListaEnemigos, INFINITE);
+	WaitForSingleObject(MutexListaEnemigos, 1200);
 }
 
 void Juego::DesmutexearListaEnemigos() {

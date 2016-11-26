@@ -262,6 +262,7 @@ void CargarEnemigos() {
 	int indiceAEliminar = 1;
 	while (todosLosEnemigos->avanzarCursor())
 	{
+		UnJuego.MutexearListaCamaras();
 		if (todosLosEnemigos->obtenerCursor()->getX() <= (800 + UnJuego.GetCamara(0)->X))
 		{
 			enemigosVivos->agregar(todosLosEnemigos->obtenerCursor());
@@ -269,6 +270,7 @@ void CargarEnemigos() {
 			posiciones->agregar(indiceAEliminar);
 			UnJuego.sumarEnemigo();
 		}
+		UnJuego.DesmutexearListaCamaras();
 		indiceAEliminar++;
 	}
 	posiciones->iniciarCursor();
@@ -323,11 +325,9 @@ Lista<std::string>* GetTextosFinNivel(int UnModo) {
 
 void CargarEscenariosEnJuego() {
 	tinyxml2::XMLDocument docu;
-
 	UnJuego.BorrarCamaras();
 
 	std::string path = "Archivos\\escenariodef" + IntAString(Nivel) + ".xml";
-
 	char* pathXML = strdup(path.c_str());
 
 	if (docu.LoadFile(pathXML) != tinyxml2::XML_ERROR_FILE_NOT_FOUND)
@@ -483,9 +483,9 @@ void MainListenThread(void* arg) {
 			std::string GranMensaje = "";
 
 			int CantCamaras = UnJuego.GetCantCamaras();
-
+			GranMensaje.append(IntAString(CantCamaras));
+			GranMensaje.append(";");
 			for (int i = 0; i < CantCamaras; i++) {
-
 				std::string CamaraX = IntAString(UnJuego.GetCamara(i)->X);
 				GranMensaje.append(CamaraX);
 				GranMensaje.append(";");
@@ -559,13 +559,12 @@ void MainListenThread(void* arg) {
 			}
 			UnJuego.DesmutexearListaRepuestos();
 
-			UnJuego.MutexearListaEnemigos();
 			Lista<Enemigo *>* enemigos = UnJuego.GetEnemigosPantalla();
+			UnJuego.MutexearListaEnemigos();
 			enemigos->iniciarCursor();
 
 			GranMensaje.append(IntAString(enemigos->getTamanio()));
 			GranMensaje.append(";");
-
 			while (enemigos->avanzarCursor()) {
 				Enemigo* UnEnemigo = enemigos->obtenerCursor();
 				GranMensaje.append(UnEnemigo->getID());					// ID del sprite (0)
@@ -605,12 +604,11 @@ void MainListenThread(void* arg) {
 
 				tmpcuent++;
 			}
-
+			UnJuego.DesmutexearListaProyectiles();
 			if (tmpcuent != tmptam) {
 				GranMensaje.append(";");
 			}
 
-			UnJuego.DesmutexearListaProyectiles();
 
 			for(int i = 0;i< UnJuego.GetCantJugadores();i++)
 			{
@@ -618,7 +616,7 @@ void MainListenThread(void* arg) {
 				GranMensaje.append(";");
 			}
 
-
+			UnJuego.MutexearListaJugadores();
 			int IndiceMiJugador = UnJuego.GetIndiceJugador(Usuario);
 			Jugador* MiJugador = UnJuego.GetJugador(IndiceMiJugador);
 
@@ -646,6 +644,7 @@ void MainListenThread(void* arg) {
 					GranMensaje.append(";");
 				}
 			}
+			UnJuego.DesmutexearListaJugadores();
 			// Renderizo por ultimo mi jugador para asi aparece al frente
 
 			GranMensaje.append(MiJugador->GetNombre().c_str()); // Nombre

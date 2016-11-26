@@ -123,6 +123,8 @@ public:
 	bool GetEnemigoFinalMurio();
 	void MutexearListaJugadores();
 	void DesmutexearListaJugadores();
+	void MutexearListaCamaras();
+	void DesmutexearListaCamaras();
 	Lista<RectanguloPersonaje>* getRectangulosPersonajes();
 	void removerJugador(int indice);
 	void EmpezarElJuego();

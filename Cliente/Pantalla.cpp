@@ -581,28 +581,33 @@ void Pantalla::IniciarJuego() {
 			std::vector<std::string> mensajes = split(respuestaServidor, ';');
 
 			int Indice = 0;
-			CapasFondoEscenario->iniciarCursor();
-			while (CapasFondoEscenario->avanzarCursor())
+			int cantCamaras = stoi(mensajes[Indice]);
+			Indice++;
+			if(cantCamaras > 0)
 			{
-				CapaFondoEscenario UnaCapa = CapasFondoEscenario->obtenerCursor();
+				CapasFondoEscenario->iniciarCursor();
+				while (CapasFondoEscenario->avanzarCursor())
+				{
+					CapaFondoEscenario UnaCapa = CapasFondoEscenario->obtenerCursor();
 
-				int NuevoX = stoi(mensajes[Indice]);
+					int NuevoX = stoi(mensajes[Indice]);
 
-				if (NuevoX > UnaCapa.ancho - 800) {
-					CamaraCorta1.x = UnaCapa.ancho - 800;
-					CamaraDibuja1.x = UnaCapa.ancho - 800 - NuevoX;
+					if (NuevoX > UnaCapa.ancho - 800) {
+						CamaraCorta1.x = UnaCapa.ancho - 800;
+						CamaraDibuja1.x = UnaCapa.ancho - 800 - NuevoX;
 
-					CamaraDibuja2.x = 800 + CamaraDibuja1.x;
+						CamaraDibuja2.x = 800 + CamaraDibuja1.x;
+					}
+					else {
+						CamaraCorta1.x = NuevoX;
+						CamaraDibuja1.x = 0;
+						CamaraDibuja2.x = 850;
+					}
+
+					SDL_RenderCopy(Renderer, UnaCapa.Texture, &CamaraCorta1, &CamaraDibuja1);
+					SDL_RenderCopy(Renderer, UnaCapa.Texture, &CamaraCorta2, &CamaraDibuja2);
+					Indice++;
 				}
-				else {
-					CamaraCorta1.x = NuevoX;
-					CamaraDibuja1.x = 0;
-					CamaraDibuja2.x = 850;
-				}
-
-				SDL_RenderCopy(Renderer, UnaCapa.Texture, &CamaraCorta1, &CamaraDibuja1);
-				SDL_RenderCopy(Renderer, UnaCapa.Texture, &CamaraCorta2, &CamaraDibuja2);
-				Indice++;
 			}
 
 			int CantJugadores = stoi(mensajes[Indice]);
