@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ESCENARIO anchoPX="800" altoPX="600" maxJugadores="2">
+<ESCENARIO anchoPX="800" altoPX="600" maxJugadores="1">
 	<FONDO>
 		<CAPAS cantidad="3">
 			<IMAGEN nombre="cieloLevel1.bmp" zIndex="2" width="2600" height="600"/>
@@ -320,7 +320,7 @@
 		</SPRITE>
 		<SPRITE id="Bala-SE1" frameWidth="38" frameHeight="49" velocidad="100">
 			<ESTADOS cantidad="1">
-					<ESTADO id="HORIZONTAL" cantFrames="5"/>
+					<ESTADO id="VERTICAL" cantFrames="5"/>
 			</ESTADOS>
 		</SPRITE>
 		<SPRITE id="Bala-SE2" frameWidth="32" frameHeight="62" velocidad="100">

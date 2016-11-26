@@ -6,35 +6,15 @@ public:
 	ArmaEnemigoFinal1() : Arma(1500, "SE1", 10, "MachinegunEnemigoFinal", 999, true) { }
 
 	int ArmaEnemigoFinal1::DeterminarOffsetBalaX(std::string UnaDireccion) {
-
 		int Offset = 0;
 
-		if (UnaDireccion == "DERECHA") {
-			Offset = 44;
+		if (UnaDireccion == "ABAJO-DER")
+		{
+			Offset = 120;
 		}
 
-		if (UnaDireccion == "IZQUIERDA") {
-			Offset = 10;
-		}
-
-		if (UnaDireccion == "ARRIBA-DER") {
-			Offset = 12;
-		}
-
-		if (UnaDireccion == "ARRIBA-IZQ") {
-			Offset = 40;
-		}
-
-		if (UnaDireccion == "ARRIBA-DER-DIAG") {
-			Offset = 44;
-		}
-
-		if (UnaDireccion == "ARRIBA-IZQ-DIAG") {
-			Offset = 10;
-		}
-
-		if (UnaDireccion == "ABAJO-DER") {
-			Offset = 40;
+		if (UnaDireccion == "ABAJO-IZQ") {
+			Offset = 80;
 		}
 
 		return Offset;
@@ -43,32 +23,9 @@ public:
 	int ArmaEnemigoFinal1::DeterminarOffsetBalaY(std::string UnaDireccion) {
 		int Offset = 0;
 
-		if (UnaDireccion == "ABAJO-DER") {
-			Offset = 60;
-		}
-
-		if (UnaDireccion == "DERECHA") {
-			Offset = 55;
-		}
-
-		if (UnaDireccion == "IZQUIERDA") {
-			Offset = 150;
-		}
-
-		if (UnaDireccion == "ARRIBA-DER") {
-			Offset = -8;
-		}
-
-		if (UnaDireccion == "ARRIBA-IZQ") {
-			Offset = -8;
-		}
-
-		if (UnaDireccion == "ARRIBA-DER-DIAG") {
-			Offset = 0;
-		}
-
-		if (UnaDireccion == "ARRIBA-IZQ-DIAG") {
-			Offset = 0;
+		if (UnaDireccion == "ABAJO-DER" || UnaDireccion == "ABAJO-IZQ" || UnaDireccion == "ABAJO")
+		{
+			Offset = 140;
 		}
 
 		return Offset;
@@ -80,6 +37,6 @@ public:
 		int OffsetY = DeterminarOffsetBalaY(Direccion);
 
 		return new Proyectil(NombreJugador, "Bala-" + CodigoArma,
-			PosX + OffsetX, PosY + OffsetY, VelocidadBala, "IZQUIERDA", 10, 10, 0, false, false);
+			PosX + OffsetX, PosY + OffsetY, VelocidadBala,"ABAJO-DER", 10, 10, 0, false, false);
 	}
 };
