@@ -157,7 +157,7 @@ void Enemigo::mover()
 				tiempoTranscurrido = 0;
 			}
 
-			if (this->estado == "QUIETO-IZQ" && tiempoTranscurrido > 0.3)
+			if (this->estado == "QUIETO-IZQ" && tiempoTranscurrido > 1.5)
 			{
 				this->estado = "DISPARA";
 				this->estaDisparando = true;

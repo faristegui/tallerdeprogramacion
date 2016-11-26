@@ -3,7 +3,7 @@
 
 class ArmaEnemigoFinal1 : public Arma {
 public:
-	ArmaEnemigoFinal1() : Arma(350, "SE1", 25, "MachinegunEnemigoFinal", 999, true) { }
+	ArmaEnemigoFinal1() : Arma(1500, "SE1", 10, "MachinegunEnemigoFinal", 999, true) { }
 
 	int ArmaEnemigoFinal1::DeterminarOffsetBalaX(std::string UnaDireccion) {
 
