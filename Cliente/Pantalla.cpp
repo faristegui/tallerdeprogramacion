@@ -19,6 +19,13 @@ Pantalla::Pantalla(Client* unCliente)
 	cliente = unCliente;
 	SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();
+	char* font = VerificarRecurso("start.ttf");
+	FuenteDoce = TTF_OpenFont(font,12);
+	FuenteDieciseis = TTF_OpenFont(font,16);
+	FuenteVeinte = TTF_OpenFont(font,20);
+	FuenteVeintiseis = TTF_OpenFont(font,26);
+	FuenteVeintiocho = TTF_OpenFont(font,28);
+	FuenteTreinta = TTF_OpenFont(font,30);
 	Mensajes = new Lista<MensajeConsola>();
 	ListaTextPlayers = new Lista<TextPlayers>();
 
@@ -51,20 +58,12 @@ void Pantalla::WaitFPS(Uint32 starting_tick) {
 }
 
 void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::string UnTexto,
-	SDL_Texture **texture, SDL_Rect *rect, int fontSize) {
+	SDL_Texture **texture, SDL_Rect *rect, TTF_Font* Fuente) {
 
 	int text_width = 0;
 	int text_height = 0;
 	SDL_Surface *surface;
 	SDL_Color textColor = { 255, 255, 255, 0 };
-
-	char* font = VerificarRecurso("start.ttf");
-
-	TTF_Font* Fuente = NULL;
-
-	while (Fuente == NULL) {
-		Fuente = TTF_OpenFont(font, fontSize); //this opens a font style and sets a size
-	}
 
 	surface = TTF_RenderText_Solid(Fuente, UnTexto.c_str(), textColor);
 
@@ -74,18 +73,17 @@ void Pantalla::get_text_and_rect(SDL_Renderer *renderer, int x, int y, std::stri
 		text_height = surface->h;
 	}
 	SDL_FreeSurface(surface);
-	TTF_CloseFont(Fuente);
 	rect->x = x;
 	rect->y = y;
 	rect->w = text_width;
 	rect->h = text_height;
 }
 
-void Pantalla::EscribirMensaje(std::string Mensaje, int PosX, int PosY, int Tamano, SDL_Renderer *Renderer) {
+void Pantalla::EscribirMensaje(std::string Mensaje, int PosX, int PosY,TTF_Font* Fuente, SDL_Renderer *Renderer) {
 	SDL_Rect Message_Rect;
 	SDL_Texture* Message;
 
-	get_text_and_rect(Renderer, PosX, PosY, Mensaje.c_str(), &Message, &Message_Rect, Tamano);
+	get_text_and_rect(Renderer, PosX, PosY, Mensaje.c_str(), &Message, &Message_Rect,Fuente);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 
 	SDL_DestroyTexture(Message);
@@ -110,7 +108,7 @@ void Pantalla::EscribirNombreJugador(std::string Nombre, int PosX, int PosY) {
 	if (!blnEncontro) {
 		TextPlayers UnText;
 		UnText.Nombre = Nombre;
-		get_text_and_rect(Renderer, PosX, PosY, Nombre, &UnText.Message, &UnText.Message_Rect, 12);
+		get_text_and_rect(Renderer, PosX, PosY, Nombre, &UnText.Message, &UnText.Message_Rect, FuenteDoce);
 		ListaTextPlayers->agregar(UnText);
 		SDL_RenderCopy(Renderer, UnText.Message, NULL, &UnText.Message_Rect);
 	}
@@ -131,10 +129,10 @@ void Pantalla::MostrarMensaje(std::string Mensaje, int posX, int posY) {
 
 	SDL_RenderCopy(Renderer, texture, NULL, &back);
 
-	get_text_and_rect(Renderer, posX, posY, Mensaje.c_str(), &Message, &Message_Rect, 26);
+	get_text_and_rect(Renderer, posX, posY, Mensaje.c_str(), &Message, &Message_Rect, FuenteVeintiseis);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 	Mensaje = "°°Por favor espere..!!";
-	get_text_and_rect(Renderer, 170, 370, Mensaje.c_str(), &Message, &Message_Rect, 30);
+	get_text_and_rect(Renderer, 170, 370, Mensaje.c_str(), &Message, &Message_Rect, FuenteTreinta);
 	SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 	SDL_RenderPresent(Renderer);
 	while (!Sale) {
@@ -214,10 +212,10 @@ std::string Pantalla::PedirParametro(std::string NombreParametro, std::string Va
 		
 		SDL_RenderCopy(Renderer, texture, NULL, &back);
 
-		get_text_and_rect(Renderer, posX, posY, NombreParametro.c_str(), &Message, &Message_Rect, 16);
+		get_text_and_rect(Renderer, posX, posY, NombreParametro.c_str(), &Message, &Message_Rect, FuenteDieciseis);
 		SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 		// Ingresa el par√°metro
-		get_text_and_rect(Renderer, posX + Message_Rect.w + 10, posY, UnTexto.c_str(), &Message, &Message_Rect, 16);
+		get_text_and_rect(Renderer, posX + Message_Rect.w + 10, posY, UnTexto.c_str(), &Message, &Message_Rect,FuenteDieciseis);
 		SDL_RenderCopy(Renderer, Message, NULL, &Message_Rect);
 
 		WaitFPS(Starting_Tick);
@@ -707,15 +705,15 @@ void Pantalla::IniciarJuego() {
 				Indice++;
 				RenderSprite(IDSprite, EstadoProyectil, Starting_Tick, Renderer, xProyectil, yProyectil);
 			}
-
+			
 			int posY = 5;
 			for(int i = 0; i < CantJugadores;i++)
 			{
-				EscribirMensaje(mensajes[Indice],540,posY,20,Renderer);
+				EscribirMensaje(mensajes[Indice],540,posY,FuenteVeinte,Renderer);
 				posY+=25;
 				Indice++;
 			}
-
+			
 			int PosX = 0;
 			int PosY = 0;
 
@@ -736,9 +734,9 @@ void Pantalla::IniciarJuego() {
 				EscribirNombreJugador(Nombre, PosX, PosY + 125);
 			}
 
-			EscribirMensaje(mensajes[Indice], 0, 5, 20, Renderer);
+			EscribirMensaje(mensajes[Indice], 0, 5, FuenteVeinte, Renderer);
 			Indice++;
-			EscribirMensaje(mensajes[Indice], 0, 30, 20, Renderer);
+			EscribirMensaje(mensajes[Indice], 0, 30, FuenteVeinte, Renderer);
 			Indice++;
 			
 			std::string MurioFinal = mensajes[Indice];
@@ -749,7 +747,7 @@ void Pantalla::IniciarJuego() {
 				std::string FinJuego = mensajes[Indice];
 				Indice++;
 				
-				EscribirMensaje("Nivel superado", 300, 200 , 20, Renderer);
+				EscribirMensaje("Nivel superado", 300, 200 , FuenteVeinte, Renderer);
 
 				int CantTextos = stoi(mensajes[Indice]);
 				Indice++;
@@ -757,12 +755,12 @@ void Pantalla::IniciarJuego() {
 				for (int i = 0; i < CantTextos; i++)
 				{
 					std::string Texto = mensajes[Indice];
-					EscribirMensaje(Texto, 300, 250 + (i*20), 20, Renderer);
+					EscribirMensaje(Texto, 300, 250 + (i*20), FuenteVeinte, Renderer);
 					Indice++;
 				}
 
 				if (FinJuego == "SI") {
-					EscribirMensaje("GANASTE!", 300, 250 + (CantTextos * 20) + 20, 20, Renderer);
+					EscribirMensaje("GANASTE!", 300, 250 + (CantTextos * 20) + 20, FuenteVeinte, Renderer);
 				} else {
 					PedirRecarga = true;
 				}
@@ -773,7 +771,7 @@ void Pantalla::IniciarJuego() {
 
 			if (MurioPlayer == "SI") {
 
-				EscribirMensaje("GAME OVER", 300, 250, 28, Renderer);
+				EscribirMensaje("GAME OVER", 300, 250, FuenteVeintiocho, Renderer);
 			}
 
 			MostrarMensajes(Starting_Tick);
@@ -789,7 +787,7 @@ void Pantalla::IniciarJuego() {
 
 	if (!cliente->TieneConexion()) {
 
-		EscribirMensaje("Se ha perdido la conexion con el servidor", 0, 5, 12, Renderer);
+		EscribirMensaje("Se ha perdido la conexion con el servidor", 0, 5,FuenteDoce, Renderer);
 		SDL_RenderPresent(Renderer);
 		Sleep(10000);
 	}
@@ -807,7 +805,7 @@ void Pantalla::MostrarMensajes(int StartingTick) {
 
 		if (StartingTick - UnMensaje.TiempoDibujo < UnMensaje.Duracion * 1000) {
 
-			EscribirMensaje(UnMensaje.Mensaje, 0, OffsetY, 20, Renderer);
+			EscribirMensaje(UnMensaje.Mensaje, 0, OffsetY, FuenteVeinte, Renderer);
 			OffsetY += 20;
 		}
 		else {
