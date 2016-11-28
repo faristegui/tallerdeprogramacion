@@ -6,7 +6,7 @@ public:
 	ArmaEnemigoFinal1() : Arma(1500, "SE1", 10, "MachinegunEnemigoFinal", 999, true) { }
 
 	int ArmaEnemigoFinal1::DeterminarOffsetBalaX(std::string UnaDireccion) {
-		int Offset = 0;
+/*		int Offset = 0;
 
 		if (UnaDireccion == "ABAJO-DER")
 		{
@@ -15,20 +15,20 @@ public:
 
 		if (UnaDireccion == "ABAJO-IZQ") {
 			Offset = 80;
-		}
+		}*/
 
-		return Offset;
+		return 120;
 	}
 
 	int ArmaEnemigoFinal1::DeterminarOffsetBalaY(std::string UnaDireccion) {
-		int Offset = 0;
+	/*	int Offset = 0;
 
 		if (UnaDireccion == "ABAJO-DER" || UnaDireccion == "ABAJO-IZQ" || UnaDireccion == "ABAJO")
 		{
 			Offset = 140;
-		}
+		}*/
 
-		return Offset;
+		return 140;
 	}
 
 	Proyectil* ArmaEnemigoFinal1::CrearProyectil(std::string NombreJugador, int PosX, int PosY, std::string Direccion) {
@@ -37,6 +37,6 @@ public:
 		int OffsetY = DeterminarOffsetBalaY(Direccion);
 
 		return new Proyectil(NombreJugador, "Bala-" + CodigoArma,
-			PosX + OffsetX, PosY + OffsetY, VelocidadBala,"ABAJO-DER", 10, 10, 0, false, false);
+			PosX + OffsetX, PosY + OffsetY, VelocidadBala,"ABAJO-DER", 38, 49, 0, false, false);
 	}
 };
