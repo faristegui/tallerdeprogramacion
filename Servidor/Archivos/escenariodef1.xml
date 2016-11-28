@@ -318,7 +318,7 @@
 					<ESTADO id="DIAGONAL-IZQ" cantFrames="1"/>
 			</ESTADOS>
 		</SPRITE>
-		<SPRITE id="Bala-SE1" frameWidth="38" frameHeight="49" velocidad="100">
+		<SPRITE id="Bala-SE1" frameWidth="33" frameHeight="45" velocidad="100">
 			<ESTADOS cantidad="1">
 					<ESTADO id="VERTICAL" cantFrames="5"/>
 			</ESTADOS>
