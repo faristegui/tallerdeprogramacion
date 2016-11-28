@@ -35,6 +35,8 @@ public:
 	std::string  getNombre();
 	std::string getDireccion();
 	std::string GetDireccionAparicion();
+	void setEspecial(bool especial);
+	bool getEspecial();
 private:
 	void DeterminarArma();
 	std::string IDSprite;
@@ -55,5 +57,6 @@ private:
 	std::string DireccionAparicion;
 	std::string Direccion;
 	bool estaDisparando;
+	bool esEspecial;
 };
 

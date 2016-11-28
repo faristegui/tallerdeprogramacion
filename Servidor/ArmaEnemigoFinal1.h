@@ -3,31 +3,13 @@
 
 class ArmaEnemigoFinal1 : public Arma {
 public:
-	ArmaEnemigoFinal1() : Arma(2500, "SE1", 10, "MachinegunEnemigoFinal", 999, true) { }
+	ArmaEnemigoFinal1() : Arma(3500, "SE1", 10, "MachinegunEnemigoFinal", 999, true) { }
 
 	int ArmaEnemigoFinal1::DeterminarOffsetBalaX(std::string UnaDireccion) {
-/*		int Offset = 0;
-
-		if (UnaDireccion == "ABAJO-DER")
-		{
-			Offset = 120;
-		}
-
-		if (UnaDireccion == "ABAJO-IZQ") {
-			Offset = 80;
-		}*/
-
 		return 120;
 	}
 
 	int ArmaEnemigoFinal1::DeterminarOffsetBalaY(std::string UnaDireccion) {
-	/*	int Offset = 0;
-
-		if (UnaDireccion == "ABAJO-DER" || UnaDireccion == "ABAJO-IZQ" || UnaDireccion == "ABAJO")
-		{
-			Offset = 140;
-		}*/
-
 		return 140;
 	}
 

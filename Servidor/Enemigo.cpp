@@ -20,6 +20,9 @@ Enemigo::Enemigo(std::string unIdSprite, int posX, int posY, int vel,
 	time_t t = 0;
 	time_t* pTiempoDeVida = &t;
 	tiempoDeVida = (time(pTiempoDeVida));
+
+	this->esEspecial = false;
+
 	listoParaMorir = false; /*me indica si en el proximo tick ya puedo eliminar al enemigo dandome tiempo para mostrar el sprite de muerte*/
 	Nombre = unIdSprite;
 	this->estaDisparando = false;
@@ -392,6 +395,16 @@ time_t Enemigo::getTiempoActual()
 
 
 
+}
+
+void Enemigo::setEspecial(bool especial)
+{
+	esEspecial = especial;
+}
+
+bool Enemigo::getEspecial()
+{
+	return esEspecial;
 }
 
 void Enemigo::muereEnemigo()

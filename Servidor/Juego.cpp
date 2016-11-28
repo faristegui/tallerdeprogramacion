@@ -202,11 +202,17 @@ void FisicaThread(void* arg) {
 					Enemigo* UnEnemigo = todosLosEnemigos->obtenerCursor();
 					UnEnemigo->getEstado();
 
-					if (UnEnemigo->getX() > 850) {
+					if (UnEnemigo->getX() > 850 || UnEnemigo->getEspecial()) {
 						
 						if (UnEnemigo->GetDireccionAparicion() == "DER") {
-							if (UnEnemigo->getX() != 598)
-							UnEnemigo->SetX(850);
+							if (UnEnemigo->getEspecial())
+							{
+								UnEnemigo->SetX(598);
+							}
+							else
+							{
+								UnEnemigo->SetX(850);
+							}
 						} else {
 							UnEnemigo->SetX(-20);
 						}
@@ -421,8 +427,10 @@ void FisicaThread(void* arg) {
 
 					if (UnProyectil->GetIDSprite() == "Bala-SE1")
 					{
-						UnJuego->AgregarEnemigo("HumanoEnemigo", UnProyectil->GetX(), 390, 5, 150, false, 38, 49, "IZQ");
-			
+						int velCaminata = (rand()% 5) + 4; //Random entre 4 y 8
+						Enemigo* unEnemigo = new Enemigo("HumanoEnemigo", UnProyectil->GetX(), 390, velCaminata, 150, false, 38, 49, "IZQ");
+						unEnemigo->setEspecial(true);
+						UnJuego->GetTodosLosEnemigos()->agregar(unEnemigo);
 					}
 				}
 				/*avanzo sobre los rectangulos de los personajes y chequeo sus colisiones contra el proyectil*/
@@ -433,8 +441,8 @@ void FisicaThread(void* arg) {
 					RectanguloPersonaje UnRectanguloPersonaje = UnJuego->getRectangulosPersonajes()->obtenerCursor();
 
 					if (HayColision(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(),
-						UnProyectil->GetHeight(), UnRectanguloPersonaje.RefJugador->GetX(), UnRectanguloPersonaje.RefJugador->GetY(),
-						UnRectanguloPersonaje.RefJugador->GetWidth(), UnRectanguloPersonaje.RefJugador->GetHeight()))
+						UnProyectil->GetHeight(), UnRectanguloPersonaje.RefJugador->GetX() + 8, UnRectanguloPersonaje.RefJugador->GetY() + 8,
+						UnRectanguloPersonaje.RefJugador->GetWidth() - 15, UnRectanguloPersonaje.RefJugador->GetHeight() - 15))
 					{
 
   						if (!UnProyectil->EsDePersonaje()) //si el proyectil que impacta sobre el  personaje es disparado por un enemigo y no por otro personaje entonces hiero al personaje!!
@@ -1168,7 +1176,7 @@ void Juego::DesmutexearListaProyectiles() {
 
 void Juego::MutexearListaEnemigos() {
 
-	WaitForSingleObject(MutexListaEnemigos, 1800);
+	WaitForSingleObject(MutexListaEnemigos, 1200);
 }
 
 void Juego::DesmutexearListaEnemigos() {
