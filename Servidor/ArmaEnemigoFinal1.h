@@ -3,7 +3,7 @@
 
 class ArmaEnemigoFinal1 : public Arma {
 public:
-	ArmaEnemigoFinal1() : Arma(1500, "SE1", 10, "MachinegunEnemigoFinal", 999, true) { }
+	ArmaEnemigoFinal1() : Arma(2500, "SE1", 10, "MachinegunEnemigoFinal", 999, true) { }
 
 	int ArmaEnemigoFinal1::DeterminarOffsetBalaX(std::string UnaDireccion) {
 /*		int Offset = 0;
@@ -37,6 +37,6 @@ public:
 		int OffsetY = DeterminarOffsetBalaY(Direccion);
 
 		return new Proyectil(NombreJugador, "Bala-" + CodigoArma,
-			PosX + OffsetX, PosY + OffsetY, VelocidadBala,"ABAJO-DER", 38, 49, 0, false, false);
+			PosX + OffsetX, PosY + OffsetY, VelocidadBala,"ABAJO-DER", 33, 90, 0, false, false);
 	}
 };

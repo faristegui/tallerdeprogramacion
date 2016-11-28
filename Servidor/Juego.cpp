@@ -186,7 +186,7 @@ void FisicaThread(void* arg) {
 		Lista<Enemigo *>* todosLosEnemigos = UnJuego->GetTodosLosEnemigos();
 		todosLosEnemigos->iniciarCursor();
 		//si avanza el juego o recien empieza cargo los enemigos
-		if(AvanzaCamara)
+		if(AvanzaCamara || UnJuego->GetCamaraObstaculos()->X == 1800)
 		{
 			Lista<int>* posiciones = new Lista<int>();
 			int indiceAEliminar = 1;
@@ -205,6 +205,7 @@ void FisicaThread(void* arg) {
 					if (UnEnemigo->getX() > 850) {
 						
 						if (UnEnemigo->GetDireccionAparicion() == "DER") {
+							if (UnEnemigo->getX() != 598)
 							UnEnemigo->SetX(850);
 						} else {
 							UnEnemigo->SetX(-20);
@@ -270,7 +271,7 @@ void FisicaThread(void* arg) {
 
 			/****************************************************************************************************/
 
-			if (AvanzaCamara) {
+			if (AvanzaCamara ) {
 
 				UnEnemigo->MoverEnX(-VelocidadCamara);
 			}
@@ -417,6 +418,12 @@ void FisicaThread(void* arg) {
 				int TmpY, TmpX;
 				if (UnJuego->HayObstaculo(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(), UnProyectil->GetHeight(), TmpY, TmpX)) {
 					Proyectiles->remover(PosicionCursor);
+
+					if (UnProyectil->GetIDSprite() == "Bala-SE1")
+					{
+						UnJuego->AgregarEnemigo("HumanoEnemigo", UnProyectil->GetX(), 390, 5, 150, false, 38, 49, "IZQ");
+			
+					}
 				}
 				/*avanzo sobre los rectangulos de los personajes y chequeo sus colisiones contra el proyectil*/
 				
@@ -1161,7 +1168,7 @@ void Juego::DesmutexearListaProyectiles() {
 
 void Juego::MutexearListaEnemigos() {
 
-	WaitForSingleObject(MutexListaEnemigos, 1200);
+	WaitForSingleObject(MutexListaEnemigos, 1800);
 }
 
 void Juego::DesmutexearListaEnemigos() {
