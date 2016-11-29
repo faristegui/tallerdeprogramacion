@@ -217,7 +217,7 @@ void FisicaThread(void* arg) {
 						if (UnEnemigo->GetDireccionAparicion() == "DER") {
 							if (UnEnemigo->getEspecial())
 							{
-								UnEnemigo->SetX(598);
+								UnEnemigo->SetX(595);
 							}
 							else
 							{
@@ -342,6 +342,7 @@ void FisicaThread(void* arg) {
 		Lista<Proyectil *>* Proyectiles = UnJuego->GetProyectiles();
 		PosicionCursor = 1;
 		Proyectiles->iniciarCursor();
+		int TmpY, TmpX;
 		while (Proyectiles->avanzarCursor()) {
 
 			Proyectil* UnProyectil = Proyectiles->obtenerCursor();
@@ -367,71 +368,76 @@ void FisicaThread(void* arg) {
 					
 					if (HayColision(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(),
 						UnProyectil->GetHeight(), UnRectangulo.X, UnRectangulo.Y,
-						UnRectangulo.Width, UnRectangulo.Height - 15)) 
+						UnRectangulo.Width, UnRectangulo.Height)) 
 					{
 
 						if (UnProyectil->EsDePersonaje()) //si el proyectil que impacta en enemigo es disparado por un pesonaje y no por otro enemigo entonces hiero al enemigo sino no!!
 						{
 						
-							UnJuego->MutexearListaEnemigos();
+							bool hayObstaculo = UnJuego->HayObstaculo(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(), UnProyectil->GetHeight(), TmpY, TmpX);
 
-							UnRectangulo.RefEnemigo->SacarVida(UnProyectil->GetDanio());
-							if (UnRectangulo.RefEnemigo->GetVida() <= 0) 
+							if(!hayObstaculo)
 							{
-							//chequeos por bonus
-								if(UnJuego->getNumeroBonusPower() == UnRectangulo.RefEnemigo->getIndexEnListaOriginal())
+			
+								UnJuego->MutexearListaEnemigos();
+
+								UnRectangulo.RefEnemigo->SacarVida(UnProyectil->GetDanio());
+								if (UnRectangulo.RefEnemigo->GetVida() <= 0) 
 								{
-									Bonus* bonusPower = new Bonus(UnRectangulo.X,UnRectangulo.Y,"p",UnProyectil->GetIDJugador());
-									bonusPower->mostrar();
-									UnJuego->aparecerBonusPower(bonusPower);
-									UnJuego->MutexearListaTodosBonus();
-									UnJuego->getTodosLosBonus()->agregar(bonusPower);
-									UnJuego->DesmutexearListaTodosBonus();
-								}		
-								if(UnJuego->getNumeroBonusKillAll() == UnRectangulo.RefEnemigo->getIndexEnListaOriginal())
-								{
-									Bonus* bonusKillAll = new Bonus(UnRectangulo.X,UnRectangulo.Y,"ka",UnProyectil->GetIDJugador());
-									bonusKillAll->mostrar();
-									UnJuego->aparecerBonusKillAll(bonusKillAll);
-									UnJuego->MutexearListaTodosBonus();
-									UnJuego->getTodosLosBonus()->agregar(bonusKillAll);
-									UnJuego->DesmutexearListaTodosBonus();
-								}
+								//chequeos por bonus
+									if(UnJuego->getNumeroBonusPower() == UnRectangulo.RefEnemigo->getIndexEnListaOriginal())
+									{
+										Bonus* bonusPower = new Bonus(UnRectangulo.X,UnRectangulo.Y,"p",UnProyectil->GetIDJugador());
+										bonusPower->mostrar();
+										UnJuego->aparecerBonusPower(bonusPower);
+										UnJuego->MutexearListaTodosBonus();
+										UnJuego->getTodosLosBonus()->agregar(bonusPower);
+										UnJuego->DesmutexearListaTodosBonus();
+									}		
+									if(UnJuego->getNumeroBonusKillAll() == UnRectangulo.RefEnemigo->getIndexEnListaOriginal())
+									{
+										Bonus* bonusKillAll = new Bonus(UnRectangulo.X,UnRectangulo.Y,"ka",UnProyectil->GetIDJugador());
+										bonusKillAll->mostrar();
+										UnJuego->aparecerBonusKillAll(bonusKillAll);
+										UnJuego->MutexearListaTodosBonus();
+										UnJuego->getTodosLosBonus()->agregar(bonusKillAll);
+										UnJuego->DesmutexearListaTodosBonus();
+									}
 
 							
-								/**/
-								UnRectangulo.RefEnemigo->muereEnemigo();
+									/**/
+									UnRectangulo.RefEnemigo->muereEnemigo();
 
-								/*si al tratar de mover al enemigo se encuentra con un estado de muerte, y transcurrio n segundos, entonces internamente
-								se setea el atributo listoParaMorir en true*/
+									/*si al tratar de mover al enemigo se encuentra con un estado de muerte, y transcurrio n segundos, entonces internamente
+									se setea el atributo listoParaMorir en true*/
 
-								if (UnRectangulo.RefEnemigo->estaListoParaMorir())
-								{
-									UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);
-								}
-								//eliminar enemigo de pantalla
-								/*UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);*/
+									if (UnRectangulo.RefEnemigo->estaListoParaMorir())
+									{
+										UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);
+									}
+									//eliminar enemigo de pantalla
+									/*UnJuego->GetEnemigosPantalla()->remover(UnRectangulo.IndexEnLista);*/
 
-								if (UnRectangulo.RefEnemigo->esEnemigoFinal()) {
+									if (UnRectangulo.RefEnemigo->esEnemigoFinal()) {
 
-									UnJuego->SetEnemigoFinalMurio(true);
-									if(UnJuego->GetNivel() == 3) {
+										UnJuego->SetEnemigoFinalMurio(true);
+										if(UnJuego->GetNivel() == 3) {
 
-										UnJuego->SetFinJuego(true);
+											UnJuego->SetFinJuego(true);
+										}
 									}
 								}
+								UnJuego->DesmutexearListaEnemigos();
+
+								Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio
+
+								UnJuego->GetJugador(UnProyectil->GetIDJugador())->herirEnemigo();
 							}
-							UnJuego->DesmutexearListaEnemigos();
-
-							Proyectiles->remover(PosicionCursor); // TODO: Ver lo de que el cursor vuelve al inicio
-
-							UnJuego->GetJugador(UnProyectil->GetIDJugador())->herirEnemigo();
 						}
 					}
 					//muchachos el width y el height de la imagen del bonus la hardcodeo, de ultima si hacemos a tiempo lo cambiamos.
 				}
 
-				int TmpY, TmpX;
 				if (UnJuego->HayObstaculo(UnProyectil->GetX(), UnProyectil->GetY(), UnProyectil->GetWidth(), UnProyectil->GetHeight(), TmpY, TmpX)) {
 					Proyectiles->remover(PosicionCursor);
 
