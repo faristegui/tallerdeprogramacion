@@ -8,6 +8,8 @@
 
 using namespace std;
 
+std::string FinJuego ="NO";
+
 Pantalla::Pantalla(Client* unCliente)
 {
 	PedirRecarga = false;
@@ -474,7 +476,7 @@ void Pantalla::IniciarJuego() {
 				GameRunning = false;
 				break;
 			}
-			
+
 			if (Event.type == SDL_KEYDOWN) {
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
 					Evento = "RIGHT";
@@ -508,7 +510,7 @@ void Pantalla::IniciarJuego() {
 					Evento = "ARMA-A";
 				}
 			}
-			if(Event.type == SDL_KEYUP)
+			if (Event.type == SDL_KEYUP)
 			{
 				if (Event.key.keysym.sym == SDLK_RIGHT) {
 					Evento = "SOLTO-RIGHT";
@@ -553,13 +555,13 @@ void Pantalla::IniciarJuego() {
 
 				if (eventoAnterior == "RECARGA") {
 					Sprites->iniciarCursor();
-					while(Sprites->avanzarCursor())
+					while (Sprites->avanzarCursor())
 					{
 						SDL_DestroyTexture(Sprites->obtenerCursor().Texture);
 					}
 					CargarSprites();
 					CapasFondoEscenario->iniciarCursor();
-					while(CapasFondoEscenario->avanzarCursor())
+					while (CapasFondoEscenario->avanzarCursor())
 					{
 						SDL_DestroyTexture(CapasFondoEscenario->obtenerCursor().Texture);
 					}
@@ -570,18 +572,24 @@ void Pantalla::IniciarJuego() {
 
 		SDL_RenderClear(Renderer);
 
-		cliente->EnviarMensaje("STAT", 4);
-		
+		if (FinJuego == "NO")
+		{
+
+
+
+
+			cliente->EnviarMensaje("STAT", 4);
+
 		std::string respuestaServidor = cliente->RecibirMensajeTamanoVariable();
 
 		if (respuestaServidor != "LOST") {
-			
+
 			std::vector<std::string> mensajes = split(respuestaServidor, ';');
 
 			int Indice = 0;
 			int cantCamaras = stoi(mensajes[Indice]);
 			Indice++;
-			if(cantCamaras > 0)
+			if (cantCamaras > 0)
 			{
 				CapasFondoEscenario->iniciarCursor();
 				while (CapasFondoEscenario->avanzarCursor())
@@ -676,8 +684,8 @@ void Pantalla::IniciarJuego() {
 
 			int CantEnemigos = stoi(mensajes[Indice]);
 			Indice++;
-			
-			for(int i = 0; i < CantEnemigos; i++)
+
+			for (int i = 0; i < CantEnemigos; i++)
 			{
 				string nombreEnemigo = mensajes[Indice];
 				Indice++;
@@ -689,8 +697,8 @@ void Pantalla::IniciarJuego() {
 				Indice++;
 				//Sleep(40); // Que funcion cumplia esto aca? Trababa todo el juego
 				RenderSprite(nombreEnemigo, nombreSprite, Starting_Tick, Renderer, posicionEnemigoX, posicionEnemigoY);
- 			}
-			
+			}
+
 			int CantProyectiles = stoi(mensajes[Indice]);
 			Indice++;
 
@@ -705,15 +713,15 @@ void Pantalla::IniciarJuego() {
 				Indice++;
 				RenderSprite(IDSprite, EstadoProyectil, Starting_Tick, Renderer, xProyectil, yProyectil);
 			}
-			
+
 			int posY = 5;
-			for(int i = 0; i < CantJugadores;i++)
+			for (int i = 0; i < CantJugadores; i++)
 			{
-				EscribirMensaje(mensajes[Indice],540,posY,FuenteVeinte,Renderer);
-				posY+=25;
+				EscribirMensaje(mensajes[Indice], 540, posY, FuenteVeinte, Renderer);
+				posY += 25;
 				Indice++;
 			}
-			
+
 			int PosX = 0;
 			int PosY = 0;
 
@@ -738,16 +746,16 @@ void Pantalla::IniciarJuego() {
 			Indice++;
 			EscribirMensaje(mensajes[Indice], 0, 30, FuenteVeinte, Renderer);
 			Indice++;
-			
+
 			std::string MurioFinal = mensajes[Indice];
 			Indice++;
-			
+
 			if (MurioFinal == "SI") {
 
-				std::string FinJuego = mensajes[Indice];
+				FinJuego = mensajes[Indice];
 				Indice++;
-				
-				EscribirMensaje("Nivel superado", 300, 200 , FuenteVeinte, Renderer);
+
+				EscribirMensaje("Nivel superado", 300, 200, FuenteVeinte, Renderer);
 
 				int CantTextos = stoi(mensajes[Indice]);
 				Indice++;
@@ -755,13 +763,17 @@ void Pantalla::IniciarJuego() {
 				for (int i = 0; i < CantTextos; i++)
 				{
 					std::string Texto = mensajes[Indice];
-					EscribirMensaje(Texto, 300, 250 + (i*20), FuenteVeinte, Renderer);
+					EscribirMensaje(Texto, 300, 250 + (i * 20), FuenteVeinte, Renderer);
 					Indice++;
 				}
 
 				if (FinJuego == "SI") {
+
+
 					EscribirMensaje("GANASTE!", 300, 250 + (CantTextos * 20) + 20, FuenteVeinte, Renderer);
-				} else {
+
+				}
+				else {
 					PedirRecarga = true;
 				}
 			}
@@ -783,6 +795,9 @@ void Pantalla::IniciarJuego() {
 				Sleep(5000);
 			}
 		}
+
+	}
+
 	}
 
 	if (!cliente->TieneConexion()) {
