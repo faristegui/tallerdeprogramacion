@@ -100,7 +100,17 @@ void FisicaThread(void* arg) {
 		bool AvanzaCamara = false;
 		int CantJugadores = UnJuego->GetCantJugadores();
 
-		if (!UnJuego->GetEnemigoFinalMurio() && UnJuego->GetEmpezoElJuego()) {
+		bool hayJugadoresEnLinea = false;
+
+		for (int i = 0; i < CantJugadores; i++) {
+			if(UnJuego->GetJugador(i)->GetEstaConectado())
+			{
+				hayJugadoresEnLinea = true;
+				break;
+			}
+		}
+
+		if (!UnJuego->GetEnemigoFinalMurio() && UnJuego->GetEmpezoElJuego() && hayJugadoresEnLinea) {
 
 		// -----------------------------------------------
 		// Proceso jugador (estados y eventos)
