@@ -10,7 +10,7 @@
 	<PLATAFORMAS cantidad="4">
 		<PLATAFORMA x="145" ancho="553" y="322" alto="24"/>
 		<PLATAFORMA x="1075" ancho="245" y="322" alto="24"/>
-		<PLATAFORMA x="1565" ancho="245" y="322" alto="24"/>
+		<PLATAFORMA x="1565" ancho="215" y="322" alto="24"/>
 		<PLATAFORMA x="1995" ancho="345" y="322" alto="24"/>
 	</PLATAFORMAS>
 	<SPRITES cantidad="28">
